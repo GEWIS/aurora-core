@@ -1,6 +1,9 @@
-import BaseAudioHandler from "../../handlers/base-audio-handler";
 import BaseEntity from "./base-entity";
+import {Column, Entity} from "typeorm";
+import SubscribeEntity from "./subscribe-entity";
 
-export default class Audio extends BaseEntity {
-  private audioHandler: BaseAudioHandler;
+@Entity()
+export default class Audio extends SubscribeEntity {
+  // Register child entity with parent
+  static dummy = SubscribeEntity.entities.add(Audio);
 }

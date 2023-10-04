@@ -1,7 +1,8 @@
 import {BaseEntity} from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
+import SubscribeEntity from "../base/entities/subscribe-entity";
 
-export default abstract class BaseHandler<T extends BaseEntity> {
+export default abstract class BaseHandler<T extends SubscribeEntity> {
   /**
    * Used to distinguish multiple instances of the same handler type
    */
