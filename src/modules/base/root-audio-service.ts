@@ -13,6 +13,15 @@ export default class RootAudioService {
     this.repository = dataSource.getRepository(Audio);
   }
 
+  private toAudioResponse(audio: Audio): AudioResponse {
+    return {
+      id: audio.id,
+      createdAt: audio.createdAt,
+      updatedAt: audio.updatedAt,
+      name: audio.name,
+    };
+  }
+
   public async getAllAudios(): Promise<AudioResponse[]> {
     const audios = await this.repository.find();
     return audios.map((a) => ({
@@ -23,15 +32,8 @@ export default class RootAudioService {
     }));
   }
 
-  public async getSingleAudio(id: number): Promise<AudioResponse | null> {
-    const audio = await this.repository.findOne({ where: { id } });
-    if (!audio) return null;
-    return {
-      id: audio.id,
-      createdAt: audio.createdAt,
-      updatedAt: audio.updatedAt,
-      name: audio.name,
-    };
+  public async getSingleAudio(id: number): Promise<Audio | null> {
+    return this.repository.findOne({ where: { id } });
   }
 
   public async createAudio(params: AudioCreateParams): Promise<AudioResponse> {

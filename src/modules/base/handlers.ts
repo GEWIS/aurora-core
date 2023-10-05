@@ -62,4 +62,25 @@ export default class Handlers {
   public getHandlers(entity: typeof SubscribeEntity) {
     return this._handlers.get(entity) || [];
   }
+
+  /**
+   * Register the given entity with a new handler. Before doing so, deregister with the old handler
+   * If newHandler equals '' (empty string), do not register with any handler.
+   * @param entity
+   * @param newHandler
+   */
+  public registerHandler<T extends SubscribeEntity>(entity: T, newHandler: string | '') {
+    const handlers = this.getHandlers(entity.constructor as typeof SubscribeEntity);
+    handlers.forEach((handler) => {
+      handler.removeEntity(entity);
+    });
+
+    if (newHandler !== '') {
+      handlers.forEach((handler) => {
+        if (handler.constructor.name === newHandler) {
+          handler.registerEntity(entity);
+        }
+      });
+    }
+  }
 }

@@ -7,14 +7,14 @@ export default abstract class BaseHandler<T extends SubscribeEntity> {
    */
   public identifier: string;
 
-  private entities: T[];
+  private _entities: T[];
 
   public constructor() {
     this.identifier = uuidv4();
-    this.entities = [];
+    this._entities = [];
   }
 
-  private async updateHandlerRef(entity: T) {
+  private async setHandlerRef(entity: T) {
     // eslint-disable-next-line no-param-reassign
     entity.currentHandler = this.constructor.name;
     await entity.save();
@@ -25,8 +25,8 @@ export default abstract class BaseHandler<T extends SubscribeEntity> {
    * @param entity
    */
   public registerEntity(entity: T): void {
-    this.entities.push(entity);
-    this.updateHandlerRef(entity).catch((e) => console.error(e));
+    this._entities.push(entity);
+    this.setHandlerRef(entity).catch((e) => console.error(e));
   }
 
   /**
@@ -34,7 +34,7 @@ export default abstract class BaseHandler<T extends SubscribeEntity> {
    * @param entity
    */
   public removeEntity(entity: T): void {
-    this.entities = this.entities.filter((e) => e.id !== entity.id);
+    this._entities = this._entities.filter((e) => e.id !== entity.id);
   }
 
   /**
@@ -42,6 +42,10 @@ export default abstract class BaseHandler<T extends SubscribeEntity> {
    * @param entity
    */
   public hasEntity(entity: T): boolean {
-    return this.entities.findIndex((e) => e.id === entity.id) >= 0;
+    return this._entities.findIndex((e) => e.id === entity.id) >= 0;
+  }
+
+  public get entities() {
+    return this._entities;
   }
 }
