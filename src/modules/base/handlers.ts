@@ -15,11 +15,7 @@ export default class Handlers {
 
   private initialized: boolean = false;
 
-  private _audioHandlers: BaseAudioHandler[];
-
-  private _lightsHandlers: BaseLightsHandler[];
-
-  private _screenHandlers: BaseScreenHandler[];
+  private _handlers: Map<typeof SubscribeEntity, BaseHandler<SubscribeEntity>[]> = new Map();
 
   protected restoreHandlers<
     T extends SubscribeEntity,
@@ -34,30 +30,25 @@ export default class Handlers {
 
   private async init() {
     if (this.initialized) throw new Error('Handlers already initialized.');
-    await Promise.all(Array.from(SubscribeEntity.entities.values()).map(async (entity) => {
+    await Promise.all(Array.from(this._handlers.keys()).map(async (entity) => {
       const entities = await dataSource.manager.find(entity);
       entities.forEach((instance) => {
-        switch (instance.constructor) {
-          case Audio: this.restoreHandlers(instance, this._audioHandlers); break;
-          case LightsGroup: this.restoreHandlers(instance, this._lightsHandlers); break;
-          case Screen: this.restoreHandlers(instance, this._screenHandlers); break;
-          default: throw new Error(`Unknown entity: ${instance.constructor.name}`);
-        }
+        const handlers = this._handlers.get(instance.constructor as typeof SubscribeEntity);
+        if (handlers === undefined) throw new Error(`Unknown entity: ${instance.constructor.name}`);
+        this.restoreHandlers(instance, handlers);
       });
     }));
-
-    console.log(this._audioHandlers[0]);
   }
 
   /**
    * Register all possible handlers in this function
    */
   public constructor() {
-    this._screenHandlers = [];
-    this._lightsHandlers = [];
-    this._audioHandlers = [
+    this._handlers.set(Audio, [
       new SimpleAudioHandler(),
-    ];
+    ] as BaseAudioHandler[]);
+    this._handlers.set(LightsGroup, [] as BaseLightsHandler[]);
+    this._handlers.set(Screen, [] as BaseScreenHandler[]);
   }
 
   public static async getInstance() {
@@ -68,7 +59,7 @@ export default class Handlers {
     return this.instance;
   }
 
-  public get audioHandlers() {
-    return this._audioHandlers;
+  public getHandlers(entity: typeof SubscribeEntity) {
+    return this._handlers.get(entity) || [];
   }
 }

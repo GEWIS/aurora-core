@@ -13,9 +13,6 @@ import SubscribeEntity from '../subscribe-entity';
 
 @Entity()
 export default class LightsGroup extends SubscribeEntity {
-  // Register child entity with parent
-  static dummy = SubscribeEntity.entities.add(LightsGroup);
-
   @ManyToOne(() => LightsController)
   @JoinColumn()
   public controller: LightsController;
