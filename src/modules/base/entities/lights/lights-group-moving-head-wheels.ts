@@ -1,7 +1,10 @@
-import {Column, Entity, JoinColumn, ManyToOne} from "typeorm";
-import BaseEntity from "../base-entity";
-import LightsGroup from "./lights-group";
-import LightsMovingHeadWheel from "./lights-moving-head-wheel";
+import {
+  Column, Entity, JoinColumn, ManyToOne,
+} from 'typeorm';
+import BaseEntity from '../base-entity';
+// eslint-disable-next-line import/no-cycle
+import LightsGroup from './lights-group';
+import LightsMovingHeadWheel from './lights-moving-head-wheel';
 
 @Entity()
 export default class LightsGroupMovingHeadWheels extends BaseEntity {

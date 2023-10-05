@@ -2,9 +2,14 @@
   "name": "abc-narrowcasting",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently \"nodemon\" \"nodemon -x npx tsoa spec-and-routes\"",
+    "build": "tsoa spec-and-routes && tsc",
+    "start": "node build/src/index.js",
+    "tsoa": "tsoa spec-and-routes",
+    "lint": "eslint . --ext .ts",
+    "lint-fix": "eslint . --ext .ts --fix"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +17,7 @@
   "dependencies": {
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "sqlite3": "^5.1.6",
     "swagger-ui-express": "^5.0.0",
     "tsoa": "^5.1.1",
     "typeorm": "^0.3.17",

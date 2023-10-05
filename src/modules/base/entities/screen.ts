@@ -1,4 +1,4 @@
-import SubscribeEntity from "./subscribe-entity";
+import SubscribeEntity from './subscribe-entity';
 
 export default class Screen extends SubscribeEntity {
   // Register child entity with parent

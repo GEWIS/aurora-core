@@ -1,8 +1,12 @@
-import {BaseEntity, Column, Entity, OneToMany} from "typeorm";
-import {LightsGroup} from "./lights";
+import {
+  Column, Entity, OneToMany,
+} from 'typeorm';
+// eslint-disable-next-line import/no-cycle
+import { LightsGroup } from './lights';
+import SubscribeEntity from './subscribe-entity';
 
 @Entity()
-export default class LightsController extends BaseEntity {
+export default class LightsController extends SubscribeEntity {
   @Column()
   public name: string;
 

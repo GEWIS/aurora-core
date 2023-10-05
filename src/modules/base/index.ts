@@ -1,5 +1,5 @@
-import BaseAudioHandler from "../handlers/base-audio-handler";
+import BaseAudioHandler from '../handlers/base-audio-handler';
 
 export default class BaseModule {
-  private audioHandler: BaseAudioHandler
+  private audioHandler: BaseAudioHandler;
 }

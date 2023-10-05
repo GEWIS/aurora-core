@@ -1,6 +1,5 @@
-import BaseEntity from "./base-entity";
-import {Column, Entity} from "typeorm";
-import SubscribeEntity from "./subscribe-entity";
+import { Entity } from 'typeorm';
+import SubscribeEntity from './subscribe-entity';
 
 @Entity()
 export default class Audio extends SubscribeEntity {

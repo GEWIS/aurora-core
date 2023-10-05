@@ -19,7 +19,7 @@ module.exports = {
         'import',
     ],
     rules: {
-        'linebreak-style': ['error', 'windows'],
+        'linebreak-style': ['error', 'unix'],
         'import/prefer-default-export': 'off',
         'class-methods-use-this': 'off',
         'no-unused-expressions': 'off',

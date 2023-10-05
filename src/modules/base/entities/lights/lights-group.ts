@@ -1,9 +1,15 @@
-import {Entity, JoinColumn, ManyToOne, OneToMany} from "typeorm";
-import LightsController from "../lights-controller";
-import LightsGroupPars from "./lights-group-pars";
-import LightsGroupMovingHeadWheels from "./lights-group-moving-head-wheels";
-import LightsGroupMovingHeadRgbs from "./lights-group-moving-head-rgbs";
-import SubscribeEntity from "../subscribe-entity";
+import {
+  Entity, JoinColumn, ManyToOne, OneToMany,
+} from 'typeorm';
+// eslint-disable-next-line import/no-cycle
+import LightsController from '../lights-controller';
+// eslint-disable-next-line import/no-cycle
+import LightsGroupPars from './lights-group-pars';
+// eslint-disable-next-line import/no-cycle
+import LightsGroupMovingHeadWheels from './lights-group-moving-head-wheels';
+// eslint-disable-next-line import/no-cycle
+import LightsGroupMovingHeadRgbs from './lights-group-moving-head-rgbs';
+import SubscribeEntity from '../subscribe-entity';
 
 @Entity()
 export default class LightsGroup extends SubscribeEntity {
