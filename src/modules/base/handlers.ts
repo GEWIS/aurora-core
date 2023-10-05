@@ -1,19 +1,25 @@
+import { singleton } from 'tsyringe';
 import BaseAudioHandler from '../handlers/base-audio-handler';
 import BaseLightsHandler from '../handlers/base-lights-handler';
 import BaseScreenHandler from '../handlers/base-screen-handler';
 import SubscribeEntity from './entities/subscribe-entity';
 import BaseHandler from '../handlers/base-handler';
+import SimpleAudioHandler from '../modes/audio/SimpleAudioHandler';
+import dataSource from '../../database';
+import { Audio, Screen } from './entities';
+import { LightsGroup } from './entities/lights';
 
+@singleton()
 export default class Handlers {
   private static instance: Handlers;
 
   private initialized: boolean = false;
 
-  private audioHandlers: BaseAudioHandler[];
+  private _audioHandlers: BaseAudioHandler[];
 
-  private lightsHandlers: BaseLightsHandler[];
+  private _lightsHandlers: BaseLightsHandler[];
 
-  private screenHandlers: BaseScreenHandler[];
+  private _screenHandlers: BaseScreenHandler[];
 
   protected restoreHandlers<
     T extends SubscribeEntity,
@@ -21,7 +27,7 @@ export default class Handlers {
   >(entity: T, handlers: U[]) {
     handlers.forEach((handler) => {
       if (handler.constructor.name === entity.currentHandler) {
-        handler.registerLightsController(entity);
+        handler.registerEntity(entity);
       }
     });
   }
@@ -29,25 +35,29 @@ export default class Handlers {
   private async init() {
     if (this.initialized) throw new Error('Handlers already initialized.');
     await Promise.all(Array.from(SubscribeEntity.entities.values()).map(async (entity) => {
-      const entities = await entity.find();
+      const entities = await dataSource.manager.find(entity);
       entities.forEach((instance) => {
-        switch (instance.constructor.name) {
-          case 'Audio': this.restoreHandlers(instance, this.audioHandlers); break;
-          case 'LightsGroup': this.restoreHandlers(instance, this.lightsHandlers); break;
-          case 'Screen': this.restoreHandlers(instance, this.screenHandlers); break;
+        switch (instance.constructor) {
+          case Audio: this.restoreHandlers(instance, this._audioHandlers); break;
+          case LightsGroup: this.restoreHandlers(instance, this._lightsHandlers); break;
+          case Screen: this.restoreHandlers(instance, this._screenHandlers); break;
           default: throw new Error(`Unknown entity: ${instance.constructor.name}`);
         }
       });
     }));
+
+    console.log(this._audioHandlers[0]);
   }
 
   /**
    * Register all possible handlers in this function
    */
-  private constructor() {
-    this.screenHandlers = [];
-    this.lightsHandlers = [];
-    this.audioHandlers = [];
+  public constructor() {
+    this._screenHandlers = [];
+    this._lightsHandlers = [];
+    this._audioHandlers = [
+      new SimpleAudioHandler(),
+    ];
   }
 
   public static async getInstance() {
@@ -56,5 +66,9 @@ export default class Handlers {
       await this.instance.init();
     }
     return this.instance;
+  }
+
+  public get audioHandlers() {
+    return this._audioHandlers;
   }
 }

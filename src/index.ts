@@ -1,10 +1,13 @@
 import './env';
 import createHttp from './http';
 import dataSource from './database';
+import Handlers from './modules/base/handlers';
 
 async function createApp(): Promise<void> {
   await dataSource.initialize();
   const app = createHttp();
+
+  const handlers = Handlers.getInstance();
 
   const port = process.env.PORT || 3000;
   app.listen(port, () => console.log(`Listening at http://localhost:${port}`));

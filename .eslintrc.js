@@ -23,6 +23,7 @@ module.exports = {
         'import/prefer-default-export': 'off',
         'class-methods-use-this': 'off',
         'no-unused-expressions': 'off',
+        'no-underscore-dangle': 'off',
         'import/extensions': ['off', 'ignorePackages', {
             js: 'never',
             ts: 'never',
