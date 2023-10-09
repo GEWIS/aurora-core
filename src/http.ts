@@ -3,6 +3,7 @@ import express, { Response as ExResponse, Request as ExRequest } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
+import { getSessionMiddleware } from './modules/auth';
 
 export default function createHttp() {
   const app = express();
@@ -13,6 +14,7 @@ export default function createHttp() {
     }),
   );
   app.use(bodyParser.json());
+  app.use(getSessionMiddleware());
 
   RegisterRoutes(app);
 

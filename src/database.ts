@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Entities as BaseEntities } from './modules/base/entities';
+import { Entities as AuthEntities } from './modules/auth/entities';
 
 const dataSource = new DataSource({
   host: process.env.TYPEORM_HOST,
@@ -12,6 +13,7 @@ const dataSource = new DataSource({
   logging: process.env.TYPEORM_LOGGING === 'true',
   entities: [
     ...BaseEntities,
+    ...AuthEntities,
   ],
 });
 
