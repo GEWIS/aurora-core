@@ -4,10 +4,32 @@
   "controllerPathGlobs": ["src/**/*-controller.ts"],
   "spec": {
     "outputDirectory": "build",
-    "specVersion": 3
+    "specVersion": 3,
+    "schemes": ["http"],
+    "specMerging": "recursive",
+    "spec": {
+      "paths": {
+        "/auth/mock": {
+          "post": {
+            "operationId": "AuthMock",
+            "responses": {
+              "204": {
+                "description": "No content"
+              }
+            },
+            "security": [],
+            "parameters": [],
+            "tags": [
+              "Authentication"
+            ]
+          }
+        }
+      }
+    }
   },
   "routes": {
     "routesDir": "build",
-    "iocModule": "src/ioc"
+    "iocModule": "src/ioc",
+    "middleware": "express"
   }
 }
