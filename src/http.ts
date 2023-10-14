@@ -3,6 +3,7 @@ import express, { Response as ExResponse, Request as ExRequest } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import passport from 'passport';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
 import { SessionMiddleware } from './modules/auth';
@@ -18,6 +19,7 @@ export default function createHttp() {
     }),
   );
   app.use(bodyParser.json());
+  app.use(cookieParser(process.env.COOKIE_SECRET));
   app.use(SessionMiddleware.getInstance().get());
 
   RegisterRoutes(app);

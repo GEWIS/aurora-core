@@ -15,10 +15,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@spotify/web-api-ts-sdk": "^1.1.2",
     "@tsoa/runtime": "^5.0.0",
     "@types/express-session": "^1.17.8",
     "body-parser": "^1.20.2",
     "connect-typeorm": "^2.0.0",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
@@ -34,6 +36,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.4",
     "@types/cors": "^2.8.14",
     "@types/express": "^4.17.18",
     "@types/passport": "^1.0.13",

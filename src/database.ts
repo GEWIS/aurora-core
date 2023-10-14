@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { Entities as BaseEntities } from './modules/base/entities';
 import { Entities as AuthEntities } from './modules/auth/entities';
+import { Entities as SpotifyEntities } from './modules/spotify/entities';
 
 const dataSource = new DataSource({
   host: process.env.TYPEORM_HOST,
@@ -14,6 +15,7 @@ const dataSource = new DataSource({
   entities: [
     ...BaseEntities,
     ...AuthEntities,
+    ...SpotifyEntities,
   ],
 });
 
