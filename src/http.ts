@@ -2,12 +2,15 @@ import bodyParser from 'body-parser';
 import express, { Response as ExResponse, Request as ExRequest } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import passport from 'passport';
+import cors from 'cors';
 import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
-import { getSessionMiddleware } from './modules/auth';
+import { SessionMiddleware } from './modules/auth';
 
 export default function createHttp() {
   const app = express();
+
+  app.use(cors({ allowedHeaders: ['Cookie', 'Cookies'] }));
 
   app.use(
     bodyParser.urlencoded({
@@ -15,7 +18,7 @@ export default function createHttp() {
     }),
   );
   app.use(bodyParser.json());
-  app.use(getSessionMiddleware());
+  app.use(SessionMiddleware.getInstance().get());
 
   RegisterRoutes(app);
 
