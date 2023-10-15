@@ -8,9 +8,9 @@ export default class SpotifyApiHandler {
 
   private initialized = false;
 
-  private sdk: SpotifyApi;
+  private sdk: SpotifyApi | undefined;
 
-  private currentUser: SpotifyUser;
+  private currentUser: SpotifyUser | undefined;
 
   private repository: Repository<SpotifyUser>;
 
@@ -78,6 +78,22 @@ export default class SpotifyApiHandler {
     }
   }
 
+  /**
+   * Stop watching the current active user
+   */
+  public async unloadSpotifyUser() {
+    if (this.sdk) this.sdk = undefined;
+    if (this.currentUser) {
+      this.currentUser.active = false;
+      await this.repository.save(this.currentUser);
+      this.currentUser = undefined;
+    }
+  }
+
+  /**
+   * Make the given user the currently active user
+   * @param spotifyUser
+   */
   public async loadSpotifyUser(spotifyUser: SpotifyUser) {
     let accessToken: AccessToken;
     if (new Date().getTime() + 5000 > spotifyUser.token.expires) {
@@ -87,11 +103,15 @@ export default class SpotifyApiHandler {
       accessToken = spotifyUser.token;
     }
 
+    await this.unloadSpotifyUser();
+
     this.sdk = SpotifyApi.withAccessToken(process.env.SPOTIFY_CLIENT_ID || '', accessToken);
 
     const newToken = await this.sdk.getAccessToken();
     if (newToken) {
       spotifyUser.setToken(newToken);
+      // eslint-disable-next-line no-param-reassign
+      spotifyUser.active = true;
       await this.repository.save(spotifyUser);
       this.currentUser = spotifyUser;
     }

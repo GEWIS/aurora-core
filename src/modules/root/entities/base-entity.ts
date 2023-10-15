@@ -7,8 +7,8 @@ export default class BaseEntity extends TypeormBaseEntity {
   public id: number;
 
   @CreateDateColumn()
-  public readonly createdAt: number;
+  public readonly createdAt: Date;
 
   @UpdateDateColumn()
-  public updatedAt: number;
+  public updatedAt: Date;
 }
