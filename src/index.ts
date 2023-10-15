@@ -4,13 +4,16 @@ import createHttp from './http';
 import dataSource from './database';
 import Handlers from './modules/base/handlers';
 import createWebsocket from './socketio';
+import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
 
 async function createApp(): Promise<void> {
   await dataSource.initialize();
   const app = createHttp();
   const httpServer = createServer(app);
 
-  const handlers = Handlers.getInstance();
+  await Handlers.getInstance();
+  await SpotifyApiHandler.getInstance().init();
+  await SpotifyTrackHandler.getInstance().init();
 
   const io = createWebsocket(httpServer);
 

@@ -1,14 +1,11 @@
 import {
-  Get, Route, Tags, Request, Post, Body, Query,
+  Get, Route, Tags, Request, Query,
 } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import { Request as ExpressRequest } from 'express';
-import { AccessToken, SpotifyApi } from '@spotify/web-api-ts-sdk';
 import * as querystring from 'querystring';
 import * as crypto from 'crypto';
-import dataSource from '../../database';
-import SpotifyUser from './entities/spotify-user';
-import SpotifyHandler from './spotify-handler';
+import SpotifyApiHandler from './spotify-api-handler';
 
 @Route('spotify')
 @Tags('Spotify')
@@ -53,19 +50,23 @@ export class SpotifyController extends Controller {
       return `Could not log in: ${error}`;
     }
 
-    const spotifyUser: SpotifyUser = await dataSource.getRepository(SpotifyUser).save({
-      name: 'Test-Change-Later',
-      authorizationCode: code,
-      active: true,
-    } as SpotifyUser);
-
-    await SpotifyHandler.getInstance().setSpotifyUser(spotifyUser);
-    return SpotifyHandler.getInstance().client.currentUser.profile();
+    await SpotifyApiHandler.getInstance().bindSpotifyUser(code);
+    return SpotifyApiHandler.getInstance().client.currentUser.profile();
   }
 
-  @Post('accept-user-token')
-  public async spotifyAcceptUserToken(@Body() body: AccessToken) {
-    const sdk = SpotifyApi.withAccessToken(process.env.SPOTIFY_CLIENT_ID || '', body);
-    await sdk.authenticate();
+  // @Post('accept-user-token')
+  // public async spotifyAcceptUserToken(@Body() body: AccessToken) {
+  //   const sdk = SpotifyApi.withAccessToken(process.env.SPOTIFY_CLIENT_ID || '', body);
+  //   await sdk.authenticate();
+  // }
+
+  @Get('user')
+  public getSpotifyUser() {
+    return SpotifyApiHandler.getInstance().user;
+  }
+
+  @Get('profile')
+  public getSpotifyProfile() {
+    return SpotifyApiHandler.getInstance().client.currentUser.profile();
   }
 }
