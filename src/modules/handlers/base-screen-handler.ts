@@ -1,5 +1,5 @@
 import BaseHandler from './base-handler';
-import Screen from '../base/entities/screen';
+import Screen from '../root/entities/screen';
 
 export default abstract class BaseScreenHandler extends BaseHandler<Screen> {
 

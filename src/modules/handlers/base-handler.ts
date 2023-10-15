@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import SubscribeEntity from '../base/entities/subscribe-entity';
+import SubscribeEntity from '../root/entities/subscribe-entity';
 
 export default abstract class BaseHandler<T extends SubscribeEntity> {
   /**

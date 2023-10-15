@@ -2,7 +2,7 @@ import './env';
 import { createServer } from 'http';
 import createHttp from './http';
 import dataSource from './database';
-import Handlers from './modules/base/handlers';
+import Handlers from './modules/root/handlers';
 import createWebsocket from './socketio';
 import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
 

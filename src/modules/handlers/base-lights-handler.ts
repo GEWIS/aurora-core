@@ -1,6 +1,6 @@
-import LightsController from '../base/entities/lights-controller';
+import LightsController from '../root/entities/lights-controller';
 import BaseHandler from './base-handler';
-import { LightsGroup } from '../base/entities/lights';
+import { LightsGroup } from '../root/entities/lights';
 
 export default abstract class BaseLightsHandler extends BaseHandler<LightsGroup> {
   private bpm: number;

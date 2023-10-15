@@ -1,6 +1,6 @@
 import { Column, Entity } from 'typeorm';
 import { AccessToken as SpotifyAccessToken } from '@spotify/web-api-ts-sdk';
-import BaseEntity from '../../base/entities/base-entity';
+import BaseEntity from '../../root/entities/base-entity';
 import AccessToken from './access-token';
 
 @Entity()
