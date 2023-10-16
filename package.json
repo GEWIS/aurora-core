@@ -8,6 +8,7 @@
     "build": "tsoa spec-and-routes && tsc",
     "start": "node build/src/index.js",
     "tsoa": "tsoa spec-and-routes",
+    "gen-client": "nswag openapi2tsclient /input:build/swagger.json /output:../narrowcasting-client/src/api/Client.ts /ServiceHost:.",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix"
   },
@@ -50,6 +51,7 @@
     "eslint-config-airbnb-typescript": "^17.1.0",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "nswag": "^13.20.0"
   }
 }
