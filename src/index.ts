@@ -12,13 +12,13 @@ async function createApp(): Promise<void> {
   const app = createHttp();
   const httpServer = createServer(app);
 
+  const io = createWebsocket(httpServer);
+
   const beatEmitter = new BeatEmitter();
 
-  await Handlers.getInstance();
+  await Handlers.getInstance(io, beatEmitter);
   await SpotifyApiHandler.getInstance().init();
   await SpotifyTrackHandler.getInstance().init(beatEmitter);
-
-  const io = createWebsocket(httpServer);
 
   const port = process.env.PORT || 3000;
   httpServer.listen(port, () => console.log(`Listening at http://localhost:${port}`));

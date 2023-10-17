@@ -1,4 +1,5 @@
 import { singleton } from 'tsyringe';
+import { Server } from 'socket.io';
 import BaseAudioHandler from '../handlers/base-audio-handler';
 import BaseLightsHandler from '../handlers/base-lights-handler';
 import BaseScreenHandler from '../handlers/base-screen-handler';
@@ -8,6 +9,8 @@ import SimpleAudioHandler from '../modes/audio/SimpleAudioHandler';
 import dataSource from '../../database';
 import { Audio, Screen } from './entities';
 import { LightsGroup } from './entities/lights';
+import SimpleLightsHandler from '../handlers/lights/SimpleLightsHandler';
+import { BeatEmitter } from '../events';
 
 @singleton()
 export default class Handlers {
@@ -43,17 +46,21 @@ export default class Handlers {
   /**
    * Register all possible handlers in this function
    */
-  public constructor() {
+  public constructor(io: Server, beatEmitter: BeatEmitter) {
     this._handlers.set(Audio, [
       new SimpleAudioHandler(),
     ] as BaseAudioHandler[]);
-    this._handlers.set(LightsGroup, [] as BaseLightsHandler[]);
+    this._handlers.set(LightsGroup, [
+      new SimpleLightsHandler(io.of('/lights'), beatEmitter),
+    ] as BaseLightsHandler[]);
     this._handlers.set(Screen, [] as BaseScreenHandler[]);
   }
 
-  public static async getInstance() {
-    if (this.instance == null) {
-      this.instance = new Handlers();
+  public static async getInstance(io?: Server, beatEmitter?: BeatEmitter) {
+    if (this.instance == null && (io === undefined || !beatEmitter === undefined)) {
+      throw new Error('Not all parameters provided to initialize');
+    } else if (this.instance == null) {
+      this.instance = new Handlers(io!, beatEmitter!);
       await this.instance.init();
     }
     return this.instance;

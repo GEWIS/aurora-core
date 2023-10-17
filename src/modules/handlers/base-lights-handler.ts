@@ -1,11 +1,24 @@
-import LightsController from '../root/entities/lights-controller';
+import { Namespace } from 'socket.io';
 import BaseHandler from './base-handler';
 import { LightsGroup } from '../root/entities/lights';
+import { BeatEmitter } from '../events';
 
 export default abstract class BaseLightsHandler extends BaseHandler<LightsGroup> {
   private bpm: number;
 
-  private lights: LightsController[] = [];
+  private lights: LightsGroup[] = [];
+
+  protected websocket: Namespace;
+
+  protected beatEmitter: BeatEmitter;
+
+  protected constructor(socket: Namespace, beatEmitter: BeatEmitter) {
+    super();
+    this.websocket = socket;
+    this.beatEmitter = beatEmitter;
+
+    this.beatEmitter.on('bpm', (...args) => this.setBpm(args[0]));
+  }
 
   /**
    * Set the bpm of the current song. Zero (0) if no bpm
@@ -15,16 +28,7 @@ export default abstract class BaseLightsHandler extends BaseHandler<LightsGroup>
     this.bpm = bpm;
   }
 
-  /**
-   * Handle a beat of the current playing song
-   * @param timestamp timestamp of the current beat
-   */
-  public abstract beat(timestamp: number): void;
-
-  /**
-   * Handle a tick to recalculate the current light settings.
-   * Runs more frequent than beat (at least 44Hz)
-   * @param timestamp
-   */
-  public abstract tick(timestamp: number): void;
+  protected sendDataToController(data: any) {
+    this.websocket.emit('dmx_packet', data);
+  }
 }
