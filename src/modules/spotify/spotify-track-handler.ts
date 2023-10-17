@@ -2,6 +2,7 @@ import {
   AudioAnalysis, AudioFeatures, Beat, PlaybackState, Section, Segment, Tatum,
 } from '@spotify/web-api-ts-sdk';
 import SpotifyApiHandler from './spotify-api-handler';
+import { BeatEmitter } from '../events';
 
 interface BeatEvent {
   beat: Beat;
@@ -30,6 +31,8 @@ export default class SpotifyTrackHandler {
     timeout: NodeJS.Timeout
   }[];
 
+  private beatEmitter: BeatEmitter;
+
   private ping = false;
 
   private constructor() {
@@ -46,8 +49,9 @@ export default class SpotifyTrackHandler {
     return this.instance;
   }
 
-  public async init() {
+  public async init(emitter: BeatEmitter) {
     if (this.initialized) throw new Error('SpotifyTrackHandler is already initialized!');
+    this.beatEmitter = emitter;
     this.initialized = true;
   }
 
@@ -137,5 +141,7 @@ export default class SpotifyTrackHandler {
 
     beat += `: ${event.beat.start} (${event.beat.confidence}) - ${event.section?.start} - ${event.section?.loudness}`;
     console.log(beat);
+
+    this.beatEmitter.emit('beat', event);
   }
 }

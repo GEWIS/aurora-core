@@ -5,15 +5,18 @@ import dataSource from './database';
 import Handlers from './modules/root/handlers';
 import createWebsocket from './socketio';
 import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
+import { BeatEmitter } from './modules/events';
 
 async function createApp(): Promise<void> {
   await dataSource.initialize();
   const app = createHttp();
   const httpServer = createServer(app);
 
+  const beatEmitter = new BeatEmitter();
+
   await Handlers.getInstance();
   await SpotifyApiHandler.getInstance().init();
-  await SpotifyTrackHandler.getInstance().init();
+  await SpotifyTrackHandler.getInstance().init(beatEmitter);
 
   const io = createWebsocket(httpServer);
 

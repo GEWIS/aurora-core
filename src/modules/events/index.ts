@@ -1,0 +1,1 @@
+export { BeatEmitter } from './BeatEmitter';
