@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import SubscribeEntity from '../root/entities/subscribe-entity';
+import { BeatEvent } from '../events/MusicEmitter';
 
 export default abstract class BaseHandler<T extends SubscribeEntity> {
   /**
@@ -49,5 +50,5 @@ export default abstract class BaseHandler<T extends SubscribeEntity> {
     return this._entities;
   }
 
-  abstract beat(): void;
+  abstract beat(event: BeatEvent): void;
 }

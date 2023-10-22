@@ -5,6 +5,7 @@ import BaseLightsHandler from '../handlers/base-lights-handler';
 import LightsGroupPars from './entities/lights/lights-group-pars';
 import LightsGroupMovingHeadRgbs from './entities/lights/lights-group-moving-head-rgbs';
 import LightsGroupMovingHeadWheels from './entities/lights/lights-group-moving-head-wheels';
+import { MusicEmitter, TrackPropertiesEvent } from '../events/MusicEmitter';
 
 @singleton()
 export default class LightsControllerHandler {
@@ -22,13 +23,20 @@ export default class LightsControllerHandler {
     return new Array(512).fill(0);
   }
 
-  constructor(socket: Namespace, lightControllers: LightsController[] = []) {
+  constructor(
+    socket: Namespace,
+    musicEmitter: MusicEmitter,
+    lightControllers: LightsController[] = [],
+  ) {
     this.websocket = socket;
 
     lightControllers.forEach((c) => {
       this.lightsControllersValues.set(c.id, this.constructNewValuesArray());
     });
 
+    musicEmitter.on('features', this.setTrackFeatures.bind(this));
+
+    // Tick rate (currently 40Hz)
     setInterval(this.tick.bind(this), 25);
   }
 
@@ -38,7 +46,6 @@ export default class LightsControllerHandler {
       result = this.constructNewValuesArray();
       this.lightsControllersValues.set(controller.id, result);
       this.lightsControllers.set(controller.id, controller);
-      console.log('ping!');
     }
     return result;
   }
@@ -54,6 +61,10 @@ export default class LightsControllerHandler {
   removeLightsHandler(lightsHandler: BaseLightsHandler) {
     this.lightsHandlers = this.lightsHandlers
       .filter((h) => h.identifier !== lightsHandler.identifier);
+  }
+
+  private setTrackFeatures(event: TrackPropertiesEvent) {
+    this.lightsHandlers.forEach((h) => h.setFeatures(event));
   }
 
   /**

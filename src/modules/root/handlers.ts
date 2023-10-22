@@ -1,5 +1,4 @@
 import { singleton } from 'tsyringe';
-import { Server } from 'socket.io';
 import BaseAudioHandler from '../handlers/base-audio-handler';
 import BaseLightsHandler from '../handlers/base-lights-handler';
 import BaseScreenHandler from '../handlers/base-screen-handler';
@@ -12,6 +11,7 @@ import { LightsGroup } from './entities/lights';
 import SimpleLightsHandler from '../handlers/lights/SimpleLightsHandler';
 import { MusicEmitter } from '../events';
 import LightsControllerHandler from './lights-controller-handler';
+import { BeatEvent } from '../events/MusicEmitter';
 
 @singleton()
 export default class Handlers {
@@ -107,9 +107,9 @@ export default class Handlers {
     }
   }
 
-  public handleBeat() {
+  public handleBeat(event: BeatEvent) {
     this._handlers.forEach((handlers) => {
-      handlers.forEach((h) => h.beat());
+      handlers.forEach((h) => h.beat(event));
     });
   }
 }

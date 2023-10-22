@@ -1,22 +1,16 @@
 import {
-  AudioAnalysis, AudioFeatures, Beat, PlaybackState, Section, Segment, Tatum,
+  AudioAnalysis, AudioFeatures, PlaybackState, Track,
 } from '@spotify/web-api-ts-sdk';
 import SpotifyApiHandler from './spotify-api-handler';
 import { MusicEmitter } from '../events';
-
-interface BeatEvent {
-  beat: Beat;
-  segment?: Segment;
-  section?: Section;
-  tatum?: Tatum;
-}
+import { BeatEvent, TrackPropertiesEvent } from '../events/MusicEmitter';
 
 export default class SpotifyTrackHandler {
   private static instance: SpotifyTrackHandler;
 
   private initialized = false;
 
-  private syncLoopTimer;
+  private syncLoopTimer?: NodeJS.Timeout;
 
   private readonly api: SpotifyApiHandler;
 
@@ -31,13 +25,13 @@ export default class SpotifyTrackHandler {
     timeout: NodeJS.Timeout
   }[];
 
-  private beatEmitter: MusicEmitter;
+  private musicEmitter: MusicEmitter;
 
   private ping = false;
 
   private constructor() {
     this.api = SpotifyApiHandler.getInstance();
-    this.syncLoopTimer = setInterval(this.syncLoop.bind(this), 5000);
+    setInterval(this.syncLoop.bind(this), 5000);
     this.syncLoop().then(() => {});
     this.beatEvents = [];
   }
@@ -51,7 +45,7 @@ export default class SpotifyTrackHandler {
 
   public async init(emitter: MusicEmitter) {
     if (this.initialized) throw new Error('SpotifyTrackHandler is already initialized!');
-    this.beatEmitter = emitter;
+    this.musicEmitter = emitter;
     this.initialized = true;
   }
 
@@ -64,6 +58,19 @@ export default class SpotifyTrackHandler {
       clearTimeout(e.timeout);
     });
     this.beatEvents = [];
+  }
+
+  private setNextTrackEvent(state: PlaybackState): void {
+    if (!state.is_playing) return;
+    if (this.syncLoopTimer) {
+      clearTimeout(this.syncLoopTimer);
+      this.syncLoopTimer = undefined;
+    }
+
+    this.syncLoopTimer = setTimeout(
+      this.syncLoop.bind(this),
+      state.item.duration_ms - state.progress_ms + 10,
+    );
   }
 
   private setBeatEvents(track: AudioAnalysis) {
@@ -103,7 +110,6 @@ export default class SpotifyTrackHandler {
    * @private
    */
   private async syncLoop() {
-    console.log('Start Spotify sync job');
     if (!this.api.client) return;
 
     const state = await this.api.client.player.getCurrentlyPlayingTrack();
@@ -114,7 +120,12 @@ export default class SpotifyTrackHandler {
       this.currentlyPlayingAnalysis = await this.api.client.tracks
         .audioAnalysis(state.item.id);
 
-      console.log(this.currentlyPlayingFeatures);
+      this.emitTrackFeatures(this.currentlyPlayingFeatures);
+      this.setNextTrackEvent(state);
+
+      const item = state.item as Track;
+
+      console.log(`Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name}`);
     }
 
     if (!state.is_playing && this.playState.is_playing) {
@@ -142,6 +153,22 @@ export default class SpotifyTrackHandler {
     beat += `: ${event.beat.start} (${event.beat.confidence}) - ${event.section?.start} - ${event.section?.loudness}`;
     console.log(beat);
 
-    this.beatEmitter.emit('beat', event);
+    this.musicEmitter.emit('beat', event);
+  }
+
+  /**
+   * Send the features of the currently playing track to all handlers
+   * @param features
+   * @private
+   */
+  private emitTrackFeatures(features: AudioFeatures) {
+    const event: TrackPropertiesEvent = {
+      bpm: features.tempo,
+      danceability: features.danceability,
+      energy: features.energy,
+      loudness: features.loudness,
+      valence: features.valence,
+    };
+    this.musicEmitter.emit('features', event);
   }
 }
