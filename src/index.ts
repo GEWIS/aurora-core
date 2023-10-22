@@ -5,7 +5,7 @@ import dataSource from './database';
 import Handlers from './modules/root/handlers';
 import createWebsocket from './socketio';
 import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
-import { BeatEmitter } from './modules/events';
+import { MusicEmitter } from './modules/events';
 import LightsControllerHandler from './modules/root/lights-controller-handler';
 
 async function createApp(): Promise<void> {
@@ -17,11 +17,11 @@ async function createApp(): Promise<void> {
 
   const lightsControllerHandler = new LightsControllerHandler(io.of('/lights'));
 
-  const beatEmitter = new BeatEmitter();
+  const musicEmitter = new MusicEmitter();
 
-  await Handlers.getInstance(io, beatEmitter, lightsControllerHandler);
+  await Handlers.getInstance(musicEmitter, lightsControllerHandler);
   await SpotifyApiHandler.getInstance().init();
-  await SpotifyTrackHandler.getInstance().init(beatEmitter);
+  await SpotifyTrackHandler.getInstance().init(musicEmitter);
 
   const port = process.env.PORT || 3000;
   httpServer.listen(port, () => console.log(`Listening at http://localhost:${port}`));

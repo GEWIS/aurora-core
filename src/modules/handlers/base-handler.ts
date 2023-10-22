@@ -48,4 +48,6 @@ export default abstract class BaseHandler<T extends SubscribeEntity> {
   public get entities() {
     return this._entities;
   }
+
+  abstract beat(): void;
 }

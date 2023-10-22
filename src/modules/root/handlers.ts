@@ -10,7 +10,7 @@ import dataSource from '../../database';
 import { Audio, Screen } from './entities';
 import { LightsGroup } from './entities/lights';
 import SimpleLightsHandler from '../handlers/lights/SimpleLightsHandler';
-import { BeatEmitter } from '../events';
+import { MusicEmitter } from '../events';
 import LightsControllerHandler from './lights-controller-handler';
 
 @singleton()
@@ -48,32 +48,35 @@ export default class Handlers {
    * Register all possible handlers in this function
    */
   public constructor(
-    io: Server,
-    beatEmitter: BeatEmitter,
+    musicEmitter: MusicEmitter,
     lightsControllerHandler: LightsControllerHandler,
   ) {
+    // Create all light handlers
     const lightsHandlers: BaseLightsHandler[] = [
-      new SimpleLightsHandler(io.of('/lights'), beatEmitter),
+      new SimpleLightsHandler(),
     ];
 
+    // Register all handlers
     this._handlers.set(Audio, [
       new SimpleAudioHandler(),
     ] as BaseAudioHandler[]);
     this._handlers.set(LightsGroup, lightsHandlers);
     this._handlers.set(Screen, [] as BaseScreenHandler[]);
 
+    // Subscribe all lights handlers to the broker that handlers beats and ticks
     lightsControllerHandler.registerLightsHandlers(lightsHandlers);
+
+    musicEmitter.on('beat', this.handleBeat.bind(this));
   }
 
   public static async getInstance(
-    io?: Server,
-    beatEmitter?: BeatEmitter,
+    musicEmitter?: MusicEmitter,
     lightsControllerHandler?: LightsControllerHandler,
   ) {
-    if (this.instance == null && (io === undefined || !beatEmitter === undefined)) {
+    if (this.instance == null && !musicEmitter === undefined) {
       throw new Error('Not all parameters provided to initialize');
     } else if (this.instance == null) {
-      this.instance = new Handlers(io!, beatEmitter!, lightsControllerHandler!);
+      this.instance = new Handlers(musicEmitter!, lightsControllerHandler!);
       await this.instance.init();
     }
     return this.instance;
@@ -102,5 +105,11 @@ export default class Handlers {
         }
       });
     }
+  }
+
+  public handleBeat() {
+    this._handlers.forEach((handlers) => {
+      handlers.forEach((h) => h.beat());
+    });
   }
 }
