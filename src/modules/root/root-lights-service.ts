@@ -10,11 +10,12 @@ import LightsMovingHead from './entities/lights/lights-moving-head';
 import LightsGroupPars from './entities/lights/lights-group-pars';
 import LightsGroupMovingHeadRgbs from './entities/lights/lights-group-moving-head-rgbs';
 import LightsGroupMovingHeadWheels from './entities/lights/lights-group-moving-head-wheels';
+import Movement from './entities/lights/movement';
 
 export interface LightsControllerResponse extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
 export interface LightsFixtureResponse extends Pick<LightsFixture, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'masterDimChannel' | 'strobeChannel'> {}
 export interface ColorResponse extends Pick<Colors, 'redChannel' | 'blueChannel' | 'greenChannel' | 'coldWhiteChannel' | 'warmWhiteChannel' | 'amberChannel' | 'uvChannel'> {}
-export interface MovingHeadResponse extends LightsFixtureResponse, Pick<LightsMovingHead, 'panChannel' | 'finePanChannel' | 'tiltChannel' | 'fineTiltChannel' | 'movingSpeedChannel'> {}
+export interface MovingHeadResponse extends LightsFixtureResponse, Movement {}
 export interface MovingHeadWheelResponse extends LightsFixtureResponse, Pick<LightsMovingHeadWheel, 'colorWheelChannel' | 'goboWheelChannel' | 'goboRotateChannel'> {}
 export interface BaseLightsGroupResponse extends Pick<LightsGroup, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
 export interface LightsGroupResponse extends BaseLightsGroupResponse {
@@ -89,6 +90,16 @@ export default class RootLightsService {
     };
   }
 
+  private toMovementResponse(m: Movement, firstChannel: number): Movement {
+    return {
+      tiltChannel: m.tiltChannel + firstChannel - 1,
+      fineTiltChannel: m.fineTiltChannel ? m.fineTiltChannel + firstChannel - 1 : null,
+      panChannel: m.panChannel + firstChannel - 1,
+      finePanChannel: m.finePanChannel ? m.finePanChannel + firstChannel - 1 : null,
+      movingSpeedChannel: m.movingSpeedChannel ? m.movingSpeedChannel + firstChannel - 1 : null,
+    };
+  }
+
   private toFixtureResponse(f: LightsFixture, firstChannel: number): LightsFixtureResponse {
     return {
       id: f.id,
@@ -103,11 +114,7 @@ export default class RootLightsService {
   private toMovingHeadResponse(m: LightsMovingHead, firstChannel: number): MovingHeadResponse {
     return {
       ...this.toFixtureResponse(m, firstChannel),
-      tiltChannel: m.tiltChannel + firstChannel - 1,
-      fineTiltChannel: m.fineTiltChannel ? m.fineTiltChannel + firstChannel - 1 : null,
-      panChannel: m.panChannel + firstChannel - 1,
-      finePanChannel: m.finePanChannel ? m.finePanChannel + firstChannel - 1 : null,
-      movingSpeedChannel: m.movingSpeedChannel ? m.movingSpeedChannel + firstChannel - 1 : null,
+      ...this.toMovementResponse(m.movement, firstChannel),
     };
   }
 
@@ -256,15 +263,14 @@ export default class RootLightsService {
     };
   }
 
-  private toMovingHead(params: LightsMovingHeadParams): LightsMovingHead {
+  private toMovement(params: LightsMovingHeadParams): Movement {
     return {
-      ...this.toFixture(params),
       panChannel: params.panChannel,
       finePanChannel: params.finePanChannel,
       tiltChannel: params.tiltChannel,
       fineTiltChannel: params.fineTiltChannel,
       movingSpeedChannel: params.movingSpeedChannel,
-    } as LightsMovingHead;
+    } as Movement;
   }
 
   public async getAllLightsPars(): Promise<LightsPar[]> {
@@ -292,7 +298,8 @@ export default class RootLightsService {
   ): Promise<LightsMovingHeadRgb> {
     const repository = dataSource.getRepository(LightsMovingHeadRgb);
     return repository.save({
-      ...this.toMovingHead(params),
+      ...this.toFixture(params),
+      movement: this.toMovement(params),
       color: this.toColor(params),
     });
   }
@@ -302,7 +309,8 @@ export default class RootLightsService {
   ): Promise<LightsMovingHeadWheel> {
     const repository = dataSource.getRepository(LightsMovingHeadWheel);
     return repository.save({
-      ...this.toMovingHead(params),
+      ...this.toFixture(params),
+      movement: this.toMovement(params),
       colorWheelChannel: params.colorWheelChannel,
       goboWheelChannel: params.goboWheelChannel,
       goboRotateChannel: params.goboRotateChannel,

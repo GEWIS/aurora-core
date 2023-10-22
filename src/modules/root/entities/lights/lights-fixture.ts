@@ -1,5 +1,10 @@
-import { Column } from 'typeorm';
+import { AfterLoad, Column } from 'typeorm';
 import BaseEntity from '../base-entity';
+
+export interface LightsFixtureCurrentValues {
+  masterDimChannel: number,
+  strobeChannel: number,
+}
 
 export default class LightsFixture extends BaseEntity {
   @Column()
@@ -10,4 +15,11 @@ export default class LightsFixture extends BaseEntity {
 
   @Column({ type: 'tinyint', unsigned: true })
   public strobeChannel: number;
+
+  public valuesUpdatedAt: Date;
+
+  @AfterLoad()
+  afterLoad() {
+    this.valuesUpdatedAt = new Date();
+  }
 }

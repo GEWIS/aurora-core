@@ -1,5 +1,13 @@
 import { Column, Entity } from 'typeorm';
 import LightsMovingHead from './lights-moving-head';
+import Movement from './movement';
+import { LightsFixtureCurrentValues } from './lights-fixture';
+
+interface LightsMovingHeadWheelCurrentValues extends Movement, LightsFixtureCurrentValues {
+  colorWheelChannel: number,
+  goboWheelChannel: number,
+  goboRotateChannel?: number,
+}
 
 @Entity()
 export default class LightsMovingHeadWheel extends LightsMovingHead {
@@ -11,4 +19,29 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
 
   @Column({ type: 'tinyint', nullable: true, unsigned: true })
   public goboRotateChannel: number | null;
+
+  private currentValues: LightsMovingHeadWheelCurrentValues = {
+    masterDimChannel: 0,
+    strobeChannel: 0,
+    panChannel: 0,
+    finePanChannel: 0,
+    tiltChannel: 0,
+    fineTiltChannel: 0,
+    movingSpeedChannel: 0,
+    colorWheelChannel: 0,
+    goboWheelChannel: 0,
+    goboRotateChannel: 0,
+  };
+
+  setCurrentValues(values: Partial<LightsMovingHeadWheelCurrentValues>) {
+    this.currentValues = {
+      ...this.currentValues,
+      ...values,
+    };
+    this.valuesUpdatedAt = new Date();
+  }
+
+  public get channelValues() {
+    return this.currentValues;
+  }
 }

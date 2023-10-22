@@ -31,4 +31,6 @@ export default abstract class BaseLightsHandler extends BaseHandler<LightsGroup>
   protected sendDataToController(data: any) {
     this.websocket.emit('dmx_packet', data);
   }
+
+  abstract tick(): LightsGroup[];
 }

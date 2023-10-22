@@ -12,10 +12,14 @@ export default class LightsGroupPars extends BaseEntity {
   @JoinColumn()
   public group: LightsGroup;
 
-  @ManyToOne(() => LightsPar)
+  @ManyToOne(() => LightsPar, { eager: true })
   @JoinColumn()
   public par: LightsPar;
 
   @Column({ type: 'smallint', unsigned: true })
   public firstChannel: number;
+
+  public getActualChannel(relativeChannel: number) {
+    return relativeChannel + this.firstChannel - 1;
+  }
 }

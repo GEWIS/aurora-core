@@ -13,16 +13,16 @@ import SubscribeEntity from '../subscribe-entity';
 
 @Entity()
 export default class LightsGroup extends SubscribeEntity {
-  @ManyToOne(() => LightsController)
+  @ManyToOne(() => LightsController, { eager: true })
   @JoinColumn()
   public controller: LightsController;
 
-  @OneToMany(() => LightsGroupPars, (pars) => pars.group)
+  @OneToMany(() => LightsGroupPars, (pars) => pars.group, { eager: true })
   public pars: LightsGroupPars[];
 
-  @OneToMany(() => LightsGroupMovingHeadWheels, (pars) => pars.group)
+  @OneToMany(() => LightsGroupMovingHeadWheels, (pars) => pars.group, { eager: true })
   public movingHeadWheels: LightsGroupMovingHeadWheels[];
 
-  @OneToMany(() => LightsGroupMovingHeadRgbs, (pars) => pars.group)
+  @OneToMany(() => LightsGroupMovingHeadRgbs, (pars) => pars.group, { eager: true })
   public movingHeadRgbs: LightsGroupMovingHeadRgbs[];
 }

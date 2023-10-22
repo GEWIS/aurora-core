@@ -11,6 +11,7 @@ import { Audio, Screen } from './entities';
 import { LightsGroup } from './entities/lights';
 import SimpleLightsHandler from '../handlers/lights/SimpleLightsHandler';
 import { BeatEmitter } from '../events';
+import LightsControllerHandler from './lights-controller-handler';
 
 @singleton()
 export default class Handlers {
@@ -46,21 +47,33 @@ export default class Handlers {
   /**
    * Register all possible handlers in this function
    */
-  public constructor(io: Server, beatEmitter: BeatEmitter) {
+  public constructor(
+    io: Server,
+    beatEmitter: BeatEmitter,
+    lightsControllerHandler: LightsControllerHandler,
+  ) {
+    const lightsHandlers: BaseLightsHandler[] = [
+      new SimpleLightsHandler(io.of('/lights'), beatEmitter),
+    ];
+
     this._handlers.set(Audio, [
       new SimpleAudioHandler(),
     ] as BaseAudioHandler[]);
-    this._handlers.set(LightsGroup, [
-      new SimpleLightsHandler(io.of('/lights'), beatEmitter),
-    ] as BaseLightsHandler[]);
+    this._handlers.set(LightsGroup, lightsHandlers);
     this._handlers.set(Screen, [] as BaseScreenHandler[]);
+
+    lightsControllerHandler.registerLightsHandlers(lightsHandlers);
   }
 
-  public static async getInstance(io?: Server, beatEmitter?: BeatEmitter) {
+  public static async getInstance(
+    io?: Server,
+    beatEmitter?: BeatEmitter,
+    lightsControllerHandler?: LightsControllerHandler,
+  ) {
     if (this.instance == null && (io === undefined || !beatEmitter === undefined)) {
       throw new Error('Not all parameters provided to initialize');
     } else if (this.instance == null) {
-      this.instance = new Handlers(io!, beatEmitter!);
+      this.instance = new Handlers(io!, beatEmitter!, lightsControllerHandler!);
       await this.instance.init();
     }
     return this.instance;

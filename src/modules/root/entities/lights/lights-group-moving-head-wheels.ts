@@ -12,10 +12,14 @@ export default class LightsGroupMovingHeadWheels extends BaseEntity {
   @JoinColumn()
   public group: LightsGroup;
 
-  @ManyToOne(() => LightsMovingHeadWheel)
+  @ManyToOne(() => LightsMovingHeadWheel, { eager: true })
   @JoinColumn()
   public movingHead: LightsMovingHeadWheel;
 
   @Column({ type: 'smallint', unsigned: true })
   public firstChannel: number;
+
+  public getActualChannel(relativeChannel: number) {
+    return relativeChannel + this.firstChannel - 1;
+  }
 }

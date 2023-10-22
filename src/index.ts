@@ -6,6 +6,7 @@ import Handlers from './modules/root/handlers';
 import createWebsocket from './socketio';
 import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
 import { BeatEmitter } from './modules/events';
+import LightsControllerHandler from './modules/root/lights-controller-handler';
 
 async function createApp(): Promise<void> {
   await dataSource.initialize();
@@ -14,9 +15,11 @@ async function createApp(): Promise<void> {
 
   const io = createWebsocket(httpServer);
 
+  const lightsControllerHandler = new LightsControllerHandler(io.of('/lights'));
+
   const beatEmitter = new BeatEmitter();
 
-  await Handlers.getInstance(io, beatEmitter);
+  await Handlers.getInstance(io, beatEmitter, lightsControllerHandler);
   await SpotifyApiHandler.getInstance().init();
   await SpotifyTrackHandler.getInstance().init(beatEmitter);
 
