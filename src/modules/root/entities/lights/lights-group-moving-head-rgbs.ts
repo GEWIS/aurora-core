@@ -10,7 +10,7 @@ import LightsMovingHeadRgb from './lights-moving-head-rgb';
 export default class LightsGroupMovingHeadRgbs extends BaseEntity {
   @ManyToOne(() => LightsGroup)
   @JoinColumn()
-  public lightsGroup: LightsGroup;
+  public group: LightsGroup;
 
   @ManyToOne(() => LightsMovingHeadRgb)
   @JoinColumn()

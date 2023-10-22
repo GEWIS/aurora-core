@@ -10,7 +10,7 @@ import LightsMovingHeadWheel from './lights-moving-head-wheel';
 export default class LightsGroupMovingHeadWheels extends BaseEntity {
   @ManyToOne(() => LightsGroup)
   @JoinColumn()
-  public lightsGroup: LightsGroup;
+  public group: LightsGroup;
 
   @ManyToOne(() => LightsMovingHeadWheel)
   @JoinColumn()

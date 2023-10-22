@@ -17,12 +17,12 @@ export default class LightsGroup extends SubscribeEntity {
   @JoinColumn()
   public controller: LightsController;
 
-  @OneToMany(() => LightsGroupPars, (pars) => pars.lightsGroup)
+  @OneToMany(() => LightsGroupPars, (pars) => pars.group)
   public pars: LightsGroupPars[];
 
-  @OneToMany(() => LightsGroupMovingHeadWheels, (pars) => pars.lightsGroup)
+  @OneToMany(() => LightsGroupMovingHeadWheels, (pars) => pars.group)
   public movingHeadWheels: LightsGroupMovingHeadWheels[];
 
-  @OneToMany(() => LightsGroupMovingHeadRgbs, (pars) => pars.lightsGroup)
+  @OneToMany(() => LightsGroupMovingHeadRgbs, (pars) => pars.group)
   public movingHeadRgbs: LightsGroupMovingHeadRgbs[];
 }

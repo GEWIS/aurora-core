@@ -10,7 +10,7 @@ import LightsPar from './lights-par';
 export default class LightsGroupPars extends BaseEntity {
   @ManyToOne(() => LightsGroup, (group) => group.pars)
   @JoinColumn()
-  public lightsGroup: LightsGroup;
+  public group: LightsGroup;
 
   @ManyToOne(() => LightsPar)
   @JoinColumn()

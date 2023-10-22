@@ -1,0 +1,311 @@
+import { Repository } from 'typeorm';
+import { LightsController } from './entities';
+import {
+  LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel, LightsPar,
+} from './entities/lights';
+import dataSource from '../../database';
+import LightsFixture from './entities/lights/lights-fixture';
+import Colors from './entities/lights/colors';
+import LightsMovingHead from './entities/lights/lights-moving-head';
+import LightsGroupPars from './entities/lights/lights-group-pars';
+import LightsGroupMovingHeadRgbs from './entities/lights/lights-group-moving-head-rgbs';
+import LightsGroupMovingHeadWheels from './entities/lights/lights-group-moving-head-wheels';
+
+export interface LightsControllerResponse extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
+export interface LightsFixtureResponse extends Pick<LightsFixture, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'masterDimChannel' | 'strobeChannel'> {}
+export interface ColorResponse extends Pick<Colors, 'redChannel' | 'blueChannel' | 'greenChannel' | 'coldWhiteChannel' | 'warmWhiteChannel' | 'amberChannel' | 'uvChannel'> {}
+export interface MovingHeadResponse extends LightsFixtureResponse, Pick<LightsMovingHead, 'panChannel' | 'finePanChannel' | 'tiltChannel' | 'fineTiltChannel' | 'movingSpeedChannel'> {}
+export interface MovingHeadWheelResponse extends LightsFixtureResponse, Pick<LightsMovingHeadWheel, 'colorWheelChannel' | 'goboWheelChannel' | 'goboRotateChannel'> {}
+export interface BaseLightsGroupResponse extends Pick<LightsGroup, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
+export interface LightsGroupResponse extends BaseLightsGroupResponse {
+  pars: (LightsFixtureResponse & ColorResponse)[];
+  movingHeadRgbs: (MovingHeadResponse & ColorResponse)[];
+  movingHeadWheels: MovingHeadWheelResponse[];
+}
+
+export interface ColorParams {
+  colorRedChannel: number;
+  colorGreenChannel: number;
+  colorBlueChannel: number;
+  colorColdWhiteChannel?: number;
+  colorWarmWhiteChannel?: number;
+  colorAmberWhiteChannel?: number;
+  colorUvChannel?: number;
+}
+
+export interface LightsFixtureParams extends Pick<LightsFixture, 'name' | 'masterDimChannel' | 'strobeChannel'> {}
+
+export interface LightsParCreateParams extends LightsFixtureParams, ColorParams {
+}
+
+export interface LightsMovingHeadParams extends LightsFixtureParams {
+  panChannel: number;
+  finePanChannel?: number;
+  tiltChannel: number;
+  fineTiltChannel?: number;
+  movingSpeedChannel?: number;
+}
+
+export interface LightsMovingHeadRgbCreateParams extends LightsMovingHeadParams, ColorParams {}
+
+export interface LightsMovingHeadWheelCreateParams extends LightsMovingHeadParams {
+  colorWheelChannel: number;
+  goboWheelChannel: number;
+  goboRotateChannel?: number;
+}
+
+export interface LightsInGroup {
+  fixtureId: number;
+  firstChannel: number;
+}
+
+export interface LightsGroupCreateParams extends Pick<LightsGroup, 'name'> {
+  pars: LightsInGroup[];
+  movingHeadRgbs: LightsInGroup[];
+  movingHeadWheels: LightsInGroup[];
+}
+
+export interface LightsControllerCreateParams extends Pick<LightsController, 'name'> {}
+
+export default class RootLightsService {
+  private controllerRepository: Repository<LightsController>;
+
+  private groupRepository: Repository<LightsGroup>;
+
+  constructor() {
+    this.controllerRepository = dataSource.getRepository(LightsController);
+    this.groupRepository = dataSource.getRepository(LightsGroup);
+  }
+
+  private toColorResponse(c: Colors, firstChannel: number): ColorResponse {
+    return {
+      redChannel: c.redChannel + firstChannel - 1,
+      blueChannel: c.blueChannel + firstChannel - 1,
+      greenChannel: c.greenChannel + firstChannel - 1,
+      coldWhiteChannel: c.coldWhiteChannel ? c.coldWhiteChannel + firstChannel - 1 : null,
+      warmWhiteChannel: c.warmWhiteChannel ? c.warmWhiteChannel + firstChannel - 1 : null,
+      amberChannel: c.amberChannel ? c.amberChannel + firstChannel - 1 : null,
+      uvChannel: c.uvChannel ? c.uvChannel + firstChannel - 1 : null,
+    };
+  }
+
+  private toFixtureResponse(f: LightsFixture, firstChannel: number): LightsFixtureResponse {
+    return {
+      id: f.id,
+      createdAt: f.createdAt,
+      updatedAt: f.updatedAt,
+      name: f.name,
+      masterDimChannel: f.masterDimChannel + firstChannel - 1,
+      strobeChannel: f.strobeChannel + firstChannel - 1,
+    };
+  }
+
+  private toMovingHeadResponse(m: LightsMovingHead, firstChannel: number): MovingHeadResponse {
+    return {
+      ...this.toFixtureResponse(m, firstChannel),
+      tiltChannel: m.tiltChannel + firstChannel - 1,
+      fineTiltChannel: m.fineTiltChannel ? m.fineTiltChannel + firstChannel - 1 : null,
+      panChannel: m.panChannel + firstChannel - 1,
+      finePanChannel: m.finePanChannel ? m.finePanChannel + firstChannel - 1 : null,
+      movingSpeedChannel: m.movingSpeedChannel ? m.movingSpeedChannel + firstChannel - 1 : null,
+    };
+  }
+
+  private toLightsGroup(g: LightsGroup): LightsGroupResponse {
+    return {
+      id: g.id,
+      createdAt: g.createdAt,
+      updatedAt: g.updatedAt,
+      name: g.name,
+      pars: g.pars.map((p) => ({
+        ...this.toFixtureResponse(p.par, p.firstChannel),
+        ...this.toColorResponse(p.par.color, p.firstChannel),
+      })),
+      movingHeadRgbs: g.movingHeadRgbs.map((m) => ({
+        ...this.toMovingHeadResponse(m.movingHead, m.firstChannel),
+        ...this.toColorResponse(m.movingHead.color, m.firstChannel),
+      })),
+      movingHeadWheels: g.movingHeadWheels.map((m) => ({
+        ...this.toMovingHeadResponse(m.movingHead, m.firstChannel),
+        colorWheelChannel: m.movingHead.colorWheelChannel,
+        goboWheelChannel: m.movingHead.goboWheelChannel,
+        goboRotateChannel: m.movingHead.goboRotateChannel
+          ? m.movingHead.goboRotateChannel + m.firstChannel - 1 : null,
+      })),
+    };
+  }
+
+  private toLightsControllerResponse(c: LightsController): LightsControllerResponse {
+    return {
+      id: c.id,
+      createdAt: c.createdAt,
+      updatedAt: c.updatedAt,
+      name: c.name,
+    };
+  }
+
+  public async getAllControllers(): Promise<LightsControllerResponse[]> {
+    const controllers = await this.controllerRepository.find();
+    return controllers.map((c) => this.toLightsControllerResponse(c));
+  }
+
+  public async getSingleController(id: number): Promise<LightsController | null> {
+    return this.controllerRepository.findOne({ where: { id } });
+  }
+
+  public async createController(
+    params: LightsControllerCreateParams,
+  ): Promise<LightsControllerResponse> {
+    const controller = await this.controllerRepository.save({
+      name: params.name,
+    });
+    return this.toLightsControllerResponse(controller);
+  }
+
+  public async getAllLightsGroups(): Promise<BaseLightsGroupResponse[]> {
+    const groups = await this.groupRepository.find();
+    return groups.map((g) => ({
+      id: g.id,
+      createdAt: g.createdAt,
+      updatedAt: g.updatedAt,
+      name: g.name,
+    }));
+  }
+
+  public async getSingleLightGroup(id: number): Promise<LightsGroupResponse | null> {
+    const group = await this.groupRepository.findOne({
+      where: { id },
+      relations: {
+        pars: { par: true },
+        movingHeadWheels: { movingHead: true },
+        movingHeadRgbs: { movingHead: true },
+      },
+    });
+    if (group == null) return null;
+    return this.toLightsGroup(group);
+  }
+
+  public async createLightGroup(
+    controllerId: number,
+    params: LightsGroupCreateParams,
+  ): Promise<LightsGroupResponse | null> {
+    const controller = await this.controllerRepository.findOne({ where: { id: controllerId } });
+    if (controller == null) return null;
+
+    const g = await dataSource.transaction(async (manager) => {
+      const group = await manager.save(LightsGroup, {
+        name: params.name,
+        controller,
+      }) as LightsGroup;
+
+      await Promise.all(params.pars.map(async (p) => {
+        const par = await manager.findOne(LightsPar, { where: { id: p.fixtureId } });
+        if (par == null) throw new Error(`LightsPar with ID ${p.fixtureId} not found!`);
+        await manager.save(LightsGroupPars, {
+          group,
+          par,
+          firstChannel: p.firstChannel,
+        });
+      }));
+
+      await Promise.all(params.movingHeadRgbs.map(async (p) => {
+        const movingHead = await manager
+          .findOne(LightsMovingHeadRgb, { where: { id: p.fixtureId } });
+        if (movingHead == null) throw new Error(`LightsMovingHeadRgb with ID ${p.fixtureId} not found!`);
+        await manager.save(LightsGroupMovingHeadRgbs, {
+          group,
+          movingHead,
+          firstChannel: p.firstChannel,
+        });
+      }));
+
+      await Promise.all(params.movingHeadWheels.map(async (p) => {
+        const movingHead = await manager
+          .findOne(LightsMovingHeadWheel, { where: { id: p.fixtureId } });
+        if (movingHead == null) throw new Error(`LightsMovingHeadWheel with ID ${p.fixtureId} not found!`);
+        await manager.save(LightsGroupMovingHeadWheels, {
+          group,
+          movingHead,
+          firstChannel: p.firstChannel,
+        });
+      }));
+
+      return group;
+    });
+
+    return this.getSingleLightGroup(g.id);
+  }
+
+  private toFixture(params: LightsFixtureParams): LightsFixture {
+    return {
+      name: params.name,
+      masterDimChannel: params.masterDimChannel,
+      strobeChannel: params.strobeChannel,
+    } as LightsFixture;
+  }
+
+  private toColor(params: ColorParams): Colors {
+    return {
+      redChannel: params.colorRedChannel,
+      blueChannel: params.colorBlueChannel,
+      greenChannel: params.colorGreenChannel,
+      coldWhiteChannel: params.colorColdWhiteChannel,
+      warmWhiteChannel: params.colorWarmWhiteChannel,
+      amberChannel: params.colorAmberWhiteChannel,
+      uvChannel: params.colorUvChannel,
+    };
+  }
+
+  private toMovingHead(params: LightsMovingHeadParams): LightsMovingHead {
+    return {
+      ...this.toFixture(params),
+      panChannel: params.panChannel,
+      finePanChannel: params.finePanChannel,
+      tiltChannel: params.tiltChannel,
+      fineTiltChannel: params.fineTiltChannel,
+      movingSpeedChannel: params.movingSpeedChannel,
+    } as LightsMovingHead;
+  }
+
+  public async getAllLightsPars(): Promise<LightsPar[]> {
+    return dataSource.getRepository(LightsPar).find();
+  }
+
+  public async getAllMovingHeadRgbs(): Promise<LightsMovingHeadRgb[]> {
+    return dataSource.getRepository(LightsMovingHeadRgb).find();
+  }
+
+  public async getAllMovingHeadWheels(): Promise<LightsMovingHeadWheel[]> {
+    return dataSource.getRepository(LightsMovingHeadWheel).find();
+  }
+
+  public async createLightsPar(params: LightsParCreateParams): Promise<LightsPar> {
+    const repository = dataSource.getRepository(LightsPar);
+    return repository.save({
+      ...this.toFixture(params),
+      color: this.toColor(params),
+    });
+  }
+
+  public async createMovingHeadRgb(
+    params: LightsMovingHeadRgbCreateParams,
+  ): Promise<LightsMovingHeadRgb> {
+    const repository = dataSource.getRepository(LightsMovingHeadRgb);
+    return repository.save({
+      ...this.toMovingHead(params),
+      color: this.toColor(params),
+    });
+  }
+
+  public async createMovingHeadWheel(
+    params: LightsMovingHeadWheelCreateParams,
+  ): Promise<LightsMovingHeadWheel> {
+    const repository = dataSource.getRepository(LightsMovingHeadWheel);
+    return repository.save({
+      ...this.toMovingHead(params),
+      colorWheelChannel: params.colorWheelChannel,
+      goboWheelChannel: params.goboWheelChannel,
+      goboRotateChannel: params.goboRotateChannel,
+    });
+  }
+}
