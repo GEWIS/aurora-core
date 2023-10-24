@@ -1,7 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import LightsMovingHead from './lights-moving-head';
 import Movement from './movement';
 import { LightsFixtureCurrentValues } from './lights-fixture';
+import LightsWheelChannelValue, { ColorWheelColors } from './lights-wheel-channel-value';
 
 interface LightsMovingHeadWheelCurrentValues extends Movement, LightsFixtureCurrentValues {
   colorWheelChannel: number,
@@ -19,6 +20,12 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
 
   @Column({ type: 'tinyint', nullable: true, unsigned: true })
   public goboRotateChannel: number | null;
+
+  @OneToMany(() => LightsWheelChannelValue, (c) => c.movingHead, { eager: true })
+  public colorWheelChannelValues: LightsWheelChannelValue<ColorWheelColors>[];
+
+  @OneToMany(() => LightsWheelChannelValue, (c) => c.movingHead, { eager: true })
+  public goboWheelChannelValues: LightsWheelChannelValue<string>[];
 
   private currentValues: LightsMovingHeadWheelCurrentValues = {
     masterDimChannel: 0,

@@ -1,6 +1,7 @@
 import BaseLightsHandler from '../base-lights-handler';
 import { LightsGroup } from '../../root/entities/lights';
 import { BeatEvent } from '../../events/MusicEmitter';
+import { rgbColorDefinitions } from '../../lights/ColorDefinitions';
 
 export default class SimpleLightsHandler extends BaseLightsHandler {
   private ping = false;
@@ -19,11 +20,11 @@ export default class SimpleLightsHandler extends BaseLightsHandler {
       g.pars.forEach((p, i) => {
         if (i % 2 === (this.ping ? 1 : 0)) {
           p.par.setCurrentValues({
-            masterDimChannel: 255,
-            redChannel: Math.round(255 * beatProgression),
+            masterDimChannel: 255 * beatProgression,
+            ...rgbColorDefinitions.pink,
           });
         } else {
-          p.par.setCurrentValues({ masterDimChannel: 255, redChannel: 0 });
+          p.par.setMasterDimmer(0);
         }
       });
       return g;

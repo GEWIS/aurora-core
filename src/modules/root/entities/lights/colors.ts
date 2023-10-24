@@ -1,5 +1,7 @@
 import { Column } from 'typeorm';
 
+export type ColorChannel = keyof Colors;
+
 export default class Colors {
   @Column({ type: 'tinyint', unsigned: true })
   public redChannel: number;

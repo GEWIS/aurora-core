@@ -90,11 +90,11 @@ export default class LightsControllerHandler {
     }
     if (p.par.color.amberChannel != null) {
       o[p.getActualChannel(p.par.color.amberChannel) - 1] = p.par
-        .channelValues.coldWhiteChannel || 0;
+        .channelValues.amberChannel || 0;
     }
     if (p.par.color.uvChannel != null) {
       o[p.getActualChannel(p.par.color.uvChannel) - 1] = p.par
-        .channelValues.coldWhiteChannel || 0;
+        .channelValues.uvChannel || 0;
     }
     return o;
   }
@@ -128,11 +128,11 @@ export default class LightsControllerHandler {
     }
     if (p.movingHead.color.amberChannel != null) {
       o[p.getActualChannel(p.movingHead.color.amberChannel) - 1] = p.movingHead
-        .channelValues.coldWhiteChannel || 0;
+        .channelValues.amberChannel || 0;
     }
     if (p.movingHead.color.uvChannel != null) {
       o[p.getActualChannel(p.movingHead.color.uvChannel) - 1] = p.movingHead
-        .channelValues.coldWhiteChannel || 0;
+        .channelValues.uvChannel || 0;
     }
     o[p.getActualChannel(p.movingHead.movement.panChannel) - 1] = p.movingHead
       .channelValues.panChannel;

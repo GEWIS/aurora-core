@@ -51,7 +51,15 @@ export interface LightsMovingHeadRgbCreateParams extends LightsMovingHeadParams,
 
 export interface LightsMovingHeadWheelCreateParams extends LightsMovingHeadParams {
   colorWheelChannel: number;
+  colorWheelChannelValues: {
+    name: string;
+    value: number;
+  }[];
   goboWheelChannel: number;
+  goboWheelChannelValues: {
+    name: string;
+    value: number;
+  }[];
   goboRotateChannel?: number;
 }
 
