@@ -12,6 +12,9 @@ export { default as LightsGroup } from './lights-group';
 export { default as LightsPar } from './lights-par';
 export { default as LightsMovingHeadRgb } from './lights-moving-head-rgb';
 export { default as LightsMovingHeadWheel } from './lights-moving-head-wheel';
+export { default as LightsGroupPars } from './lights-group-pars';
+export { default as LightsGroupMovingHeadRgbs } from './lights-group-moving-head-rgbs';
+export { default as LightsGroupMovingHeadWheels } from './lights-group-moving-head-wheels';
 
 export const Entities = [
   LightsGroup, LightsPar, LightsMovingHeadRgb, LightsMovingHeadWheel,

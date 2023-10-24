@@ -2,15 +2,15 @@ import { Repository } from 'typeorm';
 import { LightsController } from './entities';
 import {
   LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel, LightsPar,
-} from './entities/lights';
+} from '../lights/entities';
 import dataSource from '../../database';
-import LightsFixture from './entities/lights/lights-fixture';
-import Colors from './entities/lights/colors';
-import LightsMovingHead from './entities/lights/lights-moving-head';
-import LightsGroupPars from './entities/lights/lights-group-pars';
-import LightsGroupMovingHeadRgbs from './entities/lights/lights-group-moving-head-rgbs';
-import LightsGroupMovingHeadWheels from './entities/lights/lights-group-moving-head-wheels';
-import Movement from './entities/lights/movement';
+import LightsFixture from '../lights/entities/lights-fixture';
+import Colors from '../lights/entities/colors';
+import LightsMovingHead from '../lights/entities/lights-moving-head';
+import LightsGroupPars from '../lights/entities/lights-group-pars';
+import LightsGroupMovingHeadRgbs from '../lights/entities/lights-group-moving-head-rgbs';
+import LightsGroupMovingHeadWheels from '../lights/entities/lights-group-moving-head-wheels';
+import Movement from '../lights/entities/movement';
 
 export interface LightsControllerResponse extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
 export interface LightsFixtureResponse extends Pick<LightsFixture, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'masterDimChannel' | 'strobeChannel'> {}

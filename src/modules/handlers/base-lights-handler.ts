@@ -1,5 +1,5 @@
 import BaseHandler from './base-handler';
-import { LightsGroup } from '../root/entities/lights';
+import { LightsGroup } from '../lights/entities';
 import { TrackPropertiesEvent } from '../events/MusicEmitter';
 
 export default abstract class BaseLightsHandler extends BaseHandler<LightsGroup> {

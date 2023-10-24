@@ -7,7 +7,7 @@ import BaseHandler from '../handlers/base-handler';
 import SimpleAudioHandler from '../modes/audio/SimpleAudioHandler';
 import dataSource from '../../database';
 import { Audio, Screen } from './entities';
-import { LightsGroup } from './entities/lights';
+import { LightsGroup } from '../lights/entities';
 import SimpleLightsHandler from '../handlers/lights/SimpleLightsHandler';
 import { MusicEmitter } from '../events';
 import LightsControllerHandler from './lights-controller-handler';

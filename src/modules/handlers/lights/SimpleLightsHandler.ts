@@ -1,5 +1,5 @@
 import BaseLightsHandler from '../base-lights-handler';
-import { LightsGroup } from '../../root/entities/lights';
+import { LightsGroup } from '../../lights/entities';
 import { BeatEvent } from '../../events/MusicEmitter';
 import { rgbColorDefinitions } from '../../lights/ColorDefinitions';
 

@@ -1,20 +1,20 @@
 import {
   Column, Entity, JoinColumn, ManyToOne,
 } from 'typeorm';
-import BaseEntity from '../base-entity';
+import BaseEntity from '../../root/entities/base-entity';
 // eslint-disable-next-line import/no-cycle
 import LightsGroup from './lights-group';
-import LightsPar from './lights-par';
+import LightsMovingHeadRgb from './lights-moving-head-rgb';
 
 @Entity()
-export default class LightsGroupPars extends BaseEntity {
-  @ManyToOne(() => LightsGroup, (group) => group.pars)
+export default class LightsGroupMovingHeadRgbs extends BaseEntity {
+  @ManyToOne(() => LightsGroup)
   @JoinColumn()
   public group: LightsGroup;
 
-  @ManyToOne(() => LightsPar, { eager: true })
+  @ManyToOne(() => LightsMovingHeadRgb, { eager: true })
   @JoinColumn()
-  public par: LightsPar;
+  public movingHead: LightsMovingHeadRgb;
 
   @Column({ type: 'smallint', unsigned: true })
   public firstChannel: number;

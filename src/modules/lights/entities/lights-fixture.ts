@@ -1,5 +1,5 @@
 import { AfterLoad, Column } from 'typeorm';
-import BaseEntity from '../base-entity';
+import BaseEntity from '../../root/entities/base-entity';
 
 export interface LightsFixtureCurrentValues {
   masterDimChannel: number,

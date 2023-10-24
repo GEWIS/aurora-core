@@ -1,4 +1,4 @@
-import { ColorChannel } from '../root/entities/lights/colors';
+import { ColorChannel } from './entities/colors';
 
 export type RgbColor = 'red' | 'blue'
 | 'green' | 'yellow' | 'purple' | 'cyan'

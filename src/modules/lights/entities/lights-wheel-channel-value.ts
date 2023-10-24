@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import LightsMovingHeadWheel from './lights-moving-head-wheel';
-import BaseEntity from '../base-entity';
+import BaseEntity from '../../root/entities/base-entity';
 
 export enum ColorWheelColors {
   RED = 'red',

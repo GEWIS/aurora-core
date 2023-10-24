@@ -2,10 +2,8 @@ import { singleton } from 'tsyringe';
 import { Namespace } from 'socket.io';
 import { LightsController } from './entities';
 import BaseLightsHandler from '../handlers/base-lights-handler';
-import LightsGroupPars from './entities/lights/lights-group-pars';
-import LightsGroupMovingHeadRgbs from './entities/lights/lights-group-moving-head-rgbs';
-import LightsGroupMovingHeadWheels from './entities/lights/lights-group-moving-head-wheels';
 import { MusicEmitter, TrackPropertiesEvent } from '../events/MusicEmitter';
+import { LightsGroupPars, LightsGroupMovingHeadRgbs, LightsGroupMovingHeadWheels } from '../lights/entities';
 
 @singleton()
 export default class LightsControllerHandler {
