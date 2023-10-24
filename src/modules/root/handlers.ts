@@ -4,11 +4,11 @@ import BaseLightsHandler from '../handlers/base-lights-handler';
 import BaseScreenHandler from '../handlers/base-screen-handler';
 import SubscribeEntity from './entities/subscribe-entity';
 import BaseHandler from '../handlers/base-handler';
-import SimpleAudioHandler from '../modes/audio/SimpleAudioHandler';
+import SimpleAudioHandler from '../handlers/audio/SimpleAudioHandler';
 import dataSource from '../../database';
 import { Audio, Screen } from './entities';
 import { LightsGroup } from '../lights/entities';
-import SimpleLightsHandler from '../handlers/lights/SimpleLightsHandler';
+import { RandomEffectsHandler } from '../handlers/lights';
 import { MusicEmitter } from '../events';
 import LightsControllerHandler from './lights-controller-handler';
 import { BeatEvent } from '../events/MusicEmitter';
@@ -53,7 +53,7 @@ export default class Handlers {
   ) {
     // Create all light handlers
     const lightsHandlers: BaseLightsHandler[] = [
-      new SimpleLightsHandler(),
+      new RandomEffectsHandler(),
     ];
 
     // Register all handlers

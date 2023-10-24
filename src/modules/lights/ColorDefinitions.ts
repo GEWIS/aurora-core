@@ -1,10 +1,15 @@
 import { ColorChannel } from './entities/colors';
 
-export type RgbColor = 'red' | 'blue'
-| 'green' | 'yellow' | 'purple' | 'cyan'
-| 'pink' | 'gold' | 'brown' | 'uv' | 'white'
-| 'blindingWhite' | 'lightblue' | 'orange'
-| 'lightpink' | 'black' | 'lime';
+export const wheelColors = [
+  'red', 'green', 'blue', 'yellow', 'lightblue', 'orange', 'rosered',
+];
+export type WheelColor = typeof wheelColors[number];
+
+export const rgbColors = [
+  ...wheelColors,
+  'purple', 'cyan', 'pink', 'gold', 'brown', 'uv', 'white',
+  'blindingWhite', 'lightpink', 'lime'];
+export type RgbColor = typeof rgbColors[number];
 
 export type RgbColorDefinition = { [k in ColorChannel]: number };
 
@@ -157,12 +162,12 @@ export const rgbColorDefinitions: RgbColorSet = {
     amberChannel: 255,
     uvChannel: 0,
   },
-  black: {
-    redChannel: 0,
+  rosered: {
+    redChannel: 255,
     blueChannel: 0,
     greenChannel: 0,
     warmWhiteChannel: 0,
-    coldWhiteChannel: 0,
+    coldWhiteChannel: 64,
     amberChannel: 0,
     uvChannel: 0,
   },
