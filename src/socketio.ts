@@ -11,6 +11,14 @@ interface SocketData {
   user: User,
 }
 
+/**
+ * Create a SocketIO instance and attach it to the Express HTTP server
+ *
+ * Websockets are used by the entities (lights, audios and screens) to listen
+ * for instructions/tasks/messages. They should subscribe to their corresponding
+ * namespaces. Authentication with a session cookie is necessary.
+ * @param httpServer Express.JS HttpServer instance
+ */
 export default function createWebsocket(httpServer: HttpServer) {
   const io = new SocketIoServer<
   DefaultEventsMap, EventsMap, DefaultEventsMap, SocketData
@@ -26,7 +34,7 @@ export default function createWebsocket(httpServer: HttpServer) {
     middleware: (req: Request, res: Response, next: NextFunction) => void,
   ) => (socket: Socket, next: any) => middleware(socket.request as Request, {} as Response, next);
 
-  /*
+  /**
    * Set the "cookies" header to "cookie" in development to allow SocketIO auth without CORS
    * Web browsers protect users by not being able to set cookies manually in API requests
    * Unfortunately, when testing, it might be that you test from a different hostname. To not

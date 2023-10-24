@@ -13,6 +13,11 @@ import { MusicEmitter } from '../events';
 import LightsControllerHandler from './lights-controller-handler';
 import { BeatEvent } from '../events/MusicEmitter';
 
+/**
+ * Main broker for managing handlers. This object registers entities to their
+ * corresponding handlers and transmits events towards all known handlers.
+ * Primarily used by HTTP controllers to attach entities to handlers.
+ */
 @singleton()
 export default class Handlers {
   private static instance: Handlers;
@@ -32,6 +37,12 @@ export default class Handlers {
     });
   }
 
+  /**
+   * Initialize the Handlers object if it is not already initialized.
+   * It fetches all relevant entities (audios, lightGroups, screens) from the database
+   * and registers them to their handlers
+   * @private
+   */
   private async init() {
     if (this.initialized) throw new Error('Handlers already initialized.');
     await Promise.all(Array.from(this._handlers.keys()).map(async (entity) => {
@@ -69,6 +80,12 @@ export default class Handlers {
     musicEmitter.on('beat', this.handleBeat.bind(this));
   }
 
+  /**
+   * Get the current instance. Parameters are only necessary if it is
+   * the first time an instance is requested and a new object should be created
+   * @param musicEmitter
+   * @param lightsControllerHandler
+   */
   public static async getInstance(
     musicEmitter?: MusicEmitter,
     lightsControllerHandler?: LightsControllerHandler,
@@ -82,6 +99,10 @@ export default class Handlers {
     return this.instance;
   }
 
+  /**
+   * Get all handlers that belong to the given entity type (audio, lightsGroup, screen)
+   * @param entity
+   */
   public getHandlers(entity: typeof SubscribeEntity) {
     return this._handlers.get(entity) || [];
   }

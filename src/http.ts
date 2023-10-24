@@ -8,6 +8,13 @@ import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
 import { SessionMiddleware } from './modules/auth';
 
+/**
+ * Create an Express instance to listen to HTTP calls.
+ * Directly assigns all middlewares and routes.
+ *
+ * HTTP is only used for the end user to interact with the software,
+ * i.e. changing settings or modes.
+ */
 export default function createHttp() {
   const app = express();
 

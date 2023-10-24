@@ -202,6 +202,11 @@ export default class LightsControllerHandler {
     });
   }
 
+  /**
+   * Compare the given date with the time of the previous tick
+   * @param valuesUpdatedAt
+   * @private
+   */
   private hasUpdated(valuesUpdatedAt?: Date) {
     if (valuesUpdatedAt === undefined) return true;
     return valuesUpdatedAt > this.previousTick;
@@ -214,7 +219,7 @@ export default class LightsControllerHandler {
    */
   private tick() {
     const lightGroups = this.lightsHandlers.map((h) => h.tick());
-    // console.log(this.previousTick, lightGroups.flat()[0].pars[0].par.valuesUpdatedAt);
+
     lightGroups.flat().forEach((g) => {
       let oldValues = this.getOldValues(g.controller);
 

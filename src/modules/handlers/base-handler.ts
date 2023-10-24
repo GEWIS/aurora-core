@@ -46,9 +46,17 @@ export default abstract class BaseHandler<T extends SubscribeEntity> {
     return this._entities.findIndex((e) => e.id === entity.id) >= 0;
   }
 
+  /**
+   * Get the entities being registered to this handler
+   */
   public get entities() {
     return this._entities;
   }
 
+  /**
+   * Beat of the currently playing song
+   * @param event Metadata about the beat and the currently playing song.
+   * Only includes information about the future
+   */
   abstract beat(event: BeatEvent): void;
 }
