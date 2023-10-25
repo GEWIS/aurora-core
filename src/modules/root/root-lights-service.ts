@@ -187,7 +187,11 @@ export default class RootLightsService {
     }));
   }
 
-  public async getSingleLightGroup(id: number): Promise<LightsGroupResponse | null> {
+  public async getSingleLightGroup(id: number): Promise<LightsGroup | null> {
+    return this.groupRepository.findOne({ where: { id } });
+  }
+
+  public async getSingleLightGroupResponse(id: number): Promise<LightsGroupResponse | null> {
     const group = await this.groupRepository.findOne({
       where: { id },
       relations: {
@@ -248,7 +252,7 @@ export default class RootLightsService {
       return group;
     });
 
-    return this.getSingleLightGroup(g.id);
+    return this.getSingleLightGroupResponse(g.id);
   }
 
   private toFixture(params: LightsFixtureParams): LightsFixture {

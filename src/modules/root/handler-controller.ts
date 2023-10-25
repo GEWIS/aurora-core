@@ -5,6 +5,8 @@ import {
 import HandlerManager from './handler-manager';
 import { Audio } from './entities';
 import RootAudioService from './root-audio-service';
+import { LightsGroup } from '../lights/entities';
+import RootLightsService from './root-lights-service';
 
 @Route('handler')
 export class HandlerController extends Controller {
@@ -32,5 +34,24 @@ export class HandlerController extends Controller {
       return;
     }
     this.handlersManager.registerHandler(audio, params.name);
+  }
+
+  @Get('lights')
+  public async getLightsHandlers() {
+    return this.handlersManager.getHandlers(LightsGroup).map((h) => ({
+      name: h.constructor.name,
+      id: h.identifier,
+      entities: h.entities as LightsGroup[],
+    }));
+  }
+
+  @Post('lights/{id}')
+  public async setLightsHandler(@Path() id: number, @Body() params: { name: string }) {
+    const group = await new RootLightsService().getSingleLightGroup(id);
+    if (group == null) {
+      this.setStatus(404);
+      return;
+    }
+    this.handlersManager.registerHandler(group, params.name);
   }
 }

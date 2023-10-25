@@ -33,7 +33,7 @@ export class RootLightsController extends Controller {
 
   @Get('group/{id}')
   public async getSingleLightsGroup(id: number) {
-    return new RootLightsService().getSingleLightGroup(id);
+    return new RootLightsService().getSingleLightGroupResponse(id);
   }
 
   @Post('controller/{controllerId}/group')
