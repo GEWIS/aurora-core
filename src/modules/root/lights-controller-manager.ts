@@ -1,12 +1,10 @@
-import { singleton } from 'tsyringe';
 import { Namespace } from 'socket.io';
 import { LightsController } from './entities';
 import BaseLightsHandler from '../handlers/base-lights-handler';
 import { MusicEmitter, TrackPropertiesEvent } from '../events/MusicEmitter';
 import { LightsGroupPars, LightsGroupMovingHeadRgbs, LightsGroupMovingHeadWheels } from '../lights/entities';
 
-@singleton()
-export default class LightsControllerHandler {
+export default class LightsControllerManager {
   private lightsControllers: Map<number, LightsController> = new Map();
 
   private lightsControllersValues: Map<number, number[]> = new Map();

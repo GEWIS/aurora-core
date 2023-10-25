@@ -2,11 +2,11 @@ import './env';
 import { createServer } from 'http';
 import createHttp from './http';
 import dataSource from './database';
-import Handlers from './modules/root/handlers';
+import HandlerManager from './modules/root/handler-manager';
 import createWebsocket from './socketio';
 import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
 import { MusicEmitter } from './modules/events';
-import LightsControllerHandler from './modules/root/lights-controller-handler';
+import LightsControllerManager from './modules/root/lights-controller-manager';
 
 async function createApp(): Promise<void> {
   await dataSource.initialize();
@@ -16,9 +16,9 @@ async function createApp(): Promise<void> {
 
   const musicEmitter = new MusicEmitter();
 
-  const lightsControllerHandler = new LightsControllerHandler(io.of('/lights'), musicEmitter);
+  const lightsControllerHandler = new LightsControllerManager(io.of('/lights'), musicEmitter);
 
-  await Handlers.getInstance(musicEmitter, lightsControllerHandler);
+  await HandlerManager.getInstance(musicEmitter, lightsControllerHandler).init();
   await SpotifyApiHandler.getInstance().init();
   await SpotifyTrackHandler.getInstance().init(musicEmitter);
 

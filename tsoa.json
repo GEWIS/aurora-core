@@ -29,7 +29,6 @@
   },
   "routes": {
     "routesDir": "build",
-    "iocModule": "src/ioc",
     "middleware": "express"
   }
 }

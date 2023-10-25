@@ -1,16 +1,15 @@
-import { singleton } from 'tsyringe';
 import BaseAudioHandler from '../handlers/base-audio-handler';
 import BaseLightsHandler from '../handlers/base-lights-handler';
 import BaseScreenHandler from '../handlers/base-screen-handler';
 import SubscribeEntity from './entities/subscribe-entity';
 import BaseHandler from '../handlers/base-handler';
-import SimpleAudioHandler from '../handlers/audio/SimpleAudioHandler';
+import SimpleAudioHandler from '../handlers/audio/simple-audio-handler';
 import dataSource from '../../database';
 import { Audio, Screen } from './entities';
 import { LightsGroup } from '../lights/entities';
 import { RandomEffectsHandler } from '../handlers/lights';
 import { MusicEmitter } from '../events';
-import LightsControllerHandler from './lights-controller-handler';
+import LightsControllerManager from './lights-controller-manager';
 import { BeatEvent } from '../events/MusicEmitter';
 
 /**
@@ -18,9 +17,8 @@ import { BeatEvent } from '../events/MusicEmitter';
  * corresponding handlers and transmits events towards all known handlers.
  * Primarily used by HTTP controllers to attach entities to handlers.
  */
-@singleton()
-export default class Handlers {
-  private static instance: Handlers;
+export default class HandlerManager {
+  private static instance: HandlerManager;
 
   private initialized: boolean = false;
 
@@ -38,13 +36,13 @@ export default class Handlers {
   }
 
   /**
-   * Initialize the Handlers object if it is not already initialized.
+   * Initialize the HandlerManager object if it is not already initialized.
    * It fetches all relevant entities (audios, lightGroups, screens) from the database
    * and registers them to their handlers
    * @private
    */
-  private async init() {
-    if (this.initialized) throw new Error('Handlers already initialized.');
+  public async init() {
+    if (this.initialized) throw new Error('HandlerManager already initialized.');
     await Promise.all(Array.from(this._handlers.keys()).map(async (entity) => {
       const entities = await dataSource.manager.find(entity);
       entities.forEach((instance) => {
@@ -58,9 +56,9 @@ export default class Handlers {
   /**
    * Register all possible handlers in this function
    */
-  public constructor(
+  private constructor(
     musicEmitter: MusicEmitter,
-    lightsControllerHandler: LightsControllerHandler,
+    lightsControllerHandler: LightsControllerManager,
   ) {
     // Create all light handlers
     const lightsHandlers: BaseLightsHandler[] = [
@@ -86,15 +84,14 @@ export default class Handlers {
    * @param musicEmitter
    * @param lightsControllerHandler
    */
-  public static async getInstance(
+  public static getInstance(
     musicEmitter?: MusicEmitter,
-    lightsControllerHandler?: LightsControllerHandler,
+    lightsControllerHandler?: LightsControllerManager,
   ) {
     if (this.instance == null && !musicEmitter === undefined) {
       throw new Error('Not all parameters provided to initialize');
     } else if (this.instance == null) {
-      this.instance = new Handlers(musicEmitter!, lightsControllerHandler!);
-      await this.instance.init();
+      this.instance = new HandlerManager(musicEmitter!, lightsControllerHandler!);
     }
     return this.instance;
   }

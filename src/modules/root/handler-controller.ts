@@ -1,22 +1,23 @@
 import { Controller, Path } from '@tsoa/runtime';
-import { injectable } from 'tsyringe';
 import {
   Body, Get, Post, Route,
 } from 'tsoa';
-import Handlers from './handlers';
+import HandlerManager from './handler-manager';
 import { Audio } from './entities';
 import RootAudioService from './root-audio-service';
 
-@injectable()
 @Route('handler')
 export class HandlerController extends Controller {
-  constructor(private handlers: Handlers) {
+  private handlersManager: HandlerManager;
+
+  constructor() {
     super();
+    this.handlersManager = HandlerManager.getInstance();
   }
 
   @Get('audio')
   public async getAudioHandlers() {
-    return this.handlers.getHandlers(Audio).map((h) => ({
+    return this.handlersManager.getHandlers(Audio).map((h) => ({
       name: h.constructor.name,
       id: h.identifier,
       entities: h.entities as Audio[],
@@ -30,6 +31,6 @@ export class HandlerController extends Controller {
       this.setStatus(404);
       return;
     }
-    this.handlers.registerHandler(audio, params.name);
+    this.handlersManager.registerHandler(audio, params.name);
   }
 }
