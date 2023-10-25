@@ -3,6 +3,7 @@ import { Entities as BaseEntities } from './modules/root/entities';
 import { Entities as AuthEntities } from './modules/auth/entities';
 import { Entities as SpotifyEntities } from './modules/spotify/entities';
 import { Entities as LightsEntities } from './modules/lights/entities';
+import { Entities as InfoScreenEntities } from './modules/infoscreen/entities';
 
 const dataSource = new DataSource({
   host: process.env.TYPEORM_HOST,
@@ -18,6 +19,7 @@ const dataSource = new DataSource({
     ...AuthEntities,
     ...SpotifyEntities,
     ...LightsEntities,
+    ...InfoScreenEntities,
   ],
 });
 

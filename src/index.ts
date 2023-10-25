@@ -1,6 +1,7 @@
 import './env';
 import { createServer } from 'http';
 import createHttp from './http';
+import { setupErrorHandler } from './error';
 import dataSource from './database';
 import HandlerManager from './modules/root/handler-manager';
 import createWebsocket from './socketio';
@@ -11,6 +12,7 @@ import LightsControllerManager from './modules/root/lights-controller-manager';
 async function createApp(): Promise<void> {
   await dataSource.initialize();
   const app = createHttp();
+  setupErrorHandler(app);
   const httpServer = createServer(app);
   const io = createWebsocket(httpServer);
 
