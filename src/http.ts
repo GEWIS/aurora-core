@@ -36,6 +36,7 @@ export default function createHttp() {
       swaggerUi.generateHTML(apiDocs),
     ));
     app.post('/auth/mock', passport.authenticate('custom'), (req: ExRequest, res: ExResponse) => res.status(204).send());
+    app.use('/static', express.static('public'));
   }
 
   return app;

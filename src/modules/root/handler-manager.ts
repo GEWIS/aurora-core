@@ -12,6 +12,7 @@ import { RandomEffectsHandler } from '../handlers/lights';
 import { MusicEmitter } from '../events';
 import LightsControllerManager from './lights-controller-manager';
 import { BeatEvent } from '../events/MusicEmitter';
+import SetEffectsHandler from '../handlers/lights/set-effects-handler';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -67,6 +68,7 @@ export default class HandlerManager {
     // Create all light handlers
     const lightsHandlers: BaseLightsHandler[] = [
       new RandomEffectsHandler(),
+      new SetEffectsHandler(),
     ];
 
     // Register all handlers
