@@ -1,3 +1,4 @@
+import { Server } from 'socket.io';
 import BaseAudioHandler from '../handlers/base-audio-handler';
 import BaseLightsHandler from '../handlers/base-lights-handler';
 import BaseScreenHandler from '../handlers/base-screen-handler';
@@ -16,6 +17,8 @@ import { BeatEvent } from '../events/MusicEmitter';
  * Main broker for managing handlers. This object registers entities to their
  * corresponding handlers and transmits events towards all known handlers.
  * Primarily used by HTTP controllers to attach entities to handlers.
+ * Therefore, required to be a singleton class, because TSOA controllers are
+ * otherwise unable to get an instance of this object.
  */
 export default class HandlerManager {
   private static instance: HandlerManager;
@@ -57,6 +60,7 @@ export default class HandlerManager {
    * Register all possible handlers in this function
    */
   private constructor(
+    io: Server,
     musicEmitter: MusicEmitter,
     lightsControllerHandler: LightsControllerManager,
   ) {
@@ -67,7 +71,7 @@ export default class HandlerManager {
 
     // Register all handlers
     this._handlers.set(Audio, [
-      new SimpleAudioHandler(),
+      new SimpleAudioHandler(io.of('/audio')),
     ] as BaseAudioHandler[]);
     this._handlers.set(LightsGroup, lightsHandlers);
     this._handlers.set(Screen, [] as BaseScreenHandler[]);
@@ -81,17 +85,19 @@ export default class HandlerManager {
   /**
    * Get the current instance. Parameters are only necessary if it is
    * the first time an instance is requested and a new object should be created
+   * @param io
    * @param musicEmitter
    * @param lightsControllerHandler
    */
   public static getInstance(
+    io?: Server,
     musicEmitter?: MusicEmitter,
     lightsControllerHandler?: LightsControllerManager,
   ) {
-    if (this.instance == null && !musicEmitter === undefined) {
+    if (this.instance == null && (io === undefined || musicEmitter === undefined)) {
       throw new Error('Not all parameters provided to initialize');
     } else if (this.instance == null) {
-      this.instance = new HandlerManager(musicEmitter!, lightsControllerHandler!);
+      this.instance = new HandlerManager(io!, musicEmitter!, lightsControllerHandler!);
     }
     return this.instance;
   }

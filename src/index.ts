@@ -20,7 +20,7 @@ async function createApp(): Promise<void> {
 
   const lightsControllerHandler = new LightsControllerManager(io.of('/lights'), musicEmitter);
 
-  await HandlerManager.getInstance(musicEmitter, lightsControllerHandler).init();
+  await HandlerManager.getInstance(io, musicEmitter, lightsControllerHandler).init();
   await SpotifyApiHandler.getInstance().init();
   await SpotifyTrackHandler.getInstance().init(musicEmitter);
 
