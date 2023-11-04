@@ -32,10 +32,10 @@ export default abstract class BaseHandler<T extends SubscribeEntity> {
 
   /**
    * Unregister a controller from this handler
-   * @param entity
+   * @param entityCopy
    */
-  public removeEntity(entity: T): void {
-    this._entities = this._entities.filter((e) => e.id !== entity.id);
+  public removeEntity(entityCopy: T): void {
+    this._entities = this._entities.filter((e) => e.id !== entityCopy.id);
   }
 
   /**

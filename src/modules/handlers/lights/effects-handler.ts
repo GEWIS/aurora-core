@@ -15,7 +15,11 @@ export default abstract class EffectsHandler extends BaseLightsHandler {
   }
 
   // We should also remove the entity from the effects mapping
-  public removeEntity(entity: LightsGroup) {
+  public removeEntity(entityCopy: LightsGroup) {
+    const entity: LightsGroup | undefined = Array.from(this.groupEffects.keys())
+      .find((e) => e.id === entityCopy.id);
+    if (!entity) return;
+
     this.groupEffects.delete(entity);
     super.removeEntity(entity);
   }
