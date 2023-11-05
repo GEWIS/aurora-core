@@ -22,6 +22,4 @@ export default class SetEffectsHandler extends EffectsHandler {
     lightsGroup.blackout();
     this.groupEffects.set(lightsGroup, null);
   }
-
-  beat() {}
 }

@@ -64,7 +64,7 @@ export default class LightsPar extends LightsFixture {
    */
   protected getStrobeDMX(): number[] {
     const values: number[] = new Array(16).fill(0);
-    values[this.masterDimChannel - 1] = 10;
+    values[this.masterDimChannel - 1] = 255;
     values[this.strobeChannel - 1] = 220;
     values[this.color.redChannel - 1] = 255;
     values[this.color.blueChannel - 1] = 255;

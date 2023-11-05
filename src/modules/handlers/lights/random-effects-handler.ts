@@ -35,10 +35,6 @@ export default class RandomEffectsHandler extends EffectsHandler {
       });
     }
 
-    // Propagate the beat to every effect
-    this.groupEffects.forEach((effect) => {
-      if (!effect) return;
-      effect.beat(event);
-    });
+    super.beat(event);
   }
 }

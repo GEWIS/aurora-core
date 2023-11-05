@@ -1,6 +1,7 @@
 import BaseLightsHandler from '../base-lights-handler';
 import { LightsGroup } from '../../lights/entities';
 import LightsEffect from '../../lights/effects/lights-effect';
+import { BeatEvent } from '../../events/music-emitter-events';
 
 export default abstract class EffectsHandler extends BaseLightsHandler {
   /**
@@ -37,5 +38,13 @@ export default abstract class EffectsHandler extends BaseLightsHandler {
     });
 
     return result;
+  }
+
+  beat(event: BeatEvent) {
+    // Propagate the beat to every effect
+    this.groupEffects.forEach((effect) => {
+      if (!effect) return;
+      effect.beat(event);
+    });
   }
 }

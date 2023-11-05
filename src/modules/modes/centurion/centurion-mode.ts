@@ -6,7 +6,6 @@ import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
 import MixTape, { FeedEvent } from './tapes/mix-tape';
 import { BeatFadeOut } from '../../lights/effects';
 import { rgbColors, wheelColors } from '../../lights/ColorDefinitions';
-import Strobe from '../../lights/effects/strobe';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
@@ -25,6 +24,10 @@ export default class CenturionMode extends BaseMode {
   }[] = [];
 
   private static instance: CenturionMode | undefined;
+
+  private artificialBeatLoop: NodeJS.Timeout | undefined;
+
+  private artificialBeatLoopStart: Date | undefined;
 
   constructor(lights: LightsGroup[], screens: Screen[], audios: Audio[]) {
     super(lights, screens, audios);
@@ -59,33 +62,36 @@ export default class CenturionMode extends BaseMode {
     this.registerEvents(timestamp);
     this.audioHandler.play();
     this.audioHandler.setPlayback(timestamp);
+
+    this.artificialBeatLoopStart = new Date();
+    this.artificialBeatLoop = setInterval(this.artificialBeat.bind(this), 800);
+    this.artificialBeat();
+
     return true;
   }
 
   public stop() {
     this.audioHandler.stop();
     this.stopFeedEvents();
+
+    clearInterval(this.artificialBeatLoop);
+    this.artificialBeatLoop = undefined;
   }
 
-  private handleFeedEvent(event: FeedEvent | 'resetStrobe') {
+  private handleFeedEvent(event: FeedEvent) {
     const color = wheelColors[Math.floor(Math.random() * wheelColors.length)];
     const rgbColor = rgbColors[Math.floor(Math.random() * rgbColors.length)];
 
-    if (event === 'resetStrobe') {
-      this.lights.forEach((l) => {
-        this.lightsHandler.removeEffect(l);
-        l.pars.forEach((p) => p.fixture.blackout());
-      });
-    } else if (event.type === 'horn') {
+    if (event.type === 'horn') {
       this.lights.forEach((l) => {
         l.pars.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
         l.movingHeadRgbs.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
         l.movingHeadWheels.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
       });
-    // } else if (event.type === 'song') {
-    //   this.lights.forEach((l) => {
-    //     this.lightsHandler.setEffect(l, BeatFadeOut.build(color, rgbColor));
-    //   });
+    } else if (event.type === 'song') {
+      this.lights.forEach((l) => {
+        this.lightsHandler.setEffect(l, BeatFadeOut.build(color, rgbColor));
+      });
     }
   }
 
@@ -100,9 +106,6 @@ export default class CenturionMode extends BaseMode {
       .forEach((event) => {
         const timestampMillis = Math.round((event.timestamp - timestamp) * 1000);
         const timeouts = [setTimeout(this.handleFeedEvent.bind(this, event), timestampMillis)];
-        if (event.type === 'horn') {
-          timeouts.push(setTimeout(this.handleFeedEvent.bind(this, 'resetStrobe'), timestampMillis + 2000));
-        }
 
         this.feedEvents.push({
           event,
@@ -127,6 +130,16 @@ export default class CenturionMode extends BaseMode {
     });
     this.audios.forEach((audio) => {
       this.handlerManager.registerHandler(audio, '');
+    });
+  }
+
+  private artificialBeat() {
+    this.lightsHandler.beat({
+      beat: {
+        start: new Date().getTime() - (this.artificialBeatLoopStart || new Date()).getTime(),
+        duration: 800,
+        confidence: 0.2,
+      },
     });
   }
 }
