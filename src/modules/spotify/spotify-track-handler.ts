@@ -3,7 +3,7 @@ import {
 } from '@spotify/web-api-ts-sdk';
 import SpotifyApiHandler from './spotify-api-handler';
 import { MusicEmitter } from '../events';
-import { BeatEvent, TrackPropertiesEvent } from '../events/MusicEmitter';
+import { BeatEvent, TrackPropertiesEvent } from '../events/music-emitter-events';
 
 export default class SpotifyTrackHandler {
   private static instance: SpotifyTrackHandler;
@@ -155,7 +155,7 @@ export default class SpotifyTrackHandler {
     beat += `: ${event.beat.start} (${event.beat.confidence}) - ${event.section?.start} - ${event.section?.loudness}`;
     console.log(beat);
 
-    this.musicEmitter.emit('beat', event);
+    this.musicEmitter.emitSpotify('beat', event);
   }
 
   /**
@@ -171,6 +171,6 @@ export default class SpotifyTrackHandler {
       loudness: features.loudness,
       valence: features.valence,
     };
-    this.musicEmitter.emit('features', event);
+    this.musicEmitter.emitSpotify('features', event);
   }
 }

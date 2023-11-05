@@ -9,9 +9,6 @@ import dataSource from '../../database';
 import { Audio, Screen } from './entities';
 import { LightsGroup } from '../lights/entities';
 import { RandomEffectsHandler } from '../handlers/lights';
-import { MusicEmitter } from '../events';
-import LightsControllerManager from './lights-controller-manager';
-import { BeatEvent } from '../events/MusicEmitter';
 import SetEffectsHandler from '../handlers/lights/set-effects-handler';
 
 /**
@@ -62,8 +59,6 @@ export default class HandlerManager {
    */
   private constructor(
     io: Server,
-    musicEmitter: MusicEmitter,
-    lightsControllerHandler: LightsControllerManager,
   ) {
     // Create all light handlers
     const lightsHandlers: BaseLightsHandler[] = [
@@ -77,29 +72,20 @@ export default class HandlerManager {
     ] as BaseAudioHandler[]);
     this._handlers.set(LightsGroup, lightsHandlers);
     this._handlers.set(Screen, [] as BaseScreenHandler[]);
-
-    // Subscribe all lights handlers to the broker that handlers beats and ticks
-    lightsControllerHandler.registerLightsHandlers(lightsHandlers);
-
-    musicEmitter.on('beat', this.handleBeat.bind(this));
   }
 
   /**
    * Get the current instance. Parameters are only necessary if it is
    * the first time an instance is requested and a new object should be created
    * @param io
-   * @param musicEmitter
-   * @param lightsControllerHandler
    */
   public static getInstance(
     io?: Server,
-    musicEmitter?: MusicEmitter,
-    lightsControllerHandler?: LightsControllerManager,
   ) {
-    if (this.instance == null && (io === undefined || musicEmitter === undefined)) {
+    if (this.instance == null && (io === undefined)) {
       throw new Error('Not all parameters provided to initialize');
     } else if (this.instance == null) {
-      this.instance = new HandlerManager(io!, musicEmitter!, lightsControllerHandler!);
+      this.instance = new HandlerManager(io!);
     }
     return this.instance;
   }
@@ -108,7 +94,8 @@ export default class HandlerManager {
    * Get all handlers that belong to the given entity type (audio, lightsGroup, screen)
    * @param entity
    */
-  public getHandlers(entity: typeof SubscribeEntity) {
+  public getHandlers(entity?: typeof SubscribeEntity): BaseHandler<SubscribeEntity>[] {
+    if (!entity) return Array.from(this._handlers.values()).flat();
     return this._handlers.get(entity) || [];
   }
 
@@ -131,11 +118,5 @@ export default class HandlerManager {
         }
       });
     }
-  }
-
-  public handleBeat(event: BeatEvent) {
-    this._handlers.forEach((handlers) => {
-      handlers.forEach((h) => h.beat(event));
-    });
   }
 }

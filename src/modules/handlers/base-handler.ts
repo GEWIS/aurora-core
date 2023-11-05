@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import SubscribeEntity from '../root/entities/subscribe-entity';
-import { BeatEvent } from '../events/MusicEmitter';
+import { BeatEvent } from '../events/music-emitter-events';
 
 export default abstract class BaseHandler<T extends SubscribeEntity> {
   /**

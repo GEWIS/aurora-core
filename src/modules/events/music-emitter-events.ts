@@ -1,4 +1,3 @@
-import { EventEmitter } from 'node:events';
 import {
   Beat, Section, Segment, Tatum,
 } from '@spotify/web-api-ts-sdk';
@@ -22,4 +21,7 @@ export interface TrackPropertiesEvent {
   valence: number;
 }
 
-export class MusicEmitter extends EventEmitter {}
+export interface TrackChangeEvent {
+  title: string;
+  artist: string;
+}

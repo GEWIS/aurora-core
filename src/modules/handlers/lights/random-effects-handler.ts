@@ -1,6 +1,6 @@
 import { LightsGroup } from '../../lights/entities';
-import { BeatEvent } from '../../events/MusicEmitter';
-import { BeatFadeOut, Strobe } from '../../lights/effects';
+import { BeatEvent } from '../../events/music-emitter-events';
+import { BeatFadeOut } from '../../lights/effects';
 import { rgbColors, wheelColors } from '../../lights/ColorDefinitions';
 import EffectsHandler from './effects-handler';
 

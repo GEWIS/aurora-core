@@ -1,17 +1,20 @@
 import { Namespace } from 'socket.io';
 import { LightsController } from './entities';
 import BaseLightsHandler from '../handlers/base-lights-handler';
-import { MusicEmitter, TrackPropertiesEvent } from '../events/MusicEmitter';
-import { LightsGroupPars, LightsGroupMovingHeadRgbs, LightsGroupMovingHeadWheels } from '../lights/entities';
+import { MusicEmitter } from '../events';
+import {
+  LightsGroupPars,
+  LightsGroupMovingHeadRgbs,
+  LightsGroupMovingHeadWheels,
+  LightsGroup,
+} from '../lights/entities';
+import HandlerManager from './handler-manager';
+import { TrackPropertiesEvent } from '../events/music-emitter-events';
 
 export default class LightsControllerManager {
   private lightsControllers: Map<number, LightsController> = new Map();
 
   private lightsControllersValues: Map<number, number[]> = new Map();
-
-  private lightsHandlers: BaseLightsHandler[] = [];
-
-  protected websocket: Namespace;
 
   private previousTick = new Date();
 
@@ -20,12 +23,11 @@ export default class LightsControllerManager {
   }
 
   constructor(
-    socket: Namespace,
+    protected websocket: Namespace,
+    protected handlerManager: HandlerManager,
     musicEmitter: MusicEmitter,
     lightControllers: LightsController[] = [],
   ) {
-    this.websocket = socket;
-
     lightControllers.forEach((c) => {
       this.lightsControllersValues.set(c.id, this.constructNewValuesArray());
     });
@@ -33,7 +35,7 @@ export default class LightsControllerManager {
     musicEmitter.on('features', this.setTrackFeatures.bind(this));
 
     // Tick rate (currently 40Hz)
-    setInterval(this.tick.bind(this), 25);
+    setInterval(this.tick.bind(this), 250);
   }
 
   private getOldValues(controller: LightsController): number[] {
@@ -46,17 +48,8 @@ export default class LightsControllerManager {
     return result;
   }
 
-  registerLightsHandlers(lightsHandlers: BaseLightsHandler[]) {
-    this.lightsHandlers.push(...lightsHandlers);
-  }
-
-  registerLightsHandler(lightsHandler: BaseLightsHandler) {
-    this.lightsHandlers.push(lightsHandler);
-  }
-
-  removeLightsHandler(lightsHandler: BaseLightsHandler) {
-    this.lightsHandlers = this.lightsHandlers
-      .filter((h) => h.identifier !== lightsHandler.identifier);
+  private get lightsHandlers() {
+    return this.handlerManager.getHandlers(LightsGroup) as BaseLightsHandler[];
   }
 
   private setTrackFeatures(event: TrackPropertiesEvent) {

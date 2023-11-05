@@ -1,4 +1,4 @@
-import { BeatEvent, TrackPropertiesEvent } from '../../events/MusicEmitter';
+import { BeatEvent, TrackPropertiesEvent } from '../../events/music-emitter-events';
 import { LightsGroup } from '../entities';
 
 export type LightsEffectBuilder<T extends LightsEffect = LightsEffect> = (

@@ -1,5 +1,5 @@
 import LightsEffect, { LightsEffectBuilder } from './lights-effect';
-import { BeatEvent, TrackPropertiesEvent } from '../../events/MusicEmitter';
+import { BeatEvent, TrackPropertiesEvent } from '../../events/music-emitter-events';
 import { LightsGroup } from '../entities';
 import { RgbColor, rgbColorDefinitions, WheelColor } from '../ColorDefinitions';
 
