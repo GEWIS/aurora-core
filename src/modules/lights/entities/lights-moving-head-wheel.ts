@@ -74,6 +74,14 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
       values[this.movement.movingSpeedChannel - 1] = this.channelValues.movingSpeedChannel || 0;
     }
 
-    return this.removeEndingZeroes(values);
+    if (this.strobeEnabled) {
+      values[this.colorWheelChannel - 1] = 0;
+      values[this.goboWheelChannel - 1] = 0;
+      if (this.goboRotateChannel != null) values[this.goboRotateChannel - 1] = 0;
+      values[this.masterDimChannel - 1] = 255;
+      values[this.strobeChannel - 1] = 220;
+    }
+
+    return values;
   }
 }

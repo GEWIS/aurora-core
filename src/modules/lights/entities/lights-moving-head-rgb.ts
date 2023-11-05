@@ -38,6 +38,23 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
     return this.currentValues;
   }
 
+  /**
+   * Get the DMX packet for a strobing light
+   * @protected
+   */
+  protected getStrobeDMX(): number[] {
+    const values: number[] = new Array(16).fill(0);
+    values[this.masterDimChannel - 1] = 255;
+    values[this.strobeChannel - 1] = 220;
+    values[this.color.redChannel - 1] = 255;
+    values[this.color.blueChannel - 1] = 255;
+    values[this.color.greenChannel - 1] = 255;
+    if (this.color.warmWhiteChannel) values[this.color.warmWhiteChannel - 1] = 255;
+    if (this.color.coldWhiteChannel) values[this.color.coldWhiteChannel - 1] = 255;
+    if (this.color.amberChannel) values[this.color.amberChannel - 1] = 255;
+    return values;
+  }
+
   toDmx(): number[] {
     const values: number[] = new Array(16).fill(0);
 
@@ -70,6 +87,28 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
       values[this.movement.movingSpeedChannel - 1] = this.channelValues.movingSpeedChannel || 0;
     }
 
-    return this.removeEndingZeroes(values);
+    // If the strobe is enabled, override all color channels with a strobe
+    if (this.strobeEnabled) {
+      const strobeDmxValues = this.getStrobeDMX();
+
+      // Remove starting zeroes, so we don't override the position of the moving head.
+      // Assumes that all color-related channels are near each other;
+      let nrStartingZeroes = 0;
+      while (strobeDmxValues.length > 0) {
+        if (strobeDmxValues[0] === 0) {
+          strobeDmxValues.shift();
+          nrStartingZeroes += 1;
+        } else {
+          break;
+        }
+      }
+      values.splice(
+        nrStartingZeroes,
+        nrStartingZeroes + strobeDmxValues.length,
+        ...strobeDmxValues,
+      );
+    }
+
+    return values;
   }
 }

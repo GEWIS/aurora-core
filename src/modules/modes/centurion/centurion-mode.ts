@@ -10,6 +10,7 @@ import Strobe from '../../lights/effects/strobe';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
+const STROBE_TIME = 1500; // Milliseconds
 
 export default class CenturionMode extends BaseMode {
   private lightsHandler: SetEffectsHandler;
@@ -77,7 +78,9 @@ export default class CenturionMode extends BaseMode {
       });
     } else if (event.type === 'horn') {
       this.lights.forEach((l) => {
-        this.lightsHandler.setEffect(l, Strobe.build());
+        l.pars.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
+        l.movingHeadRgbs.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
+        l.movingHeadWheels.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
       });
     // } else if (event.type === 'song') {
     //   this.lights.forEach((l) => {

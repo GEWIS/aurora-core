@@ -58,7 +58,26 @@ export default class LightsPar extends LightsFixture {
     return this.currentValues;
   }
 
+  /**
+   * Get the DMX packet for a strobing light (16 channels)
+   * @protected
+   */
+  protected getStrobeDMX(): number[] {
+    const values: number[] = new Array(16).fill(0);
+    values[this.masterDimChannel - 1] = 10;
+    values[this.strobeChannel - 1] = 220;
+    values[this.color.redChannel - 1] = 255;
+    values[this.color.blueChannel - 1] = 255;
+    values[this.color.greenChannel - 1] = 255;
+    if (this.color.warmWhiteChannel) values[this.color.warmWhiteChannel - 1] = 255;
+    if (this.color.coldWhiteChannel) values[this.color.coldWhiteChannel - 1] = 255;
+    if (this.color.amberChannel) values[this.color.amberChannel - 1] = 255;
+    return values;
+  }
+
   toDmx(): number[] {
+    if (this.strobeEnabled) return this.getStrobeDMX();
+
     const values: number[] = new Array(16).fill(0);
 
     values[this.masterDimChannel - 1] = this.currentValues.masterDimChannel;
@@ -79,6 +98,6 @@ export default class LightsPar extends LightsFixture {
       values[this.color.uvChannel - 1] = this.channelValues.uvChannel || 0;
     }
 
-    return this.removeEndingZeroes(values);
+    return values;
   }
 }

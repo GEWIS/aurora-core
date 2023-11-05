@@ -25,14 +25,25 @@ export default abstract class LightsFixture extends BaseEntity {
 
   protected strobeEnabled = false;
 
+  private strobeDisableEvent: NodeJS.Timeout | undefined;
+
   /**
    * How long the strobe needs to be enabled
    * @param milliseconds
    */
   enableStrobe(milliseconds?: number) {
     this.strobeEnabled = true;
+    this.valuesUpdatedAt = new Date();
+
+    // Stop an existing stop strobe timeout if it exists
+    if (this.strobeDisableEvent) {
+      clearTimeout(this.strobeDisableEvent);
+      this.strobeDisableEvent = undefined;
+    }
+
+    // Create a stop strobe timeout if a time is given
     if (milliseconds) {
-      setTimeout(this.disableStrobe.bind(this), milliseconds);
+      this.strobeDisableEvent = setTimeout(this.disableStrobe.bind(this), milliseconds);
     }
   }
 
@@ -41,23 +52,11 @@ export default abstract class LightsFixture extends BaseEntity {
    */
   disableStrobe() {
     this.strobeEnabled = false;
-  }
-
-  protected removeEndingZeroes(input: number[]): number[] {
-    const result = [...input];
-    while (result.length > 0) {
-      if (result[result.length - 1] === 0) {
-        result.pop();
-      } else {
-        break;
-      }
-    }
-    return result;
+    this.valuesUpdatedAt = new Date();
   }
 
   /**
-   * Get the current DMX values as an array of integers.
-   * The length of the resulting array depends on how many channels are non-zero
+   * Get the current DMX values as an 16-length array of integers.
    */
   abstract toDmx(): number[];
 }
