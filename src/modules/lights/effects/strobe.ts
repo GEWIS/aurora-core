@@ -11,9 +11,9 @@ export default class Strobe extends LightsEffect {
     console.log('Strobe tick!');
     if (!this.enabled) {
       this.lightsGroup.pars.forEach((par) => {
-        par.par.setColor(rgbColorDefinitions.blindingWhite);
-        par.par.setMasterDimmer(255);
-        par.par.enableStrobe();
+        par.fixture.setColor(rgbColorDefinitions.blindingWhite);
+        par.fixture.setMasterDimmer(255);
+        par.fixture.enableStrobe();
       });
     }
     return this.lightsGroup;

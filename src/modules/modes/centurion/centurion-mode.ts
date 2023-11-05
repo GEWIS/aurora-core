@@ -73,7 +73,7 @@ export default class CenturionMode extends BaseMode {
     if (event === 'resetStrobe') {
       this.lights.forEach((l) => {
         this.lightsHandler.removeEffect(l);
-        l.pars.forEach((p) => p.par.blackout());
+        l.pars.forEach((p) => p.fixture.blackout());
       });
     } else if (event.type === 'horn') {
       this.lights.forEach((l) => {

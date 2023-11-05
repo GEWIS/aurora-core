@@ -37,4 +37,39 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
   public get channelValues() {
     return this.currentValues;
   }
+
+  toDmx(): number[] {
+    const values: number[] = new Array(16).fill(0);
+
+    values[this.masterDimChannel - 1] = this.channelValues.masterDimChannel;
+    values[this.strobeChannel - 1] = this.channelValues.strobeChannel;
+    values[this.color.redChannel - 1] = this.channelValues.redChannel;
+    values[this.color.greenChannel - 1] = this.channelValues.greenChannel;
+    values[this.color.blueChannel - 1] = this.channelValues.blueChannel;
+    if (this.color.coldWhiteChannel != null) {
+      values[this.color.coldWhiteChannel - 1] = this.channelValues.coldWhiteChannel || 0;
+    }
+    if (this.color.warmWhiteChannel != null) {
+      values[this.color.warmWhiteChannel - 1] = this.channelValues.warmWhiteChannel || 0;
+    }
+    if (this.color.amberChannel != null) {
+      values[this.color.amberChannel - 1] = this.channelValues.amberChannel || 0;
+    }
+    if (this.color.uvChannel != null) {
+      values[this.color.uvChannel - 1] = this.channelValues.uvChannel || 0;
+    }
+    values[this.movement.panChannel - 1] = this.channelValues.panChannel;
+    if (this.movement.finePanChannel != null) {
+      values[this.movement.finePanChannel] = this.channelValues.finePanChannel || 0;
+    }
+    values[this.movement.tiltChannel - 1] = this.channelValues.tiltChannel;
+    if (this.movement.fineTiltChannel != null) {
+      values[this.movement.fineTiltChannel - 1] = this.channelValues.fineTiltChannel || 0;
+    }
+    if (this.movement.movingSpeedChannel != null) {
+      values[this.movement.movingSpeedChannel - 1] = this.channelValues.movingSpeedChannel || 0;
+    }
+
+    return this.removeEndingZeroes(values);
+  }
 }

@@ -55,12 +55,12 @@ export default class BeatFadeOut extends LightsEffect {
 
     this.lightsGroup.pars.forEach((p, i) => {
       if (i % 2 === (this.ping ? 1 : 0)) {
-        p.par.setCurrentValues({
+        p.fixture.setCurrentValues({
           masterDimChannel: 255 * beatProgression,
           ...rgbColorDefinitions[this.parsColor || this.color],
         });
       } else {
-        p.par.setMasterDimmer(0);
+        p.fixture.setMasterDimmer(0);
       }
     });
 
