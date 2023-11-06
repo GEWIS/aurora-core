@@ -1,5 +1,5 @@
 import {
-  Body, Controller, Get, Post, Route,
+  Body, Controller, Get, Post, Route, Tags,
 } from 'tsoa';
 import { Audio } from './entities';
 import RootAudioService, { AudioCreateParams } from './root-audio-service';
@@ -7,6 +7,7 @@ import RootAudioService, { AudioCreateParams } from './root-audio-service';
 export type AudioResponse = Pick<Audio, 'id' | 'createdAt' | 'updatedAt' | 'name'>;
 
 @Route('audio')
+@Tags('Audios')
 export class RootAudioController extends Controller {
   @Get()
   public async getAudios() {
