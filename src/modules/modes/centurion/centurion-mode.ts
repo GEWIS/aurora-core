@@ -23,6 +23,8 @@ export default class CenturionMode extends BaseMode {
     timeouts: NodeJS.Timeout[];
   }[] = [];
 
+  private timestamp: number = 0;
+
   private static instance: CenturionMode | undefined;
 
   private artificialBeatLoop: NodeJS.Timeout | undefined;
@@ -55,18 +57,21 @@ export default class CenturionMode extends BaseMode {
   }
 
   public start(): boolean {
-    const timestamp = 40;
+    this.timestamp = 35;
 
     if (!this.audioHandler.ready) return false;
 
-    this.registerEvents(timestamp);
-    this.audioHandler.play();
-    this.audioHandler.setPlayback(timestamp);
+    this.audioHandler.setPlayback(this.timestamp);
+    this.audioHandler.play((startTime: number) => {
+      // Synchronize music with effects
+      const msDifference = new Date().getTime() - startTime;
 
-    this.artificialBeatLoopStart = new Date();
-    this.artificialBeatLoop = setInterval(this.artificialBeat.bind(this), 800);
-    this.artificialBeat();
+      this.registerEvents(this.timestamp + (msDifference / 1000));
 
+      this.artificialBeatLoopStart = new Date();
+      this.artificialBeatLoop = setInterval(this.artificialBeat.bind(this), 800);
+      this.artificialBeat();
+    });
     return true;
   }
 
