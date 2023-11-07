@@ -10,6 +10,7 @@ import { Audio, Screen } from './entities';
 import { LightsGroup } from '../lights/entities';
 import { RandomEffectsHandler } from '../handlers/lights';
 import SetEffectsHandler from '../handlers/lights/set-effects-handler';
+import DevelopEffectsHandler from '../handlers/lights/develop-effects-handler';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -64,6 +65,7 @@ export default class HandlerManager {
     const lightsHandlers: BaseLightsHandler[] = [
       new RandomEffectsHandler(),
       new SetEffectsHandler(),
+      new DevelopEffectsHandler(),
     ];
 
     // Register all handlers
