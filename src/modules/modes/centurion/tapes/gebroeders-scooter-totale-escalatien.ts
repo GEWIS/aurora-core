@@ -2,7 +2,7 @@ import MixTape from './mix-tape';
 
 const centurion: MixTape = {
   name: 'Gebroeders Scooter - Totale EscalaTIEN',
-  songFile: '/audio/gebroeders-scooter-escalatien.mp3',
+  songFile: '/audio/gebroeders-scooter-totale-escalatien.mp3',
   feed: [
     { timestamp: 10, type: 'horn', data: { counter: 0 } },
     { timestamp: 46.00, type: 'song', data: { artist: 'Vanessa Carlton', title: 'A Thousand Miles' } },
