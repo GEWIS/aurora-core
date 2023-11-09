@@ -24,6 +24,7 @@ export interface ValidateErrorJSON {
 export interface InternalError {
   message: 'Internal Server Error';
 }
+
 export class ApiError extends Error {
   public statusCode: number;
 

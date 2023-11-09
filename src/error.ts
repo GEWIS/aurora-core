@@ -4,6 +4,7 @@ import {
   NextFunction, Express,
 } from 'express';
 import { ValidateError } from 'tsoa';
+import { ApiError } from './helpers/customError';
 
 export function setupErrorHandler(app : Express) {
   app.use((_req, res: ExResponse) => {
@@ -26,12 +27,12 @@ export function setupErrorHandler(app : Express) {
       });
     }
 
-    // if (err instanceof ApiError) {
-    //   return res.status(err.statusCode).json({
-    //     message: err.name,
-    //     details: err.message,
-    //   });
-    // }
+    if (err instanceof ApiError) {
+      return res.status(err.statusCode).json({
+        message: err.name,
+        details: err.message,
+      });
+    }
 
     next();
   });
