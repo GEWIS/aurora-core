@@ -1,0 +1,57 @@
+import {
+  Post, Route, Tags, Response, SuccessResponse,
+} from 'tsoa';
+import { Controller } from '@tsoa/runtime';
+import ModeManager from '../mode-manager';
+import CenturionMode from './centurion-mode';
+
+@Route('modes/centurion')
+@Tags('Modes')
+export class CenturionController extends Controller {
+  private modeManager: ModeManager;
+
+  constructor() {
+    super();
+    this.modeManager = ModeManager.getInstance();
+  }
+
+  /**
+   * Start a centurion
+   */
+  @Post('start')
+  @SuccessResponse(204, 'Start commands sent')
+  @Response<string>(411, 'Centurion not enabled')
+  public startCenturion() {
+    const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
+    if (mode === undefined) {
+      this.setStatus(411);
+      return 'Centurion not enabled';
+    }
+
+    if (!mode.start()) {
+      this.setStatus(411);
+      return 'Centurion not yet fully initialized. Please wait and try again later';
+    }
+
+    this.setStatus(204);
+    return '';
+  }
+
+  /**
+   * Stop a centurion
+   */
+  @Post('stop')
+  @SuccessResponse(204, 'Start commands sent')
+  @Response<string>(411, 'Centurion not enabled')
+  public stopCenturion() {
+    const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
+    if (mode === undefined) {
+      this.setStatus(411);
+      return 'Centurion not enabled';
+    }
+
+    mode.stop();
+    this.setStatus(204);
+    return '';
+  }
+}

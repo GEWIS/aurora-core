@@ -39,20 +39,6 @@ export default class LightsPar extends LightsFixture {
     });
   }
 
-  enableStrobe() {
-    if (this.currentValues.strobeChannel === 220) return;
-    this.setCurrentValues({
-      strobeChannel: 220,
-    });
-  }
-
-  disableStrobe() {
-    if (this.currentValues.strobeChannel === 0) return;
-    this.setCurrentValues({
-      strobeChannel: 0,
-    });
-  }
-
   blackout() {
     if (Object.values(this.currentValues).every((v) => v === 0)) return;
     this.setCurrentValues({
@@ -70,5 +56,48 @@ export default class LightsPar extends LightsFixture {
 
   public get channelValues() {
     return this.currentValues;
+  }
+
+  /**
+   * Get the DMX packet for a strobing light (16 channels)
+   * @protected
+   */
+  protected getStrobeDMX(): number[] {
+    const values: number[] = new Array(16).fill(0);
+    values[this.masterDimChannel - 1] = 255;
+    values[this.strobeChannel - 1] = 220;
+    values[this.color.redChannel - 1] = 255;
+    values[this.color.blueChannel - 1] = 255;
+    values[this.color.greenChannel - 1] = 255;
+    if (this.color.warmWhiteChannel) values[this.color.warmWhiteChannel - 1] = 255;
+    if (this.color.coldWhiteChannel) values[this.color.coldWhiteChannel - 1] = 255;
+    if (this.color.amberChannel) values[this.color.amberChannel - 1] = 255;
+    return values;
+  }
+
+  toDmx(): number[] {
+    if (this.strobeEnabled) return this.getStrobeDMX();
+
+    const values: number[] = new Array(16).fill(0);
+
+    values[this.masterDimChannel - 1] = this.currentValues.masterDimChannel;
+    values[this.strobeChannel - 1] = this.channelValues.strobeChannel;
+    values[this.color.redChannel - 1] = this.channelValues.redChannel;
+    values[this.color.greenChannel - 1] = this.channelValues.greenChannel;
+    values[this.color.blueChannel - 1] = this.channelValues.blueChannel;
+    if (this.color.coldWhiteChannel != null) {
+      values[this.color.coldWhiteChannel - 1] = this.channelValues.coldWhiteChannel || 0;
+    }
+    if (this.color.warmWhiteChannel != null) {
+      values[this.color.warmWhiteChannel - 1] = this.channelValues.warmWhiteChannel || 0;
+    }
+    if (this.color.amberChannel != null) {
+      values[this.color.amberChannel - 1] = this.channelValues.amberChannel || 0;
+    }
+    if (this.color.uvChannel != null) {
+      values[this.color.uvChannel - 1] = this.channelValues.uvChannel || 0;
+    }
+
+    return values;
   }
 }

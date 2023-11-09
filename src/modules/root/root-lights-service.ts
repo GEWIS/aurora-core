@@ -133,19 +133,19 @@ export default class RootLightsService {
       updatedAt: g.updatedAt,
       name: g.name,
       pars: g.pars.map((p) => ({
-        ...this.toFixtureResponse(p.par, p.firstChannel),
-        ...this.toColorResponse(p.par.color, p.firstChannel),
+        ...this.toFixtureResponse(p.fixture, p.firstChannel),
+        ...this.toColorResponse(p.fixture.color, p.firstChannel),
       })),
       movingHeadRgbs: g.movingHeadRgbs.map((m) => ({
-        ...this.toMovingHeadResponse(m.movingHead, m.firstChannel),
-        ...this.toColorResponse(m.movingHead.color, m.firstChannel),
+        ...this.toMovingHeadResponse(m.fixture, m.firstChannel),
+        ...this.toColorResponse(m.fixture.color, m.firstChannel),
       })),
       movingHeadWheels: g.movingHeadWheels.map((m) => ({
-        ...this.toMovingHeadResponse(m.movingHead, m.firstChannel),
-        colorWheelChannel: m.movingHead.colorWheelChannel,
-        goboWheelChannel: m.movingHead.goboWheelChannel,
-        goboRotateChannel: m.movingHead.goboRotateChannel
-          ? m.movingHead.goboRotateChannel + m.firstChannel - 1 : null,
+        ...this.toMovingHeadResponse(m.fixture, m.firstChannel),
+        colorWheelChannel: m.fixture.colorWheelChannel,
+        goboWheelChannel: m.fixture.goboWheelChannel,
+        goboRotateChannel: m.fixture.goboRotateChannel
+          ? m.fixture.goboRotateChannel + m.firstChannel - 1 : null,
       })),
     };
   }
@@ -195,9 +195,9 @@ export default class RootLightsService {
     const group = await this.groupRepository.findOne({
       where: { id },
       relations: {
-        pars: { par: true },
-        movingHeadWheels: { movingHead: true },
-        movingHeadRgbs: { movingHead: true },
+        pars: { fixture: true },
+        movingHeadWheels: { fixture: true },
+        movingHeadRgbs: { fixture: true },
       },
     });
     if (group == null) return null;
@@ -222,7 +222,7 @@ export default class RootLightsService {
         if (par == null) throw new Error(`LightsPar with ID ${p.fixtureId} not found!`);
         await manager.save(LightsGroupPars, {
           group,
-          par,
+          fixture: par,
           firstChannel: p.firstChannel,
         });
       }));
@@ -233,7 +233,7 @@ export default class RootLightsService {
         if (movingHead == null) throw new Error(`LightsMovingHeadRgb with ID ${p.fixtureId} not found!`);
         await manager.save(LightsGroupMovingHeadRgbs, {
           group,
-          movingHead,
+          fixture: movingHead,
           firstChannel: p.firstChannel,
         });
       }));
@@ -244,7 +244,7 @@ export default class RootLightsService {
         if (movingHead == null) throw new Error(`LightsMovingHeadWheel with ID ${p.fixtureId} not found!`);
         await manager.save(LightsGroupMovingHeadWheels, {
           group,
-          movingHead,
+          fixture: movingHead,
           firstChannel: p.firstChannel,
         });
       }));

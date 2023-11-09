@@ -1,3 +1,4 @@
+import { Server } from 'socket.io';
 import BaseAudioHandler from '../handlers/base-audio-handler';
 import BaseLightsHandler from '../handlers/base-lights-handler';
 import BaseScreenHandler from '../handlers/base-screen-handler';
@@ -8,14 +9,15 @@ import dataSource from '../../database';
 import { Audio, Screen } from './entities';
 import { LightsGroup } from '../lights/entities';
 import { RandomEffectsHandler } from '../handlers/lights';
-import { MusicEmitter } from '../events';
-import LightsControllerManager from './lights-controller-manager';
-import { BeatEvent } from '../events/MusicEmitter';
+import SetEffectsHandler from '../handlers/lights/set-effects-handler';
+import DevelopEffectsHandler from '../handlers/lights/develop-effects-handler';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
  * corresponding handlers and transmits events towards all known handlers.
  * Primarily used by HTTP controllers to attach entities to handlers.
+ * Therefore, required to be a singleton class, because TSOA controllers are
+ * otherwise unable to get an instance of this object.
  */
 export default class HandlerManager {
   private static instance: HandlerManager;
@@ -57,41 +59,35 @@ export default class HandlerManager {
    * Register all possible handlers in this function
    */
   private constructor(
-    musicEmitter: MusicEmitter,
-    lightsControllerHandler: LightsControllerManager,
+    io: Server,
   ) {
     // Create all light handlers
     const lightsHandlers: BaseLightsHandler[] = [
       new RandomEffectsHandler(),
+      new SetEffectsHandler(),
+      new DevelopEffectsHandler(),
     ];
 
     // Register all handlers
     this._handlers.set(Audio, [
-      new SimpleAudioHandler(),
+      new SimpleAudioHandler(io.of('/audio')),
     ] as BaseAudioHandler[]);
     this._handlers.set(LightsGroup, lightsHandlers);
     this._handlers.set(Screen, [] as BaseScreenHandler[]);
-
-    // Subscribe all lights handlers to the broker that handlers beats and ticks
-    lightsControllerHandler.registerLightsHandlers(lightsHandlers);
-
-    musicEmitter.on('beat', this.handleBeat.bind(this));
   }
 
   /**
    * Get the current instance. Parameters are only necessary if it is
    * the first time an instance is requested and a new object should be created
-   * @param musicEmitter
-   * @param lightsControllerHandler
+   * @param io
    */
   public static getInstance(
-    musicEmitter?: MusicEmitter,
-    lightsControllerHandler?: LightsControllerManager,
+    io?: Server,
   ) {
-    if (this.instance == null && !musicEmitter === undefined) {
+    if (this.instance == null && (io === undefined)) {
       throw new Error('Not all parameters provided to initialize');
     } else if (this.instance == null) {
-      this.instance = new HandlerManager(musicEmitter!, lightsControllerHandler!);
+      this.instance = new HandlerManager(io!);
     }
     return this.instance;
   }
@@ -100,7 +96,8 @@ export default class HandlerManager {
    * Get all handlers that belong to the given entity type (audio, lightsGroup, screen)
    * @param entity
    */
-  public getHandlers(entity: typeof SubscribeEntity) {
+  public getHandlers(entity?: typeof SubscribeEntity): BaseHandler<SubscribeEntity>[] {
+    if (!entity) return Array.from(this._handlers.values()).flat();
     return this._handlers.get(entity) || [];
   }
 
@@ -123,11 +120,5 @@ export default class HandlerManager {
         }
       });
     }
-  }
-
-  public handleBeat(event: BeatEvent) {
-    this._handlers.forEach((handlers) => {
-      handlers.forEach((h) => h.beat(event));
-    });
   }
 }

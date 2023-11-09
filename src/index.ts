@@ -16,11 +16,12 @@ async function createApp(): Promise<void> {
   const httpServer = createServer(app);
   const io = createWebsocket(httpServer);
 
-  const musicEmitter = new MusicEmitter();
+  const handlerManager = HandlerManager.getInstance(io);
+  await handlerManager.init();
 
-  const lightsControllerHandler = new LightsControllerManager(io.of('/lights'), musicEmitter);
+  const musicEmitter = new MusicEmitter(handlerManager);
+  const lightsControllerManager = new LightsControllerManager(io.of('/lights'), handlerManager, musicEmitter);
 
-  await HandlerManager.getInstance(musicEmitter, lightsControllerHandler).init();
   await SpotifyApiHandler.getInstance().init();
   await SpotifyTrackHandler.getInstance().init(musicEmitter);
 

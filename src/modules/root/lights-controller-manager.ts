@@ -1,17 +1,20 @@
 import { Namespace } from 'socket.io';
 import { LightsController } from './entities';
 import BaseLightsHandler from '../handlers/base-lights-handler';
-import { MusicEmitter, TrackPropertiesEvent } from '../events/MusicEmitter';
-import { LightsGroupPars, LightsGroupMovingHeadRgbs, LightsGroupMovingHeadWheels } from '../lights/entities';
+import { MusicEmitter } from '../events';
+import {
+  LightsGroupPars,
+  LightsGroupMovingHeadRgbs,
+  LightsGroupMovingHeadWheels,
+  LightsGroup,
+} from '../lights/entities';
+import HandlerManager from './handler-manager';
+import { TrackPropertiesEvent } from '../events/music-emitter-events';
 
 export default class LightsControllerManager {
   private lightsControllers: Map<number, LightsController> = new Map();
 
   private lightsControllersValues: Map<number, number[]> = new Map();
-
-  private lightsHandlers: BaseLightsHandler[] = [];
-
-  protected websocket: Namespace;
 
   private previousTick = new Date();
 
@@ -20,12 +23,11 @@ export default class LightsControllerManager {
   }
 
   constructor(
-    socket: Namespace,
+    protected websocket: Namespace,
+    protected handlerManager: HandlerManager,
     musicEmitter: MusicEmitter,
     lightControllers: LightsController[] = [],
   ) {
-    this.websocket = socket;
-
     lightControllers.forEach((c) => {
       this.lightsControllersValues.set(c.id, this.constructNewValuesArray());
     });
@@ -46,17 +48,8 @@ export default class LightsControllerManager {
     return result;
   }
 
-  registerLightsHandlers(lightsHandlers: BaseLightsHandler[]) {
-    this.lightsHandlers.push(...lightsHandlers);
-  }
-
-  registerLightsHandler(lightsHandler: BaseLightsHandler) {
-    this.lightsHandlers.push(lightsHandler);
-  }
-
-  removeLightsHandler(lightsHandler: BaseLightsHandler) {
-    this.lightsHandlers = this.lightsHandlers
-      .filter((h) => h.identifier !== lightsHandler.identifier);
+  private get lightsHandlers() {
+    return this.handlerManager.getHandlers(LightsGroup) as BaseLightsHandler[];
   }
 
   private setTrackFeatures(event: TrackPropertiesEvent) {
@@ -64,129 +57,18 @@ export default class LightsControllerManager {
   }
 
   /**
-   * Given a par in a light group, put the new DMX values in the correct spot in the packet
+   * Given a fixture, put the new DMX values in the correct spot in the packet
    * @param p
    * @param packet Array of 512 integers [0, 255]
    * @private
    */
-  private setParValues(p: LightsGroupPars, packet: number[]) {
-    const o = [...packet];
-    o[p.getActualChannel(p.par.masterDimChannel) - 1] = p.par.channelValues.masterDimChannel;
-    o[p.getActualChannel(p.par.strobeChannel) - 1] = p.par.channelValues.strobeChannel;
-    o[p.getActualChannel(p.par.color.redChannel) - 1] = p.par.channelValues.redChannel;
-    o[p.getActualChannel(p.par.color.greenChannel) - 1] = p.par.channelValues.greenChannel;
-    o[p.getActualChannel(p.par.color.blueChannel) - 1] = p.par.channelValues.blueChannel;
-    if (p.par.color.coldWhiteChannel != null) {
-      o[p.getActualChannel(p.par.color.coldWhiteChannel) - 1] = p.par
-        .channelValues.coldWhiteChannel || 0;
-    }
-    if (p.par.color.warmWhiteChannel != null) {
-      o[p.getActualChannel(p.par.color.warmWhiteChannel) - 1] = p.par
-        .channelValues.warmWhiteChannel || 0;
-    }
-    if (p.par.color.amberChannel != null) {
-      o[p.getActualChannel(p.par.color.amberChannel) - 1] = p.par
-        .channelValues.amberChannel || 0;
-    }
-    if (p.par.color.uvChannel != null) {
-      o[p.getActualChannel(p.par.color.uvChannel) - 1] = p.par
-        .channelValues.uvChannel || 0;
-    }
-    return o;
-  }
-
-  /**
-   * Given a moving head (RGB) in a light group,
-   * put the new DMX values in the correct spot in the packet
-   * @param p
-   * @param packet Array of 512 integers [0, 255]
-   * @private
-   */
-  private setMovingHeadRgbValues(p: LightsGroupMovingHeadRgbs, packet: number[]) {
-    const o = [...packet];
-    o[p.getActualChannel(p.movingHead.masterDimChannel) - 1] = p.movingHead
-      .channelValues.masterDimChannel;
-    o[p.getActualChannel(p.movingHead.strobeChannel) - 1] = p.movingHead
-      .channelValues.strobeChannel;
-    o[p.getActualChannel(p.movingHead.color.redChannel) - 1] = p.movingHead
-      .channelValues.redChannel;
-    o[p.getActualChannel(p.movingHead.color.greenChannel) - 1] = p.movingHead
-      .channelValues.greenChannel;
-    o[p.getActualChannel(p.movingHead.color.blueChannel) - 1] = p.movingHead
-      .channelValues.blueChannel;
-    if (p.movingHead.color.coldWhiteChannel != null) {
-      o[p.getActualChannel(p.movingHead.color.coldWhiteChannel) - 1] = p.movingHead
-        .channelValues.coldWhiteChannel || 0;
-    }
-    if (p.movingHead.color.warmWhiteChannel != null) {
-      o[p.getActualChannel(p.movingHead.color.warmWhiteChannel) - 1] = p.movingHead
-        .channelValues.warmWhiteChannel || 0;
-    }
-    if (p.movingHead.color.amberChannel != null) {
-      o[p.getActualChannel(p.movingHead.color.amberChannel) - 1] = p.movingHead
-        .channelValues.amberChannel || 0;
-    }
-    if (p.movingHead.color.uvChannel != null) {
-      o[p.getActualChannel(p.movingHead.color.uvChannel) - 1] = p.movingHead
-        .channelValues.uvChannel || 0;
-    }
-    o[p.getActualChannel(p.movingHead.movement.panChannel) - 1] = p.movingHead
-      .channelValues.panChannel;
-    if (p.movingHead.movement.finePanChannel != null) {
-      o[p.getActualChannel(p.movingHead.movement.finePanChannel) - 1] = p.movingHead
-        .channelValues.finePanChannel || 0;
-    }
-    o[p.getActualChannel(p.movingHead.movement.tiltChannel) - 1] = p.movingHead
-      .channelValues.tiltChannel;
-    if (p.movingHead.movement.fineTiltChannel != null) {
-      o[p.getActualChannel(p.movingHead.movement.fineTiltChannel) - 1] = p.movingHead
-        .channelValues.fineTiltChannel || 0;
-    }
-    if (p.movingHead.movement.movingSpeedChannel != null) {
-      o[p.getActualChannel(p.movingHead.movement.movingSpeedChannel) - 1] = p.movingHead
-        .channelValues.movingSpeedChannel || 0;
-    }
-    return o;
-  }
-
-  /**
-   * Given a moving head (Wheel) in a light group,
-   * put the new DMX values in the correct spot in the packet
-   * @param p
-   * @param packet Array of 512 integers [0, 255]
-   * @private
-   */
-  private setMovingHeadWheelValues(p: LightsGroupMovingHeadWheels, packet: number[]) {
-    const o = [...packet];
-    o[p.getActualChannel(p.movingHead.masterDimChannel) - 1] = p.movingHead
-      .channelValues.masterDimChannel;
-    o[p.getActualChannel(p.movingHead.strobeChannel) - 1] = p.movingHead
-      .channelValues.masterDimChannel;
-    o[p.getActualChannel(p.movingHead.movement.panChannel) - 1] = p.movingHead
-      .channelValues.panChannel;
-    o[p.getActualChannel(p.movingHead.colorWheelChannel) - 1] = p.movingHead
-      .channelValues.colorWheelChannel;
-    o[p.getActualChannel(p.movingHead.goboWheelChannel) - 1] = p.movingHead
-      .channelValues.goboWheelChannel;
-    if (p.movingHead.goboRotateChannel != null) {
-      o[p.getActualChannel(p.movingHead.goboRotateChannel) - 1] = p.movingHead
-        .channelValues.goboRotateChannel || 0;
-    }
-    if (p.movingHead.movement.finePanChannel != null) {
-      o[p.getActualChannel(p.movingHead.movement.finePanChannel) - 1] = p.movingHead
-        .channelValues.finePanChannel || 0;
-    }
-    o[p.getActualChannel(p.movingHead.movement.tiltChannel) - 1] = p.movingHead
-      .channelValues.tiltChannel;
-    if (p.movingHead.movement.fineTiltChannel != null) {
-      o[p.getActualChannel(p.movingHead.movement.fineTiltChannel) - 1] = p.movingHead
-        .channelValues.fineTiltChannel || 0;
-    }
-    if (p.movingHead.movement.movingSpeedChannel != null) {
-      o[p.getActualChannel(p.movingHead.movement.movingSpeedChannel) - 1] = p.movingHead
-        .channelValues.movingSpeedChannel || 0;
-    }
-    return o;
+  private setDmxValues(
+    p: LightsGroupPars | LightsGroupMovingHeadRgbs | LightsGroupMovingHeadWheels,
+    packet: number[],
+  ) {
+    const dmxValues = p.fixture.toDmx();
+    packet.splice(p.firstChannel - 1, dmxValues.length, ...dmxValues);
+    return packet;
   }
 
   /**
@@ -222,21 +104,21 @@ export default class LightsControllerManager {
       let oldValues = this.getOldValues(g.controller);
 
       g.pars
-        .filter((p) => this.hasUpdated(p.par.valuesUpdatedAt))
+        .filter((p) => this.hasUpdated(p.fixture.valuesUpdatedAt))
         .forEach((p) => {
-          oldValues = this.setParValues(p, oldValues);
+          oldValues = this.setDmxValues(p, oldValues);
         });
 
       g.movingHeadRgbs
-        .filter((p) => this.hasUpdated(p.movingHead.valuesUpdatedAt))
+        .filter((p) => this.hasUpdated(p.fixture.valuesUpdatedAt))
         .forEach((p) => {
-          oldValues = this.setMovingHeadRgbValues(p, oldValues);
+          oldValues = this.setDmxValues(p, oldValues);
         });
 
       g.movingHeadWheels
-        .filter((p) => this.hasUpdated(p.movingHead.valuesUpdatedAt))
+        .filter((p) => this.hasUpdated(p.fixture.valuesUpdatedAt))
         .forEach((p) => {
-          oldValues = this.setMovingHeadWheelValues(p, oldValues);
+          oldValues = this.setDmxValues(p, oldValues);
         });
 
       this.lightsControllersValues.set(g.controller.id, oldValues);

@@ -14,7 +14,7 @@ export default class LightsGroupMovingHeadRgbs extends BaseEntity {
 
   @ManyToOne(() => LightsMovingHeadRgb, { eager: true })
   @JoinColumn()
-  public movingHead: LightsMovingHeadRgb;
+  public fixture: LightsMovingHeadRgb;
 
   @Column({ type: 'smallint', unsigned: true })
   public firstChannel: number;

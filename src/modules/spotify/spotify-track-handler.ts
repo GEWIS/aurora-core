@@ -3,7 +3,7 @@ import {
 } from '@spotify/web-api-ts-sdk';
 import SpotifyApiHandler from './spotify-api-handler';
 import { MusicEmitter } from '../events';
-import { BeatEvent, TrackPropertiesEvent } from '../events/MusicEmitter';
+import { BeatEvent, TrackPropertiesEvent } from '../events/music-emitter-events';
 
 export default class SpotifyTrackHandler {
   private static instance: SpotifyTrackHandler;
@@ -14,11 +14,11 @@ export default class SpotifyTrackHandler {
 
   private readonly api: SpotifyApiHandler;
 
-  private playState: PlaybackState;
+  private playState: PlaybackState | undefined;
 
-  private currentlyPlayingFeatures: AudioFeatures;
+  private currentlyPlayingFeatures: AudioFeatures | undefined;
 
-  private currentlyPlayingAnalysis: AudioAnalysis;
+  private currentlyPlayingAnalysis: AudioAnalysis | undefined;
 
   private beatEvents: {
     event: BeatEvent,
@@ -73,12 +73,12 @@ export default class SpotifyTrackHandler {
     );
   }
 
-  private setBeatEvents(track: AudioAnalysis) {
+  private setBeatEvents(track?: AudioAnalysis) {
     this.stopBeatEvents();
 
-    const progress = this.playState.progress_ms;
+    const progress = this.playState?.progress_ms || 0;
 
-    this.beatEvents = track.beats
+    this.beatEvents = track ? track.beats
       .filter((b) => (b.start * 1000 >= progress))
       .map((beat) => {
         const segment = track.segments
@@ -102,7 +102,7 @@ export default class SpotifyTrackHandler {
           event: beatEvent,
           timeout,
         };
-      });
+      }) : [];
   }
 
   /**
@@ -114,7 +114,7 @@ export default class SpotifyTrackHandler {
 
     const state = await this.api.client.player.getCurrentlyPlayingTrack();
 
-    if (state.currently_playing_type === 'track' && (!this.playState || this.playState.item?.id !== state.item?.id)) {
+    if (state && state.currently_playing_type === 'track' && (!this.playState || this.playState.item?.id !== state.item?.id)) {
       this.currentlyPlayingFeatures = await this.api.client.tracks
         .audioFeatures(state.item.id);
       this.currentlyPlayingAnalysis = await this.api.client.tracks
@@ -128,8 +128,10 @@ export default class SpotifyTrackHandler {
       console.log(`Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name}`);
     }
 
-    if (!state.is_playing && this.playState.is_playing) {
+    if ((!state || !state.is_playing) && this.playState && this.playState.is_playing) {
       this.stopBeatEvents();
+      this.currentlyPlayingFeatures = undefined;
+      this.currentlyPlayingAnalysis = undefined;
     }
 
     this.playState = state;
@@ -142,7 +144,7 @@ export default class SpotifyTrackHandler {
    * @private
    */
   private async syncBeat(event: BeatEvent) {
-    if (!this.playState.is_playing) return;
+    if (!this.playState || !this.playState.is_playing) return;
 
     let beat = '';
 
@@ -153,7 +155,7 @@ export default class SpotifyTrackHandler {
     beat += `: ${event.beat.start} (${event.beat.confidence}) - ${event.section?.start} - ${event.section?.loudness}`;
     console.log(beat);
 
-    this.musicEmitter.emit('beat', event);
+    this.musicEmitter.emitSpotify('beat', event);
   }
 
   /**
@@ -169,6 +171,6 @@ export default class SpotifyTrackHandler {
       loudness: features.loudness,
       valence: features.valence,
     };
-    this.musicEmitter.emit('features', event);
+    this.musicEmitter.emitSpotify('features', event);
   }
 }

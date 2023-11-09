@@ -14,7 +14,7 @@ export default class LightsGroupPars extends BaseEntity {
 
   @ManyToOne(() => LightsPar, { eager: true })
   @JoinColumn()
-  public par: LightsPar;
+  public fixture: LightsPar;
 
   @Column({ type: 'smallint', unsigned: true })
   public firstChannel: number;

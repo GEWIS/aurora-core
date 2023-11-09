@@ -2,7 +2,7 @@ import { Column } from 'typeorm';
 import LightsFixture from './lights-fixture';
 import Movement from './movement';
 
-export default class LightsMovingHead extends LightsFixture {
+export default abstract class LightsMovingHead extends LightsFixture {
   @Column(() => Movement)
   public movement: Movement;
 }

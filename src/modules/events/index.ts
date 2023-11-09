@@ -1,1 +1,1 @@
-export { MusicEmitter } from './MusicEmitter';
+export { MusicEmitter } from './music-emitter';

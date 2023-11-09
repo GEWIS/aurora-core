@@ -51,4 +51,37 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
   public get channelValues() {
     return this.currentValues;
   }
+
+  toDmx(): number[] {
+    const values: number[] = new Array(16).fill(0);
+
+    values[this.masterDimChannel - 1] = this.channelValues.masterDimChannel;
+    values[this.strobeChannel - 1] = this.channelValues.masterDimChannel;
+    values[this.movement.panChannel - 1] = this.channelValues.panChannel;
+    values[this.colorWheelChannel - 1] = this.channelValues.colorWheelChannel;
+    values[this.goboWheelChannel - 1] = this.channelValues.goboWheelChannel;
+    if (this.goboRotateChannel != null) {
+      values[this.goboRotateChannel - 1] = this.channelValues.goboRotateChannel || 0;
+    }
+    if (this.movement.finePanChannel != null) {
+      values[this.movement.finePanChannel - 1] = this.channelValues.finePanChannel || 0;
+    }
+    values[this.movement.tiltChannel - 1] = this.channelValues.tiltChannel;
+    if (this.movement.fineTiltChannel != null) {
+      values[this.movement.fineTiltChannel - 1] = this.channelValues.fineTiltChannel || 0;
+    }
+    if (this.movement.movingSpeedChannel != null) {
+      values[this.movement.movingSpeedChannel - 1] = this.channelValues.movingSpeedChannel || 0;
+    }
+
+    if (this.strobeEnabled) {
+      values[this.colorWheelChannel - 1] = 0;
+      values[this.goboWheelChannel - 1] = 0;
+      if (this.goboRotateChannel != null) values[this.goboRotateChannel - 1] = 0;
+      values[this.masterDimChannel - 1] = 255;
+      values[this.strobeChannel - 1] = 220;
+    }
+
+    return values;
+  }
 }

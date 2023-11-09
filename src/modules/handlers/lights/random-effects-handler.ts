@@ -1,28 +1,16 @@
-import BaseLightsHandler from '../base-lights-handler';
 import { LightsGroup } from '../../lights/entities';
-import { BeatEvent } from '../../events/MusicEmitter';
-import LightsEffect from '../../lights/effects/LightsEffect';
-import BeatFadeOut from '../../lights/effects/BeatFadeOut';
+import { BeatEvent } from '../../events/music-emitter-events';
+import { BeatFadeOut } from '../../lights/effects';
 import { rgbColors, wheelColors } from '../../lights/ColorDefinitions';
+import EffectsHandler from './effects-handler';
 
-export default class RandomEffectsHandler extends BaseLightsHandler {
-  /**
-   * Assign every group of lights exactly one effect
-   */
-  private groupEffects: Map<LightsGroup, LightsEffect | null> = new Map();
-
+export default class RandomEffectsHandler extends EffectsHandler {
   private lastSectionStart: number = 0;
 
-  // Override entity register function to also populate the groupEffect mapping
+  // Override entity register function to assign random effect
   public registerEntity(entity: LightsGroup) {
     super.registerEntity(entity);
     this.assignRandomEffect(entity);
-  }
-
-  // We should also remove the entity from the effects mapping
-  public removeEntity(entity: LightsGroup) {
-    this.groupEffects.delete(entity);
-    super.removeEntity(entity);
   }
 
   /**
@@ -35,17 +23,7 @@ export default class RandomEffectsHandler extends BaseLightsHandler {
     const rgbColor = rgbColors[Math.floor(Math.random() * rgbColors.length)];
     // We currently have only one effect, so that makes our choice easy
     this.groupEffects.set(entity, new BeatFadeOut(entity, color, this.trackFeatures, rgbColor));
-  }
-
-  tick(): LightsGroup[] {
-    const result: LightsGroup[] = [];
-
-    this.groupEffects.forEach((effect) => {
-      if (!effect) return;
-      result.push(effect.tick());
-    });
-
-    return result;
+    // this.groupEffects.set(entity, new Strobe(entity, this.trackFeatures));
   }
 
   beat(event: BeatEvent): void {
@@ -57,10 +35,6 @@ export default class RandomEffectsHandler extends BaseLightsHandler {
       });
     }
 
-    // Propagate the beat to every effect
-    this.groupEffects.forEach((effect) => {
-      if (!effect) return;
-      effect.beat(event);
-    });
+    super.beat(event);
   }
 }
