@@ -1,5 +1,5 @@
 import bodyParser from 'body-parser';
-import express, { Response as ExResponse, Request as ExRequest } from 'express';
+import express, { Response as ExResponse, Request as ExRequest, NextFunction } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import passport from 'passport';
 import cors from 'cors';
@@ -15,7 +15,7 @@ import { SessionMiddleware } from './modules/auth';
  * HTTP is only used for the end user to interact with the software,
  * i.e. changing settings or modes.
  */
-export default function createHttp() {
+export default async function createHttp() {
   const app = express();
 
   app.use(cors({ allowedHeaders: ['Cookie', 'Cookies'] }));
@@ -31,11 +31,20 @@ export default function createHttp() {
 
   RegisterRoutes(app);
 
+  app.get('/auth/oidc', (req, res, next) => {
+    passport.authenticate('oidc')(req, res, next);
+  });
+
+  app.get('/auth/callback', (req, res, next) => {
+    passport.authenticate('oidc')(req, res, next);
+    res.status(200).send();
+  });
+
   if (process.env.NODE_ENV === 'development') {
     app.use('/api-docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => res.send(
       swaggerUi.generateHTML(apiDocs),
     ));
-    app.post('/auth/mock', passport.authenticate('custom'), (req: ExRequest, res: ExResponse) => res.status(204).send());
+    app.post('/auth/mock', passport.authenticate('mock'), (req: ExRequest, res: ExResponse) => res.status(204).send());
     app.use('/static', express.static('public'));
   }
 

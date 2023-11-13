@@ -1,8 +1,12 @@
 import passport from 'passport';
-import './mock-strategy';
 import { User } from '../user';
 
-passport.serializeUser((user, done) => done(null, JSON.stringify(user)));
+export { default as mockStrategy } from './mock-strategy';
+export { default as oidcStrategy } from './oidc-strategy';
+
+passport.serializeUser((user, done) => {
+  done(null, JSON.stringify(user));
+});
 
 passport.deserializeUser((json: string, done) => {
   const user = JSON.parse(json);

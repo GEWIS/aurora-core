@@ -23,6 +23,21 @@
               "Authentication"
             ]
           }
+        },
+        "/auth/oidc": {
+          "get": {
+            "operationId": "Authoidc",
+            "responses": {
+              "200": {
+                "description": "Success"
+              }
+            },
+            "security": [],
+            "parameters": [],
+            "tags": [
+              "Authentication"
+            ]
+          }
         }
       }
     }
