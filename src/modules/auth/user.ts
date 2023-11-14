@@ -1,8 +1,4 @@
 export interface User {
-  given_name: string;
-  resource_access: {
-    'narrowcasting-test': {
-      roles: string[];
-    },
-  },
+  name: string;
+  roles: string[];
 }

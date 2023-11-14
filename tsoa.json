@@ -1,13 +1,48 @@
 {
   "entryFile": "src/index.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
-  "controllerPathGlobs": ["src/**/*-controller.ts"],
+  "controllerPathGlobs": [
+    "src/**/*-controller.ts"
+  ],
   "spec": {
+    "basePath": "/api",
     "outputDirectory": "build",
+    "host": "localhost:3000",
     "specVersion": 3,
-    "schemes": ["http"],
+    "schemes": [
+      "http",
+      "https"
+    ],
     "specMerging": "recursive",
     "spec": {
+      "components": {
+        "schemas": {
+          "OIDCParameters": {
+            "dataType": "refObject",
+            "properties": {
+              "state": {
+                "type": "string"
+              },
+              "session_state": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "OIDCResponse": {
+            "dataType": "refObject",
+            "properties": {
+              "id_token": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
       "paths": {
         "/auth/mock": {
           "post": {
@@ -25,15 +60,32 @@
           }
         },
         "/auth/oidc": {
-          "get": {
-            "operationId": "Authoidc",
+          "post": {
+            "operationId": "AuthOIDC",
             "responses": {
               "200": {
-                "description": "Success"
+                "description": "Success",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/OIDCResponse"
+                    }
+                  }
+                }
               }
             },
             "security": [],
             "parameters": [],
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/OIDCParameters"
+                  }
+                }
+              }
+            },
             "tags": [
               "Authentication"
             ]
@@ -43,6 +95,7 @@
     }
   },
   "routes": {
+    "basePath": "/api",
     "routesDir": "build",
     "middleware": "express"
   }

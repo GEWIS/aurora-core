@@ -1,12 +1,13 @@
 import bodyParser from 'body-parser';
 import express, { Response as ExResponse, Request as ExRequest, NextFunction } from 'express';
 import swaggerUi from 'swagger-ui-express';
-import passport from 'passport';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
 import { SessionMiddleware } from './modules/auth';
+import { oidcLogin } from './modules/auth/passport/oidc-strategy';
+import { mockLogin } from './modules/auth/passport/mock-strategy';
 
 /**
  * Create an Express instance to listen to HTTP calls.
@@ -29,22 +30,15 @@ export default async function createHttp() {
   app.use(cookieParser(process.env.COOKIE_SECRET));
   app.use(SessionMiddleware.getInstance().get());
 
+  app.post('/api/auth/oidc', oidcLogin);
+
   RegisterRoutes(app);
-
-  app.get('/auth/oidc', (req, res, next) => {
-    passport.authenticate('oidc')(req, res, next);
-  });
-
-  app.get('/auth/callback', (req, res, next) => {
-    passport.authenticate('oidc')(req, res, next);
-    res.status(200).send();
-  });
 
   if (process.env.NODE_ENV === 'development') {
     app.use('/api-docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => res.send(
       swaggerUi.generateHTML(apiDocs),
     ));
-    app.post('/auth/mock', passport.authenticate('mock'), (req: ExRequest, res: ExResponse) => res.status(204).send());
+    app.post('/api/auth/mock', mockLogin);
     app.use('/static', express.static('public'));
   }
 

@@ -5,6 +5,7 @@ export { default as mockStrategy } from './mock-strategy';
 export { default as oidcStrategy } from './oidc-strategy';
 
 passport.serializeUser((user, done) => {
+  console.log(user);
   done(null, JSON.stringify(user));
 });
 
