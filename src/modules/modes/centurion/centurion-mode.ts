@@ -56,9 +56,10 @@ export default class CenturionMode extends BaseMode {
     return this.instance;
   }
 
+  /**
+   * Start playing the given mixtape and register all timed effects
+   */
   public start(): boolean {
-    this.timestamp = 35;
-
     if (!this.audioHandler.ready) return false;
 
     this.audioHandler.setPlayback(this.timestamp);
@@ -75,6 +76,23 @@ export default class CenturionMode extends BaseMode {
     return true;
   }
 
+  /**
+   * Continue playback at the given timestamp (in seconds)
+   * @param seconds
+   */
+  public skip(seconds: number) {
+    if (seconds < 0) throw new Error('Timestamp has to be positive');
+    this.timestamp = seconds;
+    // If we have registered events, we are playing audio
+    if (this.feedEvents.length > 0) {
+      this.audioHandler.setPlayback(seconds);
+      this.registerEvents(seconds);
+    }
+  }
+
+  /**
+   * Stop playing the given mixtape and all its effects
+   */
   public stop() {
     this.audioHandler.stop();
     this.stopFeedEvents();
@@ -83,6 +101,11 @@ export default class CenturionMode extends BaseMode {
     this.artificialBeatLoop = undefined;
   }
 
+  /**
+   * Handle a fired event
+   * @param event
+   * @private
+   */
   private handleFeedEvent(event: FeedEvent) {
     const color = wheelColors[Math.floor(Math.random() * wheelColors.length)];
     const rgbColor = rgbColors[Math.floor(Math.random() * rgbColors.length)];
@@ -102,14 +125,17 @@ export default class CenturionMode extends BaseMode {
 
   /**
    * Register events
-   * @param timestamp seconds since start of the track
+   * @param seconds seconds since start of the track
    * @private
    */
-  private registerEvents(timestamp: number = 0): void {
+  private registerEvents(seconds: number = 0): void {
+    if (this.feedEvents.length > 0) {
+      this.stopFeedEvents();
+    }
     this.tape.feed
-      .filter((e) => e.timestamp >= timestamp)
+      .filter((e) => e.timestamp >= seconds)
       .forEach((event) => {
-        const timestampMillis = Math.round((event.timestamp - timestamp) * 1000);
+        const timestampMillis = Math.round((event.timestamp - seconds) * 1000);
         const timeouts = [setTimeout(this.handleFeedEvent.bind(this, event), timestampMillis)];
 
         this.feedEvents.push({

@@ -1,9 +1,16 @@
 import {
-  Post, Route, Tags, Response, SuccessResponse,
+  Post, Route, Tags, Response, SuccessResponse, Body,
 } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import ModeManager from '../mode-manager';
 import CenturionMode from './centurion-mode';
+
+interface SkipCenturionRequest {
+  /**
+   * @minimum 0 Timestamp should be positive
+   */
+  seconds: number;
+}
 
 @Route('modes/centurion')
 @Tags('Modes')
@@ -32,6 +39,23 @@ export class CenturionController extends Controller {
       this.setStatus(411);
       return 'Centurion not yet fully initialized. Please wait and try again later';
     }
+
+    this.setStatus(204);
+    return '';
+  }
+
+  @Post('skip')
+  @SuccessResponse(204, 'Skip commands sent')
+  @Response<string>(400, 'Invalid timestamp provided')
+  @Response<string>(411, 'Centurion nog enabled')
+  public skipCenturion(@Body() { seconds }: SkipCenturionRequest) {
+    const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
+    if (mode === undefined) {
+      this.setStatus(411);
+      return 'Centurion not enabled';
+    }
+
+    mode.skip(seconds);
 
     this.setStatus(204);
     return '';
