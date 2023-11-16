@@ -34,6 +34,26 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
     this.valuesUpdatedAt = new Date();
   }
 
+  blackout() {
+    if (Object.values(this.currentValues).every((v) => v === 0)) return;
+    this.setCurrentValues({
+      masterDimChannel: 0,
+      strobeChannel: 0,
+      redChannel: 0,
+      greenChannel: 0,
+      blueChannel: 0,
+      coldWhiteChannel: 0,
+      warmWhiteChannel: 0,
+      amberChannel: 0,
+      uvChannel: 0,
+      panChannel: 0,
+      finePanChannel: 0,
+      tiltChannel: 0,
+      fineTiltChannel: 0,
+      movingSpeedChannel: 0,
+    });
+  }
+
   public get channelValues() {
     return this.currentValues;
   }

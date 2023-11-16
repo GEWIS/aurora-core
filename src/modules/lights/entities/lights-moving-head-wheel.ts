@@ -40,6 +40,22 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     goboRotateChannel: 0,
   };
 
+  blackout() {
+    if (Object.values(this.currentValues).every((v) => v === 0)) return;
+    this.setCurrentValues({
+      masterDimChannel: 0,
+      strobeChannel: 0,
+      panChannel: 0,
+      finePanChannel: 0,
+      tiltChannel: 0,
+      fineTiltChannel: 0,
+      movingSpeedChannel: 0,
+      colorWheelChannel: 0,
+      goboWheelChannel: 0,
+      goboRotateChannel: 0,
+    });
+  }
+
   setCurrentValues(values: Partial<LightsMovingHeadWheelCurrentValues>) {
     this.currentValues = {
       ...this.currentValues,

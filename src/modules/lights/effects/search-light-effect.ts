@@ -1,4 +1,4 @@
-import LightsEffect from './lights-effect';
+import LightsEffect, { LightsEffectBuilder } from './lights-effect';
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../entities';
 
 export default class SearchLightEffect extends LightsEffect {
@@ -6,7 +6,7 @@ export default class SearchLightEffect extends LightsEffect {
 
   /**
    * @param lightsGroup
-   * @param radiusFactor
+   * @param radiusFactor Radius of the search light
    * @param cycleTime Time for the moving head to go around (in milliseconds)
    * @param offsetFactor What phase the lights should move apart from each other. 0 for synchronous
    */
@@ -17,6 +17,19 @@ export default class SearchLightEffect extends LightsEffect {
     private offsetFactor = 0.5 * Math.PI,
   ) {
     super(lightsGroup);
+  }
+
+  public static build(
+    radiusFactor?: number,
+    cycleTime?: number,
+    offsetFactor?: number,
+  ): LightsEffectBuilder {
+    return (lightsGroup) => new SearchLightEffect(
+      lightsGroup,
+      radiusFactor,
+      cycleTime,
+      offsetFactor,
+    );
   }
 
   beat(): void {

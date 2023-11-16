@@ -120,7 +120,25 @@ export default class CenturionMode extends BaseMode {
       this.lights.forEach((l) => {
         this.lightsHandler.setEffect(l, BeatFadeOut.build(color, rgbColor));
       });
+    } else if (event.type === 'effect') {
+      this.lights.forEach((l) => {
+        this.lightsHandler.setEffect(l, event.data.effect);
+      });
     }
+  }
+
+  /**
+   * Fire the last past event
+   * @param seconds
+   * @private
+   */
+  private fireLastFeedEvent(seconds: number) {
+    const pastEvents = this.tape.feed
+      .filter((e) => e.type === 'song' || e.type === 'effect')
+      .filter((e) => e.timestamp <= seconds);
+    if (pastEvents.length === 0) return;
+
+    this.handleFeedEvent(pastEvents[pastEvents.length - 1]);
   }
 
   /**
@@ -143,6 +161,8 @@ export default class CenturionMode extends BaseMode {
           timeouts,
         });
       });
+
+    this.fireLastFeedEvent(seconds);
   }
 
   private stopFeedEvents() {

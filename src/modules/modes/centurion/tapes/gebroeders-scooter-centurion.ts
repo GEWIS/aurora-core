@@ -1,9 +1,17 @@
 import MixTape from './mix-tape';
+import SearchLightEffect from '../../../lights/effects/search-light-effect';
 
 const centurion: MixTape = {
   name: 'Gebroeders Scooter - Centurion',
   songFile: '/audio/gebroeders-scooter-centurion.mp3',
   feed: [
+    {
+      timestamp: 0.1,
+      type: 'effect',
+      data: {
+        effect: SearchLightEffect.build(),
+      },
+    },
     {
       timestamp: 41.90,
       type: 'horn',

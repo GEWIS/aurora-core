@@ -64,6 +64,9 @@ export default class BeatFadeOut extends LightsEffect {
       }
     });
 
+    this.lightsGroup.movingHeadWheels.forEach((m) => m.fixture.blackout());
+    this.lightsGroup.movingHeadRgbs.forEach((m) => m.fixture.blackout());
+
     return this.lightsGroup;
   }
 }
