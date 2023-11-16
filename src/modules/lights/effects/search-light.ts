@@ -1,7 +1,7 @@
 import LightsEffect, { LightsEffectBuilder } from './lights-effect';
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../entities';
 
-export default class SearchLightEffect extends LightsEffect {
+export default class SearchLight extends LightsEffect {
   private cycleStartTick: Date = new Date();
 
   /**
@@ -24,7 +24,7 @@ export default class SearchLightEffect extends LightsEffect {
     cycleTime?: number,
     offsetFactor?: number,
   ): LightsEffectBuilder {
-    return (lightsGroup) => new SearchLightEffect(
+    return (lightsGroup) => new SearchLight(
       lightsGroup,
       radiusFactor,
       cycleTime,

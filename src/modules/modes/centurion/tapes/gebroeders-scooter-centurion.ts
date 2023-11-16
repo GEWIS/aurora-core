@@ -1,15 +1,37 @@
 import MixTape from './mix-tape';
-import SearchLightEffect from '../../../lights/effects/search-light-effect';
+import SearchLight from '../../../lights/effects/search-light';
+import { SingleFlood } from '../../../lights/effects';
 
 const centurion: MixTape = {
   name: 'Gebroeders Scooter - Centurion',
   songFile: '/audio/gebroeders-scooter-centurion.mp3',
   feed: [
     {
-      timestamp: 0.1,
+      timestamp: 1,
       type: 'effect',
       data: {
-        effect: SearchLightEffect.build(),
+        effect: SearchLight.build(),
+      },
+    },
+    {
+      timestamp: 39,
+      type: 'effect',
+      data: {
+        effect: SingleFlood.build(),
+      },
+    },
+    {
+      timestamp: 40,
+      type: 'effect',
+      data: {
+        effect: SingleFlood.build(),
+      },
+    },
+    {
+      timestamp: 41,
+      type: 'effect',
+      data: {
+        effect: SingleFlood.build(),
       },
     },
     {
