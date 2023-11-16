@@ -9,7 +9,6 @@ import createWebsocket from './socketio';
 import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
 import { MusicEmitter } from './modules/events';
 import LightsControllerManager from './modules/root/lights-controller-manager';
-import { mockStrategy, oidcStrategy } from './modules/auth/passport';
 
 async function createApp(): Promise<void> {
   await dataSource.initialize();
@@ -17,9 +16,6 @@ async function createApp(): Promise<void> {
   setupErrorHandler(app);
   const httpServer = createServer(app);
   const io = createWebsocket(httpServer);
-
-  passport.use('mock', await mockStrategy());
-  passport.use('oidc', await oidcStrategy());
 
   const handlerManager = HandlerManager.getInstance(io);
   await handlerManager.init();

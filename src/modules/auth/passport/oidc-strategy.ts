@@ -26,23 +26,20 @@ export interface AuthStoreToken {
   given_name: string
 }
 
-export default async function getStrategy(): Promise<Strategy> {
-  return new CustomStrategy(
-    (req, callback) => {
-      const tokenDetails = jwtDecode<AuthStoreToken>(req.body!);
+passport.use('oidc', new CustomStrategy(
+  (req, callback) => {
+    const tokenDetails = jwtDecode<AuthStoreToken>(req.body!);
 
-      callback(null, {
-        name: tokenDetails.given_name,
-        roles: tokenDetails.resource_access ? tokenDetails.resource_access['narrowcasting-test'].roles : [],
-      });
-    },
-  );
-}
+    callback(null, {
+      name: tokenDetails.given_name,
+      roles: tokenDetails.resource_access ? tokenDetails.resource_access['narrowcasting-test'].roles : [],
+    });
+  },
+));
 
 export const oidcLogin = async (
   req: ExRequest,
   res: ExResponse,
-  next: NextFunction,
 ): Promise<void> => {
   if (!req.body.state || !req.body.session_state || !req.body.code) {
     throw new ApiError(HTTPStatus.BadRequest, 'Missing OIDC state, session state or code.');
@@ -65,10 +62,13 @@ export const oidcLogin = async (
     },
   );
   const oidcData = await oidcResponse.json();
+  // TODO this has to be redone
   req.body = oidcData.id_token;
-  passport.authenticate('oidc')(req, res, next);
+};
 
-  res.send({
-    id_token: oidcData.id_token,
-  });
+export const oidcResponse = (
+  req: ExRequest,
+  res: ExResponse,
+): void => {
+  res.status(200).send();
 };
