@@ -6,6 +6,13 @@
   ],
   "spec": {
     "basePath": "/api",
+    "securityDefinitions": {
+      "local": {
+        "type": "http",
+        "name": "connect.sid",
+        "in": "cookie"
+      }
+    },
     "outputDirectory": "build",
     "host": "localhost:3000",
     "specVersion": 3,
