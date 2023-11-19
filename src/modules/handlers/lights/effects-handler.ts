@@ -7,7 +7,7 @@ export default abstract class EffectsHandler extends BaseLightsHandler {
   /**
    * Assign every group of lights exactly one effect
    */
-  protected groupEffects: Map<LightsGroup, LightsEffect | null> = new Map();
+  protected groupEffects: Map<LightsGroup, LightsEffect | LightsEffect[] | null> = new Map();
 
   // Override entity register function to also populate the groupEffect mapping
   public registerEntity(entity: LightsGroup) {
@@ -29,9 +29,12 @@ export default abstract class EffectsHandler extends BaseLightsHandler {
     const result: LightsGroup[] = [];
 
     this.groupEffects.forEach((effect, group) => {
-      if (!effect) {
+      if (effect == null) {
         group.blackout();
         result.push(group);
+      } else if (Array.isArray(effect)) {
+        const intermediates = effect.map((e) => e.tick());
+        result.push(intermediates[intermediates.length - 1]);
       } else {
         result.push(effect.tick());
       }
@@ -44,7 +47,11 @@ export default abstract class EffectsHandler extends BaseLightsHandler {
     // Propagate the beat to every effect
     this.groupEffects.forEach((effect) => {
       if (!effect) return;
-      effect.beat(event);
+      if (Array.isArray(effect)) {
+        effect.forEach((e) => e.beat(event));
+      } else {
+        effect.beat(event);
+      }
     });
   }
 }
