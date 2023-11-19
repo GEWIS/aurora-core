@@ -210,7 +210,7 @@ export const rgbColorDefinitions: RgbColorSet = {
       uvChannel: 0,
     },
     alternative: 'red',
-    complementary: ['green', 'blue', 'orange', 'purple', 'cyan', 'gold', 'brown', 'lime'],
+    complementary: ['green', 'blue', 'orange', 'cyan', 'gold', 'brown', 'lime'],
   },
   lime: {
     definition: {
@@ -292,7 +292,7 @@ export function getTwoComplementaryRgbColors(): RgbColorSpecification[] {
     .filter((c) => rgbColorDefinitions[c].complementary.length > 0);
 
   const index = Math.floor(Math.random() * possibleColors.length);
-  const baseColorName = rgbColors[index];
+  const baseColorName = possibleColors[index];
   const baseColor = rgbColorDefinitions[baseColorName];
   if (baseColor.complementary.length === 0) throw new Error(`Selected color ${baseColorName}, which has no complements`);
   const complementaryName = baseColor.complementary[
