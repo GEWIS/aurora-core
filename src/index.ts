@@ -1,6 +1,5 @@
 import './env';
 import { createServer } from 'http';
-import passport from 'passport';
 import createHttp from './http';
 import { setupErrorHandler } from './error';
 import dataSource from './database';
@@ -9,16 +8,19 @@ import createWebsocket from './socketio';
 import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
 import { MusicEmitter } from './modules/events';
 import LightsControllerManager from './modules/root/lights-controller-manager';
+import { SocketConnectionEmitter } from './modules/events/socket-connection-emitter';
 
 async function createApp(): Promise<void> {
   await dataSource.initialize();
   const app = await createHttp();
   setupErrorHandler(app);
   const httpServer = createServer(app);
-  const io = createWebsocket(httpServer);
+
+  const socketConnectionEmitter = new SocketConnectionEmitter();
+  const io = createWebsocket(httpServer, socketConnectionEmitter);
 
   const handlerManager = HandlerManager.getInstance(io);
-  await handlerManager.init();
+  await handlerManager.init(socketConnectionEmitter);
 
   const musicEmitter = new MusicEmitter(handlerManager);
   const lightsControllerManager = new LightsControllerManager(io.of('/lights'), handlerManager, musicEmitter);

@@ -5,8 +5,8 @@ import { NextFunction, Request as ExRequest, Response as ExResponse } from 'expr
 passport.use('mock', new CustomStrategy(
   (req, callback) => {
     callback(null, {
-      name: 'mock',
-      roles: ['PRIV - Narrowcasting Test Admin'],
+      name: req.body.name ?? 'mock',
+      roles: req.body.roles ?? ['PRIV - Narrowcasting Test Admin'],
     });
   },
 ));

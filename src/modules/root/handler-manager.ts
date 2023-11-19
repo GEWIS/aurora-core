@@ -11,6 +11,8 @@ import { LightsGroup } from '../lights/entities';
 import { RandomEffectsHandler } from '../handlers/lights';
 import SetEffectsHandler from '../handlers/lights/set-effects-handler';
 import DevelopEffectsHandler from '../handlers/lights/develop-effects-handler';
+import { SocketConnectionEmitter } from '../events/socket-connection-emitter';
+import { User } from '../auth';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -43,7 +45,7 @@ export default class HandlerManager {
    * and registers them to their handlers
    * @private
    */
-  public async init() {
+  public async init(socketConnectionEmitter: SocketConnectionEmitter) {
     if (this.initialized) throw new Error('HandlerManager already initialized.');
     await Promise.all(Array.from(this._handlers.keys()).map(async (entity) => {
       const entities = await dataSource.manager.find(entity);
@@ -53,13 +55,41 @@ export default class HandlerManager {
         this.restoreHandlers(instance, handlers);
       });
     }));
+
+    // If a client connects to the socket, find the corresponding
+    // SubscribeEntity and store its socketId.
+    socketConnectionEmitter.on('connect', (user: User, socketId: string) => {
+      console.log('Connect', user, 'with ID', socketId);
+      this._handlers.forEach((handlers) => {
+        handlers.forEach((handler) => handler.entities.forEach((entity) => {
+          if (entity.name === user.name) {
+            this.io.sockets.sockets.get(socketId)?.emit('handler_set', handler.constructor.name);
+            // eslint-disable-next-line no-param-reassign
+            entity.socketId = socketId;
+            entity.save();
+          }
+        }));
+      });
+    });
+    socketConnectionEmitter.on('disconnect', (user: User, socketId: string) => {
+      this._handlers.forEach((handlers) => {
+        handlers.forEach((handler) => handler.entities.forEach((entity) => {
+          if (entity.name === user.name) {
+            this.io.sockets.sockets.get(socketId)?.emit('handler_remove', handler.constructor.name);
+            // eslint-disable-next-line no-param-reassign
+            entity.socketId = undefined;
+            entity.save();
+          }
+        }));
+      });
+    });
   }
 
   /**
    * Register all possible handlers in this function
    */
   private constructor(
-    io: Server,
+    private io: Server,
   ) {
     // Create all light handlers
     const lightsHandlers: BaseLightsHandler[] = [
@@ -113,12 +143,17 @@ export default class HandlerManager {
       handler.removeEntity(entity);
     });
 
+    const socket = this.io.sockets.sockets.get(entity.socketId || '');
+
     if (newHandler !== '') {
       handlers.forEach((handler) => {
         if (handler.constructor.name === newHandler) {
           handler.registerEntity(entity);
+          socket?.emit('handler_set', newHandler);
         }
       });
+    } else {
+      socket?.emit('handler_remove');
     }
   }
 }

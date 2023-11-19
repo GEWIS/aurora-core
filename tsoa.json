@@ -24,6 +24,20 @@
     "spec": {
       "components": {
         "schemas": {
+          "MockAuthRequest": {
+            "dataType": "refObject",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "OIDCParameters": {
             "dataType": "refObject",
             "properties": {
@@ -63,7 +77,16 @@
             "parameters": [],
             "tags": [
               "Authentication"
-            ]
+            ],
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/MockAuthRequest"
+                  }
+                }
+              }
+            }
           }
         },
         "/auth/oidc": {
