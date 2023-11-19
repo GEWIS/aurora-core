@@ -1,7 +1,7 @@
 import { Column, Entity } from 'typeorm';
 import LightsFixture, { LightsFixtureCurrentValues } from './lights-fixture';
 import Colors from './colors';
-import { RgbColorDefinition } from '../ColorDefinitions';
+import { RgbColorDefinition } from '../color-definitions';
 
 @Entity()
 export default class LightsPar extends LightsFixture {

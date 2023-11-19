@@ -1,14 +1,10 @@
 import LightsEffect, { LightsEffectBuilder } from './lights-effect';
 import { BeatEvent, TrackPropertiesEvent } from '../../events/music-emitter-events';
 import { LightsGroup } from '../entities';
-import { RgbColor, rgbColorDefinitions, WheelColor } from '../ColorDefinitions';
+import { RgbColorSpecification } from '../color-definitions';
 
 export default class BeatFadeOut extends LightsEffect {
-  private color: WheelColor;
-
-  private parsColor?: RgbColor;
-
-  private ping = false;
+  private phase = 0;
 
   private lastBeat = new Date().getTime(); // in ms since epoch;
 
@@ -16,52 +12,45 @@ export default class BeatFadeOut extends LightsEffect {
 
   constructor(
     lightsGroup: LightsGroup,
-    color: WheelColor,
+    private colors: RgbColorSpecification[],
     features?: TrackPropertiesEvent,
-    parsColor?: RgbColor,
+    private enableFade = true,
   ) {
     super(lightsGroup, features);
-    this.color = color;
-    this.parsColor = parsColor;
   }
 
   /**
    * Create an constructor function that will create this effect with the given parameters
    * Used when you want to reference effects, but are not in the context of handlers.
-   * @param color
-   * @param parsColor
+   * @param colors
    */
   public static build(
-    color: WheelColor,
-    parsColor?: RgbColor,
+    colors: RgbColorSpecification[],
+    enableFade = true,
   ): LightsEffectBuilder<BeatFadeOut> {
     return (
       lightsGroup: LightsGroup,
       features?: TrackPropertiesEvent,
-    ) => new BeatFadeOut(lightsGroup, color, features, parsColor);
+    ) => new BeatFadeOut(lightsGroup, colors, features, enableFade);
   }
 
   beat(event: BeatEvent): void {
     this.lastBeat = new Date().getTime();
     this.beatLength = event.beat.duration * 1000;
-    this.ping = !this.ping;
+    this.phase = (this.phase + 1) % this.colors.length;
   }
 
   tick(): LightsGroup {
-    const beatProgression = Math.max(
+    const beatProgression = this.enableFade ? Math.max(
       1 - ((new Date().getTime() - this.lastBeat) / this.beatLength),
       0,
-    );
+    ) : 1;
 
     this.lightsGroup.pars.forEach((p, i) => {
-      if (i % 2 === (this.ping ? 1 : 0)) {
-        p.fixture.setCurrentValues({
-          masterDimChannel: 255 * beatProgression,
-          ...rgbColorDefinitions[this.parsColor || this.color],
-        });
-      } else {
-        p.fixture.setMasterDimmer(0);
-      }
+      const index = (i + this.phase) % this.colors.length;
+      const color = this.colors[index];
+      p.fixture.setMasterDimmer(Math.round(255 * beatProgression));
+      p.fixture.setColor(color.definition);
     });
 
     this.lightsGroup.movingHeadWheels.forEach((m) => m.fixture.blackout());

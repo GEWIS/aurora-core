@@ -5,7 +5,9 @@ import SetEffectsHandler from '../../handlers/lights/set-effects-handler';
 import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
 import MixTape, { FeedEvent, SongData } from './tapes/mix-tape';
 import { BeatFadeOut } from '../../lights/effects';
-import { rgbColors, wheelColors } from '../../lights/ColorDefinitions';
+import {
+  getTwoComplementaryRgbColors,
+} from '../../lights/color-definitions';
 import { MusicEmitter } from '../../events';
 import { TrackChangeEvent } from '../../events/music-emitter-events';
 import { CenturionScreenHandler } from '../../handlers/screen/centurion-screen-handler';
@@ -146,9 +148,7 @@ export default class CenturionMode extends BaseMode {
    * @private
    */
   private handleFeedEvent(event: FeedEvent) {
-    const color = wheelColors[Math.floor(Math.random() * wheelColors.length)];
-    const rgbColor = rgbColors[Math.floor(Math.random() * rgbColors.length)];
-
+    const colors = getTwoComplementaryRgbColors();
     if (event.type === 'horn') {
       this.lights.forEach((l) => {
         l.pars.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
@@ -158,7 +158,10 @@ export default class CenturionMode extends BaseMode {
       this.screenHandler.horn(event.data.counter);
     } else if (event.type === 'song') {
       this.lights.forEach((l) => {
-        this.lightsHandler.setEffect(l, BeatFadeOut.build(color, rgbColor));
+        this.lightsHandler.setEffect(
+          l,
+          BeatFadeOut.build(colors),
+        );
       });
       this.emitSong(event.data);
     } else if (event.type === 'effect') {

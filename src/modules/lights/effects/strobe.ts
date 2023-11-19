@@ -1,6 +1,6 @@
 import LightsEffect, { LightsEffectBuilder } from './lights-effect';
 import { LightsGroup } from '../entities';
-import { rgbColorDefinitions } from '../ColorDefinitions';
+import { rgbColorDefinitions } from '../color-definitions';
 
 export default class Strobe extends LightsEffect {
   private enabled = false;
@@ -11,7 +11,7 @@ export default class Strobe extends LightsEffect {
     console.log('Strobe tick!');
     if (!this.enabled) {
       this.lightsGroup.pars.forEach((par) => {
-        par.fixture.setColor(rgbColorDefinitions.blindingWhite);
+        par.fixture.setColor(rgbColorDefinitions.blindingWhite.definition);
         par.fixture.setMasterDimmer(255);
         par.fixture.enableStrobe();
       });

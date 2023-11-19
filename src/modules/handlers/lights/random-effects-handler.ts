@@ -1,7 +1,7 @@
 import { LightsGroup } from '../../lights/entities';
 import { BeatEvent } from '../../events/music-emitter-events';
 import { BeatFadeOut } from '../../lights/effects';
-import { rgbColors, wheelColors } from '../../lights/ColorDefinitions';
+import { getTwoComplementaryRgbColors } from '../../lights/color-definitions';
 import EffectsHandler from './effects-handler';
 
 export default class RandomEffectsHandler extends EffectsHandler {
@@ -19,10 +19,9 @@ export default class RandomEffectsHandler extends EffectsHandler {
    * @private
    */
   private assignRandomEffect(entity: LightsGroup) {
-    const color = wheelColors[Math.floor(Math.random() * wheelColors.length)];
-    const rgbColor = rgbColors[Math.floor(Math.random() * rgbColors.length)];
+    const colors = getTwoComplementaryRgbColors();
     // We currently have only one effect, so that makes our choice easy
-    this.groupEffects.set(entity, new BeatFadeOut(entity, color, this.trackFeatures, rgbColor));
+    this.groupEffects.set(entity, new BeatFadeOut(entity, colors, this.trackFeatures, false));
     // this.groupEffects.set(entity, new Strobe(entity, this.trackFeatures));
   }
 

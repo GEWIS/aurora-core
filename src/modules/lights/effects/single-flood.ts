@@ -1,6 +1,6 @@
 import LightsEffect, { LightsEffectBuilder } from './lights-effect';
 import { LightsGroup } from '../entities';
-import { rgbColorDefinitions } from '../ColorDefinitions';
+import { rgbColorDefinitions } from '../color-definitions';
 
 const TURN_ON_TIME = 75;
 const KEEP_ON_TIME = 100;
@@ -30,7 +30,7 @@ export default class SingleFlood extends LightsEffect {
     const progression = this.getProgression(new Date());
 
     this.lightsGroup.pars.forEach((p) => {
-      p.fixture.setColor(rgbColorDefinitions.orange);
+      p.fixture.setColor(rgbColorDefinitions.orange.definition);
       p.fixture.setMasterDimmer(255 * progression);
     });
 
