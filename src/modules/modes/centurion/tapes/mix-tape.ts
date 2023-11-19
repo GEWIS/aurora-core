@@ -24,7 +24,7 @@ type Beat = {
 type Effect = {
   type: 'effect',
   data: {
-    effect: LightsEffectBuilder,
+    effects: LightsEffectBuilder[],
   }
 };
 

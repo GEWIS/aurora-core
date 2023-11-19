@@ -4,13 +4,16 @@ import { Audio, Screen } from '../../root/entities';
 import SetEffectsHandler from '../../handlers/lights/set-effects-handler';
 import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
 import MixTape, { FeedEvent, SongData } from './tapes/mix-tape';
-import { BeatFadeOut } from '../../lights/effects';
+import { BeatFadeOut, SearchLight } from '../../lights/effects';
 import {
   getTwoComplementaryRgbColors,
 } from '../../lights/color-definitions';
 import { MusicEmitter } from '../../events';
 import { TrackChangeEvent } from '../../events/music-emitter-events';
 import { CenturionScreenHandler } from '../../handlers/screen/centurion-screen-handler';
+import { LightsEffectBuilder } from '../../lights/effects/lights-effect';
+import { Wave } from '../../lights/effects/wave';
+import Sparkle from '../../lights/effects/sparkle';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
@@ -84,8 +87,6 @@ export default class CenturionMode extends BaseMode {
    * Start playing the given mixtape and register all timed effects
    */
   public start(): boolean {
-    this.timestamp = 30;
-
     if (!this.audioHandler.ready) return false;
 
     this.audioHandler.setPlayback(this.timestamp);
@@ -96,7 +97,7 @@ export default class CenturionMode extends BaseMode {
       this.registerEvents(this.timestamp + (msDifference / 1000));
 
       this.artificialBeatLoopStart = new Date();
-      this.artificialBeatLoop = setInterval(this.artificialBeat.bind(this), 800);
+      this.artificialBeatLoop = setInterval(this.artificialBeat.bind(this), 500);
       this.artificialBeat();
       this.screenHandler.start();
     });
@@ -142,13 +143,31 @@ export default class CenturionMode extends BaseMode {
     })) as TrackChangeEvent[]);
   }
 
+  private getRandomEffect(): LightsEffectBuilder {
+    const colors = getTwoComplementaryRgbColors();
+    const effects = [{
+      effect: BeatFadeOut.build(colors, false, true),
+      probability: 0.8,
+    }, {
+      effect: Wave.build(colors[0]),
+      probability: 0.1,
+    }, {
+      effect: Sparkle.build(colors),
+      probability: 0.1,
+    }];
+    const factor = Math.random();
+    return effects.find((effect, i) => {
+      const previous = effects.slice(0, i).reduce((x, e) => x + e.probability, 0);
+      return previous <= factor && previous + effect.probability > factor;
+    })?.effect || BeatFadeOut.build(colors, false);
+  }
+
   /**
    * Handle a fired event
    * @param event
    * @private
    */
   private handleFeedEvent(event: FeedEvent) {
-    const colors = getTwoComplementaryRgbColors();
     if (event.type === 'horn') {
       this.lights.forEach((l) => {
         l.pars.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
@@ -157,16 +176,15 @@ export default class CenturionMode extends BaseMode {
       });
       this.screenHandler.horn(event.data.counter);
     } else if (event.type === 'song') {
+      const movingHeadEffect = SearchLight.build(1.5, 3000);
+      const newEffectBuilder = this.getRandomEffect();
       this.lights.forEach((l) => {
-        this.lightsHandler.setEffect(
-          l,
-          BeatFadeOut.build(colors),
-        );
+        this.lightsHandler.setEffect(l, [newEffectBuilder, movingHeadEffect]);
       });
       this.emitSong(event.data);
     } else if (event.type === 'effect') {
       this.lights.forEach((l) => {
-        this.lightsHandler.setEffect(l, event.data.effect);
+        this.lightsHandler.setEffect(l, event.data.effects);
       });
     }
   }

@@ -1,4 +1,4 @@
-import LightsEffect from './lights-effect';
+import LightsEffect, { LightsEffectBuilder } from './lights-effect';
 import { LightsGroup } from '../entities';
 import { RgbColorSpecification } from '../color-definitions';
 
@@ -12,6 +12,14 @@ export class Wave extends LightsEffect {
     private cycleTime = 1000,
   ) {
     super(lightsGroup);
+  }
+
+  public static build(
+    color: RgbColorSpecification,
+    size?: number,
+    cycleTime?: number,
+  ): LightsEffectBuilder {
+    return (lightsGroup) => new Wave(lightsGroup, color, size, cycleTime);
   }
 
   beat(): void {}

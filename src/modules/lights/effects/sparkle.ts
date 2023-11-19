@@ -1,5 +1,5 @@
 import LightsEffect, { LightsEffectBuilder } from './lights-effect';
-import { RgbColor, rgbColorDefinitions, WheelColor } from '../color-definitions';
+import { RgbColorSpecification } from '../color-definitions';
 import { LightsGroup } from '../entities';
 import { TrackPropertiesEvent } from '../../events/music-emitter-events';
 
@@ -21,12 +21,11 @@ export default class Sparkle extends LightsEffect {
    */
   constructor(
     lightsGroup: LightsGroup,
-    private colors: WheelColor[],
+    private colors: RgbColorSpecification[],
     private ratio = 0.2,
     private length = 4,
     private speed = 200,
     features?: TrackPropertiesEvent,
-    private parsColors?: RgbColor[],
   ) {
     super(lightsGroup, features);
 
@@ -38,16 +37,15 @@ export default class Sparkle extends LightsEffect {
   }
 
   public static build(
-    color: WheelColor[],
+    color: RgbColorSpecification[],
     ratio?: number,
     length?: number,
     speed?: number,
-    parsColor?: RgbColor[],
   ): LightsEffectBuilder<Sparkle> {
     return (
       lightsGroup: LightsGroup,
       features?: TrackPropertiesEvent,
-    ) => new Sparkle(lightsGroup, color, ratio, length, speed, features, parsColor);
+    ) => new Sparkle(lightsGroup, color, ratio, length, speed, features);
   }
 
   beat(): void {
@@ -66,45 +64,20 @@ export default class Sparkle extends LightsEffect {
       this.beats.forEach((b, i) => {
         if (Math.random() <= this.ratio) {
           this.colorIndices[i] = (this.colorIndices[i] + i) % Math
-            .max(this.colors.length, this.parsColors?.length || -1);
+            .max(this.colors.length);
           this.beats[i] = new Date();
         }
       });
       this.previousTick = new Date();
     }
 
-    const nrPars = this.lightsGroup.pars.length;
     this.lightsGroup.pars.forEach((p, i) => {
       const index = i;
       const progression = this.getProgression(this.beats[index]);
       const colorIndex = this.colorIndices[index];
       p.fixture.setCurrentValues({
         masterDimChannel: Math.round(255 * progression),
-        ...rgbColorDefinitions[this.parsColors
-          ? this.parsColors[colorIndex] : this.colors[colorIndex]],
-      });
-    });
-
-    const nrMovingHeads = this.lightsGroup.movingHeadWheels.length;
-    this.lightsGroup.movingHeadWheels.forEach((p, i) => {
-      const index = i + nrPars;
-      const progression = this.getProgression(this.beats[index]);
-      const colorIndex = this.colorIndices[index];
-      p.fixture.setCurrentValues({
-        masterDimChannel: Math.round(255 * progression),
-        ...rgbColorDefinitions[this.parsColors
-          ? this.parsColors[colorIndex] : this.colors[colorIndex]],
-      });
-    });
-
-    this.lightsGroup.movingHeadRgbs.forEach((p, i) => {
-      const index = i + nrPars + nrMovingHeads;
-      const progression = this.getProgression(this.beats[index]);
-      const colorIndex = this.colorIndices[index];
-      p.fixture.setCurrentValues({
-        masterDimChannel: Math.round(255 * progression),
-        ...rgbColorDefinitions[this.parsColors
-          ? this.parsColors[colorIndex] : this.colors[colorIndex]],
+        ...this.colors[colorIndex % this.colors.length].definition,
       });
     });
 

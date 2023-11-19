@@ -6,12 +6,12 @@ export default class SetEffectsHandler extends EffectsHandler {
   /**
    * Attach the given effect to the given lightsGroup
    * @param lightsGroup
-   * @param effect
+   * @param effects
    */
-  public setEffect(lightsGroup: LightsGroup, effect: LightsEffectBuilder) {
+  public setEffect(lightsGroup: LightsGroup, effects: LightsEffectBuilder[]) {
     // Reset the current lights before setting anything new
     lightsGroup.blackout();
-    this.groupEffects.set(lightsGroup, effect(lightsGroup, this.trackFeatures));
+    this.groupEffects.set(lightsGroup, effects.map((e) => e(lightsGroup, this.trackFeatures)));
   }
 
   /**

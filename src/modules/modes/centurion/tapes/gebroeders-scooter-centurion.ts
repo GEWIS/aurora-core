@@ -10,28 +10,28 @@ const centurion: MixTape = {
       timestamp: 1,
       type: 'effect',
       data: {
-        effect: SearchLight.build(),
+        effects: [SearchLight.build()],
       },
     },
     {
       timestamp: 39,
       type: 'effect',
       data: {
-        effect: SingleFlood.build(),
+        effects: [SingleFlood.build()],
       },
     },
     {
       timestamp: 40,
       type: 'effect',
       data: {
-        effect: SingleFlood.build(),
+        effects: [SingleFlood.build()],
       },
     },
     {
       timestamp: 41,
       type: 'effect',
       data: {
-        effect: SingleFlood.build(),
+        effects: [SingleFlood.build()],
       },
     },
     {
