@@ -6,7 +6,7 @@ import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
 import MixTape, { FeedEvent, SongData } from './tapes/mix-tape';
 import { BeatFadeOut, SearchLight } from '../../lights/effects';
 import {
-  getTwoComplementaryRgbColors,
+  getTwoComplementaryRgbColors, RgbColorSpecification,
 } from '../../lights/color-definitions';
 import { MusicEmitter } from '../../events';
 import { TrackChangeEvent } from '../../events/music-emitter-events';
@@ -143,8 +143,7 @@ export default class CenturionMode extends BaseMode {
     })) as TrackChangeEvent[]);
   }
 
-  private getRandomEffect(): LightsEffectBuilder {
-    const colors = getTwoComplementaryRgbColors();
+  private getRandomEffect(colors: RgbColorSpecification[]): LightsEffectBuilder {
     const effects = [{
       effect: BeatFadeOut.build(colors, false, true),
       probability: 0.8,
@@ -174,13 +173,17 @@ export default class CenturionMode extends BaseMode {
         l.movingHeadRgbs.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
         l.movingHeadWheels.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
       });
-      this.screenHandler.horn(event.data.counter);
+      this.screenHandler.horn(STROBE_TIME, event.data.counter);
     } else if (event.type === 'song') {
+      const { colorNames, colorSpecs } = getTwoComplementaryRgbColors();
+
       const movingHeadEffect = SearchLight.build(1.5, 3000);
-      const newEffectBuilder = this.getRandomEffect();
+      const newEffectBuilder = this.getRandomEffect(colorSpecs);
+
       this.lights.forEach((l) => {
         this.lightsHandler.setEffect(l, [newEffectBuilder, movingHeadEffect]);
       });
+      this.screenHandler.changeColors(colorNames);
       this.emitSong(event.data);
     } else if (event.type === 'effect') {
       this.lights.forEach((l) => {

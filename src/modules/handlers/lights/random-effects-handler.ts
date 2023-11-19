@@ -19,9 +19,9 @@ export default class RandomEffectsHandler extends EffectsHandler {
    * @private
    */
   private assignRandomEffect(entity: LightsGroup) {
-    const colors = getTwoComplementaryRgbColors();
+    const { colorSpecs } = getTwoComplementaryRgbColors();
     // We currently have only one effect, so that makes our choice easy
-    this.groupEffects.set(entity, new BeatFadeOut(entity, colors, this.trackFeatures, false));
+    this.groupEffects.set(entity, new BeatFadeOut(entity, colorSpecs, this.trackFeatures, false));
     // this.groupEffects.set(entity, new Strobe(entity, this.trackFeatures));
   }
 

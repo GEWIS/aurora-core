@@ -1,6 +1,7 @@
 import BaseScreenHandler from '../base-screen-handler';
 import { BeatEvent, TrackChangeEvent } from '../../events/music-emitter-events';
 import MixTape from '../../modes/centurion/tapes/mix-tape';
+import { RgbColor } from '../../lights/color-definitions';
 
 export class CenturionScreenHandler extends BaseScreenHandler {
   beat(event: BeatEvent): void {
@@ -11,8 +12,12 @@ export class CenturionScreenHandler extends BaseScreenHandler {
     this.socket.emit('change_track', event);
   }
 
-  horn(counter: number): void {
-    this.socket.emit('horn', counter);
+  changeColors(colors: RgbColor[]): void {
+    this.socket.emit('change_colors', colors);
+  }
+
+  horn(strobeTime: number, counter: number): void {
+    this.socket.emit('horn', { strobeTime, counter });
   }
 
   loaded(tape: MixTape): void {

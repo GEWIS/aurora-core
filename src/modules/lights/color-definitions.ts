@@ -286,7 +286,9 @@ export const palettes: RgbColor[][] = [
   ['blue', 'pink'],
 ];
 
-export function getTwoComplementaryRgbColors(): RgbColorSpecification[] {
+export function getTwoComplementaryRgbColors(): {
+  colorNames: RgbColor[], colorSpecs: RgbColorSpecification[],
+} {
   // Account for the colors without any complements
   const possibleColors = Object.keys(rgbColorDefinitions)
     .filter((c) => rgbColorDefinitions[c].complementary.length > 0);
@@ -300,5 +302,8 @@ export function getTwoComplementaryRgbColors(): RgbColorSpecification[] {
   ];
   const complementaryColor = rgbColorDefinitions[complementaryName];
 
-  return [baseColor, complementaryColor];
+  return {
+    colorNames: [baseColorName, complementaryName],
+    colorSpecs: [baseColor, complementaryColor],
+  };
 }
