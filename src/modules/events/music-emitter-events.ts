@@ -23,5 +23,6 @@ export interface TrackPropertiesEvent {
 
 export interface TrackChangeEvent {
   title: string;
-  artist: string;
+  artists: string[];
+  cover?: string;
 }

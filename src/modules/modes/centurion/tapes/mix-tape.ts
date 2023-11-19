@@ -1,4 +1,4 @@
-import LightsEffect, { LightsEffectBuilder } from '../../../lights/effects/lights-effect';
+import { LightsEffectBuilder } from '../../../lights/effects/lights-effect';
 
 type Horn = {
   type: 'horn',
@@ -7,7 +7,7 @@ type Horn = {
   },
 };
 
-type SongData = {
+export type SongData = {
   artist: string,
   title: string,
 };

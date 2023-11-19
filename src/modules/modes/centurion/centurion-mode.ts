@@ -3,9 +3,11 @@ import { LightsGroup } from '../../lights/entities';
 import { Audio, Screen } from '../../root/entities';
 import SetEffectsHandler from '../../handlers/lights/set-effects-handler';
 import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
-import MixTape, { FeedEvent } from './tapes/mix-tape';
+import MixTape, { FeedEvent, SongData } from './tapes/mix-tape';
 import { BeatFadeOut } from '../../lights/effects';
 import { rgbColors, wheelColors } from '../../lights/ColorDefinitions';
+import { MusicEmitter } from '../../events';
+import { TrackChangeEvent } from '../../events/music-emitter-events';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
@@ -17,6 +19,8 @@ export default class CenturionMode extends BaseMode {
   private audioHandler: SimpleAudioHandler;
 
   private tape: MixTape;
+
+  private musicEmitter: MusicEmitter;
 
   private feedEvents: {
     event: FeedEvent;
@@ -31,7 +35,13 @@ export default class CenturionMode extends BaseMode {
 
   private artificialBeatLoopStart: Date | undefined;
 
-  constructor(lights: LightsGroup[], screens: Screen[], audios: Audio[]) {
+  private initialized = false;
+
+  constructor(
+    lights: LightsGroup[],
+    screens: Screen[],
+    audios: Audio[],
+  ) {
     super(lights, screens, audios);
 
     lights.forEach((lightsGroup) => {
@@ -47,6 +57,11 @@ export default class CenturionMode extends BaseMode {
       .find((h) => h.constructor.name === AUDIO_HANDLER) as SimpleAudioHandler;
   }
 
+  public initialize(musicEmitter: MusicEmitter) {
+    if (this.initialized) throw new Error('CenturionMode already initialized!');
+    this.musicEmitter = musicEmitter;
+  }
+
   public loadTape(tape: MixTape) {
     this.tape = tape;
     this.audioHandler.load(`/static${tape.songFile}`);
@@ -60,6 +75,8 @@ export default class CenturionMode extends BaseMode {
    * Start playing the given mixtape and register all timed effects
    */
   public start(): boolean {
+    this.timestamp = 30;
+
     if (!this.audioHandler.ready) return false;
 
     this.audioHandler.setPlayback(this.timestamp);
@@ -101,6 +118,20 @@ export default class CenturionMode extends BaseMode {
     this.artificialBeatLoop = undefined;
   }
 
+  private emitSong(song: SongData | SongData[]) {
+    let songs: SongData[];
+    if (!Array.isArray(song)) {
+      songs = [song];
+    } else {
+      songs = song;
+    }
+
+    this.musicEmitter.emitAudio('change_track', songs.map((s) => ({
+      title: s.title,
+      artists: s.artist.split(', '),
+    })) as TrackChangeEvent[]);
+  }
+
   /**
    * Handle a fired event
    * @param event
@@ -120,6 +151,7 @@ export default class CenturionMode extends BaseMode {
       this.lights.forEach((l) => {
         this.lightsHandler.setEffect(l, BeatFadeOut.build(color, rgbColor));
       });
+      this.emitSong(event.data);
     } else if (event.type === 'effect') {
       this.lights.forEach((l) => {
         this.lightsHandler.setEffect(l, event.data.effect);
@@ -176,19 +208,21 @@ export default class CenturionMode extends BaseMode {
    * Remove all handlers from these entities
    */
   public destroy() {
+    this.stop();
     this.lights.forEach((lightsGroup) => {
       this.handlerManager.registerHandler(lightsGroup, '');
     });
     this.audios.forEach((audio) => {
       this.handlerManager.registerHandler(audio, '');
     });
+    clearInterval(this.artificialBeatLoop);
   }
 
   private artificialBeat() {
-    this.lightsHandler.beat({
+    this.musicEmitter.emitAudio('beat', {
       beat: {
         start: new Date().getTime() - (this.artificialBeatLoopStart || new Date()).getTime(),
-        duration: 800,
+        duration: 0.8,
         confidence: 0.2,
       },
     });

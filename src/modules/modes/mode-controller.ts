@@ -59,6 +59,7 @@ export class ModeController extends Controller {
     const { lights, screens, audios } = await this.mapBodyToEntities(params);
 
     const centurionMode = new CenturionMode(lights, screens, audios);
+    centurionMode.initialize(this.modeManager.musicEmitter);
     const tape = tapes.find((t) => t.name === params.centurionName);
     if (tape === undefined) {
       this.setStatus(404);

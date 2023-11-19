@@ -9,6 +9,7 @@ import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
 import { MusicEmitter } from './modules/events';
 import LightsControllerManager from './modules/root/lights-controller-manager';
 import { SocketConnectionEmitter } from './modules/events/socket-connection-emitter';
+import ModeManager from './modules/modes/mode-manager';
 
 async function createApp(): Promise<void> {
   await dataSource.initialize();
@@ -24,6 +25,8 @@ async function createApp(): Promise<void> {
 
   const musicEmitter = new MusicEmitter(handlerManager);
   const lightsControllerManager = new LightsControllerManager(io.of('/lights'), handlerManager, musicEmitter);
+  const modeManager = ModeManager.getInstance();
+  modeManager.init(musicEmitter);
 
   await SpotifyApiHandler.getInstance().init();
   await SpotifyTrackHandler.getInstance().init(musicEmitter);

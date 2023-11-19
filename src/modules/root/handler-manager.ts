@@ -13,6 +13,8 @@ import SetEffectsHandler from '../handlers/lights/set-effects-handler';
 import DevelopEffectsHandler from '../handlers/lights/develop-effects-handler';
 import { SocketConnectionEmitter } from '../events/socket-connection-emitter';
 import { User } from '../auth';
+import { BeatEvent, TrackChangeEvent } from '../events/music-emitter-events';
+import CurrentlyPlayingTrackHandler from '../handlers/screen/curently-playing-track-handler';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -103,7 +105,9 @@ export default class HandlerManager {
       new SimpleAudioHandler(io.of('/audio')),
     ] as BaseAudioHandler[]);
     this._handlers.set(LightsGroup, lightsHandlers);
-    this._handlers.set(Screen, [] as BaseScreenHandler[]);
+    this._handlers.set(Screen, [
+      new CurrentlyPlayingTrackHandler(io.of('/screen')),
+    ] as BaseScreenHandler[]);
   }
 
   /**
@@ -155,5 +159,27 @@ export default class HandlerManager {
     } else {
       socket?.emit('handler_remove');
     }
+  }
+
+  /**
+   * Transmit a beat to all handlers. They can decide what to do with it
+   * @param event
+   */
+  public beat(event: BeatEvent) {
+    this.getHandlers().forEach((h) => {
+      if (h.beat) h.beat(event);
+    });
+  }
+
+  /**
+   * Transmit a track change to all screen handlers,
+   * as are the only ones who can do something with it
+   * @param event
+   */
+  public changeTrack(event: TrackChangeEvent[]) {
+    const handlers = this.getHandlers(Screen) as BaseScreenHandler[];
+    handlers.forEach((h) => {
+      if (h.changeTrack) h.changeTrack(event);
+    });
   }
 }

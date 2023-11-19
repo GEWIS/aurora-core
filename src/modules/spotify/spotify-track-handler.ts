@@ -3,7 +3,7 @@ import {
 } from '@spotify/web-api-ts-sdk';
 import SpotifyApiHandler from './spotify-api-handler';
 import { MusicEmitter } from '../events';
-import { BeatEvent, TrackPropertiesEvent } from '../events/music-emitter-events';
+import { BeatEvent, TrackChangeEvent, TrackPropertiesEvent } from '../events/music-emitter-events';
 
 export default class SpotifyTrackHandler {
   private static instance: SpotifyTrackHandler;
@@ -124,6 +124,11 @@ export default class SpotifyTrackHandler {
       this.setNextTrackEvent(state);
 
       const item = state.item as Track;
+      this.musicEmitter.emit('change_track', [{
+        title: item.name,
+        artists: item.artists.map((a) => a.name),
+        cover: item.album.images[0].url,
+      }] as TrackChangeEvent[]);
 
       console.log(`Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name}`);
     }

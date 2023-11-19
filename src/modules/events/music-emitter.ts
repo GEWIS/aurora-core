@@ -2,12 +2,13 @@ import { EventEmitter } from 'node:events';
 import HandlerManager from '../root/handler-manager';
 import { Audio } from '../root/entities';
 import BaseAudioHandler from '../handlers/base-audio-handler';
-import { BeatEvent } from './music-emitter-events';
+import { BeatEvent, TrackChangeEvent } from './music-emitter-events';
 
 export class MusicEmitter extends EventEmitter {
   constructor(private handlerManager: HandlerManager) {
     super();
     this.on('beat', this.handleBeat.bind(this));
+    this.on('change_track', this.handleChangeTrack.bind(this));
   }
 
   /**
@@ -47,6 +48,10 @@ export class MusicEmitter extends EventEmitter {
   }
 
   private handleBeat(event: BeatEvent) {
-    this.handlerManager.getHandlers().forEach((h) => h.beat(event));
+    this.handlerManager.beat(event);
+  }
+
+  private handleChangeTrack(event: TrackChangeEvent[]) {
+    this.handlerManager.changeTrack(event);
   }
 }
