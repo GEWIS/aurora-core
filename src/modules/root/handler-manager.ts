@@ -14,7 +14,8 @@ import DevelopEffectsHandler from '../handlers/lights/develop-effects-handler';
 import { SocketConnectionEmitter } from '../events/socket-connection-emitter';
 import { User } from '../auth';
 import { BeatEvent, TrackChangeEvent } from '../events/music-emitter-events';
-import CurrentlyPlayingTrackHandler from '../handlers/screen/curently-playing-track-handler';
+import { CurrentlyPlayingTrackHandler } from '../handlers/screen';
+import { CenturionScreenHandler } from '../handlers/screen/centurion-screen-handler';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -107,6 +108,7 @@ export default class HandlerManager {
     this._handlers.set(LightsGroup, lightsHandlers);
     this._handlers.set(Screen, [
       new CurrentlyPlayingTrackHandler(io.of('/screen')),
+      new CenturionScreenHandler(io.of('screen')),
     ] as BaseScreenHandler[]);
   }
 

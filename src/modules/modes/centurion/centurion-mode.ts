@@ -8,15 +8,19 @@ import { BeatFadeOut } from '../../lights/effects';
 import { rgbColors, wheelColors } from '../../lights/ColorDefinitions';
 import { MusicEmitter } from '../../events';
 import { TrackChangeEvent } from '../../events/music-emitter-events';
+import { CenturionScreenHandler } from '../../handlers/screen/centurion-screen-handler';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
+const SCREEN_HANDLER = 'CenturionScreenHandler';
 const STROBE_TIME = 1500; // Milliseconds
 
 export default class CenturionMode extends BaseMode {
   private lightsHandler: SetEffectsHandler;
 
   private audioHandler: SimpleAudioHandler;
+
+  private screenHandler: CenturionScreenHandler;
 
   private tape: MixTape;
 
@@ -55,6 +59,8 @@ export default class CenturionMode extends BaseMode {
       .find((h) => h.constructor.name === LIGHTS_HANDLER) as SetEffectsHandler;
     this.audioHandler = this.handlerManager.getHandlers(Audio)
       .find((h) => h.constructor.name === AUDIO_HANDLER) as SimpleAudioHandler;
+    this.screenHandler = this.handlerManager.getHandlers(Screen)
+      .find((h) => h.constructor.name === SCREEN_HANDLER) as CenturionScreenHandler;
   }
 
   public initialize(musicEmitter: MusicEmitter) {
@@ -65,6 +71,7 @@ export default class CenturionMode extends BaseMode {
   public loadTape(tape: MixTape) {
     this.tape = tape;
     this.audioHandler.load(`/static${tape.songFile}`);
+    this.screenHandler.loaded(tape);
   }
 
   public static getInstance() {
@@ -89,6 +96,7 @@ export default class CenturionMode extends BaseMode {
       this.artificialBeatLoopStart = new Date();
       this.artificialBeatLoop = setInterval(this.artificialBeat.bind(this), 800);
       this.artificialBeat();
+      this.screenHandler.start();
     });
     return true;
   }
@@ -147,6 +155,7 @@ export default class CenturionMode extends BaseMode {
         l.movingHeadRgbs.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
         l.movingHeadWheels.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
       });
+      this.screenHandler.horn(event.data.counter);
     } else if (event.type === 'song') {
       this.lights.forEach((l) => {
         this.lightsHandler.setEffect(l, BeatFadeOut.build(color, rgbColor));
