@@ -123,6 +123,7 @@ export default class CenturionMode extends BaseMode {
    */
   public stop() {
     this.audioHandler.stop();
+    this.screenHandler.stop();
     this.stopFeedEvents();
 
     clearInterval(this.artificialBeatLoop);
