@@ -3,6 +3,7 @@ import MixTape from './mix-tape';
 const centurion: MixTape = {
   name: 'Gebroeders Scooter - Totale EscalaTIEN',
   songFile: '/audio/gebroeders-scooter-totale-escalatien.mp3',
+  coverUrl: 'https://i1.sndcdn.com/artworks-000618062935-ad3w9z-t500x500.jpg',
   feed: [
     {
       timestamp: 10,

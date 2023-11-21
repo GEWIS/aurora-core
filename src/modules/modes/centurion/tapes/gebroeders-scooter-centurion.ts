@@ -5,6 +5,7 @@ import { SingleFlood } from '../../../lights/effects';
 const centurion: MixTape = {
   name: 'Gebroeders Scooter - Centurion',
   songFile: '/audio/gebroeders-scooter-centurion.mp3',
+  coverUrl: 'https://i1.sndcdn.com/artworks-000660440143-nxgkca-t500x500.jpg',
   feed: [
     {
       timestamp: 1,

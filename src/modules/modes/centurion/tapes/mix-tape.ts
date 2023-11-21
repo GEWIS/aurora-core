@@ -41,4 +41,5 @@ export default interface MixTape {
   name: string;
   songFile: string;
   feed: FeedEvent[];
+  coverUrl: string;
 }
