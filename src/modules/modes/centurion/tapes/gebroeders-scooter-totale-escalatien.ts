@@ -579,8 +579,8 @@ const centurion: MixTape = {
       timestamp: 1742.50,
       type: 'song',
       data: {
-        artist: 'The Bad Touch',
-        title: 'Discovery Channel',
+        artist: 'Bloodhound Gang',
+        title: 'The Bad Touch',
       },
     },
     {
