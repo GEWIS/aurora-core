@@ -66,6 +66,8 @@ export default class CenturionMode extends BaseMode {
       .find((h) => h.constructor.name === AUDIO_HANDLER) as SimpleAudioHandler;
     this.screenHandler = this.handlerManager.getHandlers(Screen)
       .find((h) => h.constructor.name === SCREEN_HANDLER) as CenturionScreenHandler;
+
+    this.audioHandler.addSyncAudioTimingHandler(this.syncFeedEvents.bind(this));
   }
 
   public initialize(musicEmitter: MusicEmitter) {
@@ -89,17 +91,16 @@ export default class CenturionMode extends BaseMode {
   public start(): boolean {
     if (!this.audioHandler.ready) return false;
 
-    this.audioHandler.setPlayback(this.timestamp);
-    this.audioHandler.play((startTime: number) => {
+    this.audioHandler.play(this.timestamp, (startTime: number) => {
       // Synchronize music with effects
-      const msDifference = new Date().getTime() - startTime;
-
-      this.registerEvents(this.timestamp + (msDifference / 1000));
+      this.syncFeedEvents({ startTime, timestamp: this.timestamp * 1000 });
+      this.fireLastFeedEvent(this.timestamp);
 
       this.artificialBeatLoopStart = new Date();
       this.artificialBeatLoop = setInterval(this.artificialBeat.bind(this), 500);
       this.artificialBeat();
       this.screenHandler.start();
+      this.timestamp = 0;
     });
     return true;
   }
@@ -115,6 +116,7 @@ export default class CenturionMode extends BaseMode {
     if (this.feedEvents.length > 0) {
       this.audioHandler.setPlayback(seconds);
       this.registerEvents(seconds);
+      this.fireLastFeedEvent(seconds);
     }
   }
 
@@ -167,6 +169,8 @@ export default class CenturionMode extends BaseMode {
    * @private
    */
   private handleFeedEvent(event: FeedEvent) {
+    console.log(new Date().toTimeString(), event);
+
     if (event.type === 'horn') {
       this.lights.forEach((l) => {
         l.pars.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
@@ -226,8 +230,6 @@ export default class CenturionMode extends BaseMode {
           timeouts,
         });
       });
-
-    this.fireLastFeedEvent(seconds);
   }
 
   private stopFeedEvents() {
@@ -238,10 +240,24 @@ export default class CenturionMode extends BaseMode {
   }
 
   /**
+   * Synchronize the feed events with the currently playing audio
+   * @param sendTime the time the sync packet has been sent (to synchronize clocks)
+   * in ms since epoch
+   * @param timestamp progression of the audio in ms
+   * @private
+   */
+  private syncFeedEvents({ startTime, timestamp }: { startTime: number, timestamp: number }) {
+    const msDifference = new Date().getTime() - startTime;
+
+    this.registerEvents((timestamp + msDifference) / 1000);
+  }
+
+  /**
    * Remove all handlers from these entities
    */
   public destroy() {
     this.stop();
+    this.audioHandler.removeSyncAudioTimingHandler(this.syncFeedEvents.bind(this));
     this.lights.forEach((lightsGroup) => {
       this.handlerManager.registerHandler(lightsGroup, '');
     });

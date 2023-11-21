@@ -8,6 +8,8 @@ export default class SimpleAudioHandler extends BaseAudioHandler {
 
   private onStartedPlayingHandlers: ((startTime: number) => void)[] = [];
 
+  private onSyncAudioTimings: ((params: { startTime: number, timestamp: number }) => void)[] = [];
+
   constructor(socket: Namespace) {
     super();
     this.socket = socket;
@@ -18,6 +20,10 @@ export default class SimpleAudioHandler extends BaseAudioHandler {
         console.log('handle play audio started events', startTime);
         this.onStartedPlayingHandlers.forEach((h) => h(startTime));
         this.onStartedPlayingHandlers = [];
+      });
+      sc.on('sync_audio_timings', (params: { startTime: number, timestamp: number }) => {
+        console.log('Sync audio timings:', params.startTime - params.timestamp);
+        this.onSyncAudioTimings.forEach((h) => h(params));
       });
     });
   }
@@ -33,19 +39,40 @@ export default class SimpleAudioHandler extends BaseAudioHandler {
   }
 
   /**
+   * Add an audio sync timing handler function
+   * @param handler
+   */
+  public addSyncAudioTimingHandler(
+    handler: (params: { startTime: number, timestamp: number }) => void,
+  ) {
+    this.onSyncAudioTimings.push(handler);
+  }
+
+  /**
+   * Remove an audio sync timing handler function
+   * @param handler
+   */
+  public removeSyncAudioTimingHandler(
+    handler: (params: { startTime: number, timestamp: number }) => void,
+  ) {
+    this.onSyncAudioTimings = this.onSyncAudioTimings.filter((h) => h === handler);
+  }
+
+  /**
    * Start playing audio. Optionally provide a callback function that is called
    * once the listener starts playing audio. It will then provide the time in ms
    * since epoch at which audio started playing (listener machine time)
-   * @param onPlaying
+   * @param startTime Timestamp in seconds the audio should start playing at
+   * @param onPlaying Callback once player has started
    */
-  public play(onPlaying?: (startTime: number) => void) {
+  public play(startTime?: number, onPlaying?: (startTime: number) => void) {
     if (!this.ready) throw new Error('Not all audio players are ready!');
 
     if (onPlaying) {
       this.onStartedPlayingHandlers.push(onPlaying);
     }
 
-    this.socket.emit('play_audio');
+    this.socket.emit('play_audio', startTime);
   }
 
   public stop() {
