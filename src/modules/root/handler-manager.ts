@@ -14,8 +14,7 @@ import DevelopEffectsHandler from '../handlers/lights/develop-effects-handler';
 import { SocketConnectionEmitter } from '../events/socket-connection-emitter';
 import { User } from '../auth';
 import { BeatEvent, TrackChangeEvent } from '../events/music-emitter-events';
-import { CurrentlyPlayingTrackHandler } from '../handlers/screen';
-import { CenturionScreenHandler } from '../handlers/screen/centurion-screen-handler';
+import { CurrentlyPlayingTrackHandler, CenturionScreenHandler } from '../handlers/screen';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
