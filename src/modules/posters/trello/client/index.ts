@@ -74,4 +74,4 @@ export type { TrelloList } from './models/TrelloList';
 export { ViewFilter } from './models/ViewFilter';
 export type { Webhook } from './models/Webhook';
 
-export { DefaultService } from './services/DefaultService';
+export { TrelloService } from './services/TrelloService';

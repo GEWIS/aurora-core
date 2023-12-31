@@ -6,4 +6,5 @@
 export enum OrganizationFields {
     ID = 'id',
     NAME = 'name',
+    ALL = 'all',
 }

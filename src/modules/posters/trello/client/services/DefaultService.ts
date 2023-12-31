@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* generated using openapi-typescript-codegen -- do no edit */
 /* istanbul ignore file */
 /* tslint:disable */
@@ -64,10 +65,10 @@ export class DefaultService {
      * Get an Action
      * Get an Action
      * @param id The ID of the Action
-     * @param display 
-     * @param entities 
+     * @param display
+     * @param entities
      * @param fields `all` or a comma-separated list of action [fields](/cloud/trello/guides/rest-api/object-definitions/#action-object)
-     * @param member 
+     * @param member
      * @param memberFields `all` or a comma-separated list of member [fields](/cloud/trello/guides/rest-api/object-definitions/)
      * @param memberCreator Whether to include the member object for the creator of the action
      * @param memberCreatorFields `all` or a comma-separated list of member [fields](/cloud/trello/guides/rest-api/object-definitions/)
@@ -366,7 +367,7 @@ emoji: boolean = true,
      * Create Reaction for Action
      * Adds a new reaction to an action
      * @param idAction The ID of the action
-     * @param requestBody 
+     * @param requestBody
      * @returns any Success
      * @throws ApiError
      */
@@ -475,7 +476,7 @@ idAction: TrelloID,
 
     /**
      * Get Application's compliance data
-     * @param key 
+     * @param key
      * @returns any Success
      * @throws ApiError
      */
@@ -549,7 +550,7 @@ memberFields: MemberFields = 'fullname,username',
     /**
      * Get a Board
      * Request a single board.
-     * @param id 
+     * @param id
      * @param actions This is a nested resource. Read more about actions as nested resources [here](/cloud/trello/guides/rest-api/nested-resources/).
      * @param boardStars Valid values are one of: `mine` or `none`.
      * @param cards This is a nested resource. Read more about cards as nested resources [here](/cloud/trello/guides/rest-api/nested-resources/).
@@ -564,7 +565,7 @@ memberFields: MemberFields = 'fullname,username',
      * @param pluginData Determines whether the pluginData for this board should be returned. Valid values: true or false.
      * @param organization This is a nested resource. Read more about organizations as nested resources [here](/cloud/trello/guides/rest-api/nested-resources/).
      * @param organizationPluginData Use with the `organization` param to include organization pluginData with the response
-     * @param myPrefs 
+     * @param myPrefs
      * @param tags Also known as collections, tags, refer to the collection(s) that a Board belongs to.
      * @returns Board Success
      * @returns Error Unexpected error
@@ -623,7 +624,7 @@ tags: boolean = false,
     /**
      * Update a Board
      * Update an existing board by id
-     * @param id 
+     * @param id
      * @param name The new name for the board. 1 to 16384 characters long.
      * @param desc A new description for the board, 0 to 16384 characters long
      * @param closed Whether the board is closed
@@ -707,7 +708,7 @@ labelNamesBlue?: string,
     /**
      * Delete a Board
      * Delete a board.
-     * @param id 
+     * @param id
      * @param id The id of the board to delete
      * @returns any Success
      * @throws ApiError
@@ -750,7 +751,7 @@ field: string,
 
     /**
      * Get Actions of a Board
-     * @param boardId 
+     * @param boardId
      * @param fields The fields to be returned for the Actions. [See Action fields here](/cloud/trello/guides/rest-api/object-definitions/#action-object).
      * @param filter A comma-separated list of [action types](/cloud/trello/guides/rest-api/action-types/).
      * @param format The format of the returned Actions. Either list or count.
@@ -872,7 +873,7 @@ since?: string,
 
     /**
      * Get boardStars on a Board
-     * @param boardId 
+     * @param boardId
      * @param filter Valid values: mine, none
      * @returns any Success
      * @throws ApiError
@@ -915,7 +916,7 @@ id: string,
     /**
      * Get Cards on a Board
      * Get all of the open Cards on a Board.
-     * @param id 
+     * @param id
      * @returns any Success
      * @throws ApiError
      */
@@ -1132,7 +1133,7 @@ id: TrelloID,
      * @param id The ID of the board
      * @param email The email address of a user to add as a member of the board.
      * @param type Valid values: admin, normal, observer. Determines what type of member the user being added should be of the board.
-     * @param requestBody 
+     * @param requestBody
      * @returns any Success
      * @throws ApiError
      */
@@ -1648,11 +1649,11 @@ filter: 'enabled' | 'available' = 'enabled',
      * @param pos The position of the new card. `top`, `bottom`, or a positive float
      * @param due A due date for the card
      * @param start The start date of a card, or `null`
-     * @param dueComplete 
+     * @param dueComplete
      * @param idMembers Comma-separated list of member IDs to add to the card
      * @param idLabels Comma-separated list of label IDs to add to the card
      * @param urlSource A URL starting with `http://` or `https://`
-     * @param fileSource 
+     * @param fileSource
      * @param mimeType The mimeType of the attachment. Max length 256
      * @param idCardSource The ID of a card to copy into the new card
      * @param keepFromSource If using `idCardSource` you can specify which properties to copy over. `all` or comma-separated list of: `attachments,checklists,customFields,comments,due,start,labels,members,start,stickers`
@@ -1718,7 +1719,7 @@ coordinates?: string,
      * @param memberFields `all` or a comma-separated list of member [fields](/cloud/trello/guides/rest-api/object-definitions/). **Defaults**: `avatarHash, fullName, initials, username`
      * @param membersVoted Whether to return member objects for members who voted on the card
      * @param memberVotedFields `all` or a comma-separated list of member [fields](/cloud/trello/guides/rest-api/object-definitions/). **Defaults**: `avatarHash, fullName, initials, username`
-     * @param checkItemStates 
+     * @param checkItemStates
      * @param checklists Whether to return the checklists on the card. `all` or `none`
      * @param checklistFields `all` or a comma-separated list of `idBoard,idCard,name,pos`
      * @param board Whether to return the board object the card is on
@@ -2595,7 +2596,7 @@ idAction: TrelloID,
      * Setting, updating, and removing the value for a Custom Field on a card. For more details on updating custom fields check out the [Getting Started With Custom Fields](/cloud/trello/guides/rest-api/getting-started-with-custom-fields/)
      * @param idCard ID of the card that the Custom Field value should be set/updated for
      * @param idCustomField ID of the Custom Field on the card.
-     * @param requestBody 
+     * @param requestBody
      * @returns any Success
      * @throws ApiError
      */
@@ -2634,7 +2635,7 @@ idValue?: TrelloID;
     /**
      * Update Multiple Custom Field items on Card
      * Setting, updating, and removing the values for multiple Custom Fields on a card. For more details on updating custom fields check out the [Getting Started With Custom Fields](/cloud/trello/guides/rest-api/getting-started-with-custom-fields/)
-     * @param requestBody 
+     * @param requestBody
      * @returns any Success
      * @throws ApiError
      */
@@ -3235,7 +3236,7 @@ idCheckItem: TrelloID,
     /**
      * Create a new Custom Field on a Board
      * Create a new Custom Field on a board.
-     * @param requestBody 
+     * @param requestBody
      * @returns CustomField Success
      * @throws ApiError
      */
@@ -3258,7 +3259,7 @@ name: string;
  */
 type: 'checkbox' | 'list' | 'number' | 'text' | 'date';
 /**
- * If the type is `checkbox` 
+ * If the type is `checkbox`
  */
 options?: string;
 pos: posStringOrNumber;
@@ -3298,7 +3299,7 @@ id: TrelloID,
      * Update a Custom Field definition
      * Update a Custom Field definition.
      * @param id ID of the Custom Field.
-     * @param requestBody 
+     * @param requestBody
      * @returns CustomField Success
      * @throws ApiError
      */
@@ -3564,8 +3565,8 @@ fields: string = 'fullName, userName',
      * Get signupUrl for Enterprise
      * Get the signup URL for an enterprise.
      * @param id ID of the enterprise to retrieve.
-     * @param authenticate 
-     * @param confirmationAccepted 
+     * @param authenticate
+     * @param confirmationAccepted
      * @param returnUrl Any valid URL.
      * @param tosAccepted Designates whether the user has seen/consented to the Trello ToS prior to being redirected to the enterprise signup page/their IdP.
      * @returns any Success
@@ -4531,7 +4532,7 @@ id: TrelloID,
      * @param organizationsInvited One of: `all`, `members`, `none`, `public`
      * @param organizationsInvitedFields `all` or a comma-separated list of organization [fields](/cloud/trello/guides/rest-api/object-definitions/)
      * @param paidAccount Whether or not to include paid account information in the returned member object
-     * @param savedSearches 
+     * @param savedSearches
      * @param tokens `all` or `none`
      * @returns any Success
      * @throws ApiError
@@ -4597,10 +4598,10 @@ tokens: 'all' | 'none' = 'none',
      * @param fullName New name for the member. Cannot begin or end with a space.
      * @param initials New initials for the member. 1-4 characters long.
      * @param username New username for the member. At least 3 characters long, only lowercase letters, underscores, and numbers. Must be unique.
-     * @param bio 
+     * @param bio
      * @param avatarSource One of: `gravatar`, `none`, `upload`
-     * @param prefsColorBlind 
-     * @param prefsLocale 
+     * @param prefsColorBlind
+     * @param prefsLocale
      * @param prefsMinutesBetweenSummaries `-1` for disabled, `1`, or `60`
      * @returns any Success
      * @throws ApiError
@@ -4709,7 +4710,7 @@ filter: 'all' | 'custom' | 'default' | 'none' | 'premium' = 'all',
      * Upload new boardBackground for Member
      * Upload a new boardBackground
      * @param id The ID or username of the member
-     * @param file 
+     * @param file
      * @returns any Success
      * @throws ApiError
      */
@@ -5032,7 +5033,7 @@ id: TrelloID,
      * Create a new custom Board Background
      * Upload a new custom board background
      * @param id The ID or username of the member
-     * @param file 
+     * @param file
      * @returns BoardBackground Success
      * @throws ApiError
      */
@@ -5149,7 +5150,7 @@ id: TrelloID,
      * Create custom Emoji for Member
      * Create a new custom Emoji
      * @param id The ID or username of the member
-     * @param file 
+     * @param file
      * @param name Name for the emoji. 2 - 64 characters
      * @returns CustomEmoji Success
      * @throws ApiError
@@ -5222,7 +5223,7 @@ id: TrelloID,
      * Create custom Sticker for Member
      * Upload a new custom sticker
      * @param id The ID or username of the member
-     * @param file 
+     * @param file
      * @returns CustomSticker Success
      * @throws ApiError
      */
@@ -5295,16 +5296,16 @@ idSticker: TrelloID,
      * Get Member's Notifications
      * Get a member's notifications
      * @param id The ID or username of the member
-     * @param entities 
-     * @param display 
-     * @param filter 
+     * @param entities
+     * @param display
+     * @param filter
      * @param readFilter One of: `all`, `read`, `unread`
      * @param fields `all` or a comma-separated list of notification [fields](/cloud/trello/guides/rest-api/object-definitions/)
      * @param limit Max 1000
      * @param page Max 100
      * @param before A notification ID
      * @param since A notification ID
-     * @param memberCreator 
+     * @param memberCreator
      * @param memberCreatorFields `all` or a comma-separated list of member [fields](/cloud/trello/guides/rest-api/object-definitions/)
      * @returns Notification Success
      * @throws ApiError
@@ -5553,7 +5554,7 @@ webhooks: boolean = false,
      * Create Avatar for Member
      * Create a new avatar for a member
      * @param id The ID or username of the member
-     * @param file 
+     * @param file
      * @returns any Success
      * @throws ApiError
      */
@@ -5620,7 +5621,7 @@ id: (TrelloID | string),
      * Update blocked notification keys of Member on a channel
      * Update blocked notification keys of Member on a specific channel
      * @param id The ID or username of the member
-     * @param requestBody 
+     * @param requestBody
      * @returns NotificationChannelSettings Success
      * @throws ApiError
      */
@@ -5672,7 +5673,7 @@ channel: Channel,
      * Update blocked notification keys of Member on a specific channel
      * @param id The ID or username of the member
      * @param channel Channel to block notifications on
-     * @param requestBody 
+     * @param requestBody
      * @returns NotificationChannelSettings Success
      * @throws ApiError
      */
@@ -5857,7 +5858,7 @@ ids?: Array<TrelloID>,
      * Update Notification's read status
      * Update Notification's read status
      * @param id The ID of the notification
-     * @param value 
+     * @param value
      * @returns any Success
      * @throws ApiError
      */
@@ -6466,7 +6467,7 @@ idMember: TrelloID,
      * Deactivate or reactivate a member of a Workspace
      * @param id The ID or name of the organization
      * @param idMember The ID or username of the member to update
-     * @param value 
+     * @param value
      * @returns any Success
      * @throws ApiError
      */
@@ -6677,7 +6678,7 @@ id: TrelloID,
      * Create a Listing for Plugin
      * Create a new listing for a given locale for your Power-Up
      * @param idPlugin The ID of the Power-Up for which you are creating a new listing.
-     * @param requestBody 
+     * @param requestBody
      * @returns PluginListing Success
      * @throws ApiError
      */
@@ -6736,7 +6737,7 @@ id: TrelloID,
      * Update an existing listing for your Power-Up
      * @param idPlugin The ID of the Power-Up whose listing is being updated.
      * @param idListing The ID of the existing listing for the Power-Up that is being updated.
-     * @param requestBody 
+     * @param requestBody
      * @returns PluginListing Success
      * @throws ApiError
      */
@@ -6858,9 +6859,9 @@ partial: boolean = false,
      * Search for Trello members.
      * @param query Search query 1 to 16384 characters long
      * @param limit The maximum number of results to return. Maximum of 20.
-     * @param idBoard 
-     * @param idOrganization 
-     * @param onlyOrgMembers 
+     * @param idBoard
+     * @param idOrganization
+     * @param onlyOrgMembers
      * @returns Member Success
      * @throws ApiError
      */
@@ -6887,7 +6888,7 @@ onlyOrgMembers: boolean = false,
     /**
      * Get a Token
      * Retrieve information about a token.
-     * @param token 
+     * @param token
      * @param fields `all` or a comma-separated list of `dateCreated`, `dateExpires`, `idMember`, `identifier`, `permissions`
      * @param webhooks Determines whether to include webhooks.
      * @returns Token Success
@@ -6914,7 +6915,7 @@ webhooks: boolean = false,
     /**
      * Get Token's Member
      * Retrieve information about a token's owner by token.
-     * @param token 
+     * @param token
      * @param fields `all` or a comma-separated list of valid fields for [Member Object](/cloud/trello/guides/rest-api/object-definitions/).
      * @returns Member Success
      * @throws ApiError
@@ -6938,7 +6939,7 @@ fields: MemberFields = 'all',
     /**
      * Get Webhooks for Token
      * Retrieve all webhooks created with a Token.
-     * @param token 
+     * @param token
      * @returns Webhook Success
      * @throws ApiError
      */
@@ -6957,7 +6958,7 @@ token: string,
     /**
      * Create Webhooks for Token
      * Create a new webhook for a Token.
-     * @param token 
+     * @param token
      * @param callbackUrl The URL that the webhook should POST information to.
      * @param idModel ID of the object to create a webhook on.
      * @param description A description to be displayed when retrieving information about the webhook.
@@ -6987,7 +6988,7 @@ description?: string,
     /**
      * Get a Webhook belonging to a Token
      * Retrieve a webhook created with a Token.
-     * @param token 
+     * @param token
      * @param idWebhook ID of the [Webhooks](ref:webhooks) to retrieve.
      * @returns Webhook Success
      * @throws ApiError
@@ -7009,7 +7010,7 @@ idWebhook: TrelloID,
     /**
      * Delete a Webhook created by Token
      * Delete a webhook created with given token.
-     * @param token 
+     * @param token
      * @param idWebhook ID of the [Webhooks](ref:webhooks) to retrieve.
      * @returns any Success
      * @throws ApiError
@@ -7031,7 +7032,7 @@ idWebhook: TrelloID,
     /**
      * Update a Webhook created by Token
      * Update a Webhook created by Token
-     * @param token 
+     * @param token
      * @param idWebhook ID of the [Webhooks](ref:webhooks) to retrieve.
      * @param description A description to be displayed when retrieving information about the webhook.
      * @param callbackUrl The URL that the webhook should `POST` information to.
@@ -7064,7 +7065,7 @@ idModel?: TrelloID,
     /**
      * Delete a Token
      * Delete a token.
-     * @param token 
+     * @param token
      * @returns any Success
      * @throws ApiError
      */

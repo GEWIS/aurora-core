@@ -6,6 +6,9 @@
 import type { Limits } from './Limits';
 import type { Prefs } from './Prefs';
 import type { TrelloID } from './TrelloID';
+import { Card } from "./Card";
+import { TrelloList } from "./TrelloList";
+import { Checklist } from "./Checklist";
 
 export type Board = {
     id: TrelloID;
@@ -48,4 +51,9 @@ black?: string;
     ixUpdate?: number;
     templateGallery?: string | null;
     enterpriseOwned?: boolean;
+
+    // Manually added by Roy, because this does not seem to be in the API spec, even though it is mentioned in the docs
+    cards?: Card[];
+    lists?: TrelloList[];
+    checklists?: Checklist[];
 };

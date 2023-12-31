@@ -20,4 +20,5 @@ export enum BoardFields {
     LIMITS = 'limits',
     MEMBERSHIPS = 'memberships',
     ENTERPRISE_OWNED = 'enterpriseOwned',
+    ALL = 'all',
 }

@@ -4,7 +4,13 @@
 /* eslint-disable */
 
 import type { TrelloID } from './TrelloID';
+import { CheckItem } from "./CheckItem";
 
 export type Checklist = {
-    id?: TrelloID;
+    id: TrelloID;
+    name: string;
+    idBoard: TrelloID;
+    idCard: TrelloID;
+    pos: number;
+    checkItems: CheckItem[];
 };

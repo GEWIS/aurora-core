@@ -53,7 +53,7 @@ emoji?: Record<string, any>;
     idMembersVoted?: Array<TrelloID>;
     idShort?: number;
     idAttachmentCover?: TrelloID | null;
-    labels?: Array<TrelloID>;
+    labels?: Array<Label>;
     limits?: Limits;
     locationName?: string | null;
     manualCoverAttachment?: boolean;

@@ -6,13 +6,13 @@ import type { BaseHttpRequest } from './core/BaseHttpRequest';
 import type { OpenAPIConfig } from './core/OpenAPI';
 import { FetchHttpRequest } from './core/FetchHttpRequest';
 
-import { DefaultService } from './services/DefaultService';
+import { TrelloService } from './services/TrelloService';
 
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest;
 
 export class TrelloClient {
 
-    public readonly default: DefaultService;
+    public readonly default: TrelloService;
 
     public readonly request: BaseHttpRequest;
 
@@ -22,13 +22,14 @@ export class TrelloClient {
             VERSION: config?.VERSION ?? '0.0.1',
             WITH_CREDENTIALS: config?.WITH_CREDENTIALS ?? false,
             CREDENTIALS: config?.CREDENTIALS ?? 'include',
-            TOKEN: config?.TOKEN,
+            TOKEN: config?.TOKEN ?? process.env.TRELLO_TOKEN,
+            KEY: config?.KEY ?? process.env.TRELLO_KEY,
             USERNAME: config?.USERNAME,
             PASSWORD: config?.PASSWORD,
             HEADERS: config?.HEADERS,
             ENCODE_PATH: config?.ENCODE_PATH,
         });
 
-        this.default = new DefaultService(this.request);
+        this.default = new TrelloService(this.request);
     }
 }

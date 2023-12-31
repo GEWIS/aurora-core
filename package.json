@@ -19,6 +19,7 @@
     "@spotify/web-api-ts-sdk": "^1.1.2",
     "@tsoa/runtime": "^5.0.0",
     "@types/express-session": "^1.17.8",
+    "axios": "^1.6.3",
     "body-parser": "^1.20.2",
     "connect-typeorm": "^2.0.0",
     "cookie-parser": "^1.4.6",
@@ -38,6 +39,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/cookie-parser": "^1.4.4",
     "@types/cors": "^2.8.14",
     "@types/express": "^4.17.18",

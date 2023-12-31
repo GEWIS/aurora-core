@@ -13,6 +13,7 @@ export type OpenAPIConfig = {
     WITH_CREDENTIALS: boolean;
     CREDENTIALS: 'include' | 'omit' | 'same-origin';
     TOKEN?: string | Resolver<string> | undefined;
+    KEY?: string | Resolver<string> | undefined,
     USERNAME?: string | Resolver<string> | undefined;
     PASSWORD?: string | Resolver<string> | undefined;
     HEADERS?: Headers | Resolver<Headers> | undefined;
@@ -24,7 +25,8 @@ export const OpenAPI: OpenAPIConfig = {
     VERSION: '0.0.1',
     WITH_CREDENTIALS: false,
     CREDENTIALS: 'include',
-    TOKEN: undefined,
+    TOKEN: process.env.TRELLO_TOKEN,
+    KEY: process.env.TRELLO_KEY,
     USERNAME: undefined,
     PASSWORD: undefined,
     HEADERS: undefined,

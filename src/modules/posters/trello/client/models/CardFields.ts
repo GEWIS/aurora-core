@@ -41,4 +41,5 @@ export enum CardFields {
     URL = 'url',
     COVER = 'cover',
     IS_TEMPLATE = 'isTemplate',
+    ALL = 'all',
 }

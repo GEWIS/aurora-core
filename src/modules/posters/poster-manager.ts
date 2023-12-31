@@ -1,5 +1,11 @@
 import { Poster } from './poster';
 
 export abstract class PosterManager {
-  abstract getPosters(): Promise<Poster[]>;
+  protected _posters: Poster[];
+
+  abstract fetchPosters(): Promise<Poster[]>;
+
+  public get posters() {
+    return this._posters;
+  }
 }

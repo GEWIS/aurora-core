@@ -1,45 +1,113 @@
 import { PosterManager } from '../poster-manager';
 import {
-  BasePoster, FooterSize, MediaPoster, Poster, PosterType,
+  BasePoster, ErrorPoster, FooterSize, LocalPoster,
+  LocalPosterType, MediaPoster, Poster, PosterType,
 } from '../poster';
 import {
-  Card, TrelloClient, TrelloList, ViewFilter,
+  Board, Card, Checklist, TrelloClient, TrelloList,
 } from './client';
+import { TrelloPosterStorage } from './trello-poster-storage';
 
-const DEFAULT_TIMEOUT = 15000;
+const DEFAULT_POSTER_TIMEOUT = 15;
+const DEFAULT_POSTER_REFRESH = 1000 * 60 * 15;
 
 export class TrelloPosterManager extends PosterManager {
+  private client: TrelloClient;
+
+  private refreshTimeout: NodeJS.Timeout | undefined = undefined;
+
+  constructor() {
+    super();
+    this.client = new TrelloClient();
+  }
+
   /**
    * Parse a Trello list recursively to a list of posters
    * @param list
-   * @param all
-   * @param type
+   * @param board
+   * @param listType
    * @private
    */
-  private parseLists(list: TrelloList, all: TrelloList[], type?: PosterType): Poster[] {
-    // @ts-ignore
-    const { cards } = list;
-    const posters: Poster[][] = cards.map((card) => {
+  private async parseLists(
+    list: TrelloList,
+    board: Board,
+    listType?: PosterType,
+  ): Promise<Poster[]> {
+    const { cards: allCards, lists: allLists, checklists: allChecklists } = board;
+    const cards = allCards?.filter((card) => card.idList === list.id) || [];
+
+    const now = new Date();
+
+    const posters = await Promise.all(cards.map(async (card) => {
+      const labels = card.labels?.map((l) => l.name ?? '') ?? [];
+      const checklists = allChecklists?.filter((checklist) => card
+        .idChecklists?.includes(checklist.id)) ?? [];
+
       // A card can be two things: a poster, or a reference to a new list of cards.
       // If it has the correct label ("Posterlist"), it means the card is a reference to a list
-      if (card.labels?.includes('PosterList')) {
-        const newList = all.find((l) => l.name === card.name);
+      if (labels.includes('Posterlist')) {
+        const newList = allLists?.find((l) => l.name === card.name);
         if (newList) {
-          return this.parseLists(newList, all, card.desc as PosterType);
+          return this.parseLists(newList, board, card.desc as PosterType);
         }
         throw new Error(`Unknown list: ${card.name}`);
       }
-    });
+
+      // If the card has a due date and this due date is in the past, skip this card
+      if (card.due && new Date(card.due) < now) return undefined;
+      // If the card has a start date and this start date is in the future, skip this card
+      if (card.badges?.start != null && new Date(card.badges.start) > now) return undefined;
+
+      switch (listType) {
+        case 'img':
+        case 'video':
+          return this.parseMediaPoster(card, checklists);
+        case 'extern':
+          return this.parseExternalPoster(card, checklists);
+        case 'photo':
+          return this.parsePhotoPoster(card, checklists);
+        default: break;
+      }
+
+      let type: LocalPosterType = (listType as LocalPosterType) || PosterType.UNKNOWN;
+      const cardType = card.desc;
+      if (listType === undefined && Object.values(PosterType).includes(cardType as any)) {
+        type = cardType as LocalPosterType;
+      }
+
+      const poster: LocalPoster = {
+        ...this.parseBasePoster(card, checklists),
+        type,
+      };
+
+      return poster;
+    }));
+
+    return posters
+      .filter((p) => p !== undefined)
+      .flat() as Poster[];
   }
 
-  private parseBasePoster(card: Card): BasePoster {
+  /**
+   * Parse all generic poster information
+   * @param card
+   * @param checklists
+   * @private
+   */
+  private parseBasePoster(card: Card, checklists: Checklist[]): BasePoster {
     // Find the index of the "timeout" checklist if it exists
-    const indexTimeout = card.checklists.findIndex((checklist) => checklist.name.toLowerCase() === 'timeout');
+    // @ts-ignore
+    const indexTimeout = checklists.findIndex((checklist) => checklist.name.toLowerCase() === 'timeout');
     // If it does exist, take the value of the first checkbox and make it the timeout value
-    let timeout: number = DEFAULT_TIMEOUT;
-    if (indexTimeout > -1) {
-      timeout = parseInt(card.checklists[indexTimeout].checkItems[0].name, 10);
+    let timeout: number = DEFAULT_POSTER_TIMEOUT;
+    if (indexTimeout !== undefined && indexTimeout > -1) {
+      // @ts-ignore
+      timeout = parseInt(checklists![indexTimeout].checkItems[0]?.name, 10);
     }
+
+    const labels = card.labels?.map((l) => l.name ?? '') ?? [];
+    const hideBorder = labels.includes('HIDE_BORDER');
+    const footers = labels.filter((l) => l !== 'HIDE_BORDER');
 
     return {
       name: card.name || 'Poster',
@@ -47,106 +115,125 @@ export class TrelloPosterManager extends PosterManager {
       // If there is a due date present, set the due date
       due: card.due ? new Date(card.due) : undefined,
       // If there are labels, set the label of this poster to be the first label of the card
-      label: card.labels && card.labels.length > 0 ? card.labels[0] : undefined,
+      label: footers.length > 0 ? labels[0] : '',
       // If the card has a HIDE_LABEL label, set the footer size to minimal
-      footer: card.labels && card.labels.includes('HIDE_LABEL') ? FooterSize.FULL : FooterSize.MINIMAL,
+      footer: hideBorder ? FooterSize.MINIMAL : FooterSize.FULL,
     };
   }
 
-  private parseImagePoster(card: Card): MediaPoster {
-    const poster = this.parseBasePoster(card);
+  /**
+   * Given an image or video card, parse it and store its attachments for fetching later
+   * @param card
+   * @param checklists
+   * @private
+   */
+  private async parseMediaPoster(
+    card: Card,
+    checklists: Checklist[],
+  ): Promise<MediaPoster | ErrorPoster> {
+    const poster = this.parseBasePoster(card, checklists);
+
+    if (!card.id) {
+      return {
+        ...poster,
+        type: PosterType.ERROR,
+        message: 'Card has no ID',
+      };
+    }
+    const attachments = await this.client.default.getCardAttachments(card.id);
+    const source = await Promise.all(attachments.map(async (attachment) => {
+      const storage = new TrelloPosterStorage();
+      return storage.storeAttachment(attachment);
+    }));
 
     return {
       ...poster,
       type: PosterType.IMAGE,
-      source: [],
+      source,
     };
   }
 
-  private parseVideoPoster(card: Card): MediaPoster {
-
-  }
-
-  private parsePhotoPoster(card: Card): Poster {}
-
-  private parseExternalPoster(card: Card): Poster {}
-
   /**
-   * Given a card, get all the attachments and save only the images to the disk
-   * @param {string} cardId - ID of the card. Used to download all attachment objects from the Trello API
+   * Given a photo card, parse it and its albums
+   * @param card
+   * @param checklists
+   * @private
    */
-  async findAndSaveAttachments(card: Card): Promise<string[]> {
-    // Download all attachments and save them in a variable
-    const attachments = (await axios.get(`${baseUrl}cards/${cardId}/attachments`, {
-      params: {
-        token: process.env.TRELLO_TOKEN,
-        key: process.env.TRELLO_KEY,
-      },
-    })).data as IAttachment[];
-
-    // Create an empty array to store all saved image location URLs
-    const result: string[] = [];
-    // For each attachment in the list of attachments...
-    for (const attachment of attachments) {
-      // Create the filename with the correct extension
-      const fileExtension = getFileExtension(attachment.name);
-      const fileName = `${attachment.id}.${fileExtension}`;
-
-      // Download this image and wait for it to complete
-      await this.downloadImageFiles(attachment.url, fileName).catch((error) => {
-        console.log(error);
-      });
-      // Save the filename in the newly saved images array, used to delete unused attachments
-      newlySavedImages.push(fileName);
-      // Put this image URL in the resulting array
-      result.push(`data/${fileName}`);
+  private async parsePhotoPoster(card: Card, checklists: Checklist[]): Promise<Poster> {
+    // Find the checklist called "photos", that should contain the album ids
+    const index = checklists.findIndex((checklist) => checklist.name.toLowerCase() === 'photos');
+    // If such list cannot be found, it does not exist. Throw an error because we cannot continue
+    if (index === undefined || index < 0) {
+      return {
+        ...this.parseBasePoster(card, checklists),
+        type: PosterType.ERROR,
+        message: 'Photo card has no checklist named "photos"',
+      };
     }
-    return result;
+    // Get the checklist for the albums
+    const checkList = checklists![index];
+    // @ts-ignore
+    const albums = checkList.checkItems.map((item: any) => item.name.split(' ')[0]);
+    return {
+      ...this.parseBasePoster(card, checklists),
+      type: PosterType.PHOTO,
+      albums,
+    };
   }
 
   /**
-   * Download a file and save it with the given filename in the /data/ directory
-   * @param {string} fileUrl - location of the to be downloaded file
-   * @param {string} fileName - new name of the file
+   * Parse the given poster to an EXTERNAL type poster
+   * If the card description is an invalid URL, return an ERROR poster
+   * @param card
+   * @param checklists
+   * @private
    */
-  async downloadImageFiles(fileUrl: string, fileName: string): Promise<void> {
-    // If this file already exists, we do not need to download it again
-    if (fs.existsSync(`data/${fileName}`)) {
-      return;
-    }
-
-    // New trello update
-    const headers = {
-      Authorization: `OAuth oauth_consumer_key=\"${process.env.TRELLO_KEY}\", oauth_token=\"${process.env.TRELLO_TOKEN}\"`,
+  private async parseExternalPoster(card: Card, checklists: Checklist[]): Promise<Poster> {
+    const isUrl = (url: string): boolean => {
+      try {
+        const parsedUrl = new URL(url);
+        return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:';
+      } catch (_) {
+        return false;
+      }
     };
 
-    return axios.get(fileUrl, { responseType: 'stream', headers }).then((response) =>
+    const regexMarkdown = /(?=\[(!\[.+?\]\(.+?\)|.+?)]\((https:\/\/[^\)]+)\))/gi;
+    const match = [...(card.desc ?? '').matchAll(regexMarkdown)].map((m) => m[1])[0]?.trim();
 
-    // ensure that the user can call `then()` only when the file has
-    // been downloaded entirely.
+    const url = isUrl(match) ? match : card.desc ?? '';
 
-      new Promise((resolve, reject) => {
-        const fileWriter = fs.createWriteStream(`data/${fileName}`);
-        response.data.pipe(fileWriter);
-        let error: Error = null;
-        fileWriter.on('error', (err) => {
-          error = err;
-          fileWriter.close();
-          reject(err);
-        });
-        fileWriter.on('close', () => {
-          if (!error) {
-            resolve();
-          }
-          // no need to call the reject here, as it will have been called in the
-          // 'error' stream;
-        });
-      }));
+    if (!card.desc || !isUrl(url)) {
+      return {
+        ...this.parseBasePoster(card, checklists),
+        type: PosterType.ERROR,
+        message: 'Card description does not exist or is not a valid HTTP/HTTPS URL',
+      };
+    }
+    return {
+      ...this.parseBasePoster(card, checklists),
+      type: PosterType.EXTERNAL,
+      source: [url || ''],
+    };
   }
 
-  async getPosters(): Promise<Poster[]> {
-    const client = new TrelloClient();
-    const lists = await client.default.getBoardsIdLists(process.env.TRELLO_BOARD_ID || '', ViewFilter.ALL, 'all');
-    return Promise.resolve([]);
+  async fetchPosters(): Promise<Poster[]> {
+    // const lists = await this.client.default
+    // .getBoardsIdLists(process.env.TRELLO_BOARD_ID || '', ViewFilter.ALL, 'all');
+    let board = await this.client.default.getBoard(process.env.TRELLO_BOARD_ID || '');
+    if (!Object.prototype.hasOwnProperty.call(board, 'id')) throw new Error(JSON.stringify(board));
+    board = board as Board;
+    const { cards, lists } = board;
+    if (!cards || !lists) throw new Error('Could not find cards and/or lists on the given board');
+
+    const list = lists.find((l) => l.name === 'BasePosters');
+    if (!list) throw new Error('Could not find the list called "BasePosters"');
+
+    this._posters = await this.parseLists(list, board);
+
+    if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
+    this.refreshTimeout = setTimeout(this.fetchPosters.bind(this), DEFAULT_POSTER_REFRESH);
+
+    return this._posters;
   }
 }

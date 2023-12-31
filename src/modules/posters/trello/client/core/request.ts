@@ -94,8 +94,11 @@ const getUrl = (config: OpenAPIConfig, options: ApiRequestOptions): string => {
         });
 
     const url = `${config.BASE}${path}`;
-    if (options.query) {
-        return `${url}${getQueryString(options.query)}`;
+    const query = options.query ?? {};
+    query.key = config.KEY;
+    query.token = config.TOKEN;
+    if (query) {
+        return `${url}${getQueryString(query)}`;
     }
     return url;
 };
@@ -138,6 +141,7 @@ export const resolve = async <T>(options: ApiRequestOptions, resolver?: T | Reso
 
 export const getHeaders = async (config: OpenAPIConfig, options: ApiRequestOptions): Promise<Headers> => {
     const token = await resolve(options, config.TOKEN);
+    const key = await resolve(options, config.KEY);
     const username = await resolve(options, config.USERNAME);
     const password = await resolve(options, config.PASSWORD);
     const additionalHeaders = await resolve(options, config.HEADERS);
@@ -153,8 +157,8 @@ export const getHeaders = async (config: OpenAPIConfig, options: ApiRequestOptio
             [key]: String(value),
         }), {} as Record<string, string>);
 
-    if (isStringWithValue(token)) {
-        headers['Authorization'] = `Bearer ${token}`;
+    if (isStringWithValue(token) && isStringWithValue(key)) {
+        headers['Authorization'] = `OAuth oauth_consumer_key=\"${process.env.TRELLO_KEY}\", oauth_token=\"${process.env.TRELLO_TOKEN}\"`;
     }
 
     if (isStringWithValue(username) && isStringWithValue(password)) {
