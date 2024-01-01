@@ -8,8 +8,8 @@ export default class DevelopEffectsHandler extends EffectsHandler {
   public registerEntity(entity: LightsGroup) {
     super.registerEntity(entity);
     this.groupEffects.set(entity, [
-      new Wave(entity, rgbColorDefinitions.blue),
-      new SearchLight(entity, 1.3, 3000),
+      new Wave(entity, { color: rgbColorDefinitions.blue }),
+      new SearchLight(entity, { radiusFactor: 1.3, cycleTime: 3000 }),
     ]);
   }
 }

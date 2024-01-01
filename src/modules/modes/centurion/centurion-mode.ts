@@ -148,20 +148,20 @@ export default class CenturionMode extends BaseMode {
 
   private getRandomEffect(colors: RgbColorSpecification[]): LightsEffectBuilder {
     const effects = [{
-      effect: BeatFadeOut.build(colors, false, true),
+      effect: BeatFadeOut.build({ colors, enableFade: false, addBlacks: true }),
       probability: 0.8,
     }, {
-      effect: Wave.build(colors[0]),
+      effect: Wave.build({ color: colors[0] }),
       probability: 0.1,
     }, {
-      effect: Sparkle.build(colors),
+      effect: Sparkle.build({ colors }),
       probability: 0.1,
     }];
     const factor = Math.random();
     return effects.find((effect, i) => {
       const previous = effects.slice(0, i).reduce((x, e) => x + e.probability, 0);
       return previous <= factor && previous + effect.probability > factor;
-    })?.effect || BeatFadeOut.build(colors, false);
+    })?.effect || BeatFadeOut.build({ colors, enableFade: false });
   }
 
   /**
@@ -182,7 +182,7 @@ export default class CenturionMode extends BaseMode {
     } else if (event.type === 'song') {
       const { colorNames, colorSpecs } = getTwoComplementaryRgbColors();
 
-      const movingHeadEffect = SearchLight.build(1.5, 3000);
+      const movingHeadEffect = SearchLight.build({ radiusFactor: 1.5, cycleTime: 3000 });
       const newEffectBuilder = this.getRandomEffect(colorSpecs);
 
       this.lights.forEach((l) => {

@@ -35,7 +35,7 @@ export default class SearchLight extends LightsEffect {
     if (props.offsetFactor !== undefined) this.offsetFactor = props.offsetFactor;
   }
 
-  public static build(props: SearchLightProps): LightsEffectBuilder {
+  public static build(props: SearchLightProps = {}): LightsEffectBuilder {
     return (lightsGroup) => new SearchLight(lightsGroup, props);
   }
 

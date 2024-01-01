@@ -22,7 +22,7 @@ export default class SingleFlood extends LightsEffect {
   beat(): void {
   }
 
-  public static build(props: SingleFloodProps): LightsEffectBuilder {
+  public static build(props: SingleFloodProps = {}): LightsEffectBuilder {
     return (lightsGroup) => new SingleFlood(lightsGroup, props);
   }
 
