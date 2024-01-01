@@ -3,6 +3,18 @@ import { BeatEvent, TrackPropertiesEvent } from '../../events/music-emitter-even
 import { LightsGroup } from '../entities';
 import { RgbColorSpecification } from '../color-definitions';
 
+/**
+ * @property colors One or more colors that should be shown
+ * @property enableFade Whether the lights should be turned off using a fade effect
+ * on each beat
+ * @property addBlacks If a "black" color should be added
+ */
+export interface BeatFadeOutProps {
+  colors: RgbColorSpecification[],
+  enableFade?: boolean;
+  addBlacks?: boolean;
+}
+
 export default class BeatFadeOut extends LightsEffect {
   private phase = 0;
 
@@ -10,33 +22,36 @@ export default class BeatFadeOut extends LightsEffect {
 
   private beatLength: number = 1; // in ms;
 
+  private colors: RgbColorSpecification[];
+
+  private enableFade = true;
+
+  private addBlacks = false;
+
   constructor(
     lightsGroup: LightsGroup,
-    private colors: RgbColorSpecification[],
+    props: BeatFadeOutProps,
     features?: TrackPropertiesEvent,
-    private enableFade = true,
-    private addBlacks = false,
   ) {
     super(lightsGroup, features);
+    this.colors = props.colors;
+    if (props.enableFade !== undefined) this.enableFade = props.enableFade;
+    if (props.addBlacks !== undefined) this.addBlacks = props.addBlacks;
   }
 
   /**
    * Create an constructor function that will create this effect with the given parameters
    * Used when you want to reference effects, but are not in the context of handlers.
-   * @param colors One or more colors that should be shown
-   * @param enableFade Whether the lights should be turned off using a fade effect
    * on each beat
-   * @param addBlacks If a "black" color should be added
+   * @param props
    */
   public static build(
-    colors: RgbColorSpecification[],
-    enableFade?: boolean,
-    addBlacks?: boolean,
+    props: BeatFadeOutProps,
   ): LightsEffectBuilder<BeatFadeOut> {
     return (
       lightsGroup: LightsGroup,
       features?: TrackPropertiesEvent,
-    ) => new BeatFadeOut(lightsGroup, colors, features, enableFade, addBlacks);
+    ) => new BeatFadeOut(lightsGroup, props, features);
   }
 
   beat(event: BeatEvent): void {

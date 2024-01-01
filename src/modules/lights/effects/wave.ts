@@ -2,24 +2,30 @@ import LightsEffect, { LightsEffectBuilder } from './lights-effect';
 import { LightsGroup } from '../entities';
 import { RgbColorSpecification } from '../color-definitions';
 
+export interface WaveProps {
+  color: RgbColorSpecification,
+  size?: number,
+  cycleTime?: number,
+}
+
 export class Wave extends LightsEffect {
   private cycleStartTick: Date = new Date();
 
-  constructor(
-    lightsGroup: LightsGroup,
-    private color: RgbColorSpecification,
-    private size = 1,
-    private cycleTime = 1000,
-  ) {
+  private color: RgbColorSpecification;
+
+  private size = 1;
+
+  private cycleTime = 1000;
+
+  constructor(lightsGroup: LightsGroup, props: WaveProps) {
     super(lightsGroup);
+    this.color = props.color;
+    if (props.size !== undefined) this.size = props.size;
+    if (props.cycleTime !== undefined) this.cycleTime = props.cycleTime;
   }
 
-  public static build(
-    color: RgbColorSpecification,
-    size?: number,
-    cycleTime?: number,
-  ): LightsEffectBuilder {
-    return (lightsGroup) => new Wave(lightsGroup, color, size, cycleTime);
+  public static build(props: WaveProps): LightsEffectBuilder {
+    return (lightsGroup) => new Wave(lightsGroup, props);
   }
 
   beat(): void {}

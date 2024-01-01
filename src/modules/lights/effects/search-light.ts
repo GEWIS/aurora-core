@@ -1,35 +1,42 @@
 import LightsEffect, { LightsEffectBuilder } from './lights-effect';
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../entities';
 
+/**
+ * @property radiusFactor Radius of the search light
+ * @property cycleTime Time for the moving head to go around (in milliseconds)
+ * @property offsetFactor What phase the lights should move apart from each other. 0 for synchronous
+ */
+export interface SearchLightProps {
+  radiusFactor?: number;
+  cycleTime?: number;
+  offsetFactor?: number;
+}
+
 export default class SearchLight extends LightsEffect {
   private cycleStartTick: Date = new Date();
 
+  private radiusFactor = 1;
+
+  private cycleTime = 4000;
+
+  private offsetFactor = 0.5 * Math.PI;
+
   /**
    * @param lightsGroup
-   * @param radiusFactor Radius of the search light
-   * @param cycleTime Time for the moving head to go around (in milliseconds)
-   * @param offsetFactor What phase the lights should move apart from each other. 0 for synchronous
+   * @param props
    */
   constructor(
     lightsGroup: LightsGroup,
-    private radiusFactor = 1,
-    private cycleTime = 4000,
-    private offsetFactor = 0.5 * Math.PI,
+    props: SearchLightProps,
   ) {
     super(lightsGroup);
+    if (props.radiusFactor !== undefined) this.radiusFactor = props.radiusFactor;
+    if (props.cycleTime !== undefined) this.cycleTime = props.cycleTime;
+    if (props.offsetFactor !== undefined) this.offsetFactor = props.offsetFactor;
   }
 
-  public static build(
-    radiusFactor?: number,
-    cycleTime?: number,
-    offsetFactor?: number,
-  ): LightsEffectBuilder {
-    return (lightsGroup) => new SearchLight(
-      lightsGroup,
-      radiusFactor,
-      cycleTime,
-      offsetFactor,
-    );
+  public static build(props: SearchLightProps): LightsEffectBuilder {
+    return (lightsGroup) => new SearchLight(lightsGroup, props);
   }
 
   beat(): void {

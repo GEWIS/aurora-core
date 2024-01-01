@@ -3,6 +3,19 @@ import { RgbColorSpecification } from '../color-definitions';
 import { LightsGroup } from '../entities';
 import { TrackPropertiesEvent } from '../../events/music-emitter-events';
 
+/**
+ * @property colors Colors of the lights
+ * @property ratio What percentage (on average) of the lights should be turned on
+ * @property length How many cycles the light should take to slowly turn off
+ * @property speed After how many ms (approximately) a ratio of lights should be turned on
+ */
+export interface SparkleProps {
+  colors: RgbColorSpecification[],
+  ratio?: number,
+  length?: number,
+  speed?: number,
+}
+
 export default class Sparkle extends LightsEffect {
   private beats: Date[];
 
@@ -10,21 +23,22 @@ export default class Sparkle extends LightsEffect {
 
   private previousTick = new Date();
 
+  private colors: RgbColorSpecification[];
+
+  private ratio = 0.2;
+
+  private length = 4;
+
+  private speed = 200;
+
   /**
    * @param lightsGroup The group of lights this effect will be applied to
-   * @param colors Color of the light (in wheel)
-   * @param ratio What percentage (on average) of the lights should be turned on
-   * @param length How many cycles the light should take to slowly turn off
-   * @param speed After how many ms (approximately) a ratio of lights should be turned on
+   * @param props
    * @param features
-   * @param parsColors Extended color palette (rgb)
    */
   constructor(
     lightsGroup: LightsGroup,
-    private colors: RgbColorSpecification[],
-    private ratio = 0.2,
-    private length = 4,
-    private speed = 200,
+    props: SparkleProps,
     features?: TrackPropertiesEvent,
   ) {
     super(lightsGroup, features);
@@ -34,18 +48,18 @@ export default class Sparkle extends LightsEffect {
       + lightsGroup.movingHeadRgbs.length;
     this.beats = new Array(nrFixtures).fill(new Date(0));
     this.colorIndices = new Array(nrFixtures).fill(0);
+
+    this.colors = props.colors;
+    if (props.ratio !== undefined) this.ratio = props.ratio;
+    if (props.length !== undefined) this.length = props.length;
+    if (props.speed !== undefined) this.speed = props.speed;
   }
 
-  public static build(
-    color: RgbColorSpecification[],
-    ratio?: number,
-    length?: number,
-    speed?: number,
-  ): LightsEffectBuilder<Sparkle> {
+  public static build(props: SparkleProps): LightsEffectBuilder<Sparkle> {
     return (
       lightsGroup: LightsGroup,
       features?: TrackPropertiesEvent,
-    ) => new Sparkle(lightsGroup, color, ratio, length, speed, features);
+    ) => new Sparkle(lightsGroup, props, features);
   }
 
   beat(): void {
