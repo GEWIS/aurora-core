@@ -7,6 +7,9 @@ import LightsGroupPars from './lights-group-pars';
 import LightsGroupMovingHeadRgbs from './lights-group-moving-head-rgbs';
 import LightsGroupMovingHeadWheels from './lights-group-moving-head-wheels';
 import LightsWheelChannelValue from './lights-wheel-channel-value';
+import {
+  LightsScene, LightsSceneMovingHeadRgb, LightsSceneMovingHeadWheel, LightsScenePars,
+} from './scenes';
 
 export { default as LightsGroup } from './lights-group';
 export { default as LightsPar } from './lights-par';
@@ -20,4 +23,5 @@ export const Entities = [
   LightsGroup, LightsPar, LightsMovingHeadRgb, LightsMovingHeadWheel,
   LightsGroupPars, LightsGroupMovingHeadRgbs, LightsGroupMovingHeadWheels,
   LightsWheelChannelValue,
+  LightsScene, LightsScenePars, LightsSceneMovingHeadRgb, LightsSceneMovingHeadWheel,
 ];

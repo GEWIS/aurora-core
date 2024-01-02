@@ -255,6 +255,21 @@ export default class RootLightsService {
     return this.getSingleLightGroupResponse(g.id);
   }
 
+  public async getLightsGroupPar(id: number): Promise<LightsGroupPars | null> {
+    const repository = dataSource.getRepository(LightsGroupPars);
+    return repository.findOne({ where: { id } });
+  }
+
+  public async getLightsGroupMovingHeadRgb(id: number): Promise<LightsGroupMovingHeadRgbs | null> {
+    const repository = dataSource.getRepository(LightsGroupMovingHeadRgbs);
+    return repository.findOne({ where: { id } });
+  }
+
+  public async getLightsGroupMovingHeadWheel(id: number): Promise<LightsGroupMovingHeadWheels | null> {
+    const repository = dataSource.getRepository(LightsGroupMovingHeadWheels);
+    return repository.findOne({ where: { id } });
+  }
+
   private toFixture(params: LightsFixtureParams): LightsFixture {
     return {
       name: params.name,

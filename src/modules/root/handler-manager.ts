@@ -16,6 +16,7 @@ import { User } from '../auth';
 import { BeatEvent, TrackChangeEvent } from '../events/music-emitter-events';
 import { CurrentlyPlayingTrackHandler, CenturionScreenHandler } from '../handlers/screen';
 import { PosterScreenHandler } from '../handlers/screen/poster';
+import { ScenesHandler } from '../handlers/lights/scenes-handler';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -99,6 +100,7 @@ export default class HandlerManager {
       new RandomEffectsHandler(),
       new SetEffectsHandler(),
       new DevelopEffectsHandler(),
+      new ScenesHandler(),
     ];
 
     // Register all handlers

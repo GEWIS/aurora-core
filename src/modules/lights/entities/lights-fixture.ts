@@ -64,6 +64,7 @@ export default abstract class LightsFixture extends BaseEntity {
    */
   public setOverrideDmx(relativeChannels: (number | null)[]) {
     this.overrideDmx = relativeChannels.concat(new Array(16).fill(null)).slice(0, 16);
+    this.valuesUpdatedAt = new Date();
   }
 
   /**
