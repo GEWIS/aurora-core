@@ -1,4 +1,4 @@
-import { AccessToken as SpotifyAccessToken } from '@spotify/web-api-ts-sdk';
+import { AccessToken as SpotifyAccessToken } from '@fostertheweb/spotify-web-sdk';
 import { Column } from 'typeorm';
 
 export default class AccessToken implements SpotifyAccessToken {

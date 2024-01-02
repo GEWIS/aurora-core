@@ -1,6 +1,6 @@
 import {
   AudioAnalysis, AudioFeatures, PlaybackState, Track,
-} from '@spotify/web-api-ts-sdk';
+} from '@fostertheweb/spotify-web-sdk';
 import SpotifyApiHandler from './spotify-api-handler';
 import { MusicEmitter } from '../events';
 import { BeatEvent, TrackChangeEvent, TrackPropertiesEvent } from '../events/music-emitter-events';

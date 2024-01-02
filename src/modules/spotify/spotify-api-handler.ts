@@ -1,4 +1,4 @@
-import { AccessToken, SpotifyApi } from '@spotify/web-api-ts-sdk';
+import { AccessToken, SpotifyApi } from '@fostertheweb/spotify-web-sdk';
 import { Repository } from 'typeorm';
 import { SpotifyUser } from './entities';
 import dataSource from '../../database';

@@ -4,7 +4,7 @@
     "incremental": true,
     "target": "es6",
     "module": "commonjs",
-    "outDir": "build",
+    "outDir": "dist",
 
     /* Strict Type-Checking Options */
     "strict": true,

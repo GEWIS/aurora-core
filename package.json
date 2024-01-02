@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@spotify/web-api-ts-sdk": "^1.1.2",
+    "@fostertheweb/spotify-web-sdk": "^1.2.3",
     "@tsoa/runtime": "^5.0.0",
     "@types/express-session": "^1.17.8",
     "axios": "^1.6.3",

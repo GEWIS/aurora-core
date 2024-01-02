@@ -1,6 +1,6 @@
 import {
   Beat, Section, Segment, Tatum,
-} from '@spotify/web-api-ts-sdk';
+} from '@fostertheweb/spotify-web-sdk';
 
 export interface BeatEvent {
   beat: Beat;
