@@ -98,6 +98,6 @@ export default class LightsPar extends LightsFixture {
       values[this.color.uvChannel - 1] = this.channelValues.uvChannel || 0;
     }
 
-    return values;
+    return this.applyDmxOverride(values);
   }
 }

@@ -98,6 +98,6 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
       values[this.strobeChannel - 1] = 220;
     }
 
-    return values;
+    return this.applyDmxOverride(values);
   }
 }

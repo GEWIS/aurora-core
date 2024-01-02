@@ -18,4 +18,22 @@ export default abstract class BaseLightsHandler extends BaseHandler<LightsGroup>
    * Always runs at a frequency of 40Hz.
    */
   abstract tick(): LightsGroup[];
+
+  public removeEntity(entity: LightsGroup) {
+    // Reset all the lights
+    entity.pars.forEach((f) => {
+      f.fixture.blackout();
+      f.fixture.clearOverrideDmx();
+    });
+    entity.movingHeadRgbs.forEach((f) => {
+      f.fixture.blackout();
+      f.fixture.clearOverrideDmx();
+    });
+    entity.movingHeadWheels.forEach((f) => {
+      f.fixture.blackout();
+      f.fixture.clearOverrideDmx();
+    });
+
+    super.removeEntity(entity);
+  }
 }

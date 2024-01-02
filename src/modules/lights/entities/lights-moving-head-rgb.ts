@@ -129,6 +129,6 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
       );
     }
 
-    return values;
+    return this.applyDmxOverride(values);
   }
 }

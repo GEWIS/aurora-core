@@ -18,6 +18,8 @@ export default abstract class LightsFixture extends BaseEntity {
 
   public valuesUpdatedAt: Date;
 
+  private overrideDmx: (number | null)[] = new Array(16).fill(null);
+
   @AfterLoad()
   afterLoad() {
     this.valuesUpdatedAt = new Date();
@@ -53,6 +55,37 @@ export default abstract class LightsFixture extends BaseEntity {
   disableStrobe() {
     this.strobeEnabled = false;
     this.valuesUpdatedAt = new Date();
+  }
+
+  /**
+   * Override any set relative DMX channels with the given values.
+   * Undefined if a channel should not be overriden
+   * @param relativeChannels
+   */
+  public setOverrideDmx(relativeChannels: (number | null)[]) {
+    this.overrideDmx = relativeChannels.concat(new Array(16).fill(null)).slice(0, 16);
+  }
+
+  /**
+   * Clear any overrides
+   */
+  public clearOverrideDmx() {
+    this.setOverrideDmx([]);
+  }
+
+  /**
+   * Given an array of length 16 with DMX values, replace any
+   * DMX channel value with its override if its not undefined
+   * @param dmxValues
+   * @protected
+   */
+  protected applyDmxOverride(dmxValues: number[]): number[] {
+    return dmxValues.map((v, i): number => {
+      if (this.overrideDmx[i] != null) {
+        return this.overrideDmx[i] as number;
+      }
+      return v;
+    });
   }
 
   /**
