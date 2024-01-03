@@ -69,7 +69,7 @@ export default class LightsControllerManager {
     oldValues: number[],
     newValues: number[],
   ): number[] {
-    const oldRelativePacket = oldValues.slice(p.firstChannel - 1, 16);
+    const oldRelativePacket = oldValues.slice(p.firstChannel - 1, p.firstChannel + 15);
     newValues.splice(p.firstChannel - 1, 16, ...oldRelativePacket);
     return newValues;
   }
@@ -125,7 +125,6 @@ export default class LightsControllerManager {
       let newValues = newControllerValues.get(g.controller.id) ?? this.constructNewValuesArray();
 
       g.pars
-        .filter((p) => this.hasUpdated(p.fixture.valuesUpdatedAt))
         .forEach((p) => {
           if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
             newValues = this.calculateNewDmxValues(p, newValues);
@@ -135,7 +134,6 @@ export default class LightsControllerManager {
         });
 
       g.movingHeadRgbs
-        .filter((p) => this.hasUpdated(p.fixture.valuesUpdatedAt))
         .forEach((p) => {
           if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
             newValues = this.calculateNewDmxValues(p, newValues);
@@ -145,7 +143,6 @@ export default class LightsControllerManager {
         });
 
       g.movingHeadWheels
-        .filter((p) => this.hasUpdated(p.fixture.valuesUpdatedAt))
         .forEach((p) => {
           if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
             newValues = this.calculateNewDmxValues(p, newValues);
