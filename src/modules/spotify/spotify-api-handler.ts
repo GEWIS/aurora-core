@@ -1,4 +1,4 @@
-import { AccessToken, SpotifyApi } from '@fostertheweb/spotify-web-sdk';
+import { AccessToken, ProvidedAccessTokenStrategy, SpotifyApi } from '@fostertheweb/spotify-web-sdk';
 import { Repository } from 'typeorm';
 import { SpotifyUser } from './entities';
 import dataSource from '../../database';
@@ -39,12 +39,42 @@ export default class SpotifyApiHandler {
   }
 
   /**
+   * Custom function to refresh the Spotify access token,
+   * primarily to also include the private key in the header
+   * @param clientId
+   * @param accessToken
+   * @private
+   */
+  private static async refreshAccessToken(
+    clientId: string,
+    accessToken: AccessToken,
+  ): Promise<AccessToken> {
+    const token = await SpotifyApiHandler.getAccessToken(accessToken.refresh_token, true);
+
+    if (token.expires && token.expires === -1) {
+      return token;
+    }
+
+    return { ...token, expires: Date.now() + token.expires_in * 1000 };
+  }
+
+  /**
+   * Create an Authorization Code flow API client that automatically refreshes tokens
+   * @param accessToken
+   * @private
+   */
+  private createSdk(accessToken: AccessToken): SpotifyApi {
+    const strategy = new ProvidedAccessTokenStrategy(process.env.SPOTIFY_CLIENT_ID || '', accessToken, SpotifyApiHandler.refreshAccessToken);
+    return new SpotifyApi(strategy);
+  }
+
+  /**
    * Get a Spotify API access token for the given Spotify user
    * @private
    * @param code
    * @param refresh
    */
-  public static async getAccessToken(code: string, refresh = true): Promise<AccessToken> {
+  public static async getAccessToken(code: string, refresh: boolean): Promise<AccessToken> {
     const content: { [key: string]: string } = {
       grant_type: refresh ? 'refresh_token' : 'authorization_code',
       code,
@@ -105,7 +135,7 @@ export default class SpotifyApiHandler {
 
     await this.unloadSpotifyUser();
 
-    this.sdk = SpotifyApi.withAccessToken(process.env.SPOTIFY_CLIENT_ID || '', accessToken);
+    this.sdk = this.createSdk(accessToken);
 
     const newToken = await this.sdk.getAccessToken();
     if (newToken) {
@@ -126,7 +156,7 @@ export default class SpotifyApiHandler {
   public async bindSpotifyUser(code: string) {
     const accessToken = await SpotifyApiHandler.getAccessToken(code, false);
 
-    this.sdk = SpotifyApi.withAccessToken(process.env.SPOTIFY_CLIENT_ID || '', accessToken);
+    this.sdk = this.createSdk(accessToken);
     const profile = await this.sdk.currentUser.profile();
 
     let spotifyUser = await this.repository.findOne({ where: { spotifyId: profile.id } });
