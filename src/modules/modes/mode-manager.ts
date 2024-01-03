@@ -24,6 +24,9 @@ export default class ModeManager {
   }
 
   public enableMode(modeClass: typeof BaseMode, mode: BaseMode) {
+    // If an instance of this mode already exist, destroy it before creating a new one
+    if (this.modes.has(modeClass)) this.disableMode(modeClass);
+
     this.modes.set(modeClass, mode);
   }
 
@@ -32,6 +35,8 @@ export default class ModeManager {
   }
 
   public disableMode(modeClass: typeof BaseMode) {
+    const instance = this.modes.get(modeClass);
+    if (instance) instance.destroy();
     return this.modes.delete(modeClass);
   }
 

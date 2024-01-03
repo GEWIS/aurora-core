@@ -2,7 +2,7 @@ import { LightsGroup } from '../lights/entities';
 import { Audio, Screen } from '../root/entities';
 import HandlerManager from '../root/handler-manager';
 
-export default class BaseMode {
+export default abstract class BaseMode {
   protected lights: LightsGroup[];
 
   protected screens: Screen[];
@@ -11,9 +11,11 @@ export default class BaseMode {
 
   protected handlerManager = HandlerManager.getInstance();
 
-  constructor(lights: LightsGroup[], screens: Screen[], audios: Audio[]) {
+  protected constructor(lights: LightsGroup[], screens: Screen[], audios: Audio[]) {
     this.lights = lights;
     this.screens = screens;
     this.audios = audios;
   }
+
+  abstract destroy(): void;
 }
