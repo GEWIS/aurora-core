@@ -57,12 +57,30 @@ export default class LightsControllerManager {
   }
 
   /**
+   * Given a fixture, the old DMX packet and the new DMX packet,
+   * copy the old values to the new packet
+   * @param p
+   * @param oldValues
+   * @param newValues
+   * @private
+   */
+  private reuseOldDmxValues(
+    p: LightsGroupPars | LightsGroupMovingHeadRgbs | LightsGroupMovingHeadWheels,
+    oldValues: number[],
+    newValues: number[],
+  ): number[] {
+    const oldRelativePacket = oldValues.slice(p.firstChannel - 1, 16);
+    newValues.splice(p.firstChannel - 1, 16, ...oldRelativePacket);
+    return newValues;
+  }
+
+  /**
    * Given a fixture, put the new DMX values in the correct spot in the packet
    * @param p
    * @param packet Array of 512 integers [0, 255]
    * @private
    */
-  private setDmxValues(
+  private calculateNewDmxValues(
     p: LightsGroupPars | LightsGroupMovingHeadRgbs | LightsGroupMovingHeadWheels,
     packet: number[],
   ) {
@@ -100,29 +118,46 @@ export default class LightsControllerManager {
   private tick() {
     const lightGroups = this.lightsHandlers.map((h) => h.tick());
 
+    const newControllerValues = new Map<number, number[]>();
+
     lightGroups.flat().forEach((g) => {
-      let oldValues = this.getOldValues(g.controller);
+      const oldValues = this.getOldValues(g.controller);
+      let newValues = newControllerValues.get(g.controller.id) ?? this.constructNewValuesArray();
 
       g.pars
         .filter((p) => this.hasUpdated(p.fixture.valuesUpdatedAt))
         .forEach((p) => {
-          oldValues = this.setDmxValues(p, oldValues);
+          if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
+            newValues = this.calculateNewDmxValues(p, newValues);
+          } else {
+            newValues = this.reuseOldDmxValues(p, oldValues, newValues);
+          }
         });
 
       g.movingHeadRgbs
         .filter((p) => this.hasUpdated(p.fixture.valuesUpdatedAt))
         .forEach((p) => {
-          oldValues = this.setDmxValues(p, oldValues);
+          if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
+            newValues = this.calculateNewDmxValues(p, newValues);
+          } else {
+            newValues = this.reuseOldDmxValues(p, oldValues, newValues);
+          }
         });
 
       g.movingHeadWheels
         .filter((p) => this.hasUpdated(p.fixture.valuesUpdatedAt))
         .forEach((p) => {
-          oldValues = this.setDmxValues(p, oldValues);
+          if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
+            newValues = this.calculateNewDmxValues(p, newValues);
+          } else {
+            newValues = this.reuseOldDmxValues(p, oldValues, newValues);
+          }
         });
 
-      this.lightsControllersValues.set(g.controller.id, oldValues);
+      newControllerValues.set(g.controller.id, newValues);
     });
+
+    this.lightsControllersValues = newControllerValues;
     this.previousTick = new Date();
     this.sendDMXValuesToController();
   }
