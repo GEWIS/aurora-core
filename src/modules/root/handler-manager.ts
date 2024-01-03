@@ -163,6 +163,8 @@ export default class HandlerManager {
       });
     } else {
       socket?.emit('handler_remove');
+      entity.currentHandler = '';
+      entity.save().catch((e) => console.error(e));
     }
   }
 
