@@ -16,6 +16,22 @@ export default abstract class LightsFixture extends BaseEntity {
   @Column({ type: 'tinyint', unsigned: true })
   public strobeChannel: number;
 
+  @Column({
+    type: 'varchar',
+    transformer: {
+      from(value: string | null): number[] | null {
+        if (value == null) return null;
+        return JSON.parse(value);
+      },
+      to(value: number[] | null): string | null {
+        if (value == null) return null;
+        return JSON.stringify(value);
+      },
+    },
+    nullable: true,
+  })
+  public resetChannelAndValue?: number[] | null;
+
   public valuesUpdatedAt: Date;
 
   private overrideDmx: (number | null)[] = new Array(16).fill(null);
@@ -25,9 +41,21 @@ export default abstract class LightsFixture extends BaseEntity {
     this.valuesUpdatedAt = new Date();
   }
 
+  protected shouldReset: Date | undefined;
+
   protected strobeEnabled = false;
 
   private strobeDisableEvent: NodeJS.Timeout | undefined;
+
+  /**
+   * Reset the fixture if possible.
+   * @return true if reset command can be sent. False otherwise
+   */
+  reset(): boolean {
+    if (this.resetChannelAndValue == null || this.resetChannelAndValue.length < 2) return false;
+    this.shouldReset = new Date();
+    return true;
+  }
 
   /**
    * How long the strobe needs to be enabled

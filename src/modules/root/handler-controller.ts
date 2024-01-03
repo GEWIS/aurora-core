@@ -1,6 +1,6 @@
 import { Controller, Path } from '@tsoa/runtime';
 import {
-  Body, Get, Post, Route,
+  Body, Get, Post, Route, Tags,
 } from 'tsoa';
 import HandlerManager from './handler-manager';
 import { Audio } from './entities';
@@ -9,6 +9,7 @@ import { LightsGroup } from '../lights/entities';
 import RootLightsService from './root-lights-service';
 
 @Route('handler')
+@Tags('Handlers')
 export class HandlerController extends Controller {
   private handlersManager: HandlerManager;
 
@@ -33,7 +34,11 @@ export class HandlerController extends Controller {
       this.setStatus(404);
       return;
     }
-    this.handlersManager.registerHandler(audio, params.name);
+
+    const found = this.handlersManager.registerHandler(audio, params.name);
+    if (!found) {
+      this.setStatus(400);
+    }
   }
 
   @Get('lights')
@@ -52,6 +57,10 @@ export class HandlerController extends Controller {
       this.setStatus(404);
       return;
     }
-    this.handlersManager.registerHandler(group, params.name);
+
+    const found = this.handlersManager.registerHandler(group, params.name);
+    if (!found) {
+      this.setStatus(400);
+    }
   }
 }

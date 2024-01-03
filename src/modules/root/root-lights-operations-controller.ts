@@ -11,7 +11,7 @@ interface GroupFixtureOverrideParams {
 
 @Route('lights')
 @Tags('Lights')
-export class RootLightsOverrideController extends Controller {
+export class RootLightsOperationsController extends Controller {
   private getGroups(): LightsGroup[] {
     const manager = HandlerManager.getInstance();
     return manager.getHandlers(LightsGroup)
@@ -30,6 +30,25 @@ export class RootLightsOverrideController extends Controller {
     chosenPar.fixture.setOverrideDmx(params.dmxValues);
   }
 
+  /**
+   * Perform the fixture's internal reset operation if possible. Do nothing otherwise
+   * @param id
+   */
+  @Post('group/par/{id}/reset')
+  public async resetGroupPar(id: number) {
+    const pars = this.getGroups().map((g) => g.pars).flat();
+    const chosenPar = pars.find((p) => p.id === id);
+    if (chosenPar === undefined) {
+      this.setStatus(404);
+      return;
+    }
+
+    const success = chosenPar.fixture.reset();
+    if (!success) {
+      this.setStatus(422);
+    }
+  }
+
   @Post('group/moving-head-rgb/{id}/override')
   public async setGroupMovingHeadRgbOverride(
     id: number,
@@ -45,6 +64,25 @@ export class RootLightsOverrideController extends Controller {
     chosenMovingHead.fixture.setOverrideDmx(params.dmxValues);
   }
 
+  /**
+   * Perform the fixture's internal reset operation if possible. Do nothing otherwise
+   * @param id
+   */
+  @Post('group/moving-head-rgb/{id}/reset')
+  public async resetGroupMovingHeadRgb(id: number) {
+    const movingHeadRgbs = this.getGroups().map((g) => g.movingHeadRgbs).flat();
+    const chosenMovingHead = movingHeadRgbs.find((p) => p.id === id);
+    if (chosenMovingHead === undefined) {
+      this.setStatus(404);
+      return;
+    }
+
+    const success = chosenMovingHead.fixture.reset();
+    if (!success) {
+      this.setStatus(422);
+    }
+  }
+
   @Post('group/moving-head-wheel/{id}/override')
   public async setGroupMovingHeadWheelOverride(
     id: number,
@@ -58,5 +96,24 @@ export class RootLightsOverrideController extends Controller {
     }
 
     chosenMovingHead.fixture.setOverrideDmx(params.dmxValues);
+  }
+
+  /**
+   * Perform the fixture's internal reset operation if possible. Do nothing otherwise
+   * @param id
+   */
+  @Post('group/moving-head-wheel/{id}/reset')
+  public async resetGroupMovingHeadWheel(id: number) {
+    const movingHeadWheels = this.getGroups().map((g) => g.movingHeadWheels).flat();
+    const chosenMovingHead = movingHeadWheels.find((p) => p.id === id);
+    if (chosenMovingHead === undefined) {
+      this.setStatus(404);
+      return;
+    }
+
+    const success = chosenMovingHead.fixture.reset();
+    if (!success) {
+      this.setStatus(422);
+    }
   }
 }

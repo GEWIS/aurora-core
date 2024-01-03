@@ -146,7 +146,7 @@ export default class HandlerManager {
    * @param entity
    * @param newHandler
    */
-  public registerHandler<T extends SubscribeEntity>(entity: T, newHandler: string | '') {
+  public registerHandler<T extends SubscribeEntity>(entity: T, newHandler: string | ''): boolean {
     const handlers = this.getHandlers(entity.constructor as typeof SubscribeEntity);
     handlers.forEach((handler) => {
       handler.removeEntity(entity);
@@ -155,17 +155,17 @@ export default class HandlerManager {
     const socket = this.io.sockets.sockets.get(entity.socketId || '');
 
     if (newHandler !== '') {
-      handlers.forEach((handler) => {
-        if (handler.constructor.name === newHandler) {
-          handler.registerEntity(entity);
-          socket?.emit('handler_set', newHandler);
-        }
-      });
+      const newHandlerObj = handlers.find((h) => h.constructor.name === newHandler);
+      if (newHandlerObj === undefined) return false;
+      newHandlerObj.registerEntity(entity);
+      socket?.emit('handler_set', newHandlerObj);
     } else {
       socket?.emit('handler_remove');
       entity.currentHandler = '';
       entity.save().catch((e) => console.error(e));
     }
+
+    return true;
   }
 
   /**

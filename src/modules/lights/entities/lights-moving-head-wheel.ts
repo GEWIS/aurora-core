@@ -69,7 +69,7 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
   }
 
   toDmx(): number[] {
-    const values: number[] = new Array(16).fill(0);
+    let values: number[] = new Array(16).fill(0);
 
     values[this.masterDimChannel - 1] = this.channelValues.masterDimChannel;
     values[this.strobeChannel - 1] = this.channelValues.masterDimChannel;
@@ -98,6 +98,19 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
       values[this.strobeChannel - 1] = 220;
     }
 
-    return this.applyDmxOverride(values);
+    values = this.applyDmxOverride(values);
+
+    if (this.shouldReset !== undefined) {
+      if ((new Date().getTime() - this.shouldReset.getTime()) > 5000) {
+        this.shouldReset = undefined;
+      }
+      if (this.resetChannelAndValue && this.resetChannelAndValue.length >= 2) {
+        const [channel, value] = this.resetChannelAndValue;
+        values[channel - 1] = value;
+        this.valuesUpdatedAt = new Date();
+      }
+    }
+
+    return values;
   }
 }

@@ -78,7 +78,7 @@ export default class LightsPar extends LightsFixture {
   toDmx(): number[] {
     if (this.strobeEnabled) return this.getStrobeDMX();
 
-    const values: number[] = new Array(16).fill(0);
+    let values: number[] = new Array(16).fill(0);
 
     values[this.masterDimChannel - 1] = this.currentValues.masterDimChannel;
     values[this.strobeChannel - 1] = this.channelValues.strobeChannel;
@@ -98,6 +98,19 @@ export default class LightsPar extends LightsFixture {
       values[this.color.uvChannel - 1] = this.channelValues.uvChannel || 0;
     }
 
-    return this.applyDmxOverride(values);
+    values = this.applyDmxOverride(values);
+
+    if (this.shouldReset !== undefined) {
+      if ((new Date().getTime() - this.shouldReset.getTime()) > 5000) {
+        this.shouldReset = undefined;
+      }
+      if (this.resetChannelAndValue && this.resetChannelAndValue.length >= 2) {
+        const [channel, value] = this.resetChannelAndValue;
+        values[channel - 1] = value;
+        this.valuesUpdatedAt = new Date();
+      }
+    }
+
+    return values;
   }
 }
