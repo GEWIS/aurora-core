@@ -10,9 +10,9 @@ import {
 } from '../../lights/color-definitions';
 import { MusicEmitter } from '../../events';
 import { TrackChangeEvent } from '../../events/music-emitter-events';
-import { CenturionScreenHandler } from '../../handlers/screen/centurion-screen-handler';
+import { CenturionScreenHandler } from '../../handlers/screen';
 import { LightsEffectBuilder } from '../../lights/effects/lights-effect';
-import { Wave } from '../../lights/effects/wave';
+import Wave from '../../lights/effects/wave';
 import Sparkle from '../../lights/effects/sparkle';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';

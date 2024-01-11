@@ -17,6 +17,7 @@ import { BeatEvent, TrackChangeEvent } from '../events/music-emitter-events';
 import { CurrentlyPlayingTrackHandler, CenturionScreenHandler } from '../handlers/screen';
 import { PosterScreenHandler } from '../handlers/screen/poster';
 import { ScenesHandler } from '../handlers/lights/scenes-handler';
+import EffectSequenceHandler from '../handlers/lights/effect-sequence-handler';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -101,6 +102,7 @@ export default class HandlerManager {
       new SetEffectsHandler(),
       new DevelopEffectsHandler(),
       new ScenesHandler(),
+      new EffectSequenceHandler(),
     ];
 
     // Register all handlers
@@ -161,6 +163,7 @@ export default class HandlerManager {
       socket?.emit('handler_set', newHandlerObj);
     } else {
       socket?.emit('handler_remove');
+      // eslint-disable-next-line no-param-reassign
       entity.currentHandler = '';
       entity.save().catch((e) => console.error(e));
     }

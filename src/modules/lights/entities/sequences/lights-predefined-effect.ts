@@ -1,0 +1,42 @@
+import {
+  Column, Entity, JoinColumn, ManyToOne,
+} from 'typeorm';
+import BaseEntity from '../../../root/entities/base-entity';
+import LightsGroup from '../lights-group';
+
+@Entity()
+export class LightsPredefinedEffect extends BaseEntity {
+  /**
+   * Either a Spotify Track URI (spotify:track:<id>) or a local identifier (local:<id>)
+   */
+  @Column()
+  public trackUri: string;
+
+  @ManyToOne(() => LightsGroup)
+  @JoinColumn()
+  public lightGroups: LightsGroup[];
+
+  /**
+   * Timestamp within the song at which this effect should become active (in ms)
+   */
+  @Column()
+  public timestamp: number;
+
+  /**
+   * Number of ms this effect should stay active
+   */
+  @Column()
+  public duration: number;
+
+  /**
+   * Constructor class name of the effect
+   */
+  @Column()
+  public effect: string;
+
+  /**
+   * Props of the given effect
+   */
+  @Column()
+  public effectProps: string;
+}

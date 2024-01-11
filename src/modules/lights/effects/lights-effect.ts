@@ -7,7 +7,7 @@ export type LightsEffectBuilder<T extends LightsEffect = LightsEffect> = (
 ) => T;
 
 export default abstract class LightsEffect {
-  protected lightsGroup: LightsGroup;
+  public lightsGroup: LightsGroup;
 
   protected features?: TrackPropertiesEvent;
 

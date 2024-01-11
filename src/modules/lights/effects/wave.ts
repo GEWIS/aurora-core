@@ -8,7 +8,7 @@ export interface WaveProps {
   cycleTime?: number,
 }
 
-export class Wave extends LightsEffect {
+export default class Wave extends LightsEffect {
   private cycleStartTick: Date = new Date();
 
   private color: RgbColorSpecification;

@@ -1,6 +1,6 @@
 import EffectsHandler from './effects-handler';
 import { LightsGroup } from '../../lights/entities';
-import { Wave } from '../../lights/effects/wave';
+import Wave from '../../lights/effects/wave';
 import { rgbColorDefinitions } from '../../lights/color-definitions';
 import { SearchLight } from '../../lights/effects';
 
