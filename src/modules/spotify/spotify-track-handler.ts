@@ -114,7 +114,8 @@ export default class SpotifyTrackHandler {
 
     const state = await this.api.client.player.getCurrentlyPlayingTrack();
 
-    if (state && state.currently_playing_type === 'track' && (!this.playState || this.playState.item?.id !== state.item?.id)) {
+    // If Spotify started playing a track, starts playing a new track or resumes playing audio...
+    if (state && state.currently_playing_type === 'track' && (!this.playState || this.playState.item?.id !== state.item?.id || (!this.playState.is_playing && state.is_playing))) {
       this.currentlyPlayingFeatures = await this.api.client.tracks
         .audioFeatures(state.item.id);
       this.currentlyPlayingAnalysis = await this.api.client.tracks
@@ -128,8 +129,10 @@ export default class SpotifyTrackHandler {
         title: item.name,
         artists: item.artists.map((a) => a.name),
         cover: item.album.images[0].url,
+        trackURI: item.uri,
       }] as TrackChangeEvent[]);
 
+      // eslint-disable-next-line no-console
       console.log(`Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name}`);
     }
 
@@ -137,6 +140,9 @@ export default class SpotifyTrackHandler {
       this.stopBeatEvents();
       this.currentlyPlayingFeatures = undefined;
       this.currentlyPlayingAnalysis = undefined;
+      this.musicEmitter.emitSpotify('stop');
+      // eslint-disable-next-line no-console
+      console.log('Spotify paused/stopped');
     }
 
     this.playState = state;
