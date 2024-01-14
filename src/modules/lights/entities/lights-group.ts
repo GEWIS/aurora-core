@@ -28,7 +28,7 @@ export default class LightsGroup extends SubscribeEntity {
 
   public blackout() {
     this.pars.forEach((par) => par.fixture.blackout());
-    // this.movingHeadWheels.forEach((par) => par.movingHead.blackout());
-    // this.movingHeadRgbs.forEach((par) => par.movingHead.blackout());
+    this.movingHeadWheels.forEach((par) => par.fixture.blackout());
+    this.movingHeadRgbs.forEach((par) => par.fixture.blackout());
   }
 }

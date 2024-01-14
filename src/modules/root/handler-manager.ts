@@ -107,7 +107,7 @@ export default class HandlerManager {
       new SetEffectsHandler(),
       new DevelopEffectsHandler(),
       new ScenesHandler(),
-      new EffectSequenceHandler(),
+      new EffectSequenceHandler(musicEmitter),
     ];
 
     // Register all handlers
@@ -194,8 +194,9 @@ export default class HandlerManager {
    * @param event
    */
   public changeTrack(event: TrackChangeEvent[]) {
-    const handlers = this.getHandlers(Screen) as BaseScreenHandler[];
+    const handlers = this.getHandlers();
     handlers.forEach((h) => {
+      // @ts-ignore
       if (h.changeTrack) h.changeTrack(event);
     });
   }

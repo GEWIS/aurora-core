@@ -129,11 +129,12 @@ export default class SpotifyTrackHandler {
         title: item.name,
         artists: item.artists.map((a) => a.name),
         cover: item.album.images[0].url,
+        startTime: new Date(new Date().getTime() - state.progress_ms),
         trackURI: item.uri,
       }] as TrackChangeEvent[]);
 
       // eslint-disable-next-line no-console
-      console.log(`Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name}`);
+      console.log(`Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name} (${item.uri})`);
     }
 
     if ((!state || !state.is_playing) && this.playState && this.playState.is_playing) {

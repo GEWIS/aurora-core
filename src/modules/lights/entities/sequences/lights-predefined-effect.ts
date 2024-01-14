@@ -1,5 +1,5 @@
 import {
-  Column, Entity, JoinColumn, ManyToOne,
+  Column, Entity, ManyToMany, JoinTable,
 } from 'typeorm';
 import BaseEntity from '../../../root/entities/base-entity';
 import LightsGroup from '../lights-group';
@@ -12,8 +12,8 @@ export class LightsPredefinedEffect extends BaseEntity {
   @Column()
   public trackUri: string;
 
-  @ManyToOne(() => LightsGroup)
-  @JoinColumn()
+  @ManyToMany(() => LightsGroup, { cascade: true })
+  @JoinTable()
   public lightGroups: LightsGroup[];
 
   /**

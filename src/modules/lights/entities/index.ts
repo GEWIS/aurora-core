@@ -10,6 +10,7 @@ import LightsWheelChannelValue from './lights-wheel-channel-value';
 import {
   LightsScene, LightsSceneMovingHeadRgb, LightsSceneMovingHeadWheel, LightsScenePars,
 } from './scenes';
+import { LightsPredefinedEffect } from './sequences/lights-predefined-effect';
 
 export { default as LightsGroup } from './lights-group';
 export { default as LightsPar } from './lights-par';
@@ -24,4 +25,5 @@ export const Entities = [
   LightsGroupPars, LightsGroupMovingHeadRgbs, LightsGroupMovingHeadWheels,
   LightsWheelChannelValue,
   LightsScene, LightsScenePars, LightsSceneMovingHeadRgb, LightsSceneMovingHeadWheel,
+  LightsPredefinedEffect,
 ];
