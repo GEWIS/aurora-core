@@ -1,5 +1,6 @@
 import { Namespace } from 'socket.io';
 import BaseAudioHandler from '../base-audio-handler';
+import { MusicEmitter } from '../../events';
 
 export default class SimpleAudioHandler extends BaseAudioHandler {
   private socket: Namespace;
@@ -10,8 +11,8 @@ export default class SimpleAudioHandler extends BaseAudioHandler {
 
   private onSyncAudioTimings: ((params: { startTime: number, timestamp: number }) => void)[] = [];
 
-  constructor(socket: Namespace) {
-    super();
+  constructor(socket: Namespace, musicEmitter: MusicEmitter) {
+    super(musicEmitter);
     this.socket = socket;
 
     this.socket.on('connection', (sc) => {
@@ -71,11 +72,13 @@ export default class SimpleAudioHandler extends BaseAudioHandler {
     if (onPlaying) {
       this.onStartedPlayingHandlers.push(onPlaying);
     }
+    this.setPlaying();
 
     this.socket.emit('play_audio', startTime);
   }
 
   public stop() {
+    this.setNoLongerPlaying();
     this.socket.emit('stop_audio');
   }
 

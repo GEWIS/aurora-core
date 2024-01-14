@@ -1,14 +1,13 @@
 import { EventEmitter } from 'node:events';
-import HandlerManager from '../root/handler-manager';
-import { Audio } from '../root/entities';
+// TODO: Fix cyclical dependency
+// eslint-disable-next-line import/no-cycle
 import BaseAudioHandler from '../handlers/base-audio-handler';
-import { BeatEvent, TrackChangeEvent } from './music-emitter-events';
 
 export class MusicEmitter extends EventEmitter {
-  constructor(private handlerManager: HandlerManager) {
-    super();
-    this.on('beat', this.handleBeat.bind(this));
-    this.on('change_track', this.handleChangeTrack.bind(this));
+  private audioHandlers: BaseAudioHandler[] = [];
+
+  public registerAudioHandler(handler: BaseAudioHandler) {
+    this.audioHandlers.push(handler);
   }
 
   /**
@@ -36,22 +35,13 @@ export class MusicEmitter extends EventEmitter {
    * @private
    */
   private forwardOnAudioNotPlaying(eventName: string, ...args: any[]) {
-    const handlers = this.handlerManager.getHandlers(Audio) as BaseAudioHandler[];
-    if (handlers.some((handler) => handler.entities
-      .some((audio) => audio.playing))) return;
-
+    const someAudioPlaying = this.audioHandlers.some((h) => h.entities
+      .some((a) => a.playing));
+    if (someAudioPlaying) return;
     this.emit(eventName, ...args);
   }
 
   private forward(eventName: string, ...args: any[]) {
     this.emit(eventName, ...args);
-  }
-
-  private handleBeat(event: BeatEvent) {
-    this.handlerManager.beat(event);
-  }
-
-  private handleChangeTrack(event: TrackChangeEvent[]) {
-    this.handlerManager.changeTrack(event);
   }
 }

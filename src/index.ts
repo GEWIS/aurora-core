@@ -20,10 +20,10 @@ async function createApp(): Promise<void> {
   const socketConnectionEmitter = new SocketConnectionEmitter();
   const io = createWebsocket(httpServer, socketConnectionEmitter);
 
-  const handlerManager = HandlerManager.getInstance(io);
-  await handlerManager.init(socketConnectionEmitter);
+  const musicEmitter = new MusicEmitter();
 
-  const musicEmitter = new MusicEmitter(handlerManager);
+  const handlerManager = HandlerManager.getInstance(io, musicEmitter);
+  await handlerManager.init(socketConnectionEmitter);
   const lightsControllerManager = new LightsControllerManager(io.of('/lights'), handlerManager, musicEmitter);
   const modeManager = ModeManager.getInstance();
   modeManager.init(musicEmitter);

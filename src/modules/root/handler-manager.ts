@@ -18,6 +18,7 @@ import { CurrentlyPlayingTrackHandler, CenturionScreenHandler } from '../handler
 import { PosterScreenHandler } from '../handlers/screen/poster';
 import { ScenesHandler } from '../handlers/lights/scenes-handler';
 import EffectSequenceHandler from '../handlers/lights/effect-sequence-handler';
+import { MusicEmitter } from '../events';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -95,7 +96,11 @@ export default class HandlerManager {
    */
   private constructor(
     private io: Server,
+    private musicEmitter: MusicEmitter,
   ) {
+    this.musicEmitter.on('beat', this.beat.bind(this));
+    this.musicEmitter.on('change_track', this.changeTrack.bind(this));
+
     // Create all light handlers
     const lightsHandlers: BaseLightsHandler[] = [
       new RandomEffectsHandler(),
@@ -107,7 +112,7 @@ export default class HandlerManager {
 
     // Register all handlers
     this._handlers.set(Audio, [
-      new SimpleAudioHandler(io.of('/audio')),
+      new SimpleAudioHandler(io.of('/audio'), this.musicEmitter),
     ] as BaseAudioHandler[]);
     this._handlers.set(LightsGroup, lightsHandlers);
     this._handlers.set(Screen, [
@@ -121,14 +126,16 @@ export default class HandlerManager {
    * Get the current instance. Parameters are only necessary if it is
    * the first time an instance is requested and a new object should be created
    * @param io
+   * @param musicEmitter
    */
   public static getInstance(
     io?: Server,
+    musicEmitter?: MusicEmitter,
   ) {
-    if (this.instance == null && (io === undefined)) {
+    if (this.instance == null && (io === undefined || musicEmitter === undefined)) {
       throw new Error('Not all parameters provided to initialize');
     } else if (this.instance == null) {
-      this.instance = new HandlerManager(io!);
+      this.instance = new HandlerManager(io!, musicEmitter!);
     }
     return this.instance;
   }

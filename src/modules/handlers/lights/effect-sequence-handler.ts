@@ -153,7 +153,7 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
    */
   tick(): LightsGroup[] {
     // Remove any expired events
-    const currentMs = new Date().getTime() - this.sequenceStart.getTime();
+    const currentMs = new Date().getTime() - (this.sequenceStart?.getTime() ?? 0);
     const expiredEffects = this.activeEffects.filter((e) => e.endMs <= currentMs);
     // blackout the lights to prevent the lights from staying on afterwards
     expiredEffects.forEach((e) => e.effect.lightsGroup.blackout());

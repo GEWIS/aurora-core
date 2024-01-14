@@ -151,14 +151,17 @@ export default class SpotifyTrackHandler {
   private async syncBeat(event: BeatEvent) {
     if (!this.playState || !this.playState.is_playing) return;
 
-    let beat = '';
+    if (process.env.LOG_AUDIO_BEATS === 'true') {
+      let beat = '';
 
-    if (this.ping) beat += 'beat:   . ';
-    if (!this.ping) beat += 'beat:  .  ';
-    this.ping = !this.ping;
+      if (this.ping) beat += 'beat:   . ';
+      if (!this.ping) beat += 'beat:  .  ';
+      this.ping = !this.ping;
 
-    beat += `: ${event.beat.start} (${event.beat.confidence}) - ${event.section?.start} - ${event.section?.loudness}`;
-    console.log(beat);
+      beat += `: ${event.beat.start} (${event.beat.confidence}) - ${event.section?.start} - ${event.section?.loudness}`;
+      // eslint-disable-next-line no-console
+      console.log(beat);
+    }
 
     this.musicEmitter.emitSpotify('beat', event);
   }
