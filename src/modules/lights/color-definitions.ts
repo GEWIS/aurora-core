@@ -54,7 +54,7 @@ export const rgbColorDefinitions: RgbColorSet = {
       uvChannel: 0,
     },
     alternative: 'red',
-    complementary: ['blue', 'green', 'yellow', 'lightblue', 'purple', 'cyan', 'gold', ' lime'],
+    complementary: ['blue', 'green', 'yellow', 'lightblue', 'purple', 'cyan', 'gold', 'lime'],
   },
   green: {
     definition: {
@@ -67,7 +67,7 @@ export const rgbColorDefinitions: RgbColorSet = {
       uvChannel: 0,
     },
     alternative: 'green',
-    complementary: ['red', 'blue', ' yellow', 'lightblue', 'orange', 'rosered', 'purple', 'cyan', 'pink', 'gold', 'brown', 'lightpink'],
+    complementary: ['red', 'blue', 'yellow', 'lightblue', 'orange', 'rosered', 'purple', 'cyan', 'pink', 'gold', 'brown', 'lightpink'],
   },
   blue: {
     definition: {
