@@ -1,12 +1,32 @@
-import LightsEffect, { LightsEffectBuilder } from './lights-effect';
+import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
 import { LightsGroup } from '../entities';
 import { RgbColor, rgbColorDefinitions } from '../color-definitions';
 
 export interface WaveProps {
+  /**
+   * Color of the lights
+   */
   color: RgbColor,
+
+  /**
+   * Relative size of the wave
+   * @minimum 0
+   * @maximum 1
+   */
   size?: number,
+
+  /**
+   * How many ms each cycle of the wave takes
+   * @isInt
+   * @minimum 0
+   */
   cycleTime?: number,
 }
+
+export type WaveCreateParams = BaseLightsEffectCreateParams & {
+  type: 'Wave';
+  props: WaveProps;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const DEFAULT_SIZE = 1;

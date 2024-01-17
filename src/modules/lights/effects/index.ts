@@ -1,9 +1,9 @@
-import BeatFadeOut from './beat-fade-out';
-import SearchLight from './search-light';
-import SingleFlood from './single-flood';
-import Sparkle from './sparkle';
-import Strobe from './strobe';
-import Wave from './wave';
+import BeatFadeOut, { BeatFadeOutCreateParams } from './beat-fade-out';
+import SearchLight, { SearchLightCreateParams } from './search-light';
+import SingleFlood, { SingleFloodCreateParams } from './single-flood';
+import Sparkle, { SparkleCreateParams } from './sparkle';
+import Strobe, { StrobeCreateParams } from './strobe';
+import Wave, { WaveCreateParams } from './wave';
 
 export { default as BeatFadeOut } from './beat-fade-out';
 export { default as Strobe } from './strobe';
@@ -11,5 +11,8 @@ export { default as SearchLight } from './search-light';
 export { default as SingleFlood } from './single-flood';
 export { default as Sparkle } from './sparkle';
 export { default as Wave } from './wave';
+
+export type LightsEffectsCreateParams = BeatFadeOutCreateParams | SearchLightCreateParams
+| SingleFloodCreateParams | SparkleCreateParams | StrobeCreateParams | WaveCreateParams;
 
 export const LIGHTS_EFFECTS = [BeatFadeOut, SearchLight, SingleFlood, Sparkle, Strobe, Wave];

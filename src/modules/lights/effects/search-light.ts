@@ -1,16 +1,31 @@
-import LightsEffect, { LightsEffectBuilder } from './lights-effect';
+import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../entities';
 
-/**
- * @property radiusFactor Radius of the search light
- * @property cycleTime Time for the moving head to go around (in milliseconds)
- * @property offsetFactor What phase the lights should move apart from each other. 0 for synchronous
- */
 export interface SearchLightProps {
+  /**
+   * Radius of the search light
+   * @isInt
+   * @minimum 0
+   */
   radiusFactor?: number;
+
+  /**
+   * Time for the moving head to go around (in milliseconds)
+   * @isInt must be an integer
+   * @minimum 0 must be positive
+   */
+
   cycleTime?: number;
+  /**
+   * What phase the lights should move apart from each other. 0 for synchronous
+   */
   offsetFactor?: number;
 }
+
+export type SearchLightCreateParams = BaseLightsEffectCreateParams & {
+  type: 'SearchLight';
+  props: SearchLightProps;
+};
 
 const DEFAULT_RADIUS_FACTOR = 1;
 const DEFAULT_CYCLE_TIME = 4000;

@@ -6,6 +6,8 @@ export type LightsEffectBuilder<P = {}, T extends LightsEffect<P> = LightsEffect
   features?: TrackPropertiesEvent
 ) => T;
 
+export type BaseLightsEffectCreateParams = {};
+
 export default abstract class LightsEffect<P = {}> {
   public lightsGroup: LightsGroup;
 

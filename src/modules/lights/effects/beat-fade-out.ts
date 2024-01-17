@@ -1,19 +1,30 @@
-import LightsEffect, { LightsEffectBuilder } from './lights-effect';
+import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
 import { BeatEvent, TrackPropertiesEvent } from '../../events/music-emitter-events';
 import { LightsGroup } from '../entities';
 import { RgbColor, rgbColorDefinitions } from '../color-definitions';
 
-/**
- * @property colors One or more colors that should be shown
- * @property enableFade Whether the lights should be turned off using a fade effect
- * on each beat
- * @property addBlacks If a "black" color should be added
- */
 export interface BeatFadeOutProps {
+  /**
+   * One or more colors that should be shown
+   */
   colors: RgbColor[],
+
+  /**
+   * Whether the lights should be turned off using a fade effect
+   * on each beat
+   */
   enableFade?: boolean;
+
+  /**
+   * If a "black" color should be added
+   */
   addBlacks?: boolean;
 }
+
+export type BeatFadeOutCreateParams = BaseLightsEffectCreateParams & {
+  type: 'BeatFadeOut';
+  props: BeatFadeOutProps;
+};
 
 export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
   private phase = 0;

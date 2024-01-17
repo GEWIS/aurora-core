@@ -1,4 +1,4 @@
-import LightsEffect, { LightsEffectBuilder } from './lights-effect';
+import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
 import { LightsGroup } from '../entities';
 import { rgbColorDefinitions } from '../color-definitions';
 
@@ -7,8 +7,18 @@ const KEEP_ON_TIME = 100;
 const DEFAULT_DIM_MILLISECONDS = 500;
 
 export interface SingleFloodProps {
+  /**
+   * In how many milliseconds the lights should turn off with a dim effect
+   * @isInt
+   * @minimum 0
+   */
   dimMilliseconds?: number,
 }
+
+export type SingleFloodCreateParams = BaseLightsEffectCreateParams & {
+  type: 'SingleFlood';
+  props: SingleFloodProps;
+};
 
 export default class SingleFlood extends LightsEffect<SingleFloodProps> {
   private effectStartTime = new Date();

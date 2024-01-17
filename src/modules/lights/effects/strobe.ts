@@ -1,13 +1,20 @@
-import LightsEffect, { LightsEffectBuilder } from './lights-effect';
+import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
 import { LightsGroup } from '../entities';
 import { TrackPropertiesEvent } from '../../events/music-emitter-events';
 
 export interface StrobeProps {
   /**
    * Duration in milliseconds
+   * @isInt
+   * @minimum 0
    */
   durationMs?: number;
 }
+
+export type StrobeCreateParams = BaseLightsEffectCreateParams & {
+  type: 'Strobe';
+  props: StrobeProps
+};
 
 export default class Strobe extends LightsEffect<StrobeProps> {
   constructor(lightsGroup: LightsGroup, props: StrobeProps, features?: TrackPropertiesEvent) {

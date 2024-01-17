@@ -123,7 +123,6 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
    * @param event
    */
   beat(event: BeatEvent): void {
-    console.log(this.activeEffects);
     this.activeEffects.forEach(({ effect }) => effect.beat(event));
     this.sequenceStart = new Date(new Date().getTime() - event.beat.start * 1000);
   }
@@ -164,7 +163,6 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
    * @param event
    */
   changeTrack([event]: TrackChangeEvent[]): void {
-    console.log(this.entities.length);
     if (this.entities.length === 0) return;
 
     this.stopSequence(true);
