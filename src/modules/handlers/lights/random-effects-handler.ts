@@ -20,6 +20,15 @@ export default class RandomEffectsHandler extends EffectsHandler {
    */
   private assignRandomEffect(entity: LightsGroup) {
     const { colorSpecs } = getTwoComplementaryRgbColors();
+
+    // Destroy the existing effect(s)
+    const effect = this.groupEffects.get(entity);
+    if (effect && Array.isArray(effect)) {
+      effect.forEach((e) => e.destroy());
+    } else if (effect) {
+      effect.destroy();
+    }
+
     // We currently have only one effect, so that makes our choice easy
     this.groupEffects.set(entity, new BeatFadeOut(
       entity,

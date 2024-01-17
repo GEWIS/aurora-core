@@ -141,7 +141,10 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
     const songProgressionPreviousTick = this.lastTick.getTime() - this.sequenceStart.getTime();
     const expiredEffects = this.activeEffects.filter((e) => e.endMs <= songProgression);
     // Blackout the lights to prevent the lights from staying on afterwards
-    expiredEffects.forEach((e) => e.effect.lightsGroup.blackout());
+    expiredEffects.forEach((e) => {
+      e.effect.lightsGroup.blackout();
+      e.effect.destroy();
+    });
 
     const expiredEffectIndices = expiredEffects.map((e) => e.id);
     this.activeEffects = this.activeEffects.filter((e) => !expiredEffectIndices.includes(e.id));
@@ -149,13 +152,6 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
     const effectsToStart = this.events
       .filter((e) => e.startMs > songProgressionPreviousTick && e.startMs <= songProgression);
     effectsToStart.forEach((e) => this.startEffect(e));
-
-    if (expiredEffects.length > 0) {
-      console.log(`Expired effects: ${expiredEffects}`);
-    }
-    if (effectsToStart.length > 0) {
-      console.log(`Started effects: ${effectsToStart}`);
-    }
 
     this.lastTick = new Date();
 

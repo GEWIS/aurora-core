@@ -1,25 +1,39 @@
 import LightsEffect, { LightsEffectBuilder } from './lights-effect';
 import { LightsGroup } from '../entities';
-import { RgbColor, rgbColorDefinitions } from '../color-definitions';
+import { TrackPropertiesEvent } from '../../events/music-emitter-events';
+
+export interface StrobeProps {
+  /**
+   * Duration in milliseconds
+   */
+  durationMs?: number;
+}
 
 export default class Strobe extends LightsEffect {
-  private enabled = false;
+  private props: StrobeProps;
+
+  constructor(lightsGroup: LightsGroup, props: StrobeProps, features?: TrackPropertiesEvent) {
+    super(lightsGroup, features);
+    this.props = props;
+
+    this.lightsGroup.pars.forEach((p) => {
+      p.fixture.enableStrobe(props.durationMs);
+    });
+  }
+
+  destroy(): void {
+    this.lightsGroup.pars.forEach((p) => {
+      p.fixture.disableStrobe();
+    });
+  }
 
   beat(): void {}
 
   tick(): LightsGroup {
-    console.log('Strobe tick!');
-    if (!this.enabled) {
-      this.lightsGroup.pars.forEach((par) => {
-        par.fixture.setColor(rgbColorDefinitions[RgbColor.BLINDINGWHITE].definition);
-        par.fixture.setMasterDimmer(255);
-        par.fixture.enableStrobe();
-      });
-    }
     return this.lightsGroup;
   }
 
-  public static build(): LightsEffectBuilder {
-    return (lightsGroup, features) => new Strobe(lightsGroup, features);
+  public static build(props: StrobeProps): LightsEffectBuilder {
+    return (lightsGroup, features) => new Strobe(lightsGroup, props, features);
   }
 }

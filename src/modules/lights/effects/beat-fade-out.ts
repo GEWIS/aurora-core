@@ -48,6 +48,8 @@ export default class BeatFadeOut extends LightsEffect {
     ) => new BeatFadeOut(lightsGroup, props, features);
   }
 
+  destroy(): void {}
+
   beat(event: BeatEvent): void {
     this.lastBeat = new Date().getTime();
     this.beatLength = event.beat.duration * 1000;

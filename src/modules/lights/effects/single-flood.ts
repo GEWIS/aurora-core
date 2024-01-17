@@ -20,8 +20,9 @@ export default class SingleFlood extends LightsEffect {
     this.props = props;
   }
 
-  beat(): void {
-  }
+  destroy(): void {}
+
+  beat(): void {}
 
   public static build(props: SingleFloodProps = {}): LightsEffectBuilder {
     return (lightsGroup) => new SingleFlood(lightsGroup, props);

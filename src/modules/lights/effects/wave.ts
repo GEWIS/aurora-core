@@ -8,6 +8,7 @@ export interface WaveProps {
   cycleTime?: number,
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const DEFAULT_SIZE = 1;
 const DEFAULT_CYCLE_TIME = 1000;
 
@@ -24,6 +25,8 @@ export default class Wave extends LightsEffect {
   public static build(props: WaveProps): LightsEffectBuilder {
     return (lightsGroup) => new Wave(lightsGroup, props);
   }
+
+  destroy(): void {}
 
   beat(): void {}
 

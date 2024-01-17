@@ -37,8 +37,9 @@ export default class SearchLight extends LightsEffect {
     return (lightsGroup) => new SearchLight(lightsGroup, props);
   }
 
-  beat(): void {
-  }
+  destroy(): void {}
+
+  beat(): void {}
 
   private getProgression(currentTick: Date) {
     const cycleTime = this.props.cycleTime ?? DEFAULT_CYCLE_TIME;

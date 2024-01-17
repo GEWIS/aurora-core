@@ -16,6 +16,10 @@ export default abstract class LightsEffect {
     this.features = features;
   }
 
+  /**
+   * Clean up effect when it is destroyed
+   */
+  abstract destroy(): void;
   abstract tick(): LightsGroup;
   abstract beat(event: BeatEvent): void;
 }

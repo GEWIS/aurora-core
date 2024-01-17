@@ -57,8 +57,9 @@ export default class Sparkle extends LightsEffect {
     ) => new Sparkle(lightsGroup, props, features);
   }
 
-  beat(): void {
-  }
+  destroy(): void {}
+
+  beat(): void {}
 
   private getProgression(beat: Date) {
     const speed = this.props.cycleTime ?? DEFAULT_CYCLE_TIME;
