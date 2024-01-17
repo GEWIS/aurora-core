@@ -1,20 +1,40 @@
-import LightsEffect, { LightsEffectBuilder } from './lights-effect';
+import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
 import { RgbColor, rgbColorDefinitions } from '../color-definitions';
 import { LightsGroup } from '../entities';
 import { TrackPropertiesEvent } from '../../events/music-emitter-events';
 
-/**
- * @property colors Colors of the lights
- * @property ratio What percentage (on average) of the lights should be turned on
- * @property length How many cycles the light should take to slowly turn off
- * @property cycleTime After how many ms (approximately) a ratio of lights should be turned on
- */
 export interface SparkleProps {
+  /**
+   * Colors of the lights
+   */
   colors: RgbColor[],
+
+  /**
+   * What percentage (on average) of the lights should be turned on
+   * @minimum 0
+   * @maximum 1
+   */
   ratio?: number,
+
+  /**
+   * How many ticks the light should take to slowly turn off
+   * @isInt
+   * @minimum 1
+   */
   length?: number,
+
+  /**
+   * After how many ms (approximately) a ratio of lights should be turned on
+   * @isInt
+   * @minimum 0
+   */
   cycleTime?: number,
 }
+
+export type SparkleCreateParams = BaseLightsEffectCreateParams & {
+  type: 'Sparkle';
+  props: SparkleProps;
+};
 
 const DEFAULT_RATIO = 0.2;
 const DEFAULT_LENGTH = 4;
