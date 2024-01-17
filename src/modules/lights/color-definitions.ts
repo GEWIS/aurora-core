@@ -1,15 +1,39 @@
 import { ColorChannel } from './entities/colors';
 
-export const wheelColors = [
-  'white', 'red', 'green', 'blue', 'yellow', 'lightblue', 'orange', 'rosered',
-];
-export type WheelColor = typeof wheelColors[number];
+export enum WheelColor {
+  WHITE = 'white',
+  RED = 'red',
+  GREEN = 'green',
+  BLUE = 'blue',
+  YELLOW = 'yellow',
+  LIGHTBLUE = 'lightblue',
+  ORANGE = 'orange',
+  ROSERED = 'rosered',
+}
 
-export const rgbColors = [
-  ...wheelColors,
-  'purple', 'cyan', 'pink', 'gold', 'brown', 'lightpink', 'lime',
-  'uv', 'blindingwhite'];
-export type RgbColor = typeof rgbColors[number];
+export enum RgbColor {
+  WHITE = 'white',
+  RED = 'red',
+  GREEN = 'green',
+  BLUE = 'blue',
+  YELLOW = 'yellow',
+  LIGHTBLUE = 'lightblue',
+  ORANGE = 'orange',
+  ROSERED = 'rosered',
+  PURPLE = 'purple',
+  CYAN = 'cyan',
+  PINK = 'pink',
+  GOLD = 'gold',
+  BROWN = 'brown',
+  LIGHTPINK = 'lightpink',
+  LIME = 'lime',
+  UV = 'uv',
+  BLINDINGWHITE = 'blindingwhite',
+}
+
+export const wheelColors = Object.values(WheelColor);
+
+export const rgbColors = Object.values(RgbColor);
 
 // TODO: implement wheel colors
 export type RgbColorDefinition = { [k in ColorChannel]: number };
@@ -30,7 +54,7 @@ export type RgbColorAlternatives = {
 };
 
 export const rgbColorDefinitions: RgbColorSet = {
-  white: {
+  [RgbColor.WHITE]: {
     definition: {
       redChannel: 0,
       blueChannel: 0,
@@ -40,10 +64,10 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 0,
       uvChannel: 0,
     },
-    alternative: 'white',
+    alternative: WheelColor.WHITE,
     complementary: [],
   },
-  red: {
+  [RgbColor.RED]: {
     definition: {
       redChannel: 255,
       blueChannel: 0,
@@ -53,10 +77,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 0,
       uvChannel: 0,
     },
-    alternative: 'red',
-    complementary: ['blue', 'green', 'yellow', 'lightblue', 'purple', 'cyan', 'gold', 'lime'],
+    alternative: WheelColor.RED,
+    complementary: [RgbColor.BLUE, RgbColor.GREEN, RgbColor.YELLOW, RgbColor.LIGHTBLUE,
+      RgbColor.PURPLE, RgbColor.CYAN, RgbColor.GOLD, RgbColor.LIME],
   },
-  green: {
+  [RgbColor.GREEN]: {
     definition: {
       redChannel: 0,
       blueChannel: 0,
@@ -66,10 +91,12 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 0,
       uvChannel: 0,
     },
-    alternative: 'green',
-    complementary: ['red', 'blue', 'yellow', 'lightblue', 'orange', 'rosered', 'purple', 'cyan', 'pink', 'gold', 'brown', 'lightpink'],
+    alternative: WheelColor.GREEN,
+    complementary: [RgbColor.RED, RgbColor.BLUE, RgbColor.YELLOW, RgbColor.LIGHTBLUE,
+      RgbColor.ORANGE, RgbColor.ROSERED, RgbColor.PURPLE, RgbColor.CYAN,
+      RgbColor.PINK, RgbColor.GOLD, RgbColor.BROWN, RgbColor.LIGHTPINK],
   },
-  blue: {
+  [RgbColor.BLUE]: {
     definition: {
       redChannel: 0,
       blueChannel: 255,
@@ -79,10 +106,12 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 0,
       uvChannel: 0,
     },
-    alternative: 'blue',
-    complementary: ['red', 'green', 'yellow', 'orange', 'rosered', 'pink', 'gold', 'brown', 'lightpink', 'lime'],
+    alternative: WheelColor.BLUE,
+    complementary: [RgbColor.RED, RgbColor.GREEN, RgbColor.YELLOW, RgbColor.ORANGE,
+      RgbColor.ROSERED, RgbColor.PINK, RgbColor.GOLD, RgbColor.BROWN,
+      RgbColor.LIGHTPINK, RgbColor.LIME],
   },
-  yellow: {
+  [RgbColor.YELLOW]: {
     definition: {
       redChannel: 255,
       blueChannel: 0,
@@ -92,10 +121,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 255,
       uvChannel: 0,
     },
-    alternative: 'yellow',
-    complementary: ['red', 'green', 'blue', 'lightblue', 'purple', 'cyan', 'lime'],
+    alternative: WheelColor.YELLOW,
+    complementary: [RgbColor.RED, RgbColor.GREEN, RgbColor.BLUE, RgbColor.LIGHTBLUE,
+      RgbColor.PURPLE, RgbColor.CYAN, RgbColor.LIME],
   },
-  lightblue: {
+  [RgbColor.LIGHTBLUE]: {
     definition: {
       redChannel: 0,
       blueChannel: 255,
@@ -105,10 +135,12 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 0,
       uvChannel: 0,
     },
-    alternative: 'blue',
-    complementary: ['red', 'green', 'yellow', 'orange', 'rosered', 'purple', 'pink', 'gold', 'brown', 'lime'],
+    alternative: WheelColor.BLUE,
+    complementary: [RgbColor.RED, RgbColor.GREEN, RgbColor.YELLOW, RgbColor.ORANGE,
+      RgbColor.ROSERED, RgbColor.PURPLE, RgbColor.PINK, RgbColor.GOLD,
+      RgbColor.BROWN, RgbColor.LIME],
   },
-  orange: {
+  [RgbColor.ORANGE]: {
     definition: {
       redChannel: 255,
       blueChannel: 0,
@@ -118,10 +150,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 100,
       uvChannel: 0,
     },
-    alternative: 'orange',
-    complementary: ['green', 'blue', 'lightblue', 'purple', 'cyan', 'pink', 'lightpink', 'lime'],
+    alternative: WheelColor.ORANGE,
+    complementary: [RgbColor.GREEN, RgbColor.BLUE, RgbColor.LIGHTBLUE, RgbColor.PURPLE,
+      RgbColor.CYAN, RgbColor.PINK, RgbColor.LIGHTPINK, RgbColor.LIME],
   },
-  rosered: {
+  [RgbColor.ROSERED]: {
     definition: {
       redChannel: 255,
       blueChannel: 0,
@@ -131,10 +164,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 0,
       uvChannel: 0,
     },
-    alternative: 'red',
-    complementary: ['green', 'blue', 'lightblue', 'purple', 'cyan', 'brown', 'lime'],
+    alternative: WheelColor.RED,
+    complementary: [RgbColor.GREEN, RgbColor.BLUE, RgbColor.LIGHTBLUE, RgbColor.PURPLE,
+      RgbColor.CYAN, RgbColor.BROWN, RgbColor.LIME],
   },
-  purple: {
+  [RgbColor.PURPLE]: {
     definition: {
       redChannel: 255,
       blueChannel: 255,
@@ -144,10 +178,12 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 0,
       uvChannel: 0,
     },
-    alternative: 'blue',
-    complementary: ['red', 'green', 'yellow', 'lightblue', 'orange', 'rosered', 'cyan', 'gold', 'brown', 'lightpink', 'lime'],
+    alternative: WheelColor.BLUE,
+    complementary: [RgbColor.RED, RgbColor.GREEN, RgbColor.YELLOW, RgbColor.LIGHTBLUE,
+      RgbColor.ORANGE, RgbColor.ROSERED, RgbColor.CYAN, RgbColor.GOLD,
+      RgbColor.BROWN, RgbColor.LIGHTPINK, RgbColor.LIME],
   },
-  cyan: {
+  [RgbColor.CYAN]: {
     definition: {
       redChannel: 0,
       blueChannel: 255,
@@ -157,10 +193,12 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 0,
       uvChannel: 0,
     },
-    alternative: 'blue',
-    complementary: ['red', 'blue', 'yellow', 'orange', 'rosered', 'pink', 'gold', 'brown', 'lightpink', 'lime'],
+    alternative: WheelColor.BLUE,
+    complementary: [RgbColor.RED, RgbColor.BLUE, RgbColor.YELLOW, RgbColor.ORANGE,
+      RgbColor.ROSERED, RgbColor.PINK, RgbColor.GOLD, RgbColor.BROWN,
+      RgbColor.LIGHTPINK, RgbColor.LIME],
   },
-  pink: {
+  [RgbColor.PINK]: {
     definition: {
       redChannel: 255,
       blueChannel: 128,
@@ -170,10 +208,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 0,
       uvChannel: 0,
     },
-    alternative: 'red',
-    complementary: ['green', 'blue', 'lightblue', 'orange', 'cyan', 'gold', 'brown', 'lime'],
+    alternative: WheelColor.RED,
+    complementary: [RgbColor.GREEN, RgbColor.BLUE, RgbColor.LIGHTBLUE, RgbColor.ORANGE,
+      RgbColor.CYAN, RgbColor.GOLD, RgbColor.BROWN, RgbColor.LIME],
   },
-  gold: {
+  [RgbColor.GOLD]: {
     definition: {
       redChannel: 128,
       blueChannel: 0,
@@ -183,10 +222,12 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 255,
       uvChannel: 0,
     },
-    alternative: 'yellow',
-    complementary: ['red', 'green', 'blue', 'lightblue', 'purple', 'cyan', 'pink', 'lightpink', 'lime'],
+    alternative: WheelColor.YELLOW,
+    complementary: [RgbColor.RED, RgbColor.GREEN, RgbColor.BLUE, RgbColor.LIGHTBLUE,
+      RgbColor.PURPLE, RgbColor.CYAN, RgbColor.PINK, RgbColor.LIGHTPINK,
+      RgbColor.LIME],
   },
-  brown: {
+  [RgbColor.BROWN]: {
     definition: {
       redChannel: 192,
       blueChannel: 0,
@@ -196,10 +237,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 192,
       uvChannel: 0,
     },
-    alternative: 'yellow',
-    complementary: ['green', 'blue', 'lightblue', 'purple', 'cyan', 'pink', 'lightpink', 'lime'],
+    alternative: WheelColor.YELLOW,
+    complementary: [RgbColor.GREEN, RgbColor.BLUE, RgbColor.LIGHTBLUE, RgbColor.PURPLE,
+      RgbColor.CYAN, RgbColor.PINK, RgbColor.LIGHTPINK, RgbColor.LIME],
   },
-  lightpink: {
+  [RgbColor.LIGHTPINK]: {
     definition: {
       redChannel: 192,
       blueChannel: 128,
@@ -209,10 +251,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 0,
       uvChannel: 0,
     },
-    alternative: 'red',
-    complementary: ['green', 'blue', 'orange', 'cyan', 'gold', 'brown', 'lime'],
+    alternative: WheelColor.RED,
+    complementary: [RgbColor.GREEN, RgbColor.BLUE, RgbColor.ORANGE, RgbColor.CYAN,
+      RgbColor.GOLD, RgbColor.BROWN, RgbColor.LIME],
   },
-  lime: {
+  [RgbColor.LIME]: {
     definition: {
       redChannel: 255,
       blueChannel: 0,
@@ -222,10 +265,13 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 0,
       uvChannel: 0,
     },
-    alternative: 'green',
-    complementary: ['red', 'green', 'blue', 'yellow', 'lightblue', 'orange', 'rosered', 'purple', 'cyan', 'pink', 'gold', 'brown', 'lightpink'],
+    alternative: WheelColor.GREEN,
+    complementary: [RgbColor.RED, RgbColor.GREEN, RgbColor.BLUE, RgbColor.YELLOW,
+      RgbColor.LIGHTBLUE, RgbColor.ORANGE, RgbColor.ROSERED, RgbColor.PURPLE,
+      RgbColor.CYAN, RgbColor.PINK, RgbColor.GOLD, RgbColor.BROWN,
+      RgbColor.LIGHTPINK],
   },
-  blindingWhite: {
+  [RgbColor.BLINDINGWHITE]: {
     definition: {
       redChannel: 255,
       blueChannel: 255,
@@ -235,10 +281,10 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 255,
       uvChannel: 0,
     },
-    alternative: 'white',
+    alternative: WheelColor.WHITE,
     complementary: [],
   },
-  uv: {
+  [RgbColor.UV]: {
     definition: {
       redChannel: 0,
       blueChannel: 0,
@@ -248,49 +294,16 @@ export const rgbColorDefinitions: RgbColorSet = {
       amberChannel: 0,
       uvChannel: 255,
     },
-    alternative: 'white',
+    alternative: WheelColor.WHITE,
     complementary: [],
   },
 };
-
-export const rgbColorAlternatives: RgbColorAlternatives = {
-  white: 'white',
-  red: 'red',
-  blue: 'blue',
-  green: 'green',
-  yellow: 'yellow',
-  lightblue: 'lightblue',
-  orange: 'orange',
-  rosered: 'rosered',
-  purple: 'blue',
-  cyan: 'blue',
-  pink: 'red',
-  gold: 'yellow',
-  brown: 'yellow',
-  uv: 'white',
-  blindingwhite: 'white',
-  lightpink: 'red',
-  lime: 'green',
-};
-
-export const palettes: RgbColor[][] = [
-  ['red', 'yellow'],
-  ['red', 'lightblue'],
-  ['red', 'purple'],
-  ['red', 'cyan'],
-  ['red', 'gold'],
-  ['red', 'lime'],
-  ['blue', 'yellow'],
-  ['blue', 'orange'],
-  ['blue', 'rosered'],
-  ['blue', 'pink'],
-];
 
 export function getTwoComplementaryRgbColors(): {
   colorNames: RgbColor[], colorSpecs: RgbColorSpecification[],
 } {
   // Account for the colors without any complements
-  const possibleColors = Object.keys(rgbColorDefinitions)
+  const possibleColors = (Object.keys(rgbColorDefinitions) as RgbColor[])
     .filter((c) => rgbColorDefinitions[c].complementary.length > 0);
 
   const index = Math.floor(Math.random() * possibleColors.length);
