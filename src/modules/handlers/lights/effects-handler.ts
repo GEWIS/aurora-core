@@ -7,7 +7,10 @@ export default abstract class EffectsHandler extends BaseLightsHandler {
   /**
    * Assign every group of lights exactly one effect
    */
-  protected groupEffects: Map<LightsGroup, LightsEffect | LightsEffect[] | null> = new Map();
+  protected groupEffects: Map<
+  LightsGroup,
+  LightsEffect | LightsEffect[] | null
+  > = new Map();
 
   // Override entity register function to also populate the groupEffect mapping
   public registerEntity(entity: LightsGroup) {

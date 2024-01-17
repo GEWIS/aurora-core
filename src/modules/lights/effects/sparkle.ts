@@ -20,14 +20,12 @@ const DEFAULT_RATIO = 0.2;
 const DEFAULT_LENGTH = 4;
 const DEFAULT_CYCLE_TIME = 200;
 
-export default class Sparkle extends LightsEffect {
+export default class Sparkle extends LightsEffect<SparkleProps> {
   private beats: Date[];
 
   private colorIndices: number[];
 
   private previousTick = new Date();
-
-  private props: SparkleProps;
 
   /**
    * @param lightsGroup The group of lights this effect will be applied to
@@ -50,7 +48,7 @@ export default class Sparkle extends LightsEffect {
     this.props = props;
   }
 
-  public static build(props: SparkleProps): LightsEffectBuilder<Sparkle> {
+  public static build(props: SparkleProps): LightsEffectBuilder<SparkleProps, Sparkle> {
     return (
       lightsGroup: LightsGroup,
       features?: TrackPropertiesEvent,

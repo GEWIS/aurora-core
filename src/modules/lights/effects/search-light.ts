@@ -16,10 +16,8 @@ const DEFAULT_RADIUS_FACTOR = 1;
 const DEFAULT_CYCLE_TIME = 4000;
 const DEFAULT_OFFSET_FACTOR = 0.5 * Math.PI;
 
-export default class SearchLight extends LightsEffect {
+export default class SearchLight extends LightsEffect<SearchLightProps> {
   private cycleStartTick: Date = new Date();
-
-  private props: SearchLightProps;
 
   /**
    * @param lightsGroup
@@ -33,7 +31,9 @@ export default class SearchLight extends LightsEffect {
     this.props = props;
   }
 
-  public static build(props: SearchLightProps = {}): LightsEffectBuilder {
+  public static build(
+    props: SearchLightProps = {},
+  ): LightsEffectBuilder<SearchLightProps, SearchLight> {
     return (lightsGroup) => new SearchLight(lightsGroup, props);
   }
 

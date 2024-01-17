@@ -12,17 +12,15 @@ export interface WaveProps {
 const DEFAULT_SIZE = 1;
 const DEFAULT_CYCLE_TIME = 1000;
 
-export default class Wave extends LightsEffect {
+export default class Wave extends LightsEffect<WaveProps> {
   private cycleStartTick: Date = new Date();
-
-  private props: WaveProps;
 
   constructor(lightsGroup: LightsGroup, props: WaveProps) {
     super(lightsGroup);
     this.props = props;
   }
 
-  public static build(props: WaveProps): LightsEffectBuilder {
+  public static build(props: WaveProps): LightsEffectBuilder<WaveProps, Wave> {
     return (lightsGroup) => new Wave(lightsGroup, props);
   }
 

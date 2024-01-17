@@ -1,19 +1,25 @@
 import { BeatEvent, TrackPropertiesEvent } from '../../events/music-emitter-events';
 import { LightsGroup } from '../entities';
 
-export type LightsEffectBuilder<T extends LightsEffect = LightsEffect> = (
+export type LightsEffectBuilder<P = {}, T extends LightsEffect<P> = LightsEffect<P>> = (
   lightsGroup: LightsGroup,
   features?: TrackPropertiesEvent
 ) => T;
 
-export default abstract class LightsEffect {
+export default abstract class LightsEffect<P = {}> {
   public lightsGroup: LightsGroup;
 
   protected features?: TrackPropertiesEvent;
 
+  protected props: P;
+
   public constructor(lightsGroup: LightsGroup, features?: TrackPropertiesEvent) {
     this.lightsGroup = lightsGroup;
     this.features = features;
+  }
+
+  public setNewProps(props: P) {
+    this.props = props;
   }
 
   /**

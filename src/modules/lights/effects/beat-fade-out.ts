@@ -15,14 +15,12 @@ export interface BeatFadeOutProps {
   addBlacks?: boolean;
 }
 
-export default class BeatFadeOut extends LightsEffect {
+export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
   private phase = 0;
 
   private lastBeat = new Date().getTime(); // in ms since epoch;
 
   private beatLength: number = 1; // in ms;
-
-  private props: BeatFadeOutProps;
 
   constructor(
     lightsGroup: LightsGroup,
@@ -41,7 +39,7 @@ export default class BeatFadeOut extends LightsEffect {
    */
   public static build(
     props: BeatFadeOutProps,
-  ): LightsEffectBuilder<BeatFadeOut> {
+  ): LightsEffectBuilder<BeatFadeOutProps, BeatFadeOut> {
     return (
       lightsGroup: LightsGroup,
       features?: TrackPropertiesEvent,

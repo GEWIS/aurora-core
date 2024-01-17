@@ -9,9 +9,7 @@ export interface StrobeProps {
   durationMs?: number;
 }
 
-export default class Strobe extends LightsEffect {
-  private props: StrobeProps;
-
+export default class Strobe extends LightsEffect<StrobeProps> {
   constructor(lightsGroup: LightsGroup, props: StrobeProps, features?: TrackPropertiesEvent) {
     super(lightsGroup, features);
     this.props = props;
@@ -33,7 +31,7 @@ export default class Strobe extends LightsEffect {
     return this.lightsGroup;
   }
 
-  public static build(props: StrobeProps): LightsEffectBuilder {
+  public static build(props: StrobeProps): LightsEffectBuilder<StrobeProps, Strobe> {
     return (lightsGroup, features) => new Strobe(lightsGroup, props, features);
   }
 }

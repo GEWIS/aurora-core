@@ -10,10 +10,8 @@ export interface SingleFloodProps {
   dimMilliseconds?: number,
 }
 
-export default class SingleFlood extends LightsEffect {
+export default class SingleFlood extends LightsEffect<SingleFloodProps> {
   private effectStartTime = new Date();
-
-  private props: SingleFloodProps;
 
   constructor(lightsGroup: LightsGroup, props: SingleFloodProps) {
     super(lightsGroup);
@@ -24,7 +22,9 @@ export default class SingleFlood extends LightsEffect {
 
   beat(): void {}
 
-  public static build(props: SingleFloodProps = {}): LightsEffectBuilder {
+  public static build(
+    props: SingleFloodProps = {},
+  ): LightsEffectBuilder<SingleFloodProps, SingleFlood> {
     return (lightsGroup) => new SingleFlood(lightsGroup, props);
   }
 
