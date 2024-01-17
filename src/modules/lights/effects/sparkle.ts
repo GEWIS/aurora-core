@@ -1,5 +1,5 @@
 import LightsEffect, { LightsEffectBuilder } from './lights-effect';
-import { RgbColorSpecification } from '../color-definitions';
+import { RgbColor, rgbColorDefinitions } from '../color-definitions';
 import { LightsGroup } from '../entities';
 import { TrackPropertiesEvent } from '../../events/music-emitter-events';
 
@@ -10,7 +10,7 @@ import { TrackPropertiesEvent } from '../../events/music-emitter-events';
  * @property cycleTime After how many ms (approximately) a ratio of lights should be turned on
  */
 export interface SparkleProps {
-  colors: RgbColorSpecification[],
+  colors: RgbColor[],
   ratio?: number,
   length?: number,
   cycleTime?: number,
@@ -90,9 +90,11 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
       const index = i;
       const progression = this.getProgression(this.beats[index]);
       const colorIndex = this.colorIndices[index];
+      const color = colors[colorIndex % colors.length];
+      const { definition: colorDefinition } = rgbColorDefinitions[color];
       p.fixture.setCurrentValues({
         masterDimChannel: Math.round(255 * progression),
-        ...colors[colorIndex % colors.length].definition,
+        ...colorDefinition,
       });
     });
 

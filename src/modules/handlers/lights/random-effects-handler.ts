@@ -19,7 +19,7 @@ export default class RandomEffectsHandler extends EffectsHandler {
    * @private
    */
   private assignRandomEffect(entity: LightsGroup) {
-    const { colorSpecs } = getTwoComplementaryRgbColors();
+    const { colorNames } = getTwoComplementaryRgbColors();
 
     // Destroy the existing effect(s)
     const effect = this.groupEffects.get(entity);
@@ -32,7 +32,7 @@ export default class RandomEffectsHandler extends EffectsHandler {
     // We currently have only one effect, so that makes our choice easy
     this.groupEffects.set(entity, new BeatFadeOut(
       entity,
-      { colors: colorSpecs, enableFade: false },
+      { colors: colorNames, enableFade: false },
       this.trackFeatures,
     ));
     // this.groupEffects.set(entity, new Strobe(entity, this.trackFeatures));

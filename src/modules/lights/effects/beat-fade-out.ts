@@ -1,7 +1,7 @@
 import LightsEffect, { LightsEffectBuilder } from './lights-effect';
 import { BeatEvent, TrackPropertiesEvent } from '../../events/music-emitter-events';
 import { LightsGroup } from '../entities';
-import { RgbColorSpecification } from '../color-definitions';
+import { RgbColor, rgbColorDefinitions } from '../color-definitions';
 
 /**
  * @property colors One or more colors that should be shown
@@ -10,7 +10,7 @@ import { RgbColorSpecification } from '../color-definitions';
  * @property addBlacks If a "black" color should be added
  */
 export interface BeatFadeOutProps {
-  colors: RgbColorSpecification[],
+  colors: RgbColor[],
   enableFade?: boolean;
   addBlacks?: boolean;
 }
@@ -70,8 +70,9 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
         return;
       }
       const color = colors[index];
+      const { definition: colorDefinition } = rgbColorDefinitions[color];
       p.fixture.setMasterDimmer(Math.round(255 * beatProgression));
-      p.fixture.setColor(color.definition);
+      p.fixture.setColor(colorDefinition);
     });
 
     this.lightsGroup.movingHeadWheels.forEach((m) => m.fixture.blackout());
