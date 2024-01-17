@@ -4,9 +4,13 @@ import {
 import { Controller } from '@tsoa/runtime';
 import RootLightsService, {
   LightsControllerCreateParams,
-  LightsGroupCreateParams, LightsMovingHeadRgbCreateParams, LightsMovingHeadWheelCreateParams,
+  LightsGroupCreateParams,
+  LightsMovingHeadRgbCreateParams,
+  LightsMovingHeadWheelCreateParams,
   LightsParCreateParams,
 } from './root-lights-service';
+import { LIGHTS_EFFECTS } from '../lights/effects';
+import { rgbColorDefinitions } from '../lights/color-definitions';
 
 @Route('lights')
 @Tags('Lights')
@@ -69,5 +73,15 @@ export class RootLightsController extends Controller {
   @Post('fixture/moving-head/wheel')
   public async createLightsMovingHeadWheel(@Body() params: LightsMovingHeadWheelCreateParams) {
     return new RootLightsService().createMovingHeadWheel(params);
+  }
+
+  @Get('effects')
+  public getAllLightsEffects() {
+    return LIGHTS_EFFECTS.map((e) => e.name);
+  }
+
+  @Get('colors')
+  public getAllLightsColors() {
+    return rgbColorDefinitions;
   }
 }
