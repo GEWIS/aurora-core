@@ -8,7 +8,7 @@ import { ValidateError } from '@tsoa/runtime';
 import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
 import { SessionMiddleware } from './modules/auth';
-import { oidcLogin, oidcResponse } from './modules/auth/passport/oidc-strategy';
+import { oidcResponse } from './modules/auth/passport/oidc-strategy';
 import { mockLogin } from './modules/auth/passport/mock-strategy';
 
 /**
@@ -32,9 +32,12 @@ export default async function createHttp() {
   app.use(cookieParser(process.env.COOKIE_SECRET));
   app.use(SessionMiddleware.getInstance().get());
 
+  app.use(passport.initialize());
+  app.use(passport.session());
+
   RegisterRoutes(app);
 
-  app.post('/api/auth/oidc', oidcLogin, passport.authenticate('oidc'), oidcResponse);
+  app.post('/api/auth/oidc', passport.authenticate('oidc'), oidcResponse);
 
   if (process.env.NODE_ENV === 'development') {
     app.use('/api-docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => res.send(
