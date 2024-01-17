@@ -7,14 +7,18 @@ import { TrackPropertiesEvent } from '../../events/music-emitter-events';
  * @property colors Colors of the lights
  * @property ratio What percentage (on average) of the lights should be turned on
  * @property length How many cycles the light should take to slowly turn off
- * @property speed After how many ms (approximately) a ratio of lights should be turned on
+ * @property cycleTime After how many ms (approximately) a ratio of lights should be turned on
  */
 export interface SparkleProps {
   colors: RgbColorSpecification[],
   ratio?: number,
   length?: number,
-  speed?: number,
+  cycleTime?: number,
 }
+
+const DEFAULT_RATIO = 0.2;
+const DEFAULT_LENGTH = 4;
+const DEFAULT_CYCLE_TIME = 200;
 
 export default class Sparkle extends LightsEffect {
   private beats: Date[];
@@ -23,13 +27,7 @@ export default class Sparkle extends LightsEffect {
 
   private previousTick = new Date();
 
-  private colors: RgbColorSpecification[];
-
-  private ratio = 0.2;
-
-  private length = 4;
-
-  private speed = 200;
+  private props: SparkleProps;
 
   /**
    * @param lightsGroup The group of lights this effect will be applied to
@@ -49,10 +47,7 @@ export default class Sparkle extends LightsEffect {
     this.beats = new Array(nrFixtures).fill(new Date(0));
     this.colorIndices = new Array(nrFixtures).fill(0);
 
-    this.colors = props.colors;
-    if (props.ratio !== undefined) this.ratio = props.ratio;
-    if (props.length !== undefined) this.length = props.length;
-    if (props.speed !== undefined) this.speed = props.speed;
+    this.props = props;
   }
 
   public static build(props: SparkleProps): LightsEffectBuilder<Sparkle> {
@@ -66,19 +61,26 @@ export default class Sparkle extends LightsEffect {
   }
 
   private getProgression(beat: Date) {
+    const speed = this.props.cycleTime ?? DEFAULT_CYCLE_TIME;
+    const length = this.props.length ?? DEFAULT_LENGTH;
+
     return Math.max(
-      1 - ((new Date().getTime() - beat.getTime()) / (this.speed * this.length)),
+      1 - ((new Date().getTime() - beat.getTime()) / (speed * length)),
       0,
     );
   }
 
   tick(): LightsGroup {
+    const { colors, cycleTime: propsCycleTime, ratio: propsRatio } = this.props;
+    const cycleTime = propsCycleTime ?? DEFAULT_CYCLE_TIME;
+    const ratio = propsRatio ?? DEFAULT_RATIO;
+
     // Turn on some lights according to the ratio if we have reached the time
-    if (new Date().getTime() - this.previousTick.getTime() >= this.speed) {
+    if (new Date().getTime() - this.previousTick.getTime() >= cycleTime) {
       this.beats.forEach((b, i) => {
-        if (Math.random() <= this.ratio) {
+        if (Math.random() <= ratio) {
           this.colorIndices[i] = (this.colorIndices[i] + i) % Math
-            .max(this.colors.length);
+            .max(colors.length);
           this.beats[i] = new Date();
         }
       });
@@ -91,7 +93,7 @@ export default class Sparkle extends LightsEffect {
       const colorIndex = this.colorIndices[index];
       p.fixture.setCurrentValues({
         masterDimChannel: Math.round(255 * progression),
-        ...this.colors[colorIndex % this.colors.length].definition,
+        ...colors[colorIndex % colors.length].definition,
       });
     });
 

@@ -4,6 +4,7 @@ import { rgbColorDefinitions } from '../color-definitions';
 
 const TURN_ON_TIME = 75;
 const KEEP_ON_TIME = 100;
+const DEFAULT_DIM_MILLISECONDS = 500;
 
 export interface SingleFloodProps {
   dimMilliseconds?: number,
@@ -12,11 +13,11 @@ export interface SingleFloodProps {
 export default class SingleFlood extends LightsEffect {
   private effectStartTime = new Date();
 
-  private dimMilliseconds = 500;
+  private props: SingleFloodProps;
 
   constructor(lightsGroup: LightsGroup, props: SingleFloodProps) {
     super(lightsGroup);
-    if (props.dimMilliseconds !== undefined) this.dimMilliseconds = props.dimMilliseconds;
+    this.props = props;
   }
 
   beat(): void {
@@ -27,10 +28,11 @@ export default class SingleFlood extends LightsEffect {
   }
 
   private getProgression(currentTick: Date) {
+    const dimMilliseconds = this.props.dimMilliseconds ?? DEFAULT_DIM_MILLISECONDS;
     const diff = Math.max(0, currentTick.getTime() - this.effectStartTime.getTime());
     if (diff < TURN_ON_TIME) return diff / TURN_ON_TIME;
     if (diff < TURN_ON_TIME + KEEP_ON_TIME) return 1;
-    return 1 - Math.min(1, (diff - TURN_ON_TIME - KEEP_ON_TIME) / this.dimMilliseconds);
+    return 1 - Math.min(1, (diff - TURN_ON_TIME - KEEP_ON_TIME) / dimMilliseconds);
   }
 
   tick(): LightsGroup {

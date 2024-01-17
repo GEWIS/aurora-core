@@ -8,20 +8,17 @@ export interface WaveProps {
   cycleTime?: number,
 }
 
+const DEFAULT_SIZE = 1;
+const DEFAULT_CYCLE_TIME = 1000;
+
 export default class Wave extends LightsEffect {
   private cycleStartTick: Date = new Date();
 
-  private color: RgbColorSpecification;
-
-  private size = 1;
-
-  private cycleTime = 1000;
+  private props: WaveProps;
 
   constructor(lightsGroup: LightsGroup, props: WaveProps) {
     super(lightsGroup);
-    this.color = props.color;
-    if (props.size !== undefined) this.size = props.size;
-    if (props.cycleTime !== undefined) this.cycleTime = props.cycleTime;
+    this.props = props;
   }
 
   public static build(props: WaveProps): LightsEffectBuilder {
@@ -31,7 +28,8 @@ export default class Wave extends LightsEffect {
   beat(): void {}
 
   private getProgression(currentTick: Date) {
-    return Math.min(1, (currentTick.getTime() - this.cycleStartTick.getTime()) / this.cycleTime);
+    const cycleTime = this.props.cycleTime ?? DEFAULT_CYCLE_TIME;
+    return Math.min(1, (currentTick.getTime() - this.cycleStartTick.getTime()) / cycleTime);
   }
 
   tick(): LightsGroup {
@@ -45,7 +43,7 @@ export default class Wave extends LightsEffect {
     this.lightsGroup.pars.sort((p1, p2) => p2.firstChannel - p1.firstChannel).forEach((p, i) => {
       const brightness = Math.sin(((i / nrLights) + progression) * 2 * Math.PI);
       p.fixture.setMasterDimmer(Math.max(0, brightness * 255));
-      p.fixture.setColor(this.color.definition);
+      p.fixture.setColor(this.props.color.definition);
     });
 
     return this.lightsGroup;

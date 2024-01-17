@@ -12,14 +12,14 @@ export interface SearchLightProps {
   offsetFactor?: number;
 }
 
+const DEFAULT_RADIUS_FACTOR = 1;
+const DEFAULT_CYCLE_TIME = 4000;
+const DEFAULT_OFFSET_FACTOR = 0.5 * Math.PI;
+
 export default class SearchLight extends LightsEffect {
   private cycleStartTick: Date = new Date();
 
-  private radiusFactor = 1;
-
-  private cycleTime = 4000;
-
-  private offsetFactor = 0.5 * Math.PI;
+  private props: SearchLightProps;
 
   /**
    * @param lightsGroup
@@ -30,9 +30,7 @@ export default class SearchLight extends LightsEffect {
     props: SearchLightProps,
   ) {
     super(lightsGroup);
-    if (props.radiusFactor !== undefined) this.radiusFactor = props.radiusFactor;
-    if (props.cycleTime !== undefined) this.cycleTime = props.cycleTime;
-    if (props.offsetFactor !== undefined) this.offsetFactor = props.offsetFactor;
+    this.props = props;
   }
 
   public static build(props: SearchLightProps = {}): LightsEffectBuilder {
@@ -43,7 +41,8 @@ export default class SearchLight extends LightsEffect {
   }
 
   private getProgression(currentTick: Date) {
-    return Math.min(1, (currentTick.getTime() - this.cycleStartTick.getTime()) / this.cycleTime);
+    const cycleTime = this.props.cycleTime ?? DEFAULT_CYCLE_TIME;
+    return Math.min(1, (currentTick.getTime() - this.cycleStartTick.getTime()) / cycleTime);
   }
 
   private setPosition(
@@ -51,9 +50,11 @@ export default class SearchLight extends LightsEffect {
     progression: number,
     offset: number = 0,
   ) {
+    const radiusFactor = this.props.radiusFactor ?? DEFAULT_RADIUS_FACTOR;
+
     movingHead.setCurrentValues({
       panChannel: Math.cos(progression * 2 * Math.PI + offset) * 42 + 42,
-      tiltChannel: Math.sin(progression * 2 * Math.PI + offset) * 64 * this.radiusFactor + 128,
+      tiltChannel: Math.sin(progression * 2 * Math.PI + offset) * 64 * radiusFactor + 128,
       masterDimChannel: 255,
     });
   }
@@ -61,17 +62,18 @@ export default class SearchLight extends LightsEffect {
   tick(): LightsGroup {
     const currentTick = new Date();
     const progression = this.getProgression(currentTick);
+    const offsetFactor = this.props.offsetFactor ?? DEFAULT_OFFSET_FACTOR;
     if (progression >= 1) {
       this.cycleStartTick = currentTick;
     }
 
     this.lightsGroup.movingHeadWheels.forEach((m, i) => {
-      this.setPosition(m.fixture, progression, i * this.offsetFactor);
+      this.setPosition(m.fixture, progression, i * offsetFactor);
     });
 
     this.lightsGroup.movingHeadRgbs.forEach((m, i) => {
       const index = i + this.lightsGroup.movingHeadWheels.length;
-      this.setPosition(m.fixture, progression, index * this.offsetFactor);
+      this.setPosition(m.fixture, progression, index * offsetFactor);
     });
 
     return this.lightsGroup;
