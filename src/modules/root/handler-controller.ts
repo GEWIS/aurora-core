@@ -3,10 +3,11 @@ import {
   Body, Get, Post, Route, Tags,
 } from 'tsoa';
 import HandlerManager from './handler-manager';
-import { Audio } from './entities';
+import { Audio, Screen } from './entities';
 import RootAudioService from './root-audio-service';
 import { LightsGroup } from '../lights/entities';
 import RootLightsService from './root-lights-service';
+import RootScreenService from './root-screen-service';
 
 @Route('handler')
 @Tags('Handlers')
@@ -59,6 +60,29 @@ export class HandlerController extends Controller {
     }
 
     const found = this.handlersManager.registerHandler(group, params.name);
+    if (!found) {
+      this.setStatus(400);
+    }
+  }
+
+  @Get('screen')
+  public async getScreenHandlers() {
+    return this.handlersManager.getHandlers(Screen).map((h) => ({
+      name: h.constructor.name,
+      id: h.identifier,
+      entities: h.entities as Screen[],
+    }));
+  }
+
+  @Post('screen/{id}')
+  public async setScreenHandler(@Path() id: number, @Body() params: { name: string }) {
+    const screen = await new RootScreenService().getSingleScreen(id);
+    if (screen == null) {
+      this.setStatus(404);
+      return;
+    }
+
+    const found = this.handlersManager.registerHandler(screen, params.name);
     if (!found) {
       this.setStatus(400);
     }
