@@ -24,7 +24,7 @@
     "spec": {
       "components": {
         "schemas": {
-          "MockAuthRequest": {
+          "User": {
             "dataType": "refObject",
             "properties": {
               "name": {
@@ -60,8 +60,15 @@
           "post": {
             "operationId": "AuthMock",
             "responses": {
-              "204": {
-                "description": "No content"
+              "200": {
+                "description": "Success",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
               }
             },
             "security": [],
@@ -73,7 +80,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/MockAuthRequest"
+                    "$ref": "#/components/schemas/User"
                   }
                 }
               }
@@ -85,7 +92,14 @@
             "operationId": "AuthOIDC",
             "responses": {
               "200": {
-                "description": "Success"
+                "description": "Success",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
               }
             },
             "security": [],

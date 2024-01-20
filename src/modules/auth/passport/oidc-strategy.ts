@@ -64,5 +64,5 @@ export const oidcResponse = (
   req: ExRequest,
   res: ExResponse,
 ): void => {
-  res.status(200).send();
+  res.send(req.user).status(200).send();
 };

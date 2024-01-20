@@ -17,5 +17,5 @@ export const mockLogin = (
   req: ExRequest,
   res: ExResponse,
 ) => {
-  res.status(204).send();
+  res.send(req.user).status(200).send();
 };
