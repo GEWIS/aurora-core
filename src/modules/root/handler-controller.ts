@@ -8,6 +8,13 @@ import RootAudioService from './root-audio-service';
 import { LightsGroup } from '../lights/entities';
 import RootLightsService from './root-lights-service';
 import RootScreenService from './root-screen-service';
+import SubscribeEntity from './entities/subscribe-entity';
+
+interface HandlerResponse<T extends SubscribeEntity> {
+  entities: T[];
+  id: string;
+  name: string;
+}
 
 @Route('handler')
 @Tags('Handlers')
@@ -20,7 +27,7 @@ export class HandlerController extends Controller {
   }
 
   @Get('audio')
-  public async getAudioHandlers() {
+  public getAudioHandlers(): HandlerResponse<Audio>[] {
     return this.handlersManager.getHandlers(Audio).map((h) => ({
       name: h.constructor.name,
       id: h.identifier,
@@ -43,7 +50,7 @@ export class HandlerController extends Controller {
   }
 
   @Get('lights')
-  public async getLightsHandlers() {
+  public getLightsHandlers(): HandlerResponse<LightsGroup>[] {
     return this.handlersManager.getHandlers(LightsGroup).map((h) => ({
       name: h.constructor.name,
       id: h.identifier,
@@ -66,7 +73,7 @@ export class HandlerController extends Controller {
   }
 
   @Get('screen')
-  public async getScreenHandlers() {
+  public getScreenHandlers(): HandlerResponse<Screen>[] {
     return this.handlersManager.getHandlers(Screen).map((h) => ({
       name: h.constructor.name,
       id: h.identifier,
