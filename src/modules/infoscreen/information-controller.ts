@@ -1,6 +1,6 @@
 import { Controller } from '@tsoa/runtime';
 import {
-  Body, Get, Route, Tags, Response, Post, Security
+  Body, Get, Route, Tags, Response, Post, Security,
 } from 'tsoa';
 import InformationService, { InformationParams } from './information-service';
 import Information from './entities/information';

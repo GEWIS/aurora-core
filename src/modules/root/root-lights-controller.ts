@@ -10,7 +10,14 @@ import RootLightsService, {
   LightsParCreateParams,
 } from './root-lights-service';
 import { LIGHTS_EFFECTS } from '../lights/effects';
-import { rgbColorDefinitions } from '../lights/color-definitions';
+import {
+  RgbColor, rgbColorDefinitions, rgbColors, RgbColorSpecification,
+} from '../lights/color-definitions';
+
+interface LightsColorResponse {
+  color: RgbColor;
+  spec: RgbColorSpecification;
+}
 
 @Route('lights')
 @Tags('Lights')
@@ -81,7 +88,10 @@ export class RootLightsController extends Controller {
   }
 
   @Get('colors')
-  public getAllLightsColors() {
-    return rgbColorDefinitions;
+  public getAllLightsColors(): LightsColorResponse[] {
+    return rgbColors.map((color: RgbColor): LightsColorResponse => ({
+      color,
+      spec: rgbColorDefinitions[color],
+    }));
   }
 }

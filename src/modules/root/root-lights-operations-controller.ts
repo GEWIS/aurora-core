@@ -4,6 +4,7 @@ import {
 import { Controller } from '@tsoa/runtime';
 import HandlerManager from './handler-manager';
 import { LightsGroup } from '../lights/entities';
+import {StrobeProps} from "../lights/effects/strobe";
 
 interface GroupFixtureOverrideParams {
   dmxValues: (number | null)[];
@@ -16,6 +17,34 @@ export class RootLightsOperationsController extends Controller {
     const manager = HandlerManager.getInstance();
     return manager.getHandlers(LightsGroup)
       .map((handler) => handler.entities).flat() as LightsGroup[];
+  }
+
+  /**
+   * Enable the strobe for all fixtures in the given group
+   */
+  @Post('group/{id}/strobe/enable')
+  public async enableStrobeOnLightsGroup(id: number, @Body() params: StrobeProps = {}) {
+    const lightsGroup = this.getGroups().find((g) => g.id === id);
+    if (!lightsGroup) {
+      this.setStatus(404);
+      return;
+    }
+
+    lightsGroup.enableStrobe(params?.durationMs);
+  }
+
+  /**
+   * Disable the strobe for all fixtures in the given group
+   */
+  @Post('group/{id}/strobe/disable')
+  public async disableStrobeOnLightsGroup(id: number) {
+    const lightsGroup = this.getGroups().find((g) => g.id === id);
+    if (!lightsGroup) {
+      this.setStatus(404);
+      return;
+    }
+
+    lightsGroup.disableStrobe();
   }
 
   @Post('group/par/{id}/override')

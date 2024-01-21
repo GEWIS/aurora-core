@@ -31,4 +31,22 @@ export default class LightsGroup extends SubscribeEntity {
     this.movingHeadWheels.forEach((par) => par.fixture.blackout());
     this.movingHeadRgbs.forEach((par) => par.fixture.blackout());
   }
+
+  /**
+   * Enable the strobe on all fixtures in this group
+   */
+  public enableStrobe(milliseconds?: number) {
+    this.pars.forEach((par) => par.fixture.enableStrobe(milliseconds));
+    this.movingHeadWheels.forEach((par) => par.fixture.enableStrobe(milliseconds));
+    this.movingHeadRgbs.forEach((par) => par.fixture.enableStrobe(milliseconds));
+  }
+
+  /**
+   * Disable the strobe for all fixtures in this group (if strobe is enabled)
+   */
+  public disableStrobe() {
+    this.pars.forEach((par) => par.fixture.disableStrobe());
+    this.movingHeadWheels.forEach((par) => par.fixture.disableStrobe());
+    this.movingHeadRgbs.forEach((par) => par.fixture.disableStrobe());
+  }
 }
