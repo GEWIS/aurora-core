@@ -21,8 +21,11 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
     super(lightsGroup, features);
     this.props = props;
 
-    this.lightsGroup.pars.forEach((p) => p.fixture
-      .setColor(rgbColorDefinitions[props.color].definition));
+    const color = rgbColorDefinitions[this.props.color];
+    this.lightsGroup.pars.forEach((p) => {
+      p.fixture.setColor(color.definition);
+      p.fixture.setMasterDimmer(255);
+    });
   }
 
   public static build(props: StaticColorProps): LightsEffectBuilder<StaticColorProps, StaticColor> {
