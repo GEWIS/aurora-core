@@ -14,6 +14,7 @@ import { CenturionScreenHandler } from '../../handlers/screen';
 import { LightsEffectBuilder } from '../../lights/effects/lights-effect';
 import Wave from '../../lights/effects/wave';
 import Sparkle from '../../lights/effects/sparkle';
+import { ArtificialBeatGenerator } from '../../beats/artificial-beat-generator';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
@@ -40,9 +41,7 @@ export default class CenturionMode extends BaseMode {
 
   private static instance: CenturionMode | undefined;
 
-  private artificialBeatLoop: NodeJS.Timeout | undefined;
-
-  private artificialBeatLoopStart: Date | undefined;
+  private beatGenerator: ArtificialBeatGenerator;
 
   private initialized = false;
 
@@ -68,6 +67,8 @@ export default class CenturionMode extends BaseMode {
       .find((h) => h.constructor.name === SCREEN_HANDLER) as CenturionScreenHandler;
 
     this.audioHandler.addSyncAudioTimingHandler(this.syncFeedEvents.bind(this));
+
+    this.beatGenerator = ArtificialBeatGenerator.getInstance();
   }
 
   public initialize(musicEmitter: MusicEmitter) {
@@ -96,11 +97,9 @@ export default class CenturionMode extends BaseMode {
       this.syncFeedEvents({ startTime, timestamp: this.timestamp * 1000 });
       this.fireLastFeedEvent(this.timestamp);
 
-      this.artificialBeatLoopStart = new Date();
-      this.artificialBeatLoop = setInterval(this.artificialBeat.bind(this), 500);
-      this.artificialBeat();
       this.screenHandler.start();
       this.timestamp = 0;
+      this.beatGenerator.start(130);
     });
     return true;
   }
@@ -127,9 +126,7 @@ export default class CenturionMode extends BaseMode {
     this.audioHandler.stop();
     this.screenHandler.stop();
     this.stopFeedEvents();
-
-    clearInterval(this.artificialBeatLoop);
-    this.artificialBeatLoop = undefined;
+    this.beatGenerator.stop();
   }
 
   private emitSong(song: SongData | SongData[]) {
@@ -264,17 +261,6 @@ export default class CenturionMode extends BaseMode {
     });
     this.audios.forEach((audio) => {
       this.handlerManager.registerHandler(audio, '');
-    });
-    clearInterval(this.artificialBeatLoop);
-  }
-
-  private artificialBeat() {
-    this.musicEmitter.emitAudio('beat', {
-      beat: {
-        start: new Date().getTime() - (this.artificialBeatLoopStart || new Date()).getTime(),
-        duration: 0.8,
-        confidence: 0.2,
-      },
     });
   }
 }
