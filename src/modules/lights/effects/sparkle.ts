@@ -17,11 +17,11 @@ export interface SparkleProps {
   ratio?: number,
 
   /**
-   * How many ticks the light should take to slowly turn off
+   * How many ms the light should take to slowly turn off
    * @isInt
    * @minimum 1
    */
-  length?: number,
+  dimDuration?: number,
 
   /**
    * After how many ms (approximately) a ratio of lights should be turned on
@@ -37,7 +37,7 @@ export type SparkleCreateParams = BaseLightsEffectCreateParams & {
 };
 
 const DEFAULT_RATIO = 0.2;
-const DEFAULT_LENGTH = 4;
+const DEFAULT_DIM_DURATION = 800;
 const DEFAULT_CYCLE_TIME = 200;
 
 export default class Sparkle extends LightsEffect<SparkleProps> {
@@ -80,11 +80,10 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
   beat(): void {}
 
   private getProgression(beat: Date) {
-    const speed = this.props.cycleTime ?? DEFAULT_CYCLE_TIME;
-    const length = this.props.length ?? DEFAULT_LENGTH;
+    const dimDuration = this.props.dimDuration ?? DEFAULT_DIM_DURATION;
 
     return Math.max(
-      1 - ((new Date().getTime() - beat.getTime()) / (speed * length)),
+      1 - ((new Date().getTime() - beat.getTime()) / (dimDuration)),
       0,
     );
   }

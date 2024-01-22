@@ -29,7 +29,7 @@ export type SearchLightCreateParams = BaseLightsEffectCreateParams & {
 
 const DEFAULT_RADIUS_FACTOR = 1;
 const DEFAULT_CYCLE_TIME = 4000;
-const DEFAULT_OFFSET_FACTOR = 0.5 * Math.PI;
+const DEFAULT_OFFSET_FACTOR = 0.25;
 
 export default class SearchLight extends LightsEffect<SearchLightProps> {
   private cycleStartTick: Date = new Date();
@@ -84,12 +84,12 @@ export default class SearchLight extends LightsEffect<SearchLightProps> {
     }
 
     this.lightsGroup.movingHeadWheels.forEach((m, i) => {
-      this.setPosition(m.fixture, progression, i * offsetFactor);
+      this.setPosition(m.fixture, progression, i * offsetFactor * 2 * Math.PI);
     });
 
     this.lightsGroup.movingHeadRgbs.forEach((m, i) => {
       const index = i + this.lightsGroup.movingHeadWheels.length;
-      this.setPosition(m.fixture, progression, index * offsetFactor);
+      this.setPosition(m.fixture, progression, index * offsetFactor * 2 * Math.PI);
     });
 
     return this.lightsGroup;
