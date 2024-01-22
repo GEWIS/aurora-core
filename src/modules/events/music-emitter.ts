@@ -6,16 +6,21 @@ import BaseAudioHandler from '../handlers/base-audio-handler';
 export class MusicEmitter extends EventEmitter {
   private audioHandlers: BaseAudioHandler[] = [];
 
+  public artificialBeatGeneratorEnabled = false;
+
   public registerAudioHandler(handler: BaseAudioHandler) {
     this.audioHandlers.push(handler);
   }
 
   /**
    * Emit Spotify-related events. Blocked when an audio entity is playing audio
+   * Beat events are blocked when the artificial beat generator is enabled
    * @param eventName
    * @param args
    */
   public emitSpotify(eventName: string, ...args: any[]) {
+    // Do not forward a beat from Spotify if the artifical beat generator is enabled
+    if (eventName === 'beat' && this.artificialBeatGeneratorEnabled) return;
     this.forwardOnAudioNotPlaying(eventName, ...args);
   }
 
