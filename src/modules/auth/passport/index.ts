@@ -2,6 +2,7 @@ import passport from 'passport';
 import { User } from '../user';
 
 passport.serializeUser((user, done) => {
+  // TODO I am unsure how cookies are hashed, but we might want to apply our own hash to the stringify as well...
   done(null, JSON.stringify(user));
 });
 

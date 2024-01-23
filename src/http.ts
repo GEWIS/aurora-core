@@ -4,12 +4,12 @@ import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
-import { ValidateError } from '@tsoa/runtime';
 import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
 import { SessionMiddleware } from './modules/auth';
 import { oidcResponse } from './modules/auth/passport/oidc-strategy';
 import { mockLogin } from './modules/auth/passport/mock-strategy';
+import { setupErrorHandler } from './error';
 
 /**
  * Create an Express instance to listen to HTTP calls.
@@ -47,33 +47,6 @@ export default async function createHttp() {
     app.use('/static', express.static('public'));
   }
 
-  app.use((
-    err: unknown,
-    req: ExRequest,
-    res: ExResponse,
-    next: NextFunction,
-  ): ExResponse | void => {
-    if (err instanceof ValidateError) {
-      console.warn(`Caught Validation Error for ${req.path}:`, err.fields);
-      return res.status(422).json({
-        message: 'Validation Failed',
-        details: err?.fields,
-      });
-    }
-    if (err instanceof Error) {
-      return res.status(500).json({
-        message: 'Internal Server Error',
-      });
-    }
-
-    return next();
-  });
-
-  app.use((_req, res: ExResponse) => {
-    res.status(404).send({
-      message: 'Not Found',
-    });
-  });
-
+  setupErrorHandler(app);
   return app;
 }

@@ -2,7 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Request as ExRequest, Response as ExResponse } from 'express';
 import passport from 'passport';
 import { Strategy as CustomStrategy } from 'passport-custom';
-import { ApiError, HTTPStatus } from '../../../helpers/customError';
+import { ApiError, HttpStatusCode } from '../../../helpers/customError';
 
 export interface AuthStoreToken {
   exp: number,
@@ -28,9 +28,8 @@ export interface AuthStoreToken {
 
 passport.use('oidc', new CustomStrategy(
   async (req, callback) => {
-
     if (!req.body.state || !req.body.session_state || !req.body.code) {
-      throw new ApiError(HTTPStatus.BadRequest, 'Missing OIDC state, session state or code.');
+      throw new ApiError(HttpStatusCode.BadRequest, 'Missing OIDC state, session state or code.');
     }
 
     const oidcResponse = await fetch(

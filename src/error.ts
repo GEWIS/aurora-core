@@ -4,11 +4,11 @@ import {
   NextFunction, Express,
 } from 'express';
 import { ValidateError } from 'tsoa';
-import { ApiError } from './helpers/customError';
+import { ApiError, HttpStatusCode } from './helpers/customError';
 
 export function setupErrorHandler(app : Express) {
-  app.use((_req, res: ExResponse) => {
-    res.status(404).send({
+  app.use((req: ExRequest, res: ExResponse) => {
+    res.status(HttpStatusCode.NotFound).send({
       message: 'Not Found',
     });
   });
@@ -19,16 +19,16 @@ export function setupErrorHandler(app : Express) {
     res: ExResponse,
     next: NextFunction,
   ): ExResponse | void => {
-
     if (err instanceof ValidateError) {
-      console.warn(`Caught Validation Error for ${req.path}:`, err.fields);
-      return res.status(422).json({
-        message: 'Validation Failed',
+      console.warn(`Caught '${HttpStatusCode.BadRequest} - Bad Request' for ${req.path}.`);
+      return res.status(HttpStatusCode.BadRequest).json({
+        message: 'Bad Request',
         details: err?.fields,
       });
     }
 
     if (err instanceof ApiError) {
+      console.warn(`Caught '${err.statusCode} - ${err.name}' for ${req.path}.`);
       return res.status(err.statusCode).json({
         message: err.name,
         details: err.message,
@@ -36,5 +36,6 @@ export function setupErrorHandler(app : Express) {
     }
 
     next();
+    return undefined;
   });
 }

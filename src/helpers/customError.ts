@@ -1,36 +1,14 @@
-export enum HTTPStatus {
-  NoContent = 'No Content',
-  BadRequest = 'Bad Request',
-  Unauthorized = 'Unauthorized',
-  Forbidden = 'Forbidden',
-  InternalServerError = 'Internal Server Error',
-  NotFound = 'Not Found',
-}
+import { HttpStatusCode } from 'axios';
 
-const StatusToCode = {
-  'No Content': 204,
-  'Not Found': 404,
-  'Bad Request': 400,
-  Unauthorized: 401,
-  Forbidden: 403,
-  'Internal Server Error': 500,
-};
-
-export interface ValidateErrorJSON {
-  message: 'Validation failed';
-  details: { [name: string]: unknown };
-}
-
-export interface InternalError {
-  message: 'Internal Server Error';
-}
+export { HttpStatusCode } from 'axios';
 
 export class ApiError extends Error {
   public statusCode: number;
 
-  constructor(status: HTTPStatus, message?: string) {
+  constructor(statusCode: HttpStatusCode, message?: string) {
     super(message);
-    this.name = status;
-    this.statusCode = StatusToCode[status];
+
+    this.name = HttpStatusCode[statusCode].replace(/([A-Z][a-z])/g, ' $1').trim();
+    this.statusCode = statusCode;
   }
 }

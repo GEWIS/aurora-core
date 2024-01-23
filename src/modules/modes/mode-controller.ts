@@ -1,5 +1,5 @@
 import {
-  Body, Delete, Post, Route, SuccessResponse, Tags,
+  Body, Delete, Post, Route, Security, SuccessResponse, Tags,
 } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import { In } from 'typeorm';
@@ -11,6 +11,8 @@ import { Audio, Screen } from '../root/entities';
 import CenturionMode from './centurion/centurion-mode';
 import tapes from './centurion/tapes';
 import dataSource from '../../database';
+import { SecurityGroup } from '../../helpers/security';
+import { HttpStatusCode } from '../../helpers/customError';
 
 interface EnableModeParams {
   lightsGroupIds: number[];
@@ -53,8 +55,9 @@ export class ModeController extends Controller {
   /**
    * Enable Centurion mode for the given devices
    */
+  @Security('oidc', [SecurityGroup.ADMIN, SecurityGroup.KEYHOLDER])
   @Post('centurion')
-  @SuccessResponse(204)
+  @SuccessResponse(HttpStatusCode.NoContent)
   public async enableCenturion(@Body() params: CenturionParams): Promise<string> {
     const { lights, screens, audios } = await this.mapBodyToEntities(params);
 
@@ -72,7 +75,9 @@ export class ModeController extends Controller {
     return '';
   }
 
+  @Security('oidc', [SecurityGroup.ADMIN, SecurityGroup.KEYHOLDER])
   @Delete('centurion')
+  @SuccessResponse(HttpStatusCode.Ok)
   public disableCenturion() {
     this.modeManager.disableMode(CenturionMode);
   }

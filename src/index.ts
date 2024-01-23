@@ -1,7 +1,6 @@
 import './env';
 import { createServer } from 'http';
 import createHttp from './http';
-import { setupErrorHandler } from './error';
 import dataSource from './database';
 import HandlerManager from './modules/root/handler-manager';
 import createWebsocket from './socketio';
@@ -15,7 +14,6 @@ import { ArtificialBeatGenerator } from './modules/beats/artificial-beat-generat
 async function createApp(): Promise<void> {
   await dataSource.initialize();
   const app = await createHttp();
-  setupErrorHandler(app);
   const httpServer = createServer(app);
 
   const socketConnectionEmitter = new SocketConnectionEmitter();

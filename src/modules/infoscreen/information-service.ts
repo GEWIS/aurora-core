@@ -3,7 +3,7 @@ import Information from './entities/information';
 import dataSource from '../../database';
 import { RoomStatus } from './entities/enums/roomStatus';
 import { AlcoholTime } from './entities/enums/alcoholTime';
-import { ApiError, HTTPStatus } from '../../helpers/customError';
+import { ApiError, HttpStatusCode } from '../../helpers/customError';
 
 export interface InformationParams {
   roomStatus: RoomStatus,
@@ -23,7 +23,7 @@ export default class InformationService {
 
   public async getInformation(): Promise<Information> {
     const information = await this.repo.find();
-    if (information.length > 1) throw new ApiError(HTTPStatus.InternalServerError, 'Clashing information in the database.');
+    if (information.length > 1) throw new ApiError(HttpStatusCode.InternalServerError, 'Clashing information in the database.');
     if (information.length === 0) return this.createInformation();
     return information[0];
   }

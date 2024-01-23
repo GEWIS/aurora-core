@@ -1,32 +1,37 @@
 import { Controller } from '@tsoa/runtime';
 import {
-  Body, Get, Post, Route, Put, Delete, Tags, Response,
+  Body, Delete, Get, Post, Put, Response, Route, Security, SuccessResponse, Tags, ValidateError,
 } from 'tsoa';
+import { HttpStatusCode } from 'axios';
 import MessageService, { MessageParams } from './message-service';
 import Message from './entities/message';
-import { InternalError, ValidateErrorJSON } from '../../helpers/customError';
+import { ApiError } from '../../helpers/customError';
+import { SecurityGroup } from '../../helpers/security';
 
 @Route('infoscreen')
 @Tags('Infoscreen')
 export class MessageController extends Controller {
+  @Security('oidc', [SecurityGroup.ADMIN, SecurityGroup.KEYHOLDER])
   @Get('messages')
-  @Response<InternalError>(500, 'Internal Server Error')
+  @SuccessResponse(HttpStatusCode.Ok)
   public async getAllMessages(): Promise<Message[]> {
     return new MessageService().getAllMessages();
   }
 
+  @Security('oidc', [SecurityGroup.ADMIN])
   @Post('message')
-  @Response<ValidateErrorJSON>(422, 'Validation failed')
-  @Response<InternalError>(500, 'Internal Server Error')
+  @Response<ValidateError>(HttpStatusCode.BadRequest, 'Invalid Message')
+  @SuccessResponse(HttpStatusCode.Created)
   public async createMessage(
     @Body() params: MessageParams,
   ): Promise<Message> {
     return new MessageService().createMessage(params);
   }
 
+  @Security('oidc', [SecurityGroup.ADMIN])
   @Put('message/{id}')
-  @Response<ValidateErrorJSON>(422, 'Validation failed')
-  @Response<InternalError>(500, 'Internal Server Error')
+  @Response<ValidateError>(HttpStatusCode.BadRequest, 'Invalid Message')
+  @SuccessResponse(HttpStatusCode.Ok)
   public async updateMessage(
     id: string,
     @Body() params: Partial<MessageParams>,
@@ -34,8 +39,9 @@ export class MessageController extends Controller {
     return new MessageService().updateMessage(id, params);
   }
 
+  @Security('oidc', [SecurityGroup.ADMIN])
   @Delete('message/{id}')
-  @Response<InternalError>(500, 'Internal Server Error')
+  @SuccessResponse(HttpStatusCode.Ok)
   public async deleteMessage(
     id: string,
   ): Promise<void> {

@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { ApiError, HTTPStatus } from '../../helpers/customError';
+import { ApiError, HttpStatusCode } from '../../helpers/customError';
 
 export async function expressAuthentication(
   request: express.Request,
@@ -8,11 +8,9 @@ export async function expressAuthentication(
 ): Promise<any> {
   if (securityName === 'oidc') {
     if (!request.isAuthenticated() || request.user === undefined) {
-      // TODO this only throws 500 with no insight
-      throw new ApiError(HTTPStatus.Unauthorized, 'You are not logged in.');
+      throw new ApiError(HttpStatusCode.Unauthorized, 'You are not logged in.');
     }
     return request.user;
   }
-  // TODO this only throws 500 with no insight
-  throw new ApiError(HTTPStatus.InternalServerError, 'Unknown security scheme.');
+  throw new ApiError(HttpStatusCode.InternalServerError, 'Unknown security scheme.');
 }

@@ -1,25 +1,26 @@
 import { Controller } from '@tsoa/runtime';
 import {
-  Body, Get, Route, Tags, Response, Post, Security,
+  Body, Get, Route, Tags, Response, Post, Security, SuccessResponse, ValidateError,
 } from 'tsoa';
 import InformationService, { InformationParams } from './information-service';
 import Information from './entities/information';
-import { InternalError, ValidateErrorJSON } from '../../helpers/customError';
+import { ApiError, HttpStatusCode } from '../../helpers/customError';
+import { SecurityGroup } from '../../helpers/security';
 
 @Route('infoscreen')
 @Tags('Infoscreen')
 export class InformationController extends Controller {
-  @Security('oidc', ['PRIV - Narrowcasting Test Admin'])
+  @Security('oidc', [SecurityGroup.ADMIN, SecurityGroup.KEYHOLDER])
   @Get('information')
-  @Response<InternalError>(500, 'Internal Server Error')
+  @SuccessResponse(HttpStatusCode.Ok)
   public async getInformation(): Promise<Information> {
     return new InformationService().getInformation();
   }
 
-  @Security('oidc', ['PRIV - Narrowcasting Test Admin'])
+  @Security('oidc', [SecurityGroup.ADMIN, SecurityGroup.KEYHOLDER])
   @Post('information')
-  @Response<ValidateErrorJSON>(422, 'Validation failed')
-  @Response<InternalError>(500, 'Internal Server Error')
+  @Response<ValidateError>(HttpStatusCode.BadRequest, 'Invalid Information')
+  @SuccessResponse(HttpStatusCode.Ok)
   public async setInformation(
     @Body() params: InformationParams,
   ): Promise<Information> {
