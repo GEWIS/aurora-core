@@ -52,6 +52,16 @@
               }
             },
             "additionalProperties": false
+          },
+          "ApiKeyParameters": {
+            "dataType": "refObject",
+            "required": ["key"],
+            "properties": {
+              "key": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
           }
         }
       },
@@ -113,6 +123,37 @@
                 "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/OIDCParameters"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/auth/key": {
+          "post": {
+            "operationId": "AuthKey",
+            "responses": {
+              "200": {
+                "description": "Success",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            },
+            "security": [],
+            "parameters": [],
+            "tags": [
+              "Authentication"
+            ],
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiKeyParameters"
                   }
                 }
               }

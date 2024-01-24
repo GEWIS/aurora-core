@@ -1,5 +1,5 @@
 import bodyParser from 'body-parser';
-import express, { Response as ExResponse, Request as ExRequest, NextFunction } from 'express';
+import express, { Response as ExResponse, Request as ExRequest } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -10,6 +10,7 @@ import { SessionMiddleware } from './modules/auth';
 import { oidcResponse } from './modules/auth/passport/oidc-strategy';
 import { mockLogin } from './modules/auth/passport/mock-strategy';
 import { setupErrorHandler } from './error';
+import { apiKeyResponse } from './modules/auth/passport/api-key-strategy';
 
 /**
  * Create an Express instance to listen to HTTP calls.
@@ -38,6 +39,7 @@ export default async function createHttp() {
   RegisterRoutes(app);
 
   app.post('/api/auth/oidc', passport.authenticate('oidc'), oidcResponse);
+  app.post('/api/auth/key', passport.authenticate('apikey'), apiKeyResponse);
 
   if (process.env.NODE_ENV === 'development') {
     app.use('/api-docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => res.send(

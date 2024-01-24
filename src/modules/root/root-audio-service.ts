@@ -1,6 +1,7 @@
 import { Repository } from 'typeorm';
 import { Audio } from './entities';
 import dataSource from '../../database';
+import AuthService from '../auth/auth-service';
 
 export interface AudioResponse extends Pick<Audio, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
 
@@ -40,6 +41,7 @@ export default class RootAudioService {
     const audio = await this.repository.save({
       name: params.name,
     });
+    await new AuthService().createApiKey({ audio });
     return {
       id: audio.id,
       createdAt: audio.createdAt,

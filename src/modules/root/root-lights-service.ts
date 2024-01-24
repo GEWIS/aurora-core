@@ -11,6 +11,7 @@ import LightsGroupPars from '../lights/entities/lights-group-pars';
 import LightsGroupMovingHeadRgbs from '../lights/entities/lights-group-moving-head-rgbs';
 import LightsGroupMovingHeadWheels from '../lights/entities/lights-group-moving-head-wheels';
 import Movement from '../lights/entities/movement';
+import AuthService from '../auth/auth-service';
 
 export interface LightsControllerResponse extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
 export interface LightsFixtureResponse extends Pick<LightsFixture, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'masterDimChannel' | 'strobeChannel'> {}
@@ -171,10 +172,11 @@ export default class RootLightsService {
   public async createController(
     params: LightsControllerCreateParams,
   ): Promise<LightsControllerResponse> {
-    const controller = await this.controllerRepository.save({
+    const lightsController = await this.controllerRepository.save({
       name: params.name,
     });
-    return this.toLightsControllerResponse(controller);
+    await new AuthService().createApiKey({ lightsController });
+    return this.toLightsControllerResponse(lightsController);
   }
 
   public async getAllLightsGroups(): Promise<BaseLightsGroupResponse[]> {
