@@ -15,6 +15,7 @@ WORKDIR /app
 COPY ./package.json ./package-lock.json ./
 RUN npm ci
 COPY --from=build --chown=node /app/dist /app/dist
+COPY ./public ./public
 
 CMD [ "node", "dist/src/index.js" ]
 EXPOSE 3000

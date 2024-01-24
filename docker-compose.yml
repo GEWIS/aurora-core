@@ -1,0 +1,40 @@
+version: '2'
+services:
+  backoffice:
+    build: ../narrowcasting-backoffice
+    image: default.docker-registry.gewis.nl/aurora-backoffice:latest
+    restart: 'unless-stopped'
+    ports:
+      - '8080:80'
+    networks:
+      - aurora
+    volumes:
+      - posters:/usr/src/app/data/posters
+      - audio:/usr/src/app/data/audio
+#  client:
+#    build: ../narrowcasting-client
+#    image: default.docker-registry.gewis.nl/aurora-client:latest
+#    restart: 'unless-stopped'
+#    networks:
+#      - aurora
+  core:
+    build: .
+    image: default.docker-registry.gewis.nl/aurora-core:latest
+    restart: 'unless-stopped'
+    networks:
+      - aurora
+    volumes:
+      - posters:/app/public/posters
+      - audio:/app/public/audio
+    environment:
+      - PORT=3000
+      # See the .env.example file in the core repository to find all environment variables
+
+volumes:
+  posters:
+    driver: local
+  audio:
+    driver: local
+networks:
+  aurora:
+    driver: bridge
