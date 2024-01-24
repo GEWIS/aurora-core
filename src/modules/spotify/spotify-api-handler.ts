@@ -49,13 +49,34 @@ export default class SpotifyApiHandler {
     clientId: string,
     accessToken: AccessToken,
   ): Promise<AccessToken> {
-    const token = await SpotifyApiHandler.getAccessToken(accessToken.refresh_token, true);
+    const content: { [key: string]: string } = {
+      grant_type: 'refresh_token',
+      refresh_token: accessToken.refresh_token,
+    };
+
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      body: new URLSearchParams(content),
+      headers: {
+        Authorization: `Basic ${btoa(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`)}`,
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      },
+    });
+    const json = await response.json();
+    if (!response.ok) throw new Error(`Could not get access token: ${json.error}`);
+
+    const token = json as AccessToken;
 
     if (token.expires && token.expires === -1) {
       return token;
     }
 
-    return { ...token, expires: Date.now() + token.expires_in * 1000 };
+    return {
+      ...token,
+      expires: Date.now() + token.expires_in * 1000,
+      // A (new) refresh token is not returned, so reuse the old to make a correct AccessToken
+      refresh_token: accessToken.refresh_token,
+    };
   }
 
   /**
@@ -72,11 +93,10 @@ export default class SpotifyApiHandler {
    * Get a Spotify API access token for the given Spotify user
    * @private
    * @param code
-   * @param refresh
    */
-  public static async getAccessToken(code: string, refresh: boolean): Promise<AccessToken> {
+  public static async getAccessToken(code: string): Promise<AccessToken> {
     const content: { [key: string]: string } = {
-      grant_type: refresh ? 'refresh_token' : 'authorization_code',
+      grant_type: 'authorization_code',
       code,
       redirect_uri: process.env.SPOTIFY_REDIRECT_URI || '',
     };
@@ -128,7 +148,7 @@ export default class SpotifyApiHandler {
     let accessToken: AccessToken;
     if (new Date().getTime() + 5000 > spotifyUser.token.expires) {
       // Token has expired, so let's get a new one
-      accessToken = await SpotifyApiHandler.getAccessToken(spotifyUser.token.refresh_token || '', true);
+      accessToken = await SpotifyApiHandler.refreshAccessToken('', spotifyUser.token);
     } else {
       accessToken = spotifyUser.token;
     }
@@ -154,7 +174,7 @@ export default class SpotifyApiHandler {
    * @param code
    */
   public async bindSpotifyUser(code: string) {
-    const accessToken = await SpotifyApiHandler.getAccessToken(code, false);
+    const accessToken = await SpotifyApiHandler.getAccessToken(code);
 
     this.sdk = this.createSdk(accessToken);
     const profile = await this.sdk.currentUser.profile();
