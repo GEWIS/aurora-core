@@ -4,20 +4,20 @@ import {
 } from 'tsoa';
 import InformationService, { InformationParams } from './information-service';
 import Information from './entities/information';
-import { ApiError, HttpStatusCode } from '../../helpers/customError';
+import { HttpStatusCode } from '../../helpers/customError';
 import { SecurityGroup } from '../../helpers/security';
 
 @Route('infoscreen')
 @Tags('Infoscreen')
 export class InformationController extends Controller {
-  @Security('oidc', [SecurityGroup.ADMIN, SecurityGroup.KEYHOLDER])
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BOARD, SecurityGroup.KEY_HOLDER, SecurityGroup.SCREEN_SUBSCRIBER])
   @Get('information')
   @SuccessResponse(HttpStatusCode.Ok)
   public async getInformation(): Promise<Information> {
     return new InformationService().getInformation();
   }
 
-  @Security('oidc', [SecurityGroup.ADMIN, SecurityGroup.KEYHOLDER])
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BOARD, SecurityGroup.KEY_HOLDER, SecurityGroup.SCREEN_SUBSCRIBER])
   @Post('information')
   @Response<ValidateError>(HttpStatusCode.BadRequest, 'Invalid Information')
   @SuccessResponse(HttpStatusCode.Ok)

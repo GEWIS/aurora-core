@@ -1,12 +1,13 @@
 import { Controller } from '@tsoa/runtime';
 import {
-  Get, Post, Route, Tags,
+  Get, Post, Route, Security, Tags,
 } from 'tsoa';
 import axios from 'axios';
 import { PosterScreenHandler } from './poster-screen-handler';
 import HandlerManager from '../../../root/handler-manager';
 import { Screen } from '../../../root/entities';
 import { Poster } from '../../../posters/poster';
+import { SecurityGroup } from '../../../../helpers/security';
 
 enum TrainDepartureStatus {
   ON_STATION = 'ON_STATION',
@@ -70,6 +71,7 @@ export class PosterScreenController extends Controller {
       .filter((h) => h.constructor.name === PosterScreenHandler.name)[0] as PosterScreenHandler;
   }
 
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BOARD, SecurityGroup.SCREEN_SUBSCRIBER])
   @Get('')
   public async getPosters(): Promise<Poster[]> {
     if (!this.screenHandler.posterManager.posters) {
@@ -82,12 +84,14 @@ export class PosterScreenController extends Controller {
     return this.screenHandler.posterManager.posters;
   }
 
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BOARD])
   @Post('force-update')
   public async forceUpdatePosters(): Promise<void> {
     await this.screenHandler.posterManager.fetchPosters();
     this.screenHandler.forceUpdate();
   }
 
+  @Security('local', [SecurityGroup.SCREEN_SUBSCRIBER])
   @Get('train-departures')
   public async getTrains(): Promise<TrainResponse[]> {
     const config = {

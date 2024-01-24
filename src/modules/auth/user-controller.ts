@@ -1,6 +1,6 @@
 import { Controller } from '@tsoa/runtime';
 import {
-  Get, Route, Tags, Response, Request, SuccessResponse,
+  Get, Route, Tags, Response, Request, SuccessResponse, Security,
 } from 'tsoa';
 import * as express from 'express';
 import { HttpStatusCode } from 'axios';
@@ -10,15 +10,13 @@ import { User } from './user';
 @Route('user')
 @Tags('User')
 export class UserController extends Controller {
+  @Security('local', ['*'])
   @Get('me')
   @Response<ApiError>(HttpStatusCode.NotFound, 'User not found')
   @SuccessResponse(HttpStatusCode.Ok)
   public async getInformation(
     @Request() req: express.Request,
   ): Promise<User> {
-    if (!req.user) {
-      throw new ApiError(HttpStatusCode.NotFound, 'User info not found.');
-    }
     return req.user as User;
   }
 }

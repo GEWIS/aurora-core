@@ -7,7 +7,7 @@
   "spec": {
     "basePath": "/api",
     "securityDefinitions": {
-      "oidc": {
+      "local": {
         "type": "http",
         "name": "connect.sid",
         "in": "cookie"

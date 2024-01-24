@@ -1,5 +1,5 @@
 import {
-  Get, Route, Tags, Request, Query, Delete, Response,
+  Get, Route, Tags, Request, Query, Delete, Response, Security,
 } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import { Request as ExpressRequest } from 'express';
@@ -7,6 +7,7 @@ import * as querystring from 'querystring';
 import * as crypto from 'crypto';
 import SpotifyApiHandler from './spotify-api-handler';
 import { SpotifyUser } from './entities';
+import { SecurityGroup } from '../../helpers/security';
 
 interface SpotifyUserResponse {
   id: number;
@@ -36,6 +37,7 @@ export class SpotifyController extends Controller {
    * Performs a redirect to the Spotify website
    * @param req
    */
+  @Security('local', [SecurityGroup.ADMIN])
   @Get('login')
   public async spotifyLogin(@Request() req: ExpressRequest) {
     const response = req.res;
@@ -53,6 +55,7 @@ export class SpotifyController extends Controller {
     })}`);
   }
 
+  @Security('local', [SecurityGroup.ADMIN])
   @Get('callback')
   public async spotifyLoginCallback(
   @Request() req: ExpressRequest,
@@ -84,6 +87,7 @@ export class SpotifyController extends Controller {
   /**
    * Get the currently active Spotify user.
    */
+  @Security('local', ['*'])
   @Get('user')
   @Response('200', 'Active user')
   @Response('204', 'No user active')
@@ -95,6 +99,7 @@ export class SpotifyController extends Controller {
   /**
    * Get all existing Spotify users
    */
+  @Security('local', [SecurityGroup.ADMIN])
   @Get('users')
   public async getAllSpotifyUsers() {
     return (await SpotifyUser.find()).map(this.toResponse);
@@ -104,6 +109,7 @@ export class SpotifyController extends Controller {
    * Delete an existing Spotify user
    * @param id
    */
+  @Security('local', [SecurityGroup.ADMIN])
   @Delete('users/{id}')
   public async deleteSpotifyUser(id: number) {
     const user = await SpotifyUser.findOne({ where: { id } });
@@ -120,6 +126,7 @@ export class SpotifyController extends Controller {
   /**
    * Get the Spotify profile from the currently active user
    */
+  @Security('local', ['*'])
   @Get('profile')
   @Response('200', 'Active user')
   @Response('204', 'No user active')

@@ -2,12 +2,10 @@ import passport from 'passport';
 import { Strategy as CustomStrategy } from 'passport-custom';
 import { Request as ExRequest, Response as ExResponse } from 'express';
 import { HttpStatusCode } from 'axios';
-import * as crypto from 'crypto';
 import { ApiError } from '../../../helpers/customError';
 import database from '../../../database';
 import { ApiKey } from '../entities';
-import { Audio, LightsController } from '../../root/entities';
-import dataSource from '../../../database';
+import { SecurityGroup } from '../../../helpers/security';
 
 passport.use('apikey', new CustomStrategy(async (req, callback) => {
   if (!req.body || !req.body.key) {
@@ -26,15 +24,15 @@ passport.use('apikey', new CustomStrategy(async (req, callback) => {
   const roles: string[] = [];
   const names: string[] = [];
   if (identity.audio) {
-    roles.push('audio-subscriber');
+    roles.push(SecurityGroup.AUDIO_SUBSCRIBER);
     names.push(identity.audio.name);
   }
   if (identity.screen) {
-    roles.push('screen-subscriber');
+    roles.push(SecurityGroup.SCREEN_SUBSCRIBER);
     names.push(identity.screen.name);
   }
   if (identity.lightsController) {
-    roles.push('lights-subscriber');
+    roles.push(SecurityGroup.LIGHTS_SUBSCRIBER);
     names.push(identity.lightsController.name);
   }
 

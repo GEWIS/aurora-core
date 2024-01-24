@@ -55,7 +55,7 @@ export class ModeController extends Controller {
   /**
    * Enable Centurion mode for the given devices
    */
-  @Security('oidc', [SecurityGroup.ADMIN, SecurityGroup.KEYHOLDER])
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('centurion')
   @SuccessResponse(HttpStatusCode.NoContent)
   public async enableCenturion(@Body() params: CenturionParams): Promise<string> {
@@ -75,7 +75,7 @@ export class ModeController extends Controller {
     return '';
   }
 
-  @Security('oidc', [SecurityGroup.ADMIN, SecurityGroup.KEYHOLDER])
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Delete('centurion')
   @SuccessResponse(HttpStatusCode.Ok)
   public disableCenturion() {

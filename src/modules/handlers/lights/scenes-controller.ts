@@ -1,21 +1,24 @@
 import { Controller } from '@tsoa/runtime';
 import {
-  Body, Delete, Get, Post, Route, Tags,
+  Body, Delete, Get, Post, Route, Security, Tags,
 } from 'tsoa';
 import ScenesService, { CreateSceneParams } from './scenes-service';
 import RootLightsService from '../../root/root-lights-service';
 import HandlerManager from '../../root/handler-manager';
 import { LightsGroup } from '../../lights/entities';
 import { ScenesHandler } from './scenes-handler';
+import { SecurityGroup } from '../../../helpers/security';
 
 @Route('handler/lights/scenes')
 @Tags('Handlers')
 export class ScenesController extends Controller {
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Get('')
   public async getAllScenes() {
     return new ScenesService().getScenes();
   }
 
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Get('{id}')
   public async getSingleScene(id: number) {
     return new ScenesService().getSingleScene(id);
@@ -25,6 +28,7 @@ export class ScenesController extends Controller {
    * Create a new scene
    * @param params
    */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO])
   @Post('')
   public async createScene(@Body() params: CreateSceneParams) {
     const lightsService = new RootLightsService();
@@ -59,6 +63,7 @@ export class ScenesController extends Controller {
     return new ScenesService().createScene(params);
   }
 
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO])
   @Delete('{id}')
   public async deleteScene(id: number) {
     const service = new ScenesService();
@@ -74,6 +79,7 @@ export class ScenesController extends Controller {
    * Apply the current scene to all lights that are registered to the ScenesHandler
    * @param id
    */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('{id}/apply')
   public async applyScene(id: number) {
     const service = new ScenesService();

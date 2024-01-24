@@ -1,9 +1,10 @@
 import {
-  Post, Route, Tags, Response, SuccessResponse, Body,
+  Post, Route, Tags, Response, SuccessResponse, Body, Security,
 } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import ModeManager from '../mode-manager';
 import CenturionMode from './centurion-mode';
+import { SecurityGroup } from '../../../helpers/security';
 
 interface SkipCenturionRequest {
   /**
@@ -25,6 +26,7 @@ export class CenturionController extends Controller {
   /**
    * Start a centurion
    */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('start')
   @SuccessResponse(204, 'Start commands sent')
   @Response<string>(411, 'Centurion not enabled')
@@ -44,6 +46,7 @@ export class CenturionController extends Controller {
     return '';
   }
 
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('skip')
   @SuccessResponse(204, 'Skip commands sent')
   @Response<string>(400, 'Invalid timestamp provided')
@@ -64,6 +67,7 @@ export class CenturionController extends Controller {
   /**
    * Stop a centurion
    */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('stop')
   @SuccessResponse(204, 'Start commands sent')
   @Response<string>(411, 'Centurion not enabled')

@@ -1,11 +1,12 @@
 import { Controller } from '@tsoa/runtime';
 import {
-  Body, Post, Route, Tags,
+  Body, Post, Route, Security, Tags,
 } from 'tsoa';
 import SetEffectsHandler from './set-effects-handler';
 import HandlerManager from '../../root/handler-manager';
 import { LightsGroup } from '../../lights/entities';
 import { LightsEffectsCreateParams } from '../../lights/effects';
+import { SecurityGroup } from '../../../helpers/security';
 
 @Route('handler/lights/set-effects')
 @Tags('Handlers')
@@ -16,6 +17,7 @@ export class SetEffectsController extends Controller {
    * @param id
    * @param effects
    */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('{id}')
   public async applyLightsEffect(id: number, @Body() effects: LightsEffectsCreateParams[]) {
     const handler: SetEffectsHandler | undefined = HandlerManager.getInstance()

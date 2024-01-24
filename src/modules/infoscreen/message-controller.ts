@@ -5,20 +5,19 @@ import {
 import { HttpStatusCode } from 'axios';
 import MessageService, { MessageParams } from './message-service';
 import Message from './entities/message';
-import { ApiError } from '../../helpers/customError';
 import { SecurityGroup } from '../../helpers/security';
 
 @Route('infoscreen')
 @Tags('Infoscreen')
 export class MessageController extends Controller {
-  @Security('oidc', [SecurityGroup.ADMIN, SecurityGroup.KEYHOLDER])
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.KEY_HOLDER, SecurityGroup.SCREEN_SUBSCRIBER])
   @Get('messages')
   @SuccessResponse(HttpStatusCode.Ok)
   public async getAllMessages(): Promise<Message[]> {
     return new MessageService().getAllMessages();
   }
 
-  @Security('oidc', [SecurityGroup.ADMIN])
+  @Security('local', [SecurityGroup.ADMIN])
   @Post('message')
   @Response<ValidateError>(HttpStatusCode.BadRequest, 'Invalid Message')
   @SuccessResponse(HttpStatusCode.Created)
@@ -28,7 +27,7 @@ export class MessageController extends Controller {
     return new MessageService().createMessage(params);
   }
 
-  @Security('oidc', [SecurityGroup.ADMIN])
+  @Security('local', [SecurityGroup.ADMIN])
   @Put('message/{id}')
   @Response<ValidateError>(HttpStatusCode.BadRequest, 'Invalid Message')
   @SuccessResponse(HttpStatusCode.Ok)
@@ -39,7 +38,7 @@ export class MessageController extends Controller {
     return new MessageService().updateMessage(id, params);
   }
 
-  @Security('oidc', [SecurityGroup.ADMIN])
+  @Security('local', [SecurityGroup.ADMIN])
   @Delete('message/{id}')
   @SuccessResponse(HttpStatusCode.Ok)
   public async deleteMessage(

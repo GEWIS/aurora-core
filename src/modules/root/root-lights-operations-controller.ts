@@ -1,10 +1,11 @@
 import {
-  Body, Post, Route, Tags,
+  Body, Post, Route, Security, Tags,
 } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import HandlerManager from './handler-manager';
 import { LightsGroup } from '../lights/entities';
 import { StrobeProps } from '../lights/effects/strobe';
+import { SecurityGroup } from '../../helpers/security';
 
 interface GroupFixtureOverrideParams {
   dmxValues: (number | null)[];
@@ -22,6 +23,7 @@ export class RootLightsOperationsController extends Controller {
   /**
    * Enable the strobe for all fixtures in the given group
    */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('group/{id}/strobe/enable')
   public async enableStrobeOnLightsGroup(id: number, @Body() params: StrobeProps = {}) {
     const lightsGroup = this.getGroups().find((g) => g.id === id);
@@ -36,6 +38,7 @@ export class RootLightsOperationsController extends Controller {
   /**
    * Disable the strobe for all fixtures in the given group
    */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('group/{id}/strobe/disable')
   public async disableStrobeOnLightsGroup(id: number) {
     const lightsGroup = this.getGroups().find((g) => g.id === id);
@@ -47,6 +50,7 @@ export class RootLightsOperationsController extends Controller {
     lightsGroup.disableStrobe();
   }
 
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('group/par/{id}/override')
   public async setGroupParOverride(id: number, @Body() params: GroupFixtureOverrideParams) {
     const pars = this.getGroups().map((g) => g.pars).flat();
@@ -63,6 +67,7 @@ export class RootLightsOperationsController extends Controller {
    * Perform the fixture's internal reset operation if possible. Do nothing otherwise
    * @param id
    */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('group/par/{id}/reset')
   public async resetGroupPar(id: number) {
     const pars = this.getGroups().map((g) => g.pars).flat();
@@ -78,6 +83,7 @@ export class RootLightsOperationsController extends Controller {
     }
   }
 
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('group/moving-head-rgb/{id}/override')
   public async setGroupMovingHeadRgbOverride(
     id: number,
@@ -97,6 +103,7 @@ export class RootLightsOperationsController extends Controller {
    * Perform the fixture's internal reset operation if possible. Do nothing otherwise
    * @param id
    */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('group/moving-head-rgb/{id}/reset')
   public async resetGroupMovingHeadRgb(id: number) {
     const movingHeadRgbs = this.getGroups().map((g) => g.movingHeadRgbs).flat();
@@ -112,6 +119,7 @@ export class RootLightsOperationsController extends Controller {
     }
   }
 
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('group/moving-head-wheel/{id}/override')
   public async setGroupMovingHeadWheelOverride(
     id: number,
@@ -131,6 +139,7 @@ export class RootLightsOperationsController extends Controller {
    * Perform the fixture's internal reset operation if possible. Do nothing otherwise
    * @param id
    */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('group/moving-head-wheel/{id}/reset')
   public async resetGroupMovingHeadWheel(id: number) {
     const movingHeadWheels = this.getGroups().map((g) => g.movingHeadWheels).flat();
