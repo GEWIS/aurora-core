@@ -6,7 +6,7 @@ import SubscribeEntity from './entities/subscribe-entity';
 import BaseHandler from '../handlers/base-handler';
 import SimpleAudioHandler from '../handlers/audio/simple-audio-handler';
 import dataSource from '../../database';
-import { Audio, Screen } from './entities';
+import { Audio, LightsController, Screen } from './entities';
 import { LightsGroup } from '../lights/entities';
 import { RandomEffectsHandler } from '../handlers/lights';
 import SetEffectsHandler from '../handlers/lights/set-effects-handler';
@@ -19,6 +19,7 @@ import { PosterScreenHandler } from '../handlers/screen/poster';
 import { ScenesHandler } from '../handlers/lights/scenes-handler';
 import EffectSequenceHandler from '../handlers/lights/effect-sequence-handler';
 import { MusicEmitter } from '../events';
+import { userIsEntity } from '../auth/user';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -45,6 +46,23 @@ export default class HandlerManager {
     });
   }
 
+  private async updateSocketId(user: User, socketId?: string) {
+    if (user.audioId) await dataSource.getRepository(Audio).update(user.audioId, { socketId });
+    if (user.screenId) await dataSource.getRepository(Screen).update(user.screenId, { socketId });
+    if (user.lightsControllerId) {
+      await dataSource.getRepository(LightsController)
+        .update(user.lightsControllerId, { socketId });
+      const lightsHandlers: BaseLightsHandler[] = this
+        .getHandlers(LightsGroup) as BaseLightsHandler[];
+      const lightGroups = lightsHandlers.map((h) => h.entities).flat();
+      lightGroups.forEach((g) => {
+        if (g.controller.id !== user.lightsControllerId) return;
+        // eslint-disable-next-line no-param-reassign
+        g.controller.socketId = socketId;
+      });
+    }
+  }
+
   /**
    * Initialize the HandlerManager object if it is not already initialized.
    * It fetches all relevant entities (audios, lightGroups, screens) from the database
@@ -68,26 +86,25 @@ export default class HandlerManager {
       console.log('Connect', user, 'with ID', socketId);
       this._handlers.forEach((handlers) => {
         handlers.forEach((handler) => handler.entities.forEach((entity) => {
-          if (entity.name === user.name) {
+          if (userIsEntity(user, entity)) {
             this.io.sockets.sockets.get(socketId)?.emit('handler_set', handler.constructor.name);
             // eslint-disable-next-line no-param-reassign
             entity.socketId = socketId;
-            entity.save();
           }
         }));
       });
+      this.updateSocketId(user, socketId);
     });
-    socketConnectionEmitter.on('disconnect', (user: User, socketId: string) => {
+    socketConnectionEmitter.on('disconnect', (user: User) => {
       this._handlers.forEach((handlers) => {
         handlers.forEach((handler) => handler.entities.forEach((entity) => {
-          if (entity.name === user.name) {
-            this.io.sockets.sockets.get(socketId)?.emit('handler_remove', handler.constructor.name);
+          if (userIsEntity(user, entity)) {
             // eslint-disable-next-line no-param-reassign
             entity.socketId = undefined;
-            entity.save();
           }
         }));
       });
+      this.updateSocketId(user);
     });
   }
 

@@ -35,7 +35,7 @@ export default class LightsControllerManager {
     musicEmitter.on('features', this.setTrackFeatures.bind(this));
 
     // Tick rate (currently 40Hz)
-    setInterval(this.tick.bind(this), 25);
+    setInterval(this.tick.bind(this), Number(process.env.LIGHTS_TICK_INTERVAL) ?? 25);
   }
 
   private getOldValues(controller: LightsController): number[] {
@@ -94,9 +94,10 @@ export default class LightsControllerManager {
    * @private
    */
   private sendDMXValuesToController() {
-    // TODO: Send each packet to the correct controller
     this.lightsControllersValues.forEach((packet, id) => {
-      this.websocket.emit('dmx_packet', packet);
+      const controller = this.lightsControllers.get(id);
+      if (!controller || !controller.socketId) return;
+      this.websocket.server.sockets.sockets.get(controller.socketId)?.emit('dmx_packet', packet);
     });
   }
 

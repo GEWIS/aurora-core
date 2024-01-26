@@ -75,9 +75,9 @@ export default function createWebsocket(
 
   io.on('connect', (socket) => {
     connectionEmitter.emit('connect', (socket.request as any).user, socket.id);
-  });
-  io.on('disconnect', (socket) => {
-    connectionEmitter.emit('disconnect', (socket.request as any).user, socket.id);
+    socket.on('disconnect', () => {
+      connectionEmitter.emit('disconnect', (socket.request as any).user);
+    });
   });
 
   return io;

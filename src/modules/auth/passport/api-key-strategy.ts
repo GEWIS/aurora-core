@@ -6,6 +6,7 @@ import { ApiError } from '../../../helpers/customError';
 import database from '../../../database';
 import { ApiKey } from '../entities';
 import { SecurityGroup } from '../../../helpers/security';
+import { User } from '../user';
 
 passport.use('apikey', new CustomStrategy(async (req, callback) => {
   if (!req.body || !req.body.key) {
@@ -39,7 +40,10 @@ passport.use('apikey', new CustomStrategy(async (req, callback) => {
   callback(null, {
     name: names.join('-'),
     roles,
-  });
+    audioId: identity.audio?.id,
+    screenId: identity.screen?.id,
+    lightsControllerId: identity.lightsController?.id,
+  } as User);
 }));
 
 export const apiKeyResponse = (

@@ -28,8 +28,11 @@ async function createApp(): Promise<void> {
   ModeManager.getInstance().init(musicEmitter);
   ArtificialBeatGenerator.getInstance().init(musicEmitter);
 
-  await SpotifyApiHandler.getInstance().init();
-  await SpotifyTrackHandler.getInstance().init(musicEmitter);
+  if (process.env.SPOTIFY_ENABLE === 'true' && process.env.SPOTIFY_CLIENT_ID
+    && process.env.SPOTIFY_CLIENT_SECRET && process.env.SPOTIFY_REDIRECT_URI) {
+    await SpotifyApiHandler.getInstance().init();
+    await SpotifyTrackHandler.getInstance().init(musicEmitter);
+  }
 
   const port = process.env.PORT || 3000;
   httpServer.listen(port, () => console.log(`Listening at http://localhost:${port}`));
