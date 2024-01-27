@@ -11,12 +11,17 @@ services:
     volumes:
       - posters:/usr/src/app/data/posters
       - audio:/usr/src/app/data/audio
-#  client:
-#    build: ../narrowcasting-client
-#    image: default.docker-registry.gewis.nl/aurora-client:latest
-#    restart: 'unless-stopped'
-#    networks:
-#      - aurora
+  client:
+    build: ../narrowcasting-client
+    image: default.docker-registry.gewis.nl/aurora-client:latest
+    restart: 'unless-stopped'
+    networks:
+      - aurora
+    ports:
+      - '8081:80'
+    volumes:
+      - posters:/usr/src/app/data/posters
+      - audio:/usr/src/app/data/audio
   core:
     build: .
     image: default.docker-registry.gewis.nl/aurora-core:latest
