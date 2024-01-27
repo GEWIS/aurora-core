@@ -3,10 +3,10 @@ import { BeatEvent, TrackChangeEvent } from '../../events/music-emitter-events';
 
 export class CurrentlyPlayingTrackHandler extends BaseScreenHandler {
   beat(event: BeatEvent): void {
-    this.socket.emit('beat', event);
+    this.sendEvent('beat', event);
   }
 
   changeTrack(event: TrackChangeEvent[]): void {
-    this.socket.emit('change_track', event);
+    this.sendEvent('change_track', event);
   }
 }

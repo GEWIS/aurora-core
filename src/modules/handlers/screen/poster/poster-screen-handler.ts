@@ -13,13 +13,13 @@ export class PosterScreenHandler extends BaseScreenHandler {
   }
 
   forceUpdate(): void {
-    this.socket.emit('update_posters');
+    this.sendEvent('update_posters');
   }
 
   // Do nothing
   beat(): void {}
 
   changeTrack(event: TrackChangeEvent[]): void {
-    this.socket.emit('change_track', event);
+    this.sendEvent('change_track', event);
   }
 }

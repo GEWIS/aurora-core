@@ -5,30 +5,30 @@ import { RgbColor } from '../../lights/color-definitions';
 
 export class CenturionScreenHandler extends BaseScreenHandler {
   beat(event: BeatEvent): void {
-    this.socket.emit('beat', event);
+    this.sendEvent('beat', event);
   }
 
   changeTrack(event: TrackChangeEvent[]): void {
-    this.socket.emit('change_track', event);
+    this.sendEvent('change_track', event);
   }
 
   changeColors(colors: RgbColor[]): void {
-    this.socket.emit('change_colors', colors);
+    this.sendEvent('change_colors', colors);
   }
 
   horn(strobeTime: number, counter: number): void {
-    this.socket.emit('horn', { strobeTime, counter });
+    this.sendEvent('horn', { strobeTime, counter });
   }
 
   loaded(tape: MixTape): void {
-    this.socket.emit('loaded', tape);
+    this.sendEvent('loaded', tape);
   }
 
   start(): void {
-    this.socket.emit('start');
+    this.sendEvent('start');
   }
 
   stop(): void {
-    this.socket.emit('stop');
+    this.sendEvent('stop');
   }
 }

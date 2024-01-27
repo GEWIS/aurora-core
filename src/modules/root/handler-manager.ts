@@ -20,6 +20,7 @@ import { ScenesHandler } from '../handlers/lights/scenes-handler';
 import EffectSequenceHandler from '../handlers/lights/effect-sequence-handler';
 import { MusicEmitter } from '../events';
 import { userIsEntity } from '../auth/user';
+import StageEffectsHandler from '../handlers/screen/stage-effects-handler';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -136,6 +137,7 @@ export default class HandlerManager {
       new CurrentlyPlayingTrackHandler(io.of('/screen')),
       new CenturionScreenHandler(io.of('screen')),
       new PosterScreenHandler(io.of('/screen')),
+      new StageEffectsHandler(io.of('/screen')),
     ] as BaseScreenHandler[]);
   }
 
