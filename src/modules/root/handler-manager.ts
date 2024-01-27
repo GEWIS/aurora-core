@@ -184,7 +184,7 @@ export default class HandlerManager {
       const newHandlerObj = handlers.find((h) => h.constructor.name === newHandler);
       if (newHandlerObj === undefined) return false;
       newHandlerObj.registerEntity(entity);
-      socket?.emit('handler_set', newHandlerObj);
+      socket?.emit('handler_set', newHandlerObj.constructor.name);
     } else {
       socket?.emit('handler_remove');
       // eslint-disable-next-line no-param-reassign
