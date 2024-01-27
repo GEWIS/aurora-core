@@ -10,6 +10,7 @@ import LightsControllerManager from './modules/root/lights-controller-manager';
 import { SocketConnectionEmitter } from './modules/events/socket-connection-emitter';
 import ModeManager from './modules/modes/mode-manager';
 import { ArtificialBeatGenerator } from './modules/beats/artificial-beat-generator';
+import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
 
 async function createApp(): Promise<void> {
   await dataSource.initialize();
@@ -33,6 +34,8 @@ async function createApp(): Promise<void> {
     await SpotifyApiHandler.getInstance().init();
     await SpotifyTrackHandler.getInstance().init(musicEmitter);
   }
+
+  initBackofficeSynchronizer(io.of('/backoffice'), { musicEmitter });
 
   const port = process.env.PORT || 3000;
   httpServer.listen(port, () => console.log(`Listening at http://localhost:${port}`));

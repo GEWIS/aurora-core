@@ -1,7 +1,7 @@
 import { MusicEmitter } from '../events';
 import { BeatEvent } from '../events/music-emitter-events';
 
-export interface StartArtificialBeatGeneratorParams {
+export interface ArtificialBeatGeneratorParams {
   /**
    * Beats per minute
    * @minimum 1 Should be positive and not null
@@ -12,7 +12,7 @@ export interface StartArtificialBeatGeneratorParams {
 export class ArtificialBeatGenerator {
   private beatStart: Date | undefined;
 
-  private bpm: number | undefined;
+  public bpm: number | undefined;
 
   private beatInterval: number;
 
