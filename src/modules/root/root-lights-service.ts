@@ -31,7 +31,7 @@ export interface ColorParams {
   colorBlueChannel: number;
   colorColdWhiteChannel?: number;
   colorWarmWhiteChannel?: number;
-  colorAmberWhiteChannel?: number;
+  colorAmberChannel?: number;
   colorUvChannel?: number;
 }
 
@@ -287,7 +287,7 @@ export default class RootLightsService {
       greenChannel: params.colorGreenChannel,
       coldWhiteChannel: params.colorColdWhiteChannel,
       warmWhiteChannel: params.colorWarmWhiteChannel,
-      amberChannel: params.colorAmberWhiteChannel,
+      amberChannel: params.colorAmberChannel,
       uvChannel: params.colorUvChannel,
     };
   }
