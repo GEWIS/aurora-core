@@ -97,8 +97,8 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
   }
 
   tick(): LightsGroup {
-    this.lightsGroup.pars.forEach(this.applyColorToFixture);
-    this.lightsGroup.movingHeadRgbs.forEach(this.applyColorToFixture);
+    this.lightsGroup.pars.forEach(this.applyColorToFixture.bind(this));
+    this.lightsGroup.movingHeadRgbs.forEach(this.applyColorToFixture.bind(this));
 
     return this.lightsGroup;
   }

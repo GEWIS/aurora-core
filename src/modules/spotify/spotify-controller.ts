@@ -102,7 +102,7 @@ export class SpotifyController extends Controller {
   @Security('local', [SecurityGroup.ADMIN])
   @Get('users')
   public async getAllSpotifyUsers() {
-    return (await SpotifyUser.find()).map(this.toResponse);
+    return (await SpotifyUser.find()).map(this.toResponse.bind(this));
   }
 
   /**
