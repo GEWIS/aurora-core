@@ -1,7 +1,7 @@
 import { Column, Entity } from 'typeorm';
 import LightsFixture, { LightsFixtureCurrentValues } from './lights-fixture';
 import Colors from './colors';
-import { RgbColorDefinition } from '../color-definitions';
+import { RgbColor, rgbColorDefinitions } from '../color-definitions';
 
 @Entity()
 export default class LightsPar extends LightsFixture {
@@ -28,8 +28,8 @@ export default class LightsPar extends LightsFixture {
     this.valuesUpdatedAt = new Date();
   }
 
-  setColor(color: RgbColorDefinition) {
-    this.setCurrentValues(color);
+  setColor(color: RgbColor) {
+    this.setCurrentValues(rgbColorDefinitions[color].definition);
   }
 
   setMasterDimmer(masterDimChannel: number) {

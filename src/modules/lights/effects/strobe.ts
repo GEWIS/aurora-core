@@ -24,6 +24,12 @@ export default class Strobe extends LightsEffect<StrobeProps> {
     this.lightsGroup.pars.forEach((p) => {
       p.fixture.enableStrobe(props.durationMs);
     });
+    this.lightsGroup.movingHeadWheels.forEach((p) => {
+      p.fixture.enableStrobe(props.durationMs);
+    });
+    this.lightsGroup.movingHeadRgbs.forEach((p) => {
+      p.fixture.enableStrobe(props.durationMs);
+    });
   }
 
   destroy(): void {

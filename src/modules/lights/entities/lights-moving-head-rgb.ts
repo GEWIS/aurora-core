@@ -3,6 +3,7 @@ import LightsMovingHead from './lights-moving-head';
 import Colors from './colors';
 import Movement from './movement';
 import { LightsFixtureCurrentValues } from './lights-fixture';
+import { RgbColor, rgbColorDefinitions } from '../color-definitions';
 
 @Entity()
 export default class LightsMovingHeadRgb extends LightsMovingHead {
@@ -32,6 +33,17 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
       ...values,
     };
     this.valuesUpdatedAt = new Date();
+  }
+
+  setColor(color: RgbColor) {
+    this.setCurrentValues(rgbColorDefinitions[color].definition);
+  }
+
+  setMasterDimmer(masterDimChannel: number) {
+    if (this.currentValues.masterDimChannel === masterDimChannel) return;
+    this.setCurrentValues({
+      masterDimChannel,
+    });
   }
 
   blackout() {

@@ -26,6 +26,11 @@ export default class LightsGroup extends SubscribeEntity {
   @OneToMany(() => LightsGroupMovingHeadRgbs, (pars) => pars.group, { eager: true })
   public movingHeadRgbs: LightsGroupMovingHeadRgbs[];
 
+  public get fixtures(): (LightsGroupPars
+  | LightsGroupMovingHeadWheels | LightsGroupMovingHeadRgbs)[] {
+    return [...this.pars, ...this.movingHeadWheels, ...this.movingHeadRgbs];
+  }
+
   public blackout() {
     this.pars.forEach((par) => par.fixture.blackout());
     this.movingHeadWheels.forEach((par) => par.fixture.blackout());

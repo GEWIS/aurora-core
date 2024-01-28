@@ -1,7 +1,7 @@
 import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
 
 import { LightsGroup } from '../entities';
-import { RgbColor, rgbColorDefinitions } from '../color-definitions';
+import { RgbColor } from '../color-definitions';
 import { TrackPropertiesEvent } from '../../events/music-emitter-events';
 
 export interface StaticColorProps {
@@ -21,10 +21,9 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
     super(lightsGroup, features);
     this.props = props;
 
-    const color = rgbColorDefinitions[this.props.color];
-    this.lightsGroup.pars.forEach((p) => {
-      p.fixture.setColor(color.definition);
-      p.fixture.setMasterDimmer(255);
+    this.lightsGroup.fixtures.forEach((f) => {
+      f.fixture.setColor(this.props.color);
+      f.fixture.setMasterDimmer(255);
     });
   }
 

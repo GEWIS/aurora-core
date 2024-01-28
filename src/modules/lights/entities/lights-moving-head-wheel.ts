@@ -2,7 +2,10 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import LightsMovingHead from './lights-moving-head';
 import Movement from './movement';
 import { LightsFixtureCurrentValues } from './lights-fixture';
-import LightsWheelChannelValue, { ColorWheelColors } from './lights-wheel-channel-value';
+import LightsWheelChannelValue from './lights-wheel-channel-value';
+import {
+  RgbColor, rgbColorDefinitions, WheelColor,
+} from '../color-definitions';
 
 interface LightsMovingHeadWheelCurrentValues extends Movement, LightsFixtureCurrentValues {
   colorWheelChannel: number,
@@ -22,7 +25,7 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
   public goboRotateChannel: number | null;
 
   @OneToMany(() => LightsWheelChannelValue, (c) => c.movingHead, { eager: true })
-  public colorWheelChannelValues: LightsWheelChannelValue<ColorWheelColors>[];
+  public colorWheelChannelValues: LightsWheelChannelValue<WheelColor>[];
 
   @OneToMany(() => LightsWheelChannelValue, (c) => c.movingHead, { eager: true })
   public goboWheelChannelValues: LightsWheelChannelValue<string>[];
@@ -39,6 +42,21 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     goboWheelChannel: 0,
     goboRotateChannel: 0,
   };
+
+  setColor(color: RgbColor) {
+    const wheelColor = rgbColorDefinitions[color].alternative;
+    const channelValueObj = this.colorWheelChannelValues.find((v) => v.name === wheelColor);
+    this.setCurrentValues({
+      colorWheelChannel: channelValueObj?.value ?? 0,
+    });
+  }
+
+  setMasterDimmer(masterDimChannel: number) {
+    if (this.currentValues.masterDimChannel === masterDimChannel) return;
+    this.setCurrentValues({
+      masterDimChannel,
+    });
+  }
 
   blackout() {
     if (Object.values(this.currentValues).every((v) => v === 0)) return;

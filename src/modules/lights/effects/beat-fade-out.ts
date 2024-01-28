@@ -1,7 +1,9 @@
 import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
 import { BeatEvent, TrackPropertiesEvent } from '../../events/music-emitter-events';
-import { LightsGroup } from '../entities';
-import { RgbColor, rgbColorDefinitions } from '../color-definitions';
+import {
+  LightsGroup, LightsGroupMovingHeadRgbs, LightsGroupMovingHeadWheels, LightsGroupPars,
+} from '../entities';
+import { RgbColor } from '../color-definitions';
 
 export interface BeatFadeOutProps {
   /**
@@ -65,29 +67,38 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
     this.phase = (this.phase + 1) % (this.props.colors.length + (this.props.addBlacks ? 1 : 0));
   }
 
-  tick(): LightsGroup {
-    const { colors, enableFade, addBlacks } = this.props;
+  getCurrentColor(i: number) {
+    const { colors, addBlacks } = this.props;
+    const nrColors = colors.length + (addBlacks ? 1 : 0);
+    const index = (i + this.phase) % nrColors;
+    if (index === colors.length) {
+      return null;
+    }
+    return colors[index];
+  }
 
+  applyColorToFixture(
+    p: LightsGroupPars | LightsGroupMovingHeadRgbs | LightsGroupMovingHeadWheels,
+    i: number,
+  ) {
+    const { enableFade } = this.props;
     const beatProgression = enableFade ? Math.max(
       1 - ((new Date().getTime() - this.lastBeat) / this.beatLength),
       0,
     ) : 1;
 
-    const nrColors = colors.length + (addBlacks ? 1 : 0);
-    this.lightsGroup.pars.forEach((p, i) => {
-      const index = (i + this.phase) % nrColors;
-      if (index === colors.length) {
-        p.fixture.setMasterDimmer(0);
-        return;
-      }
-      const color = colors[index];
-      const { definition: colorDefinition } = rgbColorDefinitions[color];
+    const color = this.getCurrentColor(i);
+    if (color == null) {
+      p.fixture.setMasterDimmer(0);
+    } else {
       p.fixture.setMasterDimmer(Math.round(255 * beatProgression));
-      p.fixture.setColor(colorDefinition);
-    });
+      p.fixture.setColor(color);
+    }
+  }
 
-    this.lightsGroup.movingHeadWheels.forEach((m) => m.fixture.blackout());
-    this.lightsGroup.movingHeadRgbs.forEach((m) => m.fixture.blackout());
+  tick(): LightsGroup {
+    this.lightsGroup.pars.forEach(this.applyColorToFixture);
+    this.lightsGroup.movingHeadRgbs.forEach(this.applyColorToFixture);
 
     return this.lightsGroup;
   }

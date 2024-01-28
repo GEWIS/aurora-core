@@ -41,9 +41,13 @@ const DEFAULT_DIM_DURATION = 800;
 const DEFAULT_CYCLE_TIME = 200;
 
 export default class Sparkle extends LightsEffect<SparkleProps> {
-  private beats: Date[];
+  private beatsPars: Date[];
 
-  private colorIndices: number[];
+  private beatsMHRgbs: Date[];
+
+  private colorIndicesPars: number[];
+
+  private colorIndicesMHRgbs: number[];
 
   private previousTick = new Date();
 
@@ -62,8 +66,8 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
     const nrFixtures = lightsGroup.pars.length
       + lightsGroup.movingHeadWheels.length
       + lightsGroup.movingHeadRgbs.length;
-    this.beats = new Array(nrFixtures).fill(new Date(0));
-    this.colorIndices = new Array(nrFixtures).fill(0);
+    this.beatsPars = new Array(nrFixtures).fill(new Date(0));
+    this.colorIndicesPars = new Array(nrFixtures).fill(0);
 
     this.props = props;
   }
@@ -95,11 +99,18 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
 
     // Turn on some lights according to the ratio if we have reached the time
     if (new Date().getTime() - this.previousTick.getTime() >= cycleTime) {
-      this.beats.forEach((b, i) => {
+      this.beatsPars.forEach((b, i) => {
         if (Math.random() <= ratio) {
-          this.colorIndices[i] = (this.colorIndices[i] + i) % Math
+          this.colorIndicesPars[i] = (this.colorIndicesPars[i] + i) % Math
             .max(colors.length);
-          this.beats[i] = new Date();
+          this.beatsPars[i] = new Date();
+        }
+      });
+      this.beatsMHRgbs.forEach((b, i) => {
+        if (Math.random() <= ratio) {
+          this.colorIndicesMHRgbs[i] = (this.colorIndicesMHRgbs[i] + i) % Math
+            .max(colors.length);
+          this.beatsMHRgbs[i] = new Date();
         }
       });
       this.previousTick = new Date();
@@ -107,14 +118,19 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
 
     this.lightsGroup.pars.forEach((p, i) => {
       const index = i;
-      const progression = this.getProgression(this.beats[index]);
-      const colorIndex = this.colorIndices[index];
+      const progression = this.getProgression(this.beatsPars[index]);
+      const colorIndex = this.colorIndicesPars[index];
       const color = colors[colorIndex % colors.length];
-      const { definition: colorDefinition } = rgbColorDefinitions[color];
-      p.fixture.setCurrentValues({
-        masterDimChannel: Math.round(255 * progression),
-        ...colorDefinition,
-      });
+      p.fixture.setColor(color);
+      p.fixture.setMasterDimmer(Math.round(255 * progression));
+    });
+    this.lightsGroup.movingHeadRgbs.forEach((p, i) => {
+      const index = i;
+      const progression = this.getProgression(this.beatsMHRgbs[index]);
+      const colorIndex = this.colorIndicesMHRgbs[index];
+      const color = colors[colorIndex % colors.length];
+      p.fixture.setColor(color);
+      p.fixture.setMasterDimmer(Math.round(255 * progression));
     });
 
     return this.lightsGroup;

@@ -1,6 +1,6 @@
 import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
 import { LightsGroup } from '../entities';
-import { RgbColor, rgbColorDefinitions } from '../color-definitions';
+import { RgbColor } from '../color-definitions';
 
 export interface WaveProps {
   /**
@@ -60,13 +60,21 @@ export default class Wave extends LightsEffect<WaveProps> {
       this.cycleStartTick = currentTick;
     }
     const nrLights = this.lightsGroup.pars.length;
-    const { definition: colorDefinition } = rgbColorDefinitions[this.props.color];
 
-    this.lightsGroup.pars.sort((p1, p2) => p2.firstChannel - p1.firstChannel).forEach((p, i) => {
-      const brightness = Math.sin(((i / nrLights) + progression) * 2 * Math.PI);
-      p.fixture.setMasterDimmer(Math.max(0, brightness * 255));
-      p.fixture.setColor(colorDefinition);
-    });
+    this.lightsGroup.pars
+      .sort((p1, p2) => p2.firstChannel - p1.firstChannel)
+      .forEach((p, i) => {
+        const brightness = Math.sin(((i / nrLights) + progression) * 2 * Math.PI);
+        p.fixture.setMasterDimmer(Math.max(0, brightness * 255));
+        p.fixture.setColor(this.props.color);
+      });
+    this.lightsGroup.movingHeadRgbs
+      .sort((p1, p2) => p2.firstChannel - p1.firstChannel)
+      .forEach((p, i) => {
+        const brightness = Math.sin(((i / nrLights) + progression) * 2 * Math.PI);
+        p.fixture.setMasterDimmer(Math.max(0, brightness * 255));
+        p.fixture.setColor(this.props.color);
+      });
 
     return this.lightsGroup;
   }
