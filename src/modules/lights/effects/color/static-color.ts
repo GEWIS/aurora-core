@@ -44,6 +44,8 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
         );
       }
     });
+
+    this.beat();
   }
 
   public static build(props: StaticColorProps): LightsEffectBuilder<StaticColorProps, StaticColor> {
@@ -54,8 +56,8 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
     if (!this.props.beatToggle) return;
 
     this.lightsGroup.fixtures.forEach((f, i) => {
-      if (i % 2 === i) {
-        f.fixture.setMasterDimmer(255);
+      if ((this.ping + 1) % 2 === i) {
+        f.fixture.setMasterDimmer(Math.round((this.props.relativeBrightness ?? 1) * 255));
       } else {
         f.fixture.setMasterDimmer(0);
       }

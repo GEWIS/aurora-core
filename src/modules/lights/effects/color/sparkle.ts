@@ -99,14 +99,14 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
 
     // Turn on some lights according to the ratio if we have reached the time
     if (new Date().getTime() - this.previousTick.getTime() >= cycleTime) {
-      this.beatsPars.forEach((b, i) => {
+      this.beatsPars?.forEach((b, i) => {
         if (Math.random() <= ratio) {
           this.colorIndicesPars[i] = (this.colorIndicesPars[i] + i) % Math
             .max(colors.length);
           this.beatsPars[i] = new Date();
         }
       });
-      this.beatsMHRgbs.forEach((b, i) => {
+      this.beatsMHRgbs?.forEach((b, i) => {
         if (Math.random() <= ratio) {
           this.colorIndicesMHRgbs[i] = (this.colorIndicesMHRgbs[i] + i) % Math
             .max(colors.length);

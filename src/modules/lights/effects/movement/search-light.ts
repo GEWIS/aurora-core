@@ -4,8 +4,8 @@ import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../../e
 export interface SearchLightProps {
   /**
    * Radius of the search light
-   * @isInt
    * @minimum 0
+   * @maximum 2
    */
   radiusFactor?: number;
 
@@ -71,7 +71,6 @@ export default class SearchLight extends LightsEffect<SearchLightProps> {
     movingHead.setCurrentValues({
       panChannel: Math.cos(progression * 2 * Math.PI + offset) * 42 + 42,
       tiltChannel: Math.sin(progression * 2 * Math.PI + offset) * 64 * radiusFactor + 128,
-      masterDimChannel: 255,
     });
   }
 
