@@ -1,6 +1,6 @@
-import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
-import { LightsGroup } from '../entities';
-import { TrackPropertiesEvent } from '../../events/music-emitter-events';
+import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
+import { LightsGroup } from '../../entities';
+import { TrackPropertiesEvent } from '../../../events/music-emitter-events';
 
 export interface StrobeProps {
   /**

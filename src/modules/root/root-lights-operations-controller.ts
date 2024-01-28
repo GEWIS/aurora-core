@@ -4,7 +4,7 @@ import {
 import { Controller } from '@tsoa/runtime';
 import HandlerManager from './handler-manager';
 import { LightsGroup } from '../lights/entities';
-import { StrobeProps } from '../lights/effects/strobe';
+import { StrobeProps } from '../lights/effects/color/strobe';
 import { SecurityGroup } from '../../helpers/security';
 
 interface GroupFixtureOverrideParams {

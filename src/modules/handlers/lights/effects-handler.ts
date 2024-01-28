@@ -3,52 +3,68 @@ import { LightsGroup } from '../../lights/entities';
 import LightsEffect from '../../lights/effects/lights-effect';
 import { BeatEvent } from '../../events/music-emitter-events';
 
+export type GroupEffectsMap = Map<LightsGroup, LightsEffect | LightsEffect[] | null>;
+
 export default abstract class EffectsHandler extends BaseLightsHandler {
   /**
-   * Assign every group of lights exactly one effect
+   * Assign every group of lights zero or more color effects
    */
-  protected groupEffects: Map<
-  LightsGroup,
-  LightsEffect | LightsEffect[] | null
-  > = new Map();
+  protected groupColorEffects: GroupEffectsMap = new Map();
+
+  /**
+   * Assign every group of lights zero or more movement effects
+   */
+  protected groupMovementEffects: GroupEffectsMap = new Map();
 
   // Override entity register function to also populate the groupEffect mapping
   public registerEntity(entity: LightsGroup) {
     super.registerEntity(entity);
-    this.groupEffects.set(entity, null);
+    this.groupColorEffects.set(entity, null);
+    this.groupMovementEffects.set(entity, null);
   }
 
   // We should also remove the entity from the effects mapping
   public removeEntity(entityCopy: LightsGroup) {
-    const entity: LightsGroup | undefined = Array.from(this.groupEffects.keys())
+    const entity: LightsGroup | undefined = this.entities
       .find((e) => e.id === entityCopy.id);
     if (!entity) return;
 
-    this.groupEffects.delete(entity);
+    this.groupColorEffects.delete(entity);
+    this.groupMovementEffects.delete(entity);
     super.removeEntity(entity);
   }
 
   tick(): LightsGroup[] {
-    const result: LightsGroup[] = [];
-
-    this.groupEffects.forEach((effect, group) => {
+    this.groupColorEffects.forEach((effect, group) => {
       if (effect == null) {
-        group.blackout();
-        result.push(group);
+        // Only blackout if the group also has no movement effects. Do nothing otherwise
+        if (!this.groupMovementEffects.has(group)) {
+          group.blackout();
+        }
       } else if (Array.isArray(effect)) {
-        const intermediates = effect.map((e) => e.tick());
-        result.push(intermediates[intermediates.length - 1]);
+        effect.forEach((e) => e.tick());
       } else {
-        result.push(effect.tick());
+        effect.tick();
+      }
+    });
+    this.groupMovementEffects.forEach((effect) => {
+      if (effect == null) {
+        // No movement does not mean a blackout, because the fixture can be a par
+        return;
+      }
+      if (Array.isArray(effect)) {
+        effect.forEach((e) => e.tick());
+      } else {
+        effect.tick();
       }
     });
 
-    return result;
+    return this.entities;
   }
 
   beat(event: BeatEvent) {
     // Propagate the beat to every effect
-    this.groupEffects.forEach((effect) => {
+    this.groupColorEffects.forEach((effect) => {
       if (!effect) return;
       if (Array.isArray(effect)) {
         effect.forEach((e) => e.beat(event));

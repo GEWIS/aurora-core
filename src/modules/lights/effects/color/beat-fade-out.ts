@@ -1,9 +1,9 @@
-import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
-import { BeatEvent, TrackPropertiesEvent } from '../../events/music-emitter-events';
+import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
+import { BeatEvent, TrackPropertiesEvent } from '../../../events/music-emitter-events';
 import {
   LightsGroup, LightsGroupMovingHeadRgbs, LightsGroupMovingHeadWheels, LightsGroupPars,
-} from '../entities';
-import { RgbColor } from '../color-definitions';
+} from '../../entities';
+import { RgbColor } from '../../color-definitions';
 
 export interface BeatFadeOutProps {
   /**

@@ -1,42 +1,54 @@
-import EffectsHandler from './effects-handler';
+import EffectsHandler, { GroupEffectsMap } from './effects-handler';
 import { LightsGroup } from '../../lights/entities';
 import { LightsEffectBuilder } from '../../lights/effects/lights-effect';
 import { LIGHTS_EFFECTS, LightsEffectsCreateParams } from '../../lights/effects';
-import { BeatEvent } from '../../events/music-emitter-events';
+import { LightsEffectsColorCreateParams } from '../../lights/effects/color';
+import { LightsEffectsMovementCreateParams } from '../../lights/effects/movement';
 
 export default class SetEffectsHandler extends EffectsHandler {
   /**
    * Attach the given effect to the given lightsGroup
    * @param lightsGroup
    * @param effects
+   * @param effectsMap
    */
-  public setEffect(lightsGroup: LightsGroup, effects: LightsEffectBuilder[]) {
+  private setEffect(
+    lightsGroup: LightsGroup,
+    effects: LightsEffectBuilder[],
+    effectsMap: GroupEffectsMap,
+  ) {
     // Reset the current lights before setting anything new
     lightsGroup.blackout();
-    this.groupEffects.set(lightsGroup, effects.map((e) => e(lightsGroup, this.trackFeatures)));
+    effectsMap.set(lightsGroup, effects.map((e) => e(lightsGroup, this.trackFeatures)));
   }
 
   /**
    * Remove any existing effects from the lightsGroup. Will default to blackout
    * @param lightsGroup
+   * @param effectsMap
    */
-  public removeEffect(lightsGroup: LightsGroup) {
+  private removeEffect(lightsGroup: LightsGroup, effectsMap: GroupEffectsMap) {
     lightsGroup.blackout();
-    this.groupEffects.set(lightsGroup, null);
+    effectsMap.set(lightsGroup, null);
   }
 
   /**
    * Given a list of effects to create, add the given effects to the given
-   * lightgroup. Remove all effects if an empty array is given
+   * lightsgroup. Remove all effects if an empty array is given
    * @param id
    * @param effects
+   * @param effectsMap
    */
-  public parseAndSetEffects(id: number, effects: LightsEffectsCreateParams[]) {
+  private parseAndSetEffects(
+    id: number,
+    effects: LightsEffectsCreateParams[],
+    effectsMap: GroupEffectsMap,
+  ) {
     const lightsGroup = this.entities.find((e) => e.id === id);
     if (lightsGroup === undefined) throw new Error(`LightsGroup with ID ${id} is not registered to this handler.`);
 
     if (effects.length === 0) {
-      this.removeEffect(lightsGroup);
+      this.removeEffect(lightsGroup, effectsMap);
       return;
     }
 
@@ -50,6 +62,30 @@ export default class SetEffectsHandler extends EffectsHandler {
       .map((e) => e!)
       .flat()[0]);
 
-    this.setEffect(lightsGroup, effectBuilders);
+    this.setEffect(lightsGroup, effectBuilders, effectsMap);
+  }
+
+  public setColorEffect(lightsGroup: LightsGroup, effects: LightsEffectBuilder[]) {
+    return this.setEffect(lightsGroup, effects, this.groupColorEffects);
+  }
+
+  public removeColorEffect(lightsGroup: LightsGroup) {
+    return this.removeEffect(lightsGroup, this.groupColorEffects);
+  }
+
+  public parseAndSetColorEffects(id: number, effects: LightsEffectsColorCreateParams[]) {
+    return this.parseAndSetEffects(id, effects, this.groupColorEffects);
+  }
+
+  public setMovementEffect(lightsGroup: LightsGroup, effects: LightsEffectBuilder[]) {
+    return this.setEffect(lightsGroup, effects, this.groupMovementEffects);
+  }
+
+  public removeMovementEffect(lightsGroup: LightsGroup) {
+    return this.removeEffect(lightsGroup, this.groupMovementEffects);
+  }
+
+  public parseAndSetMovementEffects(id: number, effects: LightsEffectsMovementCreateParams[]) {
+    return this.parseAndSetEffects(id, effects, this.groupMovementEffects);
   }
 }

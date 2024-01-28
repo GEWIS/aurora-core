@@ -1,6 +1,6 @@
-import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
-import { LightsGroup } from '../entities';
-import { RgbColor } from '../color-definitions';
+import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
+import { LightsGroup } from '../../entities';
+import { RgbColor } from '../../color-definitions';
 
 export interface WaveProps {
   /**

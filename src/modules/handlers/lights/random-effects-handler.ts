@@ -1,8 +1,9 @@
 import { LightsGroup } from '../../lights/entities';
 import { BeatEvent } from '../../events/music-emitter-events';
-import { BeatFadeOut } from '../../lights/effects';
+import { BeatFadeOut } from '../../lights/effects/color';
 import { getTwoComplementaryRgbColors } from '../../lights/color-definitions';
 import EffectsHandler from './effects-handler';
+import { SearchLight } from '../../lights/effects/movement';
 
 export default class RandomEffectsHandler extends EffectsHandler {
   private lastSectionStart: number = 0;
@@ -22,7 +23,7 @@ export default class RandomEffectsHandler extends EffectsHandler {
     const { colorNames } = getTwoComplementaryRgbColors();
 
     // Destroy the existing effect(s)
-    const effect = this.groupEffects.get(entity);
+    const effect = this.groupColorEffects.get(entity);
     if (effect && Array.isArray(effect)) {
       effect.forEach((e) => e.destroy());
     } else if (effect) {
@@ -30,12 +31,12 @@ export default class RandomEffectsHandler extends EffectsHandler {
     }
 
     // We currently have only one effect, so that makes our choice easy
-    this.groupEffects.set(entity, new BeatFadeOut(
+    this.groupColorEffects.set(entity, new BeatFadeOut(
       entity,
       { colors: colorNames, enableFade: false },
       this.trackFeatures,
     ));
-    // this.groupEffects.set(entity, new Strobe(entity, this.trackFeatures));
+    this.groupMovementEffects.set(entity, new SearchLight(entity, {}));
   }
 
   beat(event: BeatEvent): void {

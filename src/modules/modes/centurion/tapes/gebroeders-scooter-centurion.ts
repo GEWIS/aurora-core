@@ -1,6 +1,6 @@
 import MixTape from './mix-tape';
-import SearchLight from '../../../lights/effects/search-light';
-import { SingleFlood } from '../../../lights/effects';
+import SearchLight from '../../../lights/effects/movement/search-light';
+import { SingleFlood } from '../../../lights/effects/color';
 
 const centurion: MixTape = {
   name: 'Gebroeders Scooter - Centurion',

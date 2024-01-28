@@ -4,7 +4,8 @@ import { Audio, Screen } from '../../root/entities';
 import SetEffectsHandler from '../../handlers/lights/set-effects-handler';
 import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
 import MixTape, { FeedEvent, SongData } from './tapes/mix-tape';
-import { BeatFadeOut, SearchLight } from '../../lights/effects';
+import { BeatFadeOut } from '../../lights/effects/color';
+import { SearchLight } from '../../lights/effects/movement';
 import {
   getTwoComplementaryRgbColors, RgbColor,
 } from '../../lights/color-definitions';
@@ -12,8 +13,8 @@ import { MusicEmitter } from '../../events';
 import { TrackChangeEvent } from '../../events/music-emitter-events';
 import { CenturionScreenHandler } from '../../handlers/screen';
 import { LightsEffectBuilder } from '../../lights/effects/lights-effect';
-import Wave from '../../lights/effects/wave';
-import Sparkle from '../../lights/effects/sparkle';
+import Wave from '../../lights/effects/color/wave';
+import Sparkle from '../../lights/effects/color/sparkle';
 import { ArtificialBeatGenerator } from '../../beats/artificial-beat-generator';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';
@@ -183,13 +184,13 @@ export default class CenturionMode extends BaseMode {
       const newEffectBuilder = this.getRandomEffect(colorNames);
 
       this.lights.forEach((l) => {
-        this.lightsHandler.setEffect(l, [newEffectBuilder, movingHeadEffect]);
+        this.lightsHandler.setColorEffect(l, [newEffectBuilder, movingHeadEffect]);
       });
       this.screenHandler.changeColors(colorNames);
       this.emitSong(event.data);
     } else if (event.type === 'effect') {
       this.lights.forEach((l) => {
-        this.lightsHandler.setEffect(l, event.data.effects);
+        this.lightsHandler.setColorEffect(l, event.data.effects);
       });
     }
   }

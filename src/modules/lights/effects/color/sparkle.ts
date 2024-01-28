@@ -1,7 +1,7 @@
-import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
-import { RgbColor, rgbColorDefinitions } from '../color-definitions';
-import { LightsGroup } from '../entities';
-import { TrackPropertiesEvent } from '../../events/music-emitter-events';
+import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
+import { RgbColor, rgbColorDefinitions } from '../../color-definitions';
+import { LightsGroup } from '../../entities';
+import { TrackPropertiesEvent } from '../../../events/music-emitter-events';
 
 export interface SparkleProps {
   /**

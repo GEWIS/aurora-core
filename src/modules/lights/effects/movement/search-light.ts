@@ -1,5 +1,5 @@
-import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from './lights-effect';
-import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../entities';
+import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
+import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../../entities';
 
 export interface SearchLightProps {
   /**
