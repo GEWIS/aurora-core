@@ -17,8 +17,6 @@ export default class SetEffectsHandler extends EffectsHandler {
     effects: LightsEffectBuilder[],
     effectsMap: GroupEffectsMap,
   ) {
-    // Reset the current lights before setting anything new
-    lightsGroup.blackout();
     effectsMap.set(lightsGroup, effects.map((e) => e(lightsGroup, this.trackFeatures)));
   }
 

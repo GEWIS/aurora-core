@@ -72,5 +72,14 @@ export default abstract class EffectsHandler extends BaseLightsHandler {
         effect.beat(event);
       }
     });
+    // Propagate the beat to every effect
+    this.groupMovementEffects.forEach((effect) => {
+      if (!effect) return;
+      if (Array.isArray(effect)) {
+        effect.forEach((e) => e.beat(event));
+      } else {
+        effect.beat(event);
+      }
+    });
   }
 }
