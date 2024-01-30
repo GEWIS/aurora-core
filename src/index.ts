@@ -31,8 +31,10 @@ async function createApp(): Promise<void> {
 
   if (process.env.SPOTIFY_ENABLE === 'true' && process.env.SPOTIFY_CLIENT_ID
     && process.env.SPOTIFY_CLIENT_SECRET && process.env.SPOTIFY_REDIRECT_URI) {
+    console.log('Initialize Spotify...');
     await SpotifyApiHandler.getInstance().init();
     await SpotifyTrackHandler.getInstance().init(musicEmitter);
+    console.log('Spotify initialized!');
   }
 
   initBackofficeSynchronizer(io.of('/backoffice'), { musicEmitter });

@@ -27,6 +27,8 @@ export default class SpotifyApiHandler {
       } catch (e) {
         console.error(`Could not load Spotify user: ${e}`);
       }
+    } else {
+      console.log('No Spotify user found. Please log in to use Spotify API integration.');
     }
     this.initialized = true;
   }

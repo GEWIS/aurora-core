@@ -1,10 +1,14 @@
 import '../env';
 import dataSource from '../database';
-import seedDatabase from './seed';
+import seedDatabase, { seedOpeningSequence } from './seed';
 
 async function createSeeder() {
   await dataSource.initialize();
-  await seedDatabase();
+  await dataSource.dropDatabase();
+
+  await dataSource.synchronize();
+  const lights = await seedDatabase();
+  await seedOpeningSequence(lights[0]!, lights[1]!, lights[3]!);
 }
 
 if (require.main === module) {
