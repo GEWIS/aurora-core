@@ -146,7 +146,7 @@ export default class CenturionMode extends BaseMode {
 
   private getRandomEffect(colors: RgbColor[]): LightsEffectBuilder {
     const effects = [{
-      effect: BeatFadeOut.build({ colors, enableFade: false, addBlacks: true }),
+      effect: BeatFadeOut.build({ colors, enableFade: false, nrBlacks: 1 }),
       probability: 0.8,
     }, {
       effect: Wave.build({ color: colors[0] }),

@@ -18,9 +18,19 @@ export interface BeatFadeOutProps {
   enableFade?: boolean;
 
   /**
-   * If a "black" color should be added
+   * How many "black" fixtures should be added. Zero for no blacks
+   * @isInt
+   * @minimum 0
    */
-  addBlacks?: boolean;
+  nrBlacks?: number;
+
+  /**
+   * Amount of time it takes before the lights switch to the next state (in ms). If undefined,
+   * beats will be used for switching states
+   * @isInt
+   * @minimum 0
+   */
+  customCycleTime?: number;
 }
 
 export type BeatFadeOutCreateParams = BaseLightsEffectCreateParams & {
@@ -42,6 +52,10 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
   ) {
     super(lightsGroup, features);
     this.props = props;
+
+    if (this.props.customCycleTime) {
+      this.beatLength = this.props.customCycleTime;
+    }
   }
 
   /**
@@ -62,14 +76,17 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
   destroy(): void {}
 
   beat(event: BeatEvent): void {
+    // If we use a custom cycle time, ignore all beats
+    if (this.props.customCycleTime) return;
+
     this.lastBeat = new Date().getTime();
     this.beatLength = event.beat.duration * 1000;
-    this.phase = (this.phase + 1) % (this.props.colors.length + (this.props.addBlacks ? 1 : 0));
+    this.phase = (this.phase + 1) % (this.props.colors.length + (this.props.nrBlacks ?? 0));
   }
 
   getCurrentColor(i: number) {
-    const { colors, addBlacks } = this.props;
-    const nrColors = colors.length + (addBlacks ? 1 : 0);
+    const { colors, nrBlacks } = this.props;
+    const nrColors = colors.length + (nrBlacks || 0);
     const index = (i + this.phase) % nrColors;
     if (index === colors.length) {
       return null;
@@ -97,6 +114,15 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
   }
 
   tick(): LightsGroup {
+    if (this.props.customCycleTime) {
+      const now = new Date().getTime();
+      const msDiff = now - this.lastBeat;
+      if (msDiff >= this.props.customCycleTime) {
+        this.lastBeat = now;
+        this.phase = (this.phase + 1) % (this.props.colors.length + (this.props.nrBlacks ?? 0));
+      }
+    }
+
     this.lightsGroup.pars.forEach(this.applyColorToFixture.bind(this));
     this.lightsGroup.movingHeadRgbs.forEach(this.applyColorToFixture.bind(this));
 
