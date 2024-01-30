@@ -36,6 +36,10 @@ export default abstract class LightsFixture extends BaseEntity {
 
   private overrideDmx: (number | null)[] = new Array(16).fill(null);
 
+  protected shouldFreezeDmx: boolean;
+
+  protected frozenDmx: number[] | undefined;
+
   @AfterLoad()
   afterLoad() {
     this.valuesUpdatedAt = new Date();
@@ -121,4 +125,21 @@ export default abstract class LightsFixture extends BaseEntity {
    * Get the current DMX values as an 16-length array of integers.
    */
   abstract toDmx(): number[];
+
+  /**
+   * Store the next state of the fixture and do not change anymore
+   */
+  public freezeDmx() {
+    this.shouldFreezeDmx = true;
+    this.valuesUpdatedAt = new Date();
+  }
+
+  /**
+   * Unfreeze the DMX values
+   */
+  public unfreezeDmx() {
+    this.shouldFreezeDmx = false;
+    this.frozenDmx = [];
+    this.valuesUpdatedAt = new Date();
+  }
 }

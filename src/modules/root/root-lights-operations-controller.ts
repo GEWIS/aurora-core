@@ -50,6 +50,39 @@ export class RootLightsOperationsController extends Controller {
     lightsGroup.disableStrobe();
   }
 
+  /**
+   * Store the next state of all fixtures in the given LightsGroup and do not change them anymore
+   * (i.e. freeze the fixture in its current state)
+   * @param id
+   */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Post('group/{id}/freeze')
+  public async freezeLightsGroup(id: number) {
+    const group = this.getGroups().find((g) => g.id === id);
+    if (group === undefined) {
+      this.setStatus(404);
+      return;
+    }
+
+    group.fixtures.forEach((f) => f.fixture.freezeDmx());
+  }
+
+  /**
+   * Unfreeze the DMX values
+   * @param id
+   */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Post('group/{id}/unfreeze')
+  public async unfreezeLightsGroup(id: number) {
+    const group = this.getGroups().find((g) => g.id === id);
+    if (group === undefined) {
+      this.setStatus(404);
+      return;
+    }
+
+    group.fixtures.forEach((f) => f.fixture.unfreezeDmx());
+  }
+
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('group/par/{id}/override')
   public async setGroupParOverride(id: number, @Body() params: GroupFixtureOverrideParams) {
@@ -81,6 +114,41 @@ export class RootLightsOperationsController extends Controller {
     if (!success) {
       this.setStatus(422);
     }
+  }
+
+  /**
+   * Store the next state of the fixture and do not change anymore
+   * (i.e. freeze the fixture in its current state)
+   * @param id
+   */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Post('group/par/{id}/freeze')
+  public async freezeGroupPar(id: number) {
+    const pars = this.getGroups().map((g) => g.pars).flat();
+    const chosenPar = pars.find((p) => p.id === id);
+    if (chosenPar === undefined) {
+      this.setStatus(404);
+      return;
+    }
+
+    chosenPar.fixture.freezeDmx();
+  }
+
+  /**
+   * Unfreeze the DMX values
+   * @param id
+   */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Post('group/par/{id}/unfreeze')
+  public async unfreezeGroupPar(id: number) {
+    const pars = this.getGroups().map((g) => g.pars).flat();
+    const chosenPar = pars.find((p) => p.id === id);
+    if (chosenPar === undefined) {
+      this.setStatus(404);
+      return;
+    }
+
+    chosenPar.fixture.unfreezeDmx();
   }
 
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
@@ -119,6 +187,41 @@ export class RootLightsOperationsController extends Controller {
     }
   }
 
+  /**
+   * Store the next state of the fixture and do not change anymore
+   * (i.e. freeze the fixture in its current state)
+   * @param id
+   */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Post('group/moving-head-rgb/{id}/freeze')
+  public async freezeGroupMovingHeadRgb(id: number) {
+    const movingHead = this.getGroups().map((g) => g.movingHeadRgbs).flat();
+    const chosenMovingHead = movingHead.find((p) => p.id === id);
+    if (chosenMovingHead === undefined) {
+      this.setStatus(404);
+      return;
+    }
+
+    chosenMovingHead.fixture.freezeDmx();
+  }
+
+  /**
+   * Unfreeze the DMX values
+   * @param id
+   */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Post('group/moving-head-rgb/{id}/unfreeze')
+  public async unfreezeMovingHeadRgb(id: number) {
+    const pars = this.getGroups().map((g) => g.movingHeadRgbs).flat();
+    const chosenPar = pars.find((p) => p.id === id);
+    if (chosenPar === undefined) {
+      this.setStatus(404);
+      return;
+    }
+
+    chosenPar.fixture.unfreezeDmx();
+  }
+
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('group/moving-head-wheel/{id}/override')
   public async setGroupMovingHeadWheelOverride(
@@ -153,5 +256,40 @@ export class RootLightsOperationsController extends Controller {
     if (!success) {
       this.setStatus(422);
     }
+  }
+
+  /**
+   * Store the next state of the fixture and do not change anymore
+   * (i.e. freeze the fixture in its current state)
+   * @param id
+   */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Post('group/moving-head-wheel/{id}/freeze')
+  public async freezeGroupMovingHeadWheel(id: number) {
+    const movingHead = this.getGroups().map((g) => g.movingHeadRgbs).flat();
+    const chosenMovingHead = movingHead.find((p) => p.id === id);
+    if (chosenMovingHead === undefined) {
+      this.setStatus(404);
+      return;
+    }
+
+    chosenMovingHead.fixture.freezeDmx();
+  }
+
+  /**
+   * Unfreeze the DMX values
+   * @param id
+   */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Post('group/moving-head-wheel/{id}/unfreeze')
+  public async unfreezeMovingHeadWheel(id: number) {
+    const pars = this.getGroups().map((g) => g.movingHeadWheels).flat();
+    const chosenPar = pars.find((p) => p.id === id);
+    if (chosenPar === undefined) {
+      this.setStatus(404);
+      return;
+    }
+
+    chosenPar.fixture.unfreezeDmx();
   }
 }

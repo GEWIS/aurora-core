@@ -88,6 +88,12 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
   }
 
   toDmx(): number[] {
+    if (this.strobeEnabled) return this.getStrobeDMX();
+
+    if (this.frozenDmx != null && this.frozenDmx.length > 0) {
+      return this.frozenDmx;
+    }
+
     let values: number[] = new Array(16).fill(0);
 
     values[this.masterDimChannel - 1] = this.channelValues.masterDimChannel;
@@ -152,6 +158,10 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
         values[channel - 1] = value;
         this.valuesUpdatedAt = new Date();
       }
+    }
+
+    if (this.shouldFreezeDmx) {
+      this.frozenDmx = values;
     }
 
     return values;

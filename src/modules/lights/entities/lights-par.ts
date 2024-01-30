@@ -78,6 +78,10 @@ export default class LightsPar extends LightsFixture {
   toDmx(): number[] {
     if (this.strobeEnabled) return this.getStrobeDMX();
 
+    if (this.frozenDmx != null && this.frozenDmx.length > 0) {
+      return this.frozenDmx;
+    }
+
     let values: number[] = new Array(16).fill(0);
 
     values[this.masterDimChannel - 1] = this.currentValues.masterDimChannel;
@@ -109,6 +113,10 @@ export default class LightsPar extends LightsFixture {
         values[channel - 1] = value;
         this.valuesUpdatedAt = new Date();
       }
+    }
+
+    if (this.shouldFreezeDmx) {
+      this.frozenDmx = values;
     }
 
     return values;
