@@ -19,7 +19,7 @@ export interface AuthStoreToken {
   at_hash: string,
   sid: string,
   resource_access?: {
-    'narrowcasting-test': {
+    [key: string]: {
       roles: string[]
     }
   }
@@ -40,7 +40,7 @@ passport.use('oidc', new CustomStrategy(
           grant_type: 'authorization_code',
           client_id: process.env.KEYCLOAK_CLIENT_ID!,
           client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
-          redirect_uri: process.env.AUTH_KEYCLOAK_CALLBACK!,
+          redirect_uri: process.env.KEYCLOAK_REDIRECT_URI!,
           code: req.body.code,
         }),
         headers: {
@@ -49,13 +49,17 @@ passport.use('oidc', new CustomStrategy(
       },
     );
 
-    const oidcData = await oidcResponse.json();
-    const tokenDetails = jwtDecode<AuthStoreToken>(oidcData!.id_token);
-
-    callback(null, {
-      name: tokenDetails.given_name,
-      roles: tokenDetails.resource_access ? tokenDetails.resource_access['narrowcasting-test'].roles : [],
-    });
+    try {
+      const oidcData = await oidcResponse.json();
+      const tokenDetails = jwtDecode<AuthStoreToken>(oidcData!.id_token);
+      callback(null, {
+        name: tokenDetails.given_name,
+        roles: tokenDetails.resource_access ? tokenDetails.resource_access[process.env.KEYCLOAK_CLIENT_ID || ''].roles : [],
+      });
+    } catch (e) {
+      console.error(e);
+      req.res?.sendStatus(500);
+    }
   },
 ));
 
