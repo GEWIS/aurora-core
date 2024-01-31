@@ -41,10 +41,11 @@ export default async function createHttp() {
   app.post('/api/auth/oidc', passport.authenticate('oidc'), oidcResponse);
   app.post('/api/auth/key', passport.authenticate('apikey'), apiKeyResponse);
 
+  app.use('/api-docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => res.send(
+    swaggerUi.generateHTML(apiDocs),
+  ));
+
   if (process.env.NODE_ENV === 'development') {
-    app.use('/api-docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => res.send(
-      swaggerUi.generateHTML(apiDocs),
-    ));
     app.post('/api/auth/mock', passport.authenticate('mock'), mockLogin);
     app.use('/static', express.static('public'));
   }
