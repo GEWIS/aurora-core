@@ -14,6 +14,11 @@ const dataSource = new DataSource({
   password: process.env.TYPEORM_PASSWORD,
   synchronize: process.env.TYPEORM_SYNCHRONIZE === 'true',
   logging: process.env.TYPEORM_LOGGING === 'true',
+  extra: {
+    authPlugins: {
+      mysql_clear_password: () => () => Buffer.from(`${process.env.TYPEORM_PASSWORD}\0`),
+    },
+  },
   entities: [
     ...BaseEntities,
     ...AuthEntities,
