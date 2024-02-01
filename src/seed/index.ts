@@ -8,7 +8,7 @@ async function createSeeder() {
 
   await dataSource.synchronize();
   const lights = await seedDatabase();
-  await seedOpeningSequence(lights[0]!, lights[1]!, lights[3]!);
+  await seedOpeningSequence(lights[0]!, lights[1]!, lights[3]!, lights[4]!);
 }
 
 if (require.main === module) {

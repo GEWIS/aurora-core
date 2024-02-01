@@ -58,6 +58,23 @@ export default async function seedDatabase() {
   eurolite_LED_TMH_S30.resetChannelAndValue = [12, 255];
   await dataSource.getRepository(LightsMovingHeadWheel).save(eurolite_LED_TMH_S30);
 
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const ayra_ERO_506 = await rootLightsService.createMovingHeadRgb({
+    name: 'Ayra ERO 506',
+    masterDimChannel: 6,
+    strobeChannel: 7,
+    panChannel: 1,
+    finePanChannel: 2,
+    tiltChannel: 3,
+    fineTiltChannel: 4,
+    colorRedChannel: 8,
+    colorGreenChannel: 9,
+    colorBlueChannel: 10,
+    colorColdWhiteChannel: 11,
+    colorAmberChannel: 12,
+    colorUvChannel: 13,
+  });
+
   const gewisRoom = await rootLightsService.createLightGroup(controller.id, {
     name: 'Ruimte',
     pars: [
@@ -105,8 +122,17 @@ export default async function seedDatabase() {
       { fixtureId: eurolite_LED_TMH_S30.id, firstChannel: 177 },
     ],
   });
+  const royMHs = await rootLightsService.createLightGroup(controller.id, {
+    name: 'Roy MH',
+    pars: [],
+    movingHeadRgbs: [
+      { fixtureId: ayra_ERO_506.id, firstChannel: 353 },
+      { fixtureId: ayra_ERO_506.id, firstChannel: 369 },
+    ],
+    movingHeadWheels: [],
+  });
 
-  return Promise.all([gewisRoom, gewisBar, gewisLounge, gewisMHRoom]
+  return Promise.all([gewisRoom, gewisBar, gewisLounge, gewisMHRoom, royMHs]
     .map((g) => dataSource.getRepository(LightsGroup).findOne({ where: { id: g!.id } })!));
 }
 
