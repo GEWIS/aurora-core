@@ -14,7 +14,7 @@
       }
     },
     "outputDirectory": "build",
-    "host": "localhost:3000",
+    "host": "",
     "specVersion": 3,
     "schemes": [
       "http",
