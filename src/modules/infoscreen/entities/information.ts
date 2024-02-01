@@ -8,18 +8,18 @@ import { AlcoholTime } from './enums/alcoholTime';
 @Entity()
 export default class Information extends BaseEntity {
   @Column({
-    type: 'varchar',
+    type: process.env.TYPEORM_CONNECTION === 'sqlite' ? 'varchar' : 'enum',
     enum: RoomStatus,
     default: RoomStatus.CLOSED,
   })
-  public roomStatus!: string;
+  public roomStatus!: RoomStatus;
 
   @Column({
-    type: 'varchar',
+    type: process.env.TYPEORM_CONNECTION === 'sqlite' ? 'varchar' : 'enum',
     enum: AlcoholTime,
     default: AlcoholTime.NORMAL,
   })
-  public alcoholTime!: string;
+  public alcoholTime!: AlcoholTime;
 
   @Column()
   public firstResponsible!: string;
