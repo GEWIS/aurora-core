@@ -3,7 +3,7 @@ import { Screen } from './entities';
 import dataSource from '../../database';
 import AuthService from '../auth/auth-service';
 
-export interface ScreenResponse extends Pick<Screen, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
+export interface ScreenResponse extends Pick<Screen, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketId'> {}
 
 export interface ScreenCreateParams extends Pick<Screen, 'name'> {}
 
@@ -20,6 +20,7 @@ export default class RootScreenService {
       createdAt: screen.createdAt,
       updatedAt: screen.updatedAt,
       name: screen.name,
+      socketId: screen.socketId,
     };
   }
 

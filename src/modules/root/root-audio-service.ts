@@ -3,7 +3,7 @@ import { Audio } from './entities';
 import dataSource from '../../database';
 import AuthService from '../auth/auth-service';
 
-export interface AudioResponse extends Pick<Audio, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
+export interface AudioResponse extends Pick<Audio, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketId'> {}
 
 export interface AudioCreateParams extends Pick<Audio, 'name'> {}
 
@@ -20,6 +20,7 @@ export default class RootAudioService {
       createdAt: audio.createdAt,
       updatedAt: audio.updatedAt,
       name: audio.name,
+      socketId: audio.socketId,
     };
   }
 
