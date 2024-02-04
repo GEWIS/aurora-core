@@ -2,7 +2,7 @@ import { Controller } from '@tsoa/runtime';
 import {
   Body, Delete, Get, Post, Route, Security, Tags,
 } from 'tsoa';
-import ScenesService, { CreateSceneParams } from './scenes-service';
+import ScenesService, { CreateSceneParams, LightsSceneResponse } from './scenes-service';
 import RootLightsService from '../../root/root-lights-service';
 import HandlerManager from '../../root/handler-manager';
 import { LightsGroup } from '../../lights/entities';
@@ -14,14 +14,20 @@ import { SecurityGroup } from '../../../helpers/security';
 export class ScenesController extends Controller {
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Get('')
-  public async getAllScenes() {
-    return new ScenesService().getScenes();
+  public async getAllScenes(): Promise<LightsSceneResponse[]> {
+    const scenes = await new ScenesService().getScenes();
+    return scenes.map((s) => ScenesService.toSceneResponse(s));
   }
 
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Get('{id}')
-  public async getSingleScene(id: number) {
-    return new ScenesService().getSingleScene(id);
+  public async getSingleScene(id: number): Promise<LightsSceneResponse | undefined> {
+    const scene = await new ScenesService().getSingleScene(id);
+    if (!scene) {
+      this.setStatus(404);
+      return undefined;
+    }
+    return ScenesService.toSceneResponse(scene);
   }
 
   /**
@@ -60,7 +66,8 @@ export class ScenesController extends Controller {
       };
     }
 
-    return new ScenesService().createScene(params);
+    const scene = await new ScenesService().createScene(params);
+    return ScenesService.toSceneResponse(scene);
   }
 
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO])

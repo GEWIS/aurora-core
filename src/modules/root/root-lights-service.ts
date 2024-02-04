@@ -16,12 +16,15 @@ import AuthService from '../auth/auth-service';
 export interface LightsControllerResponse extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
 export interface LightsFixtureResponse extends Pick<LightsFixture, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'masterDimChannel' | 'strobeChannel'> {}
 export interface ColorResponse extends Pick<Colors, 'redChannel' | 'blueChannel' | 'greenChannel' | 'coldWhiteChannel' | 'warmWhiteChannel' | 'amberChannel' | 'uvChannel'> {}
+export interface ParResponse extends LightsFixtureResponse, ColorResponse {}
 export interface MovingHeadResponse extends LightsFixtureResponse, Movement {}
+export interface MovingHeadRgbResponse extends MovingHeadResponse, ColorResponse {}
 export interface MovingHeadWheelResponse extends LightsFixtureResponse, Pick<LightsMovingHeadWheel, 'colorWheelChannel' | 'goboWheelChannel' | 'goboRotateChannel'> {}
 export interface BaseLightsGroupResponse extends Pick<LightsGroup, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
 export interface LightsGroupResponse extends BaseLightsGroupResponse {
-  pars: (LightsFixtureResponse & ColorResponse)[];
-  movingHeadRgbs: (MovingHeadResponse & ColorResponse)[];
+  controller: LightsControllerResponse;
+  pars: ParResponse[];
+  movingHeadRgbs: MovingHeadRgbResponse[];
   movingHeadWheels: MovingHeadWheelResponse[];
 }
 
@@ -87,7 +90,7 @@ export default class RootLightsService {
     this.groupRepository = dataSource.getRepository(LightsGroup);
   }
 
-  private toColorResponse(c: Colors, firstChannel: number): ColorResponse {
+  private static toColorResponse(c: Colors, firstChannel: number): ColorResponse {
     return {
       redChannel: c.redChannel + firstChannel - 1,
       blueChannel: c.blueChannel + firstChannel - 1,
@@ -99,7 +102,7 @@ export default class RootLightsService {
     };
   }
 
-  private toMovementResponse(m: Movement, firstChannel: number): Movement {
+  private static toMovementResponse(m: Movement, firstChannel: number): Movement {
     return {
       tiltChannel: m.tiltChannel + firstChannel - 1,
       fineTiltChannel: m.fineTiltChannel ? m.fineTiltChannel + firstChannel - 1 : null,
@@ -109,7 +112,7 @@ export default class RootLightsService {
     };
   }
 
-  private toFixtureResponse(f: LightsFixture, firstChannel: number): LightsFixtureResponse {
+  private static toFixtureResponse(f: LightsFixture, firstChannel: number): LightsFixtureResponse {
     return {
       id: f.id,
       createdAt: f.createdAt,
@@ -120,38 +123,63 @@ export default class RootLightsService {
     };
   }
 
-  private toMovingHeadResponse(m: LightsMovingHead, firstChannel: number): MovingHeadResponse {
+  private static toMovingHeadResponse(
+    m: LightsMovingHead,
+    firstChannel: number,
+  ): MovingHeadResponse {
     return {
       ...this.toFixtureResponse(m, firstChannel),
       ...this.toMovementResponse(m.movement, firstChannel),
     };
   }
 
-  private toLightsGroup(g: LightsGroup): LightsGroupResponse {
+  public static toParResponse(p: LightsPar, firstChannel = 1): ParResponse {
+    return {
+      ...this.toFixtureResponse(p, firstChannel),
+      ...this.toColorResponse(p.color, firstChannel),
+    };
+  }
+
+  public static toMovingHeadRgbResponse(
+    m: LightsMovingHeadRgb,
+    firstChannel = 1,
+  ): MovingHeadRgbResponse {
+    return {
+      ...this.toMovingHeadResponse(m, firstChannel),
+      ...this.toColorResponse(m.color, firstChannel),
+    };
+  }
+
+  public static toMovingHeadWheelResponse(
+    m: LightsMovingHeadWheel,
+    firstChannel = 1,
+  ): MovingHeadWheelResponse {
+    return {
+      ...this.toMovingHeadResponse(m, firstChannel),
+      colorWheelChannel: m.colorWheelChannel,
+      goboWheelChannel: m.goboWheelChannel,
+      goboRotateChannel: m.goboRotateChannel
+        ? m.goboRotateChannel + firstChannel - 1 : null,
+    };
+  }
+
+  public static toLightsGroupResponse(g: LightsGroup): LightsGroupResponse {
     return {
       id: g.id,
       createdAt: g.createdAt,
       updatedAt: g.updatedAt,
       name: g.name,
-      pars: g.pars.map((p) => ({
-        ...this.toFixtureResponse(p.fixture, p.firstChannel),
-        ...this.toColorResponse(p.fixture.color, p.firstChannel),
-      })),
-      movingHeadRgbs: g.movingHeadRgbs.map((m) => ({
-        ...this.toMovingHeadResponse(m.fixture, m.firstChannel),
-        ...this.toColorResponse(m.fixture.color, m.firstChannel),
-      })),
-      movingHeadWheels: g.movingHeadWheels.map((m) => ({
-        ...this.toMovingHeadResponse(m.fixture, m.firstChannel),
-        colorWheelChannel: m.fixture.colorWheelChannel,
-        goboWheelChannel: m.fixture.goboWheelChannel,
-        goboRotateChannel: m.fixture.goboRotateChannel
-          ? m.fixture.goboRotateChannel + m.firstChannel - 1 : null,
-      })),
+      controller: this.toLightsControllerResponse(g.controller),
+      pars: g.pars.map((p) => this
+        .toParResponse(p.fixture, p.firstChannel)),
+      movingHeadRgbs: g.movingHeadRgbs.map((m) => this
+        .toMovingHeadRgbResponse(m.fixture, m.firstChannel)),
+      movingHeadWheels: g.movingHeadWheels.map((m) => this
+        .toMovingHeadWheelResponse(m.fixture, m.firstChannel)),
     };
   }
 
-  private toLightsControllerResponse(c: LightsController): LightsControllerResponse {
+  public static toLightsControllerResponse(c: LightsController): LightsControllerResponse {
     return {
       id: c.id,
       createdAt: c.createdAt,
@@ -160,9 +188,8 @@ export default class RootLightsService {
     };
   }
 
-  public async getAllControllers(): Promise<LightsControllerResponse[]> {
-    const controllers = await this.controllerRepository.find();
-    return controllers.map((c) => this.toLightsControllerResponse(c));
+  public async getAllControllers(): Promise<LightsController[]> {
+    return this.controllerRepository.find();
   }
 
   public async getSingleController(id: number): Promise<LightsController | null> {
@@ -171,49 +198,30 @@ export default class RootLightsService {
 
   public async createController(
     params: LightsControllerCreateParams,
-  ): Promise<LightsControllerResponse> {
+  ): Promise<LightsController> {
     const lightsController = await this.controllerRepository.save({
       name: params.name,
     });
     await new AuthService().createApiKey({ lightsController });
-    return this.toLightsControllerResponse(lightsController);
+    return lightsController;
   }
 
-  public async getAllLightsGroups(): Promise<BaseLightsGroupResponse[]> {
-    const groups = await this.groupRepository.find();
-    return groups.map((g) => ({
-      id: g.id,
-      createdAt: g.createdAt,
-      updatedAt: g.updatedAt,
-      name: g.name,
-    }));
+  public async getAllLightsGroups(): Promise<LightsGroup[]> {
+    return this.groupRepository.find();
   }
 
-  public async getSingleLightGroup(id: number): Promise<LightsGroup | null> {
+  public async getSingleLightsGroup(id: number): Promise<LightsGroup | null> {
     return this.groupRepository.findOne({ where: { id } });
-  }
-
-  public async getSingleLightGroupResponse(id: number): Promise<LightsGroupResponse | null> {
-    const group = await this.groupRepository.findOne({
-      where: { id },
-      relations: {
-        pars: { fixture: true },
-        movingHeadWheels: { fixture: true },
-        movingHeadRgbs: { fixture: true },
-      },
-    });
-    if (group == null) return null;
-    return this.toLightsGroup(group);
   }
 
   public async createLightGroup(
     controllerId: number,
     params: LightsGroupCreateParams,
-  ): Promise<LightsGroupResponse | null> {
+  ): Promise<LightsGroup | null> {
     const controller = await this.controllerRepository.findOne({ where: { id: controllerId } });
     if (controller == null) return null;
 
-    const g = await dataSource.transaction(async (manager) => {
+    return dataSource.transaction(async (manager) => {
       const group = await manager.save(LightsGroup, {
         name: params.name,
         controller,
@@ -253,8 +261,6 @@ export default class RootLightsService {
 
       return group;
     });
-
-    return this.getSingleLightGroupResponse(g.id);
   }
 
   public async getLightsGroupPar(id: number): Promise<LightsGroupPars | null> {
@@ -267,7 +273,9 @@ export default class RootLightsService {
     return repository.findOne({ where: { id } });
   }
 
-  public async getLightsGroupMovingHeadWheel(id: number): Promise<LightsGroupMovingHeadWheels | null> {
+  public async getLightsGroupMovingHeadWheel(
+    id: number,
+  ): Promise<LightsGroupMovingHeadWheels | null> {
     const repository = dataSource.getRepository(LightsGroupMovingHeadWheels);
     return repository.findOne({ where: { id } });
   }

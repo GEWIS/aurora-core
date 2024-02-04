@@ -1,6 +1,7 @@
 import { Repository } from 'typeorm';
 import { Screen } from './entities';
 import dataSource from '../../database';
+import AuthService from '../auth/auth-service';
 
 export interface ScreenResponse extends Pick<Screen, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
 
@@ -13,7 +14,7 @@ export default class RootScreenService {
     this.repository = dataSource.getRepository(Screen);
   }
 
-  private toScreenResponse(screen: Screen): ScreenResponse {
+  public static toScreenResponse(screen: Screen): ScreenResponse {
     return {
       id: screen.id,
       createdAt: screen.createdAt,
@@ -22,17 +23,17 @@ export default class RootScreenService {
     };
   }
 
-  public async getAllScreens(): Promise<ScreenResponse[]> {
-    const screens = await this.repository.find();
-    return screens.map((s) => this.toScreenResponse(s));
+  public async getAllScreens(): Promise<Screen[]> {
+    return this.repository.find();
   }
 
   public async getSingleScreen(id: number): Promise<Screen | null> {
     return this.repository.findOne({ where: { id } });
   }
 
-  public async createScreen(params: ScreenCreateParams): Promise<ScreenResponse> {
+  public async createScreen(params: ScreenCreateParams): Promise<Screen> {
     const screen = await this.repository.save(params);
-    return this.toScreenResponse(screen);
+    await new AuthService().createApiKey({ screen });
+    return screen;
   }
 }

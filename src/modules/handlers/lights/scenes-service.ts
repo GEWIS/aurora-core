@@ -7,6 +7,18 @@ import {
 } from '../../lights/entities/scenes';
 import dataSource from '../../../database';
 
+export interface LightsSceneFixtureResponse {
+  fixtureId: number,
+  dmxValues: number[],
+}
+
+export interface LightsSceneResponse {
+  name: string,
+  pars: LightsSceneFixtureResponse[],
+  movingHeadRgbs: LightsSceneFixtureResponse[],
+  movingHeadWheels: LightsSceneFixtureResponse[],
+}
+
 export interface SceneFixtureParams {
   id: number,
   dmxValues: number[],
@@ -24,6 +36,24 @@ export default class ScenesService {
 
   constructor() {
     this.repository = dataSource.getRepository(LightsScene);
+  }
+
+  public static toSceneResponse(scene: LightsScene): LightsSceneResponse {
+    return {
+      name: scene.name,
+      pars: scene.pars.map((p) => ({
+        fixtureId: p.groupParId,
+        dmxValues: p.dmxValues,
+      })),
+      movingHeadRgbs: scene.movingHeadRgbs.map((m) => ({
+        fixtureId: m.groupMovingHeadRgbId,
+        dmxValues: m.dmxValues,
+      })),
+      movingHeadWheels: scene.movingHeadWheels.map((m) => ({
+        fixtureId: m.groupMovingHeadWheelId,
+        dmxValues: m.dmxValues,
+      })),
+    };
   }
 
   public async getScenes(): Promise<LightsScene[]> {
