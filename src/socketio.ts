@@ -34,6 +34,8 @@ export default function createWebsocket(
       origin: '*',
       allowedHeaders: devEnv ? ['cookie_development'] : [],
     },
+    connectTimeout: 2000,
+    pingTimeout: 1000,
   });
 
   const wrap = (
