@@ -1,10 +1,9 @@
-import { Server as SocketIoServer, Socket } from 'socket.io';
+import { Server as SocketIoServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
 import { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
 import { DefaultEventsMap, EventsMap } from 'socket.io/dist/typed-events';
 import { SessionMiddleware, User } from './modules/auth';
-import { SocketConnectionEmitter } from './modules/events/socket-connection-emitter';
 
 const devEnv = process.env.NODE_ENV === 'development';
 
@@ -35,10 +34,6 @@ export default function createWebsocket(
     pingTimeout: 1000,
   });
 
-  const wrap = (
-    middleware: (req: Request, res: Response, next: NextFunction) => void,
-  ) => (socket: Socket, next: any) => middleware(socket.request as Request, {} as Response, next);
-
   /**
    * Set the "cookies" header to "cookie" in development to allow SocketIO auth without CORS
    * Web browsers protect users by not being able to set cookies manually in API requests
@@ -55,22 +50,30 @@ export default function createWebsocket(
       next();
     });
   }
-  io.use(wrap(SessionMiddleware.getInstance().get()));
-  io.use(wrap(passport.initialize()));
-  io.use(wrap(passport.session()));
 
-  io.use((socket, next) => {
-    // Cannot override IncomingMessage interface
-    // @ts-ignore
-    if (socket.request.user) {
-      // @ts-ignore
-      // eslint-disable-next-line no-param-reassign
-      socket.data.user = socket.request.user;
-      next();
+  // Code taken from https://socket.io/how-to/use-with-passport
+  const onlyForHandshake = (middleware: any) => (req: any, res: Response, next: NextFunction) => {
+    const isHandshake = req._query.sid === undefined;
+    if (isHandshake) {
+      middleware(req, res, next);
     } else {
-      next(new Error('unauthorized'));
+      next();
     }
-  });
+  };
+
+  // Code taken from https://socket.io/how-to/use-with-passport
+  io.engine.use(onlyForHandshake(SessionMiddleware.getInstance().get()));
+  io.engine.use(onlyForHandshake(passport.session()));
+  io.engine.use(
+    onlyForHandshake((req: Request, res: Response, next: NextFunction) => {
+      if (req.user) {
+        next();
+      } else {
+        res.writeHead(401);
+        res.end();
+      }
+    }),
+  );
 
   return io;
 }
