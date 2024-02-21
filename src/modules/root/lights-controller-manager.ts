@@ -10,6 +10,7 @@ import {
 } from '../lights/entities';
 import HandlerManager from './handler-manager';
 import { TrackPropertiesEvent } from '../events/music-emitter-events';
+import { SocketioNamespaces } from '../../socketio-namespaces';
 
 export default class LightsControllerManager {
   private lightsControllers: Map<number, LightsController> = new Map();
@@ -96,8 +97,9 @@ export default class LightsControllerManager {
   private sendDMXValuesToController() {
     this.lightsControllersValues.forEach((packet, id) => {
       const controller = this.lightsControllers.get(id);
-      if (!controller || !controller.socketId) return;
-      this.websocket.server.sockets.sockets.get(controller.socketId)?.emit('dmx_packet', packet);
+      if (!controller) return;
+      const socketId = controller.getSocketId(this.websocket.name as SocketioNamespaces);
+      this.websocket.sockets.get(socketId || '')?.emit('dmx_packet', packet);
     });
   }
 

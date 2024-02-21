@@ -6,21 +6,19 @@ import SubscribeEntity from './entities/subscribe-entity';
 import BaseHandler from '../handlers/base-handler';
 import SimpleAudioHandler from '../handlers/audio/simple-audio-handler';
 import dataSource from '../../database';
-import { Audio, LightsController, Screen } from './entities';
+import { Audio, Screen } from './entities';
 import { LightsGroup } from '../lights/entities';
 import { RandomEffectsHandler } from '../handlers/lights';
 import SetEffectsHandler from '../handlers/lights/set-effects-handler';
 import DevelopEffectsHandler from '../handlers/lights/develop-effects-handler';
-import { SocketConnectionEmitter } from '../events/socket-connection-emitter';
-import { User } from '../auth';
 import { BeatEvent, TrackChangeEvent } from '../events/music-emitter-events';
 import { CurrentlyPlayingTrackHandler, CenturionScreenHandler } from '../handlers/screen';
 import { PosterScreenHandler } from '../handlers/screen/poster';
 import { ScenesHandler } from '../handlers/lights/scenes-handler';
 import EffectSequenceHandler from '../handlers/lights/effect-sequence-handler';
 import { MusicEmitter } from '../events';
-import { userIsEntity } from '../auth/user';
 import StageEffectsHandler from '../handlers/screen/stage-effects-handler';
+import { SocketioNamespaces } from '../../socketio-namespaces';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -47,30 +45,13 @@ export default class HandlerManager {
     });
   }
 
-  private async updateSocketId(user: User, socketId?: string) {
-    if (user.audioId) await dataSource.getRepository(Audio).update(user.audioId, { socketId });
-    if (user.screenId) await dataSource.getRepository(Screen).update(user.screenId, { socketId });
-    if (user.lightsControllerId) {
-      await dataSource.getRepository(LightsController)
-        .update(user.lightsControllerId, { socketId });
-      const lightsHandlers: BaseLightsHandler[] = this
-        .getHandlers(LightsGroup) as BaseLightsHandler[];
-      const lightGroups = lightsHandlers.map((h) => h.entities).flat();
-      lightGroups.forEach((g) => {
-        if (g.controller.id !== user.lightsControllerId) return;
-        // eslint-disable-next-line no-param-reassign
-        g.controller.socketId = socketId;
-      });
-    }
-  }
-
   /**
    * Initialize the HandlerManager object if it is not already initialized.
    * It fetches all relevant entities (audios, lightGroups, screens) from the database
    * and registers them to their handlers
    * @private
    */
-  public async init(socketConnectionEmitter: SocketConnectionEmitter) {
+  public async init() {
     if (this.initialized) throw new Error('HandlerManager already initialized.');
     await Promise.all(Array.from(this._handlers.keys()).map(async (entity) => {
       const entities = await dataSource.manager.find(entity);
@@ -80,33 +61,6 @@ export default class HandlerManager {
         this.restoreHandlers(instance, handlers);
       });
     }));
-
-    // If a client connects to the socket, find the corresponding
-    // SubscribeEntity and store its socketId.
-    socketConnectionEmitter.on('connect', (user: User, socketId: string) => {
-      console.log('Connect', user, 'with ID', socketId);
-      this._handlers.forEach((handlers) => {
-        handlers.forEach((handler) => handler.entities.forEach((entity) => {
-          if (userIsEntity(user, entity)) {
-            this.io.sockets.sockets.get(socketId)?.emit('handler_set', handler.constructor.name);
-            // eslint-disable-next-line no-param-reassign
-            entity.socketId = socketId;
-          }
-        }));
-      });
-      this.updateSocketId(user, socketId);
-    });
-    socketConnectionEmitter.on('disconnect', (user: User) => {
-      this._handlers.forEach((handlers) => {
-        handlers.forEach((handler) => handler.entities.forEach((entity) => {
-          if (userIsEntity(user, entity)) {
-            // eslint-disable-next-line no-param-reassign
-            entity.socketId = undefined;
-          }
-        }));
-      });
-      this.updateSocketId(user);
-    });
   }
 
   /**
@@ -130,14 +84,14 @@ export default class HandlerManager {
 
     // Register all handlers
     this._handlers.set(Audio, [
-      new SimpleAudioHandler(io.of('/audio'), this.musicEmitter),
+      new SimpleAudioHandler(io.of(SocketioNamespaces.AUDIO), this.musicEmitter),
     ] as BaseAudioHandler[]);
     this._handlers.set(LightsGroup, lightsHandlers);
     this._handlers.set(Screen, [
-      new CurrentlyPlayingTrackHandler(io.of('/screen')),
-      new CenturionScreenHandler(io.of('screen')),
-      new PosterScreenHandler(io.of('/screen')),
-      new StageEffectsHandler(io.of('/screen')),
+      new CurrentlyPlayingTrackHandler(io.of(SocketioNamespaces.SCREEN)),
+      new CenturionScreenHandler(io.of(SocketioNamespaces.SCREEN)),
+      new PosterScreenHandler(io.of(SocketioNamespaces.SCREEN)),
+      new StageEffectsHandler(io.of(SocketioNamespaces.SCREEN)),
     ] as BaseScreenHandler[]);
   }
 
@@ -180,7 +134,8 @@ export default class HandlerManager {
       handler.removeEntity(entity);
     });
 
-    const socket = this.io.sockets.sockets.get(entity.socketId || '');
+    const socketId = entity.socketIds ? (entity.socketIds[SocketioNamespaces.BASE] ?? '') : '';
+    const socket = this.io.sockets.sockets.get(socketId);
 
     if (newHandler !== '') {
       const newHandlerObj = handlers.find((h) => h.constructor.name === newHandler);

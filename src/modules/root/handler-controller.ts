@@ -16,6 +16,10 @@ interface HandlerResponse<T> {
   name: string;
 }
 
+interface NewHandlerParams {
+  name: string;
+}
+
 @Route('handler')
 @Tags('Handlers')
 export class HandlerController extends Controller {
@@ -38,7 +42,7 @@ export class HandlerController extends Controller {
 
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('audio/{id}')
-  public async setAudioHandler(@Path() id: number, @Body() params: { name: string }) {
+  public async setAudioHandler(@Path() id: number, @Body() params: NewHandlerParams) {
     const audio = await new RootAudioService().getSingleAudio(id);
     if (audio == null) {
       this.setStatus(404);
@@ -64,7 +68,7 @@ export class HandlerController extends Controller {
 
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('lights/{id}')
-  public async setLightsHandler(@Path() id: number, @Body() params: { name: string }) {
+  public async setLightsHandler(@Path() id: number, @Body() params: NewHandlerParams) {
     const group = await new RootLightsService().getSingleLightsGroup(id);
     if (group == null) {
       this.setStatus(404);
@@ -89,7 +93,7 @@ export class HandlerController extends Controller {
 
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('screen/{id}')
-  public async setScreenHandler(@Path() id: number, @Body() params: { name: string }) {
+  public async setScreenHandler(@Path() id: number, @Body() params: NewHandlerParams) {
     const screen = await new RootScreenService().getSingleScreen(id);
     if (screen == null) {
       this.setStatus(404);

@@ -13,7 +13,7 @@ import LightsGroupMovingHeadWheels from '../lights/entities/lights-group-moving-
 import Movement from '../lights/entities/movement';
 import AuthService from '../auth/auth-service';
 
-export interface LightsControllerResponse extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketId'> {}
+export interface LightsControllerResponse extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
 export interface LightsFixtureResponse extends Pick<LightsFixture, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'masterDimChannel' | 'strobeChannel'> {}
 export interface ColorResponse extends Pick<Colors, 'redChannel' | 'blueChannel' | 'greenChannel' | 'coldWhiteChannel' | 'warmWhiteChannel' | 'amberChannel' | 'uvChannel'> {}
 export interface ParResponse extends LightsFixtureResponse, ColorResponse {}
@@ -185,7 +185,7 @@ export default class RootLightsService {
       createdAt: c.createdAt,
       updatedAt: c.updatedAt,
       name: c.name,
-      socketId: c.socketId,
+      socketIds: c.socketIds,
     };
   }
 

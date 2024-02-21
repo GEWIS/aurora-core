@@ -1,0 +1,127 @@
+import { Server } from 'socket.io';
+import { Repository } from 'typeorm';
+import AsyncLock from 'async-lock';
+import HandlerManager from './handler-manager';
+import { User } from '../auth';
+import dataSource from '../../database';
+import { Audio, LightsController, Screen } from './entities';
+import BaseLightsHandler from '../handlers/base-lights-handler';
+import { LightsGroup } from '../lights/entities';
+import { SocketioNamespaces } from '../../socketio-namespaces';
+import SubscribeEntity from './entities/subscribe-entity';
+import BaseHandler from '../handlers/base-handler';
+
+export default class SocketConnectionManager {
+  /**
+   * Semaphore required to process socket connections one at a time.
+   * A subscriber may connect to two sockets at once, meaning that both
+   * socketIds will be stored at the same time, resulting in only one
+   * being saved. This semaphore makes sure that database transactions
+   * are finished before reading the entity again.
+   * @private
+   */
+  private lock: AsyncLock;
+
+  constructor(private handlerManager: HandlerManager, ioServer: Server) {
+    this.lock = new AsyncLock();
+
+    Object.values(SocketioNamespaces).forEach((namespace) => {
+      ioServer.of(namespace).on('connect', (socket) => {
+        this.updateSocketId((socket.request as any).user, namespace, socket.id)
+          .catch((e) => console.error(e));
+        socket.on('disconnect', () => {
+          this.updateSocketId((socket.request as any).user, namespace)
+            .catch((e) => console.error(e));
+        });
+      });
+    });
+  }
+
+  private async updateSocketIdForEntity<T extends SubscribeEntity>(
+    repo: Repository<T>,
+    id: number,
+    handlers: BaseHandler<T>[],
+    namespace: SocketioNamespaces,
+    socketId?: string,
+  ) {
+    // @ts-ignore
+    const entity = await repo.findOne({ where: { id } });
+    if (!entity) return null;
+
+    if (socketId && entity.socketIds) {
+      entity.socketIds[namespace] = socketId;
+    } else if (socketId) {
+      entity.socketIds = { [namespace as SocketioNamespaces]: socketId };
+    } else if (!socketId && entity.socketIds) {
+      delete entity.socketIds[namespace];
+    }
+
+    await entity.save();
+
+    handlers.forEach((h) => {
+      h.entities.forEach((e) => {
+        if (e.id === id) {
+          e.socketIds = entity.socketIds;
+        }
+      });
+    });
+
+    return entity;
+  }
+
+  /**
+   * Bind the socket ID in the given namespace to the given user. If no SocketID is
+   * provided, the existing connection will be removed.
+   * @param user
+   * @param namespace
+   * @param socketId
+   * @private
+   */
+  private async updateSocketId(user: User, namespace: SocketioNamespaces, socketId?: string) {
+    if (user == null) {
+      console.error('Unknown user tried to connect to socket. Abort.');
+      return;
+    }
+    await this.lock.acquire('socket_connect', async (done) => {
+      console.log(`Connect (${namespace})`, user, 'with ID', socketId);
+      if (user.audioId) {
+        await this.updateSocketIdForEntity(
+          dataSource.getRepository(Audio),
+          user.audioId,
+          this.handlerManager.getHandlers(Audio),
+          namespace,
+          socketId,
+        );
+      }
+      if (user.screenId) {
+        await this.updateSocketIdForEntity(
+          dataSource.getRepository(Screen),
+          user.screenId,
+          this.handlerManager.getHandlers(Screen),
+          namespace,
+          socketId,
+        );
+      }
+      if (user.lightsControllerId) {
+        const controller = await this.updateSocketIdForEntity(
+          dataSource.getRepository(LightsController),
+          user.lightsControllerId,
+          [],
+          namespace,
+          socketId,
+        );
+        if (controller) {
+          const lightsHandlers: BaseLightsHandler[] = this.handlerManager
+            .getHandlers(LightsGroup) as BaseLightsHandler[];
+          const lightGroups = lightsHandlers.map((h) => h.entities).flat();
+          lightGroups.forEach((g) => {
+            if (g.controller.id !== user.lightsControllerId) return;
+            // eslint-disable-next-line no-param-reassign
+            g.controller.socketIds = controller.socketIds;
+          });
+        }
+      }
+      done();
+    });
+  }
+}

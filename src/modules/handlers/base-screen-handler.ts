@@ -3,6 +3,7 @@ import { EventParams } from 'socket.io/dist/typed-events';
 import BaseHandler from './base-handler';
 import Screen from '../root/entities/screen';
 import { TrackChangeEvent } from '../events/music-emitter-events';
+import { SocketioNamespaces } from '../../socketio-namespaces';
 
 export default abstract class BaseScreenHandler extends BaseHandler<Screen> {
   constructor(private socket: Namespace) {
@@ -13,7 +14,8 @@ export default abstract class BaseScreenHandler extends BaseHandler<Screen> {
 
   protected sendEvent(eventName: string, ...args: EventParams<any, any>) {
     this.entities.forEach((e) => {
-      this.socket.sockets.get(e.socketId || '')?.emit(eventName, args);
+      const socketId = e.getSocketId(this.socket.name as SocketioNamespaces);
+      this.socket.sockets.get(socketId || '')?.emit(eventName, args);
     });
   }
 }

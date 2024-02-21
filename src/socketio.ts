@@ -1,6 +1,6 @@
 import { Server as SocketIoServer, Socket } from 'socket.io';
 import { Server as HttpServer } from 'http';
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
 import { DefaultEventsMap, EventsMap } from 'socket.io/dist/typed-events';
 import { SessionMiddleware, User } from './modules/auth';
@@ -19,12 +19,9 @@ interface SocketData {
  * for instructions/tasks/messages. They should subscribe to their corresponding
  * namespaces. Authentication with a session cookie is necessary.
  * @param httpServer Express.JS HttpServer instance
- * @param connectionEmitter Event emitter to dynamically assign connect and
- * disconnect event listeners
  */
 export default function createWebsocket(
   httpServer: HttpServer,
-  connectionEmitter: SocketConnectionEmitter,
 ) {
   const io = new SocketIoServer<
   DefaultEventsMap, EventsMap, DefaultEventsMap, SocketData
@@ -73,13 +70,6 @@ export default function createWebsocket(
     } else {
       next(new Error('unauthorized'));
     }
-  });
-
-  io.on('connect', (socket) => {
-    connectionEmitter.emit('connect', (socket.request as any).user, socket.id);
-    socket.on('disconnect', () => {
-      connectionEmitter.emit('disconnect', (socket.request as any).user);
-    });
   });
 
   return io;

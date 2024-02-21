@@ -7,24 +7,28 @@ import createWebsocket from './socketio';
 import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
 import { MusicEmitter } from './modules/events';
 import LightsControllerManager from './modules/root/lights-controller-manager';
-import { SocketConnectionEmitter } from './modules/events/socket-connection-emitter';
 import ModeManager from './modules/modes/mode-manager';
 import { ArtificialBeatGenerator } from './modules/beats/artificial-beat-generator';
 import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
+import { SocketioNamespaces } from './socketio-namespaces';
+import SocketConnectionManager from './modules/root/socket-connection-manager';
 
 async function createApp(): Promise<void> {
   await dataSource.initialize();
   const app = await createHttp();
   const httpServer = createServer(app);
-
-  const socketConnectionEmitter = new SocketConnectionEmitter();
-  const io = createWebsocket(httpServer, socketConnectionEmitter);
+  const io = createWebsocket(httpServer);
 
   const musicEmitter = new MusicEmitter();
 
   const handlerManager = HandlerManager.getInstance(io, musicEmitter);
-  await handlerManager.init(socketConnectionEmitter);
-  const lightsControllerManager = new LightsControllerManager(io.of('/lights'), handlerManager, musicEmitter);
+  await handlerManager.init();
+  const socketConnectionManager = new SocketConnectionManager(handlerManager, io);
+  const lightsControllerManager = new LightsControllerManager(
+    io.of(SocketioNamespaces.LIGHTS),
+    handlerManager,
+    musicEmitter,
+  );
 
   ModeManager.getInstance().init(musicEmitter);
   ArtificialBeatGenerator.getInstance().init(musicEmitter);
