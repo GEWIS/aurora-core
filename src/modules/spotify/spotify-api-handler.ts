@@ -2,6 +2,7 @@ import { AccessToken, ProvidedAccessTokenStrategy, SpotifyApi } from '@fosterthe
 import { Repository } from 'typeorm';
 import { SpotifyUser } from './entities';
 import dataSource from '../../database';
+import logger from '../../logger';
 
 export default class SpotifyApiHandler {
   private static instance: SpotifyApiHandler;
@@ -25,10 +26,10 @@ export default class SpotifyApiHandler {
       try {
         await this.loadSpotifyUser(user);
       } catch (e) {
-        console.error(`Could not load Spotify user: ${e}`);
+        logger.error(`Could not load Spotify user: ${e}`);
       }
     } else {
-      console.log('No Spotify user found. Please log in to use Spotify API integration.');
+      logger.info('No Spotify user found. Please log in to use Spotify API integration.');
     }
     this.initialized = true;
   }

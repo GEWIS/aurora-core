@@ -1,5 +1,6 @@
 import { MusicEmitter } from '../events';
 import { BeatEvent } from '../events/music-emitter-events';
+import logger from '../../logger';
 
 export interface ArtificialBeatGeneratorParams {
   /**
@@ -94,8 +95,7 @@ export class ArtificialBeatGenerator {
       this.ping = !this.ping;
 
       beat += `: ${event.beat.start} (artificial)`;
-      // eslint-disable-next-line no-console
-      console.log(beat);
+      logger.info(beat);
     }
 
     this.musicEmitter.emitAudio('beat', event);

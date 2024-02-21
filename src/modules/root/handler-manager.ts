@@ -19,6 +19,7 @@ import EffectSequenceHandler from '../handlers/lights/effect-sequence-handler';
 import { MusicEmitter } from '../events';
 import StageEffectsHandler from '../handlers/screen/stage-effects-handler';
 import { SocketioNamespaces } from '../../socketio-namespaces';
+import logger from '../../logger';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -146,7 +147,7 @@ export default class HandlerManager {
       socket?.emit('handler_remove');
       // eslint-disable-next-line no-param-reassign
       entity.currentHandler = '';
-      entity.save().catch((e) => console.error(e));
+      entity.save().catch((e) => logger.error(e));
     }
 
     return true;

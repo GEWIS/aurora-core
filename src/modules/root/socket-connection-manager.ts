@@ -10,6 +10,7 @@ import { LightsGroup } from '../lights/entities';
 import { SocketioNamespaces } from '../../socketio-namespaces';
 import SubscribeEntity from './entities/subscribe-entity';
 import BaseHandler from '../handlers/base-handler';
+import logger from '../../logger';
 
 export default class SocketConnectionManager {
   /**
@@ -28,10 +29,10 @@ export default class SocketConnectionManager {
     Object.values(SocketioNamespaces).forEach((namespace) => {
       ioServer.of(namespace).on('connect', (socket) => {
         this.updateSocketId((socket.request as any).user, namespace, socket.id)
-          .catch((e) => console.error(e));
+          .catch((e) => logger.error(e));
         socket.on('disconnect', () => {
           this.updateSocketId((socket.request as any).user, namespace)
-            .catch((e) => console.error(e));
+            .catch((e) => logger.error(e));
         });
       });
     });
@@ -79,11 +80,11 @@ export default class SocketConnectionManager {
    */
   private async updateSocketId(user: User, namespace: SocketioNamespaces, socketId?: string) {
     if (user == null) {
-      console.error('Unknown user tried to connect to socket. Abort.');
+      logger.error('Unknown user tried to connect to socket. Abort.');
       return;
     }
     await this.lock.acquire('socket_connect', async (done) => {
-      console.log(`Connect (${namespace})`, user, 'with ID', socketId);
+      logger.info(`Connect (${namespace}) by ${JSON.stringify(user)} with Socket ID ${socketId}`);
       if (user.audioId) {
         await this.updateSocketIdForEntity(
           dataSource.getRepository(Audio),

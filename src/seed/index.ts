@@ -1,6 +1,7 @@
 import '../env';
 import dataSource from '../database';
 import seedDatabase, { seedOpeningSequence } from './seed';
+import logger from '../logger';
 
 async function createSeeder() {
   await dataSource.initialize();
@@ -19,6 +20,6 @@ if (require.main === module) {
 
   // Only execute the application directly if this is the main execution file.
   createSeeder().catch((e) => {
-    console.error(e);
+    logger.fatal(e);
   });
 }

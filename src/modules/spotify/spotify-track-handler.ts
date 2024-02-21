@@ -4,6 +4,7 @@ import {
 import SpotifyApiHandler from './spotify-api-handler';
 import { MusicEmitter } from '../events';
 import { BeatEvent, TrackChangeEvent, TrackPropertiesEvent } from '../events/music-emitter-events';
+import logger from '../../logger';
 
 export default class SpotifyTrackHandler {
   private static instance: SpotifyTrackHandler;
@@ -133,8 +134,7 @@ export default class SpotifyTrackHandler {
         trackURI: item.uri,
       }] as TrackChangeEvent[]);
 
-      // eslint-disable-next-line no-console
-      console.log(`Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name} (${item.uri})`);
+      logger.info(`Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name} (${item.uri})`);
     }
 
     if ((!state || !state.is_playing) && this.playState && this.playState.is_playing) {
@@ -142,8 +142,7 @@ export default class SpotifyTrackHandler {
       this.currentlyPlayingFeatures = undefined;
       this.currentlyPlayingAnalysis = undefined;
       this.musicEmitter.emitSpotify('stop');
-      // eslint-disable-next-line no-console
-      console.log('Spotify paused/stopped');
+      logger.info('Spotify paused/stopped');
     }
 
     this.playState = state;
@@ -166,8 +165,7 @@ export default class SpotifyTrackHandler {
       this.ping = !this.ping;
 
       beat += `: ${event.beat.start} (${event.beat.confidence}) - ${event.section?.start} - ${event.section?.loudness}`;
-      // eslint-disable-next-line no-console
-      console.log(beat);
+      logger.info(beat);
     }
 
     this.musicEmitter.emitSpotify('beat', event);

@@ -5,6 +5,7 @@ import {
 } from 'express';
 import { ValidateError } from 'tsoa';
 import { ApiError, HttpStatusCode } from './helpers/customError';
+import logger from './logger';
 
 export function setupErrorHandler(app : Express) {
   app.use((req: ExRequest, res: ExResponse) => {
@@ -20,7 +21,7 @@ export function setupErrorHandler(app : Express) {
     next: NextFunction,
   ): ExResponse | void => {
     if (err instanceof ValidateError) {
-      console.warn(`Caught '${HttpStatusCode.BadRequest} - Bad Request' for ${req.path}.`);
+      logger.warn(`Caught '${HttpStatusCode.BadRequest} - Bad Request' for ${req.path}.`);
       return res.status(HttpStatusCode.BadRequest).json({
         message: 'Bad Request',
         details: err?.fields,
@@ -28,7 +29,7 @@ export function setupErrorHandler(app : Express) {
     }
 
     if (err instanceof ApiError) {
-      console.warn(`Caught '${err.statusCode} - ${err.name}' for ${req.path}.`);
+      logger.warn(`Caught '${err.statusCode} - ${err.name}' for ${req.path}.`);
       return res.status(err.statusCode).json({
         message: err.name,
         details: err.message,

@@ -1,6 +1,7 @@
 import { Namespace } from 'socket.io';
 import BaseAudioHandler from '../base-audio-handler';
 import { MusicEmitter } from '../../events';
+import logger from '../../../logger';
 
 export default class SimpleAudioHandler extends BaseAudioHandler {
   private socket: Namespace;
@@ -18,12 +19,12 @@ export default class SimpleAudioHandler extends BaseAudioHandler {
     this.socket.on('connection', (sc) => {
       sc.on('load_audio_success', this.audioFileLoaded.bind(this));
       sc.on('play_audio_started', (startTime: number) => {
-        console.log('handle play audio started events', startTime);
+        logger.debug(`handle play audio started events ${startTime}`);
         this.onStartedPlayingHandlers.forEach((h) => h(startTime));
         this.onStartedPlayingHandlers = [];
       });
       sc.on('sync_audio_timings', (params: { startTime: number, timestamp: number }) => {
-        console.log('Sync audio timings:', params.startTime - params.timestamp);
+        logger.debug(`Sync audio timings: ${params.startTime - params.timestamp}`);
         this.onSyncAudioTimings.forEach((h) => h(params));
       });
     });
@@ -35,7 +36,7 @@ export default class SimpleAudioHandler extends BaseAudioHandler {
   }
 
   private audioFileLoaded() {
-    console.log('Audio file loaded');
+    logger.debug('Audio file loaded');
     this.nrLoaded += 1;
   }
 

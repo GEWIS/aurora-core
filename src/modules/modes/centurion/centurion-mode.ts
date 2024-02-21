@@ -16,6 +16,7 @@ import { LightsEffectBuilder } from '../../lights/effects/lights-effect';
 import Wave from '../../lights/effects/color/wave';
 import Sparkle from '../../lights/effects/color/sparkle';
 import { ArtificialBeatGenerator } from '../../beats/artificial-beat-generator';
+import logger from '../../../logger';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
@@ -168,7 +169,7 @@ export default class CenturionMode extends BaseMode {
    * @private
    */
   private handleFeedEvent(event: FeedEvent) {
-    console.log(new Date().toTimeString(), event);
+    logger.debug(event);
 
     if (event.type === 'horn') {
       this.lights.forEach((l) => {

@@ -4,6 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
+import { pinoHttp } from 'pino-http';
 import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
 import { SessionMiddleware } from './modules/auth';
@@ -21,6 +22,10 @@ import { apiKeyResponse } from './modules/auth/passport/api-key-strategy';
  */
 export default async function createHttp() {
   const app = express();
+
+  app.use(pinoHttp({
+    useLevel: 'debug',
+  }));
 
   app.use(cors({ allowedHeaders: ['Cookie', 'Cookies'] }));
 

@@ -8,6 +8,7 @@ import type { ApiResult } from './ApiResult';
 import { CancelablePromise } from './CancelablePromise';
 import type { OnCancel } from './CancelablePromise';
 import type { OpenAPIConfig } from './OpenAPI';
+import logger from "../../../../../logger";
 
 export const isDefined = <T>(value: T | null | undefined): value is Exclude<T, null | undefined> => {
     return value !== undefined && value !== null;
@@ -245,7 +246,7 @@ export const getResponseBody = async (response: Response): Promise<any> => {
                 }
             }
         } catch (error) {
-            console.error(error);
+            logger.error(error);
         }
     }
     return undefined;

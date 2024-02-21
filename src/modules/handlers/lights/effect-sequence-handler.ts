@@ -6,6 +6,7 @@ import LightsEffect from '../../lights/effects/lights-effect';
 import dataSource from '../../../database';
 import { LIGHTS_EFFECTS } from '../../lights/effects';
 import { MusicEmitter } from '../../events';
+import logger from '../../../logger';
 
 interface LightsGroupEffectBase {
   startMs: number;
@@ -175,7 +176,7 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
         this.sequence = sequence;
         this.startSequence(event.startTime);
       })
-      .catch((e) => console.error(e));
+      .catch((e) => logger.error(e));
   }
 
   /**

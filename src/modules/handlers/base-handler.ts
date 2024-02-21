@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import SubscribeEntity from '../root/entities/subscribe-entity';
 import { BeatEvent } from '../events/music-emitter-events';
+import logger from '../../logger';
 
 export default abstract class BaseHandler<T extends SubscribeEntity> {
   /**
@@ -27,7 +28,7 @@ export default abstract class BaseHandler<T extends SubscribeEntity> {
    */
   public registerEntity(entity: T): void {
     this._entities.push(entity);
-    this.setHandlerRef(entity).catch((e) => console.error(e));
+    this.setHandlerRef(entity).catch((e) => logger.error(e));
   }
 
   /**

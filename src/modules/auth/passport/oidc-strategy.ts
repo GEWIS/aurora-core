@@ -3,6 +3,7 @@ import { Request as ExRequest, Response as ExResponse } from 'express';
 import passport from 'passport';
 import { Strategy as CustomStrategy } from 'passport-custom';
 import { ApiError, HttpStatusCode } from '../../../helpers/customError';
+import logger from '../../../logger';
 
 export interface AuthStoreToken {
   exp: number,
@@ -57,7 +58,7 @@ passport.use('oidc', new CustomStrategy(
         roles: tokenDetails.resource_access ? tokenDetails.resource_access[process.env.KEYCLOAK_CLIENT_ID || ''].roles : [],
       });
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       req.res?.sendStatus(500);
     }
   },

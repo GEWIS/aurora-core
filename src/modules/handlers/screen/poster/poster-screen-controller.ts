@@ -8,6 +8,7 @@ import HandlerManager from '../../../root/handler-manager';
 import { Screen } from '../../../root/entities';
 import { Poster } from '../../../posters/poster';
 import { SecurityGroup } from '../../../../helpers/security';
+import logger from '../../../../logger';
 
 enum TrainDepartureStatus {
   ON_STATION = 'ON_STATION',
@@ -78,7 +79,7 @@ export class PosterScreenController extends Controller {
       try {
         await this.screenHandler.posterManager.fetchPosters();
       } catch (e) {
-        console.error(e);
+        logger.error(e);
       }
     }
     return this.screenHandler.posterManager.posters;
