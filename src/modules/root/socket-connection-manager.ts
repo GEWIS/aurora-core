@@ -23,7 +23,7 @@ export default class SocketConnectionManager {
    */
   private lock: AsyncLock;
 
-  constructor(private handlerManager: HandlerManager, ioServer: Server) {
+  constructor(private handlerManager: HandlerManager, private ioServer: Server) {
     this.lock = new AsyncLock();
 
     Object.values(SocketioNamespaces).forEach((namespace) => {
@@ -63,6 +63,9 @@ export default class SocketConnectionManager {
       h.entities.forEach((e) => {
         if (e.id === id) {
           e.socketIds = entity.socketIds;
+          if (socketId !== undefined) {
+            this.ioServer.of(namespace).sockets.get(socketId)?.emit('handler_set', h.constructor.name);
+          }
         }
       });
     });
@@ -78,13 +81,22 @@ export default class SocketConnectionManager {
    * @param socketId
    * @private
    */
-  private async updateSocketId(user: User, namespace: SocketioNamespaces, socketId?: string) {
+  private async updateSocketId(
+    user: User,
+    namespace: SocketioNamespaces,
+    socketId?: string,
+  ) {
     if (user == null) {
       logger.error('Unknown user tried to connect to socket. Abort.');
       return;
     }
+
     await this.lock.acquire('socket_connect', async (done) => {
-      logger.info(`Connect (${namespace}) by ${JSON.stringify(user)} with Socket ID ${socketId}`);
+      if (socketId !== undefined) {
+        logger.info(`Connect (${namespace}) by ${JSON.stringify(user)} with Socket ID ${socketId}`);
+      } else {
+        logger.info(`Disconnect (${namespace}) by ${JSON.stringify(user)}`);
+      }
       if (user.audioId) {
         await this.updateSocketIdForEntity(
           dataSource.getRepository(Audio),
