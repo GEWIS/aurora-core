@@ -7,6 +7,7 @@ const logger = pino({
       colorize: true,
     },
   },
+  level: process.env.LOG_LEVEL,
 });
 
 export default logger;

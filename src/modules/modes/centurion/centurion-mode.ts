@@ -50,6 +50,7 @@ export default class CenturionMode extends BaseMode {
   private initialized = false;
 
   public get playing(): boolean {
+    // If we have registered events, we are playing audio
     return this.feedEvents.length > 0;
   }
 
@@ -65,6 +66,9 @@ export default class CenturionMode extends BaseMode {
     });
     audios.forEach((audio) => {
       this.handlerManager.registerHandler(audio, AUDIO_HANDLER);
+    });
+    screens.forEach((screen) => {
+      this.handlerManager.registerHandler(screen, SCREEN_HANDLER);
     });
 
     this.lightsHandler = this.handlerManager.getHandlers(LightsGroup)
@@ -101,15 +105,12 @@ export default class CenturionMode extends BaseMode {
   public start(): boolean {
     if (!this.audioHandler.ready) return false;
 
-    this.audioHandler.play(this.timestamp, (startTime: number) => {
-      // Synchronize music with effects
-      this.syncFeedEvents({ startTime, timestamp: this.timestamp * 1000 });
-      this.fireLastFeedEvent(this.timestamp);
+    this.audioHandler.play(this.timestamp);
+    this.registerFeedEvents(this.timestamp);
+    this.fireLastFeedEvent(this.timestamp);
 
-      this.screenHandler.start();
-      this.timestamp = 0;
-      this.beatGenerator.start(130);
-    });
+    this.screenHandler.start();
+    this.beatGenerator.start(130);
     logger.info('Started centurion playback.');
     return true;
   }
@@ -121,10 +122,10 @@ export default class CenturionMode extends BaseMode {
   public skip(seconds: number) {
     if (seconds < 0) throw new Error('Timestamp has to be positive');
     this.timestamp = seconds;
-    // If we have registered events, we are playing audio
+    this.audioHandler.setPlayback(seconds);
+
     if (this.playing) {
-      this.audioHandler.setPlayback(seconds);
-      this.registerEvents(seconds);
+      this.registerFeedEvents(seconds);
       this.fireLastFeedEvent(seconds);
     }
     logger.info(`Moved centurion playback to ${seconds} seconds.`);
@@ -140,7 +141,7 @@ export default class CenturionMode extends BaseMode {
     this.beatGenerator.stop();
     logger.info('Paused centurion playback.');
 
-    this.timestamp = (new Date().getTime() - this.startTime.getTime()) * 1000;
+    this.timestamp = (new Date().getTime() - this.startTime.getTime()) / 1000;
   }
 
   private emitSong(song: SongData | SongData[]) {
@@ -227,7 +228,7 @@ export default class CenturionMode extends BaseMode {
    * @param seconds seconds since start of the track
    * @private
    */
-  private registerEvents(seconds: number = 0): void {
+  private registerFeedEvents(seconds: number = 0): void {
     if (this.feedEvents.length > 0) {
       this.stopFeedEvents();
     }
@@ -264,7 +265,7 @@ export default class CenturionMode extends BaseMode {
   private syncFeedEvents({ startTime, timestamp }: { startTime: number, timestamp: number }) {
     const msDifference = new Date().getTime() - startTime;
 
-    this.registerEvents((timestamp + msDifference) / 1000);
+    this.registerFeedEvents((timestamp + msDifference) / 1000);
   }
 
   /**

@@ -13,6 +13,22 @@ import { mockLogin } from './modules/auth/passport/mock-strategy';
 import { setupErrorHandler } from './error';
 import { apiKeyResponse } from './modules/auth/passport/api-key-strategy';
 
+const origins = process.env.CORS_ORIGINS?.split(', ');
+
+export function customOrigin(
+  requestOrigin: string | undefined,
+  callback: (
+    err: Error | null,
+    origin?: boolean | string | RegExp | (boolean | string | RegExp)[],
+  ) => void,
+) {
+  if (origins && origins.length > 0) {
+    callback(null, origins);
+  } else {
+    callback(new Error('No origins defined'), requestOrigin);
+  }
+}
+
 /**
  * Create an Express instance to listen to HTTP calls.
  * Directly assigns all middlewares and routes.
@@ -27,7 +43,7 @@ export default async function createHttp() {
     useLevel: 'debug',
   }));
 
-  app.use(cors({ allowedHeaders: ['Cookie', 'Cookies'] }));
+  app.use(cors({ allowedHeaders: ['Cookie', 'Cookies'], origin: customOrigin }));
 
   app.use(
     bodyParser.urlencoded({
