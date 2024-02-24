@@ -41,11 +41,17 @@ export default class CenturionMode extends BaseMode {
 
   private timestamp: number = 0;
 
+  public startTime: Date = new Date();
+
   private static instance: CenturionMode | undefined;
 
   private beatGenerator: ArtificialBeatGenerator;
 
   private initialized = false;
+
+  public get playing(): boolean {
+    return this.feedEvents.length > 0;
+  }
 
   constructor(
     lights: LightsGroup[],
@@ -116,7 +122,7 @@ export default class CenturionMode extends BaseMode {
     if (seconds < 0) throw new Error('Timestamp has to be positive');
     this.timestamp = seconds;
     // If we have registered events, we are playing audio
-    if (this.feedEvents.length > 0) {
+    if (this.playing) {
       this.audioHandler.setPlayback(seconds);
       this.registerEvents(seconds);
       this.fireLastFeedEvent(seconds);
@@ -133,6 +139,8 @@ export default class CenturionMode extends BaseMode {
     this.stopFeedEvents();
     this.beatGenerator.stop();
     logger.info('Paused centurion playback.');
+
+    this.timestamp = (new Date().getTime() - this.startTime.getTime()) * 1000;
   }
 
   private emitSong(song: SongData | SongData[]) {
@@ -223,6 +231,9 @@ export default class CenturionMode extends BaseMode {
     if (this.feedEvents.length > 0) {
       this.stopFeedEvents();
     }
+
+    this.startTime = new Date(new Date().getTime() - (seconds * 1000));
+
     this.tape.feed
       .filter((e) => e.timestamp >= seconds)
       .forEach((event) => {

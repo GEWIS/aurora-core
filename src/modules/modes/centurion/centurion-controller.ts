@@ -17,6 +17,8 @@ interface SkipCenturionRequest {
 
 interface CenturionResponse {
   name: string;
+  startTime: Date;
+  playing: boolean;
 }
 
 interface HornEvent {
@@ -60,6 +62,8 @@ export class CenturionController extends Controller {
 
     return {
       name: mode.tape.name,
+      startTime: mode.startTime,
+      playing: mode.playing,
     };
   }
 
