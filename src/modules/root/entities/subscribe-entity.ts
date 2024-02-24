@@ -21,15 +21,17 @@ export default class SubscribeEntity extends BaseEntity {
     nullable: true,
     type: 'varchar',
     transformer: {
-      from(value: string): Partial<Record<SocketioNamespaces, string>> {
+      from(value: string | null): Partial<Record<SocketioNamespaces, string>> | undefined {
+        if (!value) return undefined;
         return JSON.parse(value);
       },
-      to(value: Partial<Record<SocketioNamespaces, string>>): string {
+      to(value: Partial<Record<SocketioNamespaces, string>> | undefined | null): string | null {
+        if (!value) return null;
         return JSON.stringify(value);
       },
     },
   })
-  public socketIds?: Partial<Record<SocketioNamespaces, string>>;
+  public socketIds?: Partial<Record<SocketioNamespaces, string>> | null;
 
   /**
    * Get the socket ID for the given namespace. Undefined if no connection.

@@ -12,13 +12,9 @@ export type SongData = {
   title: string,
 };
 
-type Song = {
+export type Song = {
   type: 'song',
   data: SongData | SongData[],
-};
-
-type Beat = {
-  type: 'beat',
 };
 
 type Effect = {
@@ -35,7 +31,7 @@ type Other = {
 
 export type FeedEvent = {
   timestamp: number;
-} & (Horn | Song | Beat | Effect | Other);
+} & (Horn | Song | Effect | Other);
 
 export default interface MixTape {
   name: string;

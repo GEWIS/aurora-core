@@ -1,16 +1,30 @@
 import {
-  Post, Route, Tags, Response, SuccessResponse, Body, Security,
+  Body, Get, Post, Response, Route, Security, SuccessResponse, Tags,
 } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import ModeManager from '../mode-manager';
 import CenturionMode from './centurion-mode';
 import { SecurityGroup } from '../../../helpers/security';
+import MixTape, { Song, SongData } from './tapes/mix-tape';
+import tapes from './tapes';
 
 interface SkipCenturionRequest {
   /**
    * @minimum 0 Timestamp should be positive
    */
   seconds: number;
+}
+
+interface CenturionResponse {
+  name: string;
+  tape: string;
+  startTime: Date;
+}
+
+interface MixTapeResponse extends Pick<MixTape, 'name' | 'coverUrl'> {
+  songs: SongData[];
+  /** Seconds till the last horn */
+  duration: number;
 }
 
 @Route('modes/centurion')
@@ -22,6 +36,9 @@ export class CenturionController extends Controller {
     super();
     this.modeManager = ModeManager.getInstance();
   }
+
+  @Security('local', ['*'])
+  @Get('')
 
   /**
    * Start a centurion
@@ -81,5 +98,26 @@ export class CenturionController extends Controller {
     mode.stop();
     this.setStatus(204);
     return '';
+  }
+
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Get('tapes')
+  public getCenturionTapes(): MixTapeResponse[] {
+    return tapes
+      .map((t) => ({
+        name: t.name,
+        coverUrl: t.coverUrl,
+        songs: t.feed.filter((e) => e.type === 'song')
+          .map((e) => e as Song)
+          .map((s) => {
+            const songs = !Array.isArray(s.data) ? [s.data] : s.data;
+            return songs.map((songData) => ({
+              title: songData.title,
+              artist: songData.artist,
+            }));
+          }).flat(),
+        duration: Math.max(...t.feed.filter((e) => e.type === 'horn')
+          .map((e) => e.timestamp)),
+      }));
   }
 }

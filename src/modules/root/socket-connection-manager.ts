@@ -38,6 +38,16 @@ export default class SocketConnectionManager {
     });
   }
 
+  /**
+   * Socket IDs might still exist in the database on startup, for example if the application has
+   * crashed and is now restarted.
+   */
+  public async clearSavedSocketIds() {
+    await dataSource.getRepository(Audio).update({}, { socketIds: null });
+    await dataSource.getRepository(Screen).update({}, { socketIds: null });
+    await dataSource.getRepository(LightsController).update({}, { socketIds: null });
+  }
+
   private async updateSocketIdForEntity<T extends SubscribeEntity>(
     repo: Repository<T>,
     id: number,
