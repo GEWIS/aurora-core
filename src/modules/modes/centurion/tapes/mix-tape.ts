@@ -1,10 +1,12 @@
 import { LightsEffectBuilder } from '../../../lights/effects/lights-effect';
 
-type Horn = {
+export type HornData = {
+  counter: number,
+};
+
+export type Horn = {
   type: 'horn',
-  data: {
-    counter: number,
-  },
+  data: HornData,
 };
 
 export type SongData = {
@@ -12,7 +14,7 @@ export type SongData = {
   title: string,
 };
 
-export type Song = {
+type Song = {
   type: 'song',
   data: SongData | SongData[],
 };

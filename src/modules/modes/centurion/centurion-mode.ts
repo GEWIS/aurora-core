@@ -30,7 +30,7 @@ export default class CenturionMode extends BaseMode {
 
   private screenHandler: CenturionScreenHandler;
 
-  private tape: MixTape;
+  public tape: MixTape;
 
   private musicEmitter: MusicEmitter;
 
@@ -82,6 +82,7 @@ export default class CenturionMode extends BaseMode {
     this.tape = tape;
     this.audioHandler.load(`/static${tape.songFile}`);
     this.screenHandler.loaded(tape);
+    logger.info(`Initialized centurion tape "${tape.name}"`);
   }
 
   public static getInstance() {
@@ -103,6 +104,7 @@ export default class CenturionMode extends BaseMode {
       this.timestamp = 0;
       this.beatGenerator.start(130);
     });
+    logger.info('Started centurion playback.');
     return true;
   }
 
@@ -119,6 +121,7 @@ export default class CenturionMode extends BaseMode {
       this.registerEvents(seconds);
       this.fireLastFeedEvent(seconds);
     }
+    logger.info(`Moved centurion playback to ${seconds} seconds.`);
   }
 
   /**
@@ -129,6 +132,7 @@ export default class CenturionMode extends BaseMode {
     this.screenHandler.stop();
     this.stopFeedEvents();
     this.beatGenerator.stop();
+    logger.info('Paused centurion playback.');
   }
 
   private emitSong(song: SongData | SongData[]) {

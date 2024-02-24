@@ -1,11 +1,11 @@
 import {
-  Body, Get, Post, Response, Route, Security, SuccessResponse, Tags,
+  Body, Get, Post, Res, Response, Route, Security, SuccessResponse, Tags,
 } from 'tsoa';
-import { Controller } from '@tsoa/runtime';
+import { Controller, TsoaResponse } from '@tsoa/runtime';
 import ModeManager from '../mode-manager';
 import CenturionMode from './centurion-mode';
 import { SecurityGroup } from '../../../helpers/security';
-import MixTape, { Song, SongData } from './tapes/mix-tape';
+import MixTape, { HornData, SongData } from './tapes/mix-tape';
 import tapes from './tapes';
 
 interface SkipCenturionRequest {
@@ -17,12 +17,24 @@ interface SkipCenturionRequest {
 
 interface CenturionResponse {
   name: string;
-  tape: string;
-  startTime: Date;
+}
+
+interface HornEvent {
+  type: 'horn',
+  timestamp: number,
+  data: HornData,
+}
+
+interface SongEvent {
+  type: 'song',
+  timestamp: number,
+  data: SongData | SongData[],
 }
 
 interface MixTapeResponse extends Pick<MixTape, 'name' | 'coverUrl'> {
-  songs: SongData[];
+  events: (HornEvent | SongEvent)[];
+  /** Amount of horns */
+  horns: number;
   /** Seconds till the last horn */
   duration: number;
 }
@@ -35,6 +47,20 @@ export class CenturionController extends Controller {
   constructor() {
     super();
     this.modeManager = ModeManager.getInstance();
+  }
+
+  @Security('local', ['*'])
+  @Get('')
+  @Response<string>(411, 'Centurion not enabled')
+  public getCenturion(@Res() notEnabledResponse: TsoaResponse<404, string>): CenturionResponse {
+    const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
+    if (mode === undefined) {
+      return notEnabledResponse(404, 'Centurion not enabled');
+    }
+
+    return {
+      name: mode.tape.name,
+    };
   }
 
   /**
@@ -104,15 +130,9 @@ export class CenturionController extends Controller {
       .map((t) => ({
         name: t.name,
         coverUrl: t.coverUrl,
-        songs: t.feed.filter((e) => e.type === 'song')
-          .map((e) => e as Song)
-          .map((s) => {
-            const songs = !Array.isArray(s.data) ? [s.data] : s.data;
-            return songs.map((songData) => ({
-              title: songData.title,
-              artist: songData.artist,
-            }));
-          }).flat(),
+        events: t.feed.filter((e) => ['horn', 'song'].includes(e.type))
+          .map((e) => e as HornEvent | SongEvent),
+        horns: t.feed.filter((e) => e.type === 'horn').length,
         duration: Math.max(...t.feed.filter((e) => e.type === 'horn')
           .map((e) => e.timestamp)),
       }));

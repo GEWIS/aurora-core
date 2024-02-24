@@ -69,7 +69,7 @@ export class ModeController extends Controller {
       return 'Centurion tape not found.';
     }
     centurionMode.loadTape(tape);
-    this.modeManager.enableMode(CenturionMode, centurionMode);
+    this.modeManager.enableMode(CenturionMode, centurionMode, 'centurion');
 
     this.setStatus(204);
     return '';
@@ -79,6 +79,6 @@ export class ModeController extends Controller {
   @Delete('centurion')
   @SuccessResponse(HttpStatusCode.Ok)
   public disableCenturion() {
-    this.modeManager.disableMode(CenturionMode);
+    this.modeManager.disableMode(CenturionMode, 'centurion');
   }
 }

@@ -13,6 +13,7 @@ import { ArtificialBeatGenerator } from './modules/beats/artificial-beat-generat
 import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
 import { SocketioNamespaces } from './socketio-namespaces';
 import SocketConnectionManager from './modules/root/socket-connection-manager';
+import { BackofficeSyncEmitter } from './modules/events/backoffice-sync-emitter';
 
 async function createApp(): Promise<void> {
   await dataSource.initialize();
@@ -21,8 +22,9 @@ async function createApp(): Promise<void> {
   const io = createWebsocket(httpServer);
 
   const musicEmitter = new MusicEmitter();
+  const backofficeSyncEmitter = new BackofficeSyncEmitter();
 
-  const handlerManager = HandlerManager.getInstance(io, musicEmitter);
+  const handlerManager = HandlerManager.getInstance(io, musicEmitter, backofficeSyncEmitter);
   await handlerManager.init();
   const socketConnectionManager = new SocketConnectionManager(handlerManager, io);
   await socketConnectionManager.clearSavedSocketIds();
@@ -32,7 +34,7 @@ async function createApp(): Promise<void> {
     musicEmitter,
   );
 
-  ModeManager.getInstance().init(musicEmitter);
+  ModeManager.getInstance().init(musicEmitter, backofficeSyncEmitter);
   ArtificialBeatGenerator.getInstance().init(musicEmitter);
 
   if (process.env.SPOTIFY_ENABLE === 'true' && process.env.SPOTIFY_CLIENT_ID
@@ -43,7 +45,7 @@ async function createApp(): Promise<void> {
     logger.info('Spotify initialized!');
   }
 
-  initBackofficeSynchronizer(io.of('/backoffice'), { musicEmitter });
+  initBackofficeSynchronizer(io.of('/backoffice'), { musicEmitter, backofficeEmitter: backofficeSyncEmitter });
 
   const port = process.env.PORT || 3000;
   httpServer.listen(port, () => logger.info(`Listening at http://localhost:${port}`));

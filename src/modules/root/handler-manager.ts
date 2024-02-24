@@ -20,6 +20,7 @@ import { MusicEmitter } from '../events';
 import StageEffectsHandler from '../handlers/screen/stage-effects-handler';
 import { SocketioNamespaces } from '../../socketio-namespaces';
 import logger from '../../logger';
+import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -70,6 +71,7 @@ export default class HandlerManager {
   private constructor(
     private io: Server,
     private musicEmitter: MusicEmitter,
+    private backofficeSyncEmitter: BackofficeSyncEmitter,
   ) {
     this.musicEmitter.on('beat', this.beat.bind(this));
     this.musicEmitter.on('change_track', this.changeTrack.bind(this));
@@ -101,15 +103,18 @@ export default class HandlerManager {
    * the first time an instance is requested and a new object should be created
    * @param io
    * @param musicEmitter
+   * @param backofficeSyncEmitter
    */
   public static getInstance(
     io?: Server,
     musicEmitter?: MusicEmitter,
+    backofficeSyncEmitter?: BackofficeSyncEmitter,
   ) {
-    if (this.instance == null && (io === undefined || musicEmitter === undefined)) {
+    if (this.instance == null
+      && (io === undefined || musicEmitter === undefined || backofficeSyncEmitter === undefined)) {
       throw new Error('Not all parameters provided to initialize');
     } else if (this.instance == null) {
-      this.instance = new HandlerManager(io!, musicEmitter!);
+      this.instance = new HandlerManager(io!, musicEmitter!, backofficeSyncEmitter!);
     }
     return this.instance;
   }
@@ -149,6 +154,7 @@ export default class HandlerManager {
       entity.currentHandler = '';
       entity.save().catch((e) => logger.error(e));
     }
+    this.backofficeSyncEmitter.emit(`handler_${entity.constructor.name.toLowerCase()}_update`);
 
     return true;
   }
