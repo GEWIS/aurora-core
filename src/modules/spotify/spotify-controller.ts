@@ -8,6 +8,7 @@ import * as crypto from 'crypto';
 import SpotifyApiHandler from './spotify-api-handler';
 import { SpotifyUser } from './entities';
 import { SecurityGroup } from '../../helpers/security';
+import SpotifyTrackHandler from './spotify-track-handler';
 
 interface SpotifyUserResponse {
   id: number;
@@ -132,5 +133,14 @@ export class SpotifyController extends Controller {
   @Response('204', 'No user active')
   public getSpotifyProfile() {
     return SpotifyApiHandler.getInstance().client?.currentUser.profile();
+  }
+
+  /**
+   * Get the currently playing track on Spotify. Null if nothing is playing.
+   */
+  @Security('local', ['*'])
+  @Get('currently-playing')
+  public getSpotifyCurrentlyPlaying() {
+    return SpotifyTrackHandler.getInstance().currentlyPlayingTrack;
   }
 }

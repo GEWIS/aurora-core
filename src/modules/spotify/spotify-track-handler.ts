@@ -15,6 +15,8 @@ export default class SpotifyTrackHandler {
 
   private readonly api: SpotifyApiHandler;
 
+  private playStateUpdateTime: Date = new Date();
+
   private playState: PlaybackState | undefined;
 
   private currentlyPlayingFeatures: AudioFeatures | undefined;
@@ -48,6 +50,29 @@ export default class SpotifyTrackHandler {
     if (this.initialized) throw new Error('SpotifyTrackHandler is already initialized!');
     this.musicEmitter = emitter;
     this.initialized = true;
+  }
+
+  private asTrackChangeEvent(item: Track, state: PlaybackState): TrackChangeEvent {
+    return {
+      title: item.name,
+      artists: item.artists.map((a) => a.name),
+      cover: item.album.images[0].url,
+      startTime: new Date(this.playStateUpdateTime.getTime() - state.progress_ms),
+      trackURI: item.uri,
+    };
+  }
+
+  /**
+   * Get the currently playing track as a track change event payload
+   */
+  public get currentlyPlayingTrack(): TrackChangeEvent | null {
+    if (!this.playState || !this.playState.is_playing || this.playState.currently_playing_type !== 'track') {
+      return null;
+    }
+
+    const track = this.playState.item as Track;
+
+    return this.asTrackChangeEvent(track, this.playState);
   }
 
   /**
@@ -114,6 +139,7 @@ export default class SpotifyTrackHandler {
     if (!this.api.client) return;
 
     const state = await this.api.client.player.getCurrentlyPlayingTrack();
+    this.playStateUpdateTime = new Date();
 
     // If Spotify started playing a track, starts playing a new track or resumes playing audio...
     if (state && state.currently_playing_type === 'track' && (!this.playState || this.playState.item?.id !== state.item?.id || (!this.playState.is_playing && state.is_playing))) {
@@ -126,13 +152,7 @@ export default class SpotifyTrackHandler {
       this.setNextTrackEvent(state);
 
       const item = state.item as Track;
-      this.musicEmitter.emit('change_track', [{
-        title: item.name,
-        artists: item.artists.map((a) => a.name),
-        cover: item.album.images[0].url,
-        startTime: new Date(new Date().getTime() - state.progress_ms),
-        trackURI: item.uri,
-      }] as TrackChangeEvent[]);
+      this.musicEmitter.emit('change_track', [this.asTrackChangeEvent(item, state)] as TrackChangeEvent[]);
 
       logger.info(`Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name} (${item.uri})`);
     }

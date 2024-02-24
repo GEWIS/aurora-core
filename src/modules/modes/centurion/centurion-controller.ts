@@ -37,9 +37,6 @@ export class CenturionController extends Controller {
     this.modeManager = ModeManager.getInstance();
   }
 
-  @Security('local', ['*'])
-  @Get('')
-
   /**
    * Start a centurion
    */
