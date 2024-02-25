@@ -37,7 +37,7 @@ interface MixTapeResponse extends Pick<MixTape, 'name' | 'coverUrl'> {
   events: (HornEvent | SongEvent)[];
   /** Amount of horns */
   horns: number;
-  /** Seconds till the last horn */
+  /** Duration of the mix tape */
   duration: number;
 }
 
@@ -137,8 +137,7 @@ export class CenturionController extends Controller {
         events: t.feed.filter((e) => ['horn', 'song'].includes(e.type))
           .map((e) => e as HornEvent | SongEvent),
         horns: t.feed.filter((e) => e.type === 'horn').length,
-        duration: Math.max(...t.feed.filter((e) => e.type === 'horn')
-          .map((e) => e.timestamp)),
+        duration: t.duration,
       }));
   }
 }

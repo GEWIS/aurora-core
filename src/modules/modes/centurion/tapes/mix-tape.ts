@@ -10,8 +10,11 @@ export type Horn = {
 };
 
 export type SongData = {
+  /** Performing artists, comma-separated if multiple */
   artist: string,
   title: string,
+  /** Tempo of the song. Defaults to 130 beats per minute */
+  bpm?: number,
 };
 
 type Song = {
@@ -36,8 +39,14 @@ export type FeedEvent = {
 } & (Horn | Song | Effect | Other);
 
 export default interface MixTape {
+  /** Unique name of the tape */
   name: string;
+  /** Relative of absolute HTTP path to the audio file */
   songFile: string;
+  /** List of events */
   feed: FeedEvent[];
+  /** Relative or absolute HTTP path to the cover image */
   coverUrl: string;
+  /** Duration of the whole mixtape (in seconds) */
+  duration: number;
 }

@@ -149,6 +149,8 @@ export default class CenturionMode extends BaseMode {
       songs = song;
     }
 
+    this.beatGenerator.start(songs[0].bpm ?? 130);
+
     this.musicEmitter.emitAudio('change_track', songs.map((s) => ({
       title: s.title,
       artists: s.artist.split(', '),
@@ -205,6 +207,8 @@ export default class CenturionMode extends BaseMode {
       this.lights.forEach((l) => {
         this.lightsHandler.setColorEffect(l, event.data.effects);
       });
+    } else if (event.type === 'other' && event.data === 'stop') {
+      this.stop();
     }
   }
 
@@ -234,7 +238,13 @@ export default class CenturionMode extends BaseMode {
 
     this.startTime = new Date(new Date().getTime() - (seconds * 1000));
 
-    this.tape.feed
+    const stopEvent: FeedEvent = {
+      type: 'other',
+      data: 'stop',
+      timestamp: this.tape.duration,
+    };
+
+    [...this.tape.feed, stopEvent]
       .filter((e) => e.timestamp >= seconds)
       .forEach((event) => {
         const timestampMillis = Math.round((event.timestamp - seconds) * 1000);
