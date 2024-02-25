@@ -13,8 +13,8 @@ export async function expressAuthentication(
     }
     const user = request.user as User;
 
-    // Everyone can access
-    if (scopes.includes('*')) {
+    // Everyone can access, but needs at least one role
+    if (scopes.includes('*') && user.roles.length > 0) {
       return request.user as User;
     }
     // Should have one overlapping role/scope

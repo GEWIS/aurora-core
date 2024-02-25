@@ -4,6 +4,7 @@ import passport from 'passport';
 import { Strategy as CustomStrategy } from 'passport-custom';
 import { ApiError, HttpStatusCode } from '../../../helpers/customError';
 import logger from '../../../logger';
+import { parseRoles } from '../../../helpers/security';
 
 export interface AuthStoreToken {
   exp: number,
@@ -53,10 +54,17 @@ passport.use('oidc', new CustomStrategy(
     try {
       const oidcData = await oidcResponse.json();
       const tokenDetails = jwtDecode<AuthStoreToken>(oidcData!.id_token);
-      callback(null, {
-        name: tokenDetails.given_name,
-        roles: tokenDetails.resource_access ? tokenDetails.resource_access[process.env.KEYCLOAK_CLIENT_ID || ''].roles : [],
-      });
+      const oidcRoles = tokenDetails.resource_access ? tokenDetails.resource_access[process.env.KEYCLOAK_CLIENT_ID || ''].roles : [];
+      const securityRoles = parseRoles(oidcRoles);
+
+      if (securityRoles.length === 0) {
+        req.res?.sendStatus(403);
+      } else {
+        callback(null, {
+          name: tokenDetails.given_name,
+          roles: securityRoles,
+        });
+      }
     } catch (e) {
       logger.error(e);
       req.res?.sendStatus(500);
