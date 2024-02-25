@@ -90,7 +90,6 @@ export default class CenturionMode extends BaseMode {
 
   public loadTape(tape: MixTape) {
     this.tape = tape;
-    this.audioHandler.load(`/static${tape.songFile}`);
     this.screenHandler.loaded(tape);
     logger.info(`Initialized centurion tape "${tape.name}"`);
   }
@@ -103,9 +102,7 @@ export default class CenturionMode extends BaseMode {
    * Start playing the given mixtape and register all timed effects
    */
   public start(): boolean {
-    if (!this.audioHandler.ready) return false;
-
-    this.audioHandler.play(this.timestamp);
+    this.audioHandler.play(`/static${this.tape.songFile}`, this.timestamp);
     this.registerFeedEvents(this.timestamp);
     this.fireLastFeedEvent(this.timestamp);
 
@@ -155,6 +152,7 @@ export default class CenturionMode extends BaseMode {
     this.musicEmitter.emitAudio('change_track', songs.map((s) => ({
       title: s.title,
       artists: s.artist.split(', '),
+      cover: this.tape.coverUrl,
     })) as TrackChangeEvent[]);
   }
 
@@ -198,7 +196,8 @@ export default class CenturionMode extends BaseMode {
       const newEffectBuilder = this.getRandomEffect(colorNames);
 
       this.lights.forEach((l) => {
-        this.lightsHandler.setColorEffect(l, [newEffectBuilder, movingHeadEffect]);
+        this.lightsHandler.setColorEffect(l, [newEffectBuilder]);
+        this.lightsHandler.setMovementEffect(l, [movingHeadEffect]);
       });
       this.screenHandler.changeColors(colorNames);
       this.emitSong(event.data);
