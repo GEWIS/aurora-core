@@ -11,6 +11,7 @@ import { SocketioNamespaces } from '../../socketio-namespaces';
 import SubscribeEntity from './entities/subscribe-entity';
 import BaseHandler from '../handlers/base-handler';
 import logger from '../../logger';
+import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 
 export default class SocketConnectionManager {
   /**
@@ -23,7 +24,11 @@ export default class SocketConnectionManager {
    */
   private lock: AsyncLock;
 
-  constructor(private handlerManager: HandlerManager, private ioServer: Server) {
+  constructor(
+    private handlerManager: HandlerManager,
+    private ioServer: Server,
+    private backofficeEmitter: BackofficeSyncEmitter,
+  ) {
     this.lock = new AsyncLock();
 
     Object.values(SocketioNamespaces).forEach((namespace) => {
@@ -115,6 +120,7 @@ export default class SocketConnectionManager {
           namespace,
           socketId,
         );
+        this.backofficeEmitter.emit('connect_audio');
       }
       if (user.screenId) {
         await this.updateSocketIdForEntity(
@@ -124,6 +130,7 @@ export default class SocketConnectionManager {
           namespace,
           socketId,
         );
+        this.backofficeEmitter.emit('connect_screen');
       }
       if (user.lightsControllerId) {
         const controller = await this.updateSocketIdForEntity(
@@ -143,6 +150,7 @@ export default class SocketConnectionManager {
             g.controller.socketIds = controller.socketIds;
           });
         }
+        this.backofficeEmitter.emit('connect_lightsgroup');
       }
       done();
     });

@@ -26,7 +26,11 @@ async function createApp(): Promise<void> {
 
   const handlerManager = HandlerManager.getInstance(io, musicEmitter, backofficeSyncEmitter);
   await handlerManager.init();
-  const socketConnectionManager = new SocketConnectionManager(handlerManager, io);
+  const socketConnectionManager = new SocketConnectionManager(
+    handlerManager,
+    io,
+    backofficeSyncEmitter,
+  );
   await socketConnectionManager.clearSavedSocketIds();
   const lightsControllerManager = new LightsControllerManager(
     io.of(SocketioNamespaces.LIGHTS),
