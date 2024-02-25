@@ -48,13 +48,10 @@ export default class SimpleAudioHandler extends BaseAudioHandler {
    * @param startTime Timestamp in seconds the audio should start playing at
    */
   public play(url: string, startTime?: number) {
-    this.setPlaying();
-
     this.socket.emit('play_audio', url, startTime);
   }
 
   public stop() {
-    this.setNoLongerPlaying();
     this.socket.emit('stop_audio');
   }
 
