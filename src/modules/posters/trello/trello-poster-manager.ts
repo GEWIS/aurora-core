@@ -252,7 +252,7 @@ export class TrelloPosterManager extends PosterManager {
       if (p.type === PosterType.IMAGE || p.type === PosterType.VIDEO) {
         return {
           ...p,
-          source: p.source.map((s) => `/static${s}`),
+          source: p.source.map((s) => `/static${s.replaceAll('\\', '/')}`),
         };
       }
       return p;
