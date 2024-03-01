@@ -1,7 +1,7 @@
 import { Poster } from './poster';
 
 export abstract class PosterManager {
-  protected _posters: Poster[];
+  protected _posters: Poster[] | undefined;
 
   abstract fetchPosters(): Promise<Poster[]>;
 

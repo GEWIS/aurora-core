@@ -82,7 +82,7 @@ export class PosterScreenController extends Controller {
         logger.error(e);
       }
     }
-    return this.screenHandler.posterManager.posters;
+    return this.screenHandler.posterManager.posters ?? [];
   }
 
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BOARD])

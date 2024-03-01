@@ -1,7 +1,13 @@
 import { PosterManager } from '../poster-manager';
 import {
-  BasePoster, ErrorPoster, FooterSize, LocalPoster,
-  LocalPosterType, MediaPoster, Poster, PosterType,
+  BasePoster,
+  ErrorPoster,
+  FooterSize,
+  LocalPoster,
+  LocalPosterType,
+  MediaPoster,
+  Poster,
+  PosterType,
 } from '../poster';
 import {
   Board, Card, Checklist, TrelloClient, TrelloList,
@@ -235,5 +241,21 @@ export class TrelloPosterManager extends PosterManager {
     this.refreshTimeout = setTimeout(this.fetchPosters.bind(this), DEFAULT_POSTER_REFRESH);
 
     return this._posters;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public get posters(): Poster[] | undefined {
+    if (!this._posters) return undefined;
+    return this._posters.map((p): Poster => {
+      if (p.type === PosterType.IMAGE || p.type === PosterType.VIDEO) {
+        return {
+          ...p,
+          source: p.source.map((s) => `/static${s}`),
+        };
+      }
+      return p;
+    });
   }
 }
