@@ -14,6 +14,7 @@ import { setupErrorHandler } from './error';
 import { apiKeyResponse } from './modules/auth/passport/api-key-strategy';
 
 const origins = process.env.CORS_ORIGINS?.split(', ');
+export const enableCors = origins !== undefined && origins.length > 0;
 
 export function customOrigin(
   requestOrigin: string | undefined,
@@ -43,7 +44,10 @@ export default async function createHttp() {
     useLevel: 'debug',
   }));
 
-  app.use(cors({ allowedHeaders: ['Cookie', 'Cookies'], origin: customOrigin }));
+  app.use(cors({
+    allowedHeaders: ['Cookie', 'Cookies'],
+    origin: enableCors ? customOrigin : undefined,
+  }));
 
   app.use(
     bodyParser.urlencoded({

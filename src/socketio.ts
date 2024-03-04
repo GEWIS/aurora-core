@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
 import { DefaultEventsMap, EventsMap } from 'socket.io/dist/typed-events';
 import { SessionMiddleware, User } from './modules/auth';
-import { customOrigin } from './http';
+import { customOrigin, enableCors } from './http';
 
 const devEnv = process.env.NODE_ENV === 'development';
 
@@ -28,7 +28,7 @@ export default function createWebsocket(
   >(httpServer, {
     cookie: true,
     cors: {
-      origin: customOrigin,
+      origin: enableCors ? customOrigin : undefined,
       allowedHeaders: devEnv ? ['cookie', 'cookie_development'] : ['cookie'],
     },
     connectTimeout: 2000,
