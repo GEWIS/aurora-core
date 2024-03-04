@@ -1,10 +1,10 @@
 import MixTape from './mix-tape';
 
-const centurion: MixTape = {
+const athenaCenturion: MixTape = {
   name: 'ATHENA Centurion',
-  songFile: 'ATHENA_Centurion!!.m4a',
+  songFile: '/audio/athena-centurion.mp3',
   coverUrl: '',
-  duration: 6000,
+  duration: 6006,
   feed: [
     {
       timestamp: 0,
@@ -71,7 +71,7 @@ const centurion: MixTape = {
       type: 'song',
       data: {
         artist: 'Ariana Grande, Zedd',
-        title: 'Break Free'
+        title: 'Break Free',
       },
     },
     {
@@ -120,11 +120,11 @@ const centurion: MixTape = {
       },
     },
     {
-        timestamp: 487.17,
-        type: 'horn',
-        data: {
-          counter: 8,
-        },
+      timestamp: 487.17,
+      type: 'horn',
+      data: {
+        counter: 8,
+      },
     },
     {
       timestamp: 487.17,
@@ -300,11 +300,11 @@ const centurion: MixTape = {
       },
     },
     {
-        timestamp: 1196.07,
-        type: 'horn',
-        data: {
-          counter: 20,
-        },
+      timestamp: 1196.07,
+      type: 'horn',
+      data: {
+        counter: 20,
+      },
     },
     {
       timestamp: 1196.07,
@@ -416,7 +416,7 @@ const centurion: MixTape = {
       type: 'song',
       data: {
         artist: 'Froukje',
-        title: "Ik Wil Dansen",
+        title: 'Ik Wil Dansen',
       },
     },
     {
@@ -431,8 +431,8 @@ const centurion: MixTape = {
       type: 'song',
       data: {
         artist: 'Natasha Bedingfield',
-        title: 'Unwritten'
-      }
+        title: 'Unwritten',
+      },
     },
     {
       timestamp: 1746.27,
@@ -552,7 +552,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Britney Spears',
         title: '... Baby One More Time',
-       },
+      },
     },
     {
       timestamp: 2241.04,
@@ -1080,433 +1080,433 @@ const centurion: MixTape = {
       },
     },
     {
-        timestamp: 4315.21,
-        type: 'horn',
-        data: {
-          counter: 72,
-        },
+      timestamp: 4315.21,
+      type: 'horn',
+      data: {
+        counter: 72,
       },
-      {
-        timestamp: 4315.21,
-        type: 'song',
-        data: {
-          artist: 'Frozen',
-          title: 'Let It Go',
-        },
+    },
+    {
+      timestamp: 4315.21,
+      type: 'song',
+      data: {
+        artist: 'Frozen',
+        title: 'Let It Go',
       },
-      {
-        timestamp: 4378.12,
-        type: 'horn',
-        data: {
-          counter: 73,
-        },
+    },
+    {
+      timestamp: 4378.12,
+      type: 'horn',
+      data: {
+        counter: 73,
       },
-      {
-        timestamp: 4378.12,
-        type: 'song',
-        data: {
-          artist: 'The Weather Girls',
-          title: "It's Raining Men",
-        },
+    },
+    {
+      timestamp: 4378.12,
+      type: 'song',
+      data: {
+        artist: 'The Weather Girls',
+        title: "It's Raining Men",
       },
-      {
-        timestamp: 4440.01,
-        type: 'horn',
-        data: {
-          counter: 74,
-        },
+    },
+    {
+      timestamp: 4440.01,
+      type: 'horn',
+      data: {
+        counter: 74,
       },
-      {
-        timestamp: 4440.01,
-        type: 'song',
-        data: {
-          artist: "Destiny's Child",
-          title: 'Say My Name',
-        },
+    },
+    {
+      timestamp: 4440.01,
+      type: 'song',
+      data: {
+        artist: "Destiny's Child",
+        title: 'Say My Name',
       },
-      {
-        timestamp: 4497.05,
-        type: 'horn',
-        data: {
-          counter: 75,
-        },
+    },
+    {
+      timestamp: 4497.05,
+      type: 'horn',
+      data: {
+        counter: 75,
       },
-      {
-        timestamp: 4497.05,
-        type: 'song',
-        data: {
-          artist: 'Suzan en Freek',
-          title: 'Onderweg Naar Later',
-        },
+    },
+    {
+      timestamp: 4497.05,
+      type: 'song',
+      data: {
+        artist: 'Suzan en Freek',
+        title: 'Onderweg Naar Later',
       },
-      {
-        timestamp: 4554.19,
-        type: 'horn',
-        data: {
-          counter: 76,
-        },
+    },
+    {
+      timestamp: 4554.19,
+      type: 'horn',
+      data: {
+        counter: 76,
       },
-      {
-        timestamp: 4554.19,
-        type: 'song',
-        data: {
-          artist: 'Cascada',
-          title: 'Everytime We Touch',
-        },
+    },
+    {
+      timestamp: 4554.19,
+      type: 'song',
+      data: {
+        artist: 'Cascada',
+        title: 'Everytime We Touch',
       },
-      {
-        timestamp: 4621.00,
-        type: 'horn',
-        data: {
-          counter: 77,
-        },
+    },
+    {
+      timestamp: 4621.00,
+      type: 'horn',
+      data: {
+        counter: 77,
       },
-      {
-        timestamp: 4621.00,
-        type: 'song',
-        data: {
-          artist: 'Ariana Grande',
-          title: 'God Is A Woman',
-        },
+    },
+    {
+      timestamp: 4621.00,
+      type: 'song',
+      data: {
+        artist: 'Ariana Grande',
+        title: 'God Is A Woman',
       },
-      {
-        timestamp: 4677.13,
-        type: 'horn',
-        data: {
-          counter: 78,
-        },
+    },
+    {
+      timestamp: 4677.13,
+      type: 'horn',
+      data: {
+        counter: 78,
       },
-      {
-        timestamp: 4677.13,
-        type: 'song',
-        data: {
-          artist: 'Frozen 2',
-          title: 'Into The Unknown',
-        },
+    },
+    {
+      timestamp: 4677.13,
+      type: 'song',
+      data: {
+        artist: 'Frozen 2',
+        title: 'Into The Unknown',
       },
-      {
-        timestamp: 4731.05,
-        type: 'horn',
-        data: {
-          counter: 79,
-        },
+    },
+    {
+      timestamp: 4731.05,
+      type: 'horn',
+      data: {
+        counter: 79,
       },
-      {
-        timestamp: 4731.05,
-        type: 'song',
-        data: {
-          artist: 'Miss Montreal',
-          title: 'Just A Flirt',
-        },
+    },
+    {
+      timestamp: 4731.05,
+      type: 'song',
+      data: {
+        artist: 'Miss Montreal',
+        title: 'Just A Flirt',
       },
-      {
-        timestamp: 4795.09,
-        type: 'horn',
-        data: {
-          counter: 80,
-        },
+    },
+    {
+      timestamp: 4795.09,
+      type: 'horn',
+      data: {
+        counter: 80,
       },
-      {
-        timestamp: 4795.09,
-        type: 'song',
-        data: {
-          artist: 'Ariana Grande, Jessie J, Nicky Minaj',
-          title: 'Bang Bang',
-        },
+    },
+    {
+      timestamp: 4795.09,
+      type: 'song',
+      data: {
+        artist: 'Ariana Grande, Jessie J, Nicky Minaj',
+        title: 'Bang Bang',
       },
-      {
-        timestamp: 4857.17,
-        type: 'horn',
-        data: {
-          counter: 81,
-        },
+    },
+    {
+      timestamp: 4857.17,
+      type: 'horn',
+      data: {
+        counter: 81,
       },
-      {
-        timestamp: 4857.17,
-        type: 'song',
-        data: {
-          artist: 'Maan',
-          title: 'Leven',
-        },
+    },
+    {
+      timestamp: 4857.17,
+      type: 'song',
+      data: {
+        artist: 'Maan',
+        title: 'Leven',
       },
-      {
-        timestamp: 4918.11,
-        type: 'horn',
-        data: {
-          counter: 82,
-        },
+    },
+    {
+      timestamp: 4918.11,
+      type: 'horn',
+      data: {
+        counter: 82,
       },
-      {
-        timestamp: 4918.11,
-        type: 'song',
-        data: {
-          artist: 'OBZ',
-          title: 'Ik Ben Kachel',
-        },
+    },
+    {
+      timestamp: 4918.11,
+      type: 'song',
+      data: {
+        artist: 'OBZ',
+        title: 'Ik Ben Kachel',
       },
-      {
-        timestamp: 4992.21,
-        type: 'horn',
-        data: {
-          counter: 83,
-        },
+    },
+    {
+      timestamp: 4992.21,
+      type: 'horn',
+      data: {
+        counter: 83,
       },
-      {
-        timestamp: 4992.21,
-        type: 'song',
-        data: {
-          artist: 'Leah Kate',
-          title: '10 Things I Hate About You',
-        },
+    },
+    {
+      timestamp: 4992.21,
+      type: 'song',
+      data: {
+        artist: 'Leah Kate',
+        title: '10 Things I Hate About You',
       },
-      {
-        timestamp: 5043.10,
-        type: 'horn',
-        data: {
-          counter: 84,
-        },
+    },
+    {
+      timestamp: 5043.10,
+      type: 'horn',
+      data: {
+        counter: 84,
       },
-      {
-        timestamp: 5043.10,
-        type: 'song',
-        data: {
-          artist: 'P!nk, Willow Sage Hart',
-          title: 'Cover Me In Sunshine',
-        },
+    },
+    {
+      timestamp: 5043.10,
+      type: 'song',
+      data: {
+        artist: 'P!nk, Willow Sage Hart',
+        title: 'Cover Me In Sunshine',
       },
-      {
-        timestamp: 5100.05,
-        type: 'horn',
-        data: {
-          counter: 85,
-        },
+    },
+    {
+      timestamp: 5100.05,
+      type: 'horn',
+      data: {
+        counter: 85,
       },
-      {
-        timestamp: 5100.05,
-        type: 'song',
-        data: {
-          artist: 'Tate McRae',
-          title: "She's All I Wanna Be",
-        },
+    },
+    {
+      timestamp: 5100.05,
+      type: 'song',
+      data: {
+        artist: 'Tate McRae',
+        title: "She's All I Wanna Be",
       },
-      {
-        timestamp: 5166.16,
-        type: 'horn',
-        data: {
-          counter: 86,
-        },
+    },
+    {
+      timestamp: 5166.16,
+      type: 'horn',
+      data: {
+        counter: 86,
       },
-      {
-        timestamp: 5166.16,
-        type: 'song',
-        data: {
-          artist: 'Taylor Swift',
-          title: 'Shake It Off',
-        },
+    },
+    {
+      timestamp: 5166.16,
+      type: 'song',
+      data: {
+        artist: 'Taylor Swift',
+        title: 'Shake It Off',
       },
-      {
-        timestamp: 5226.02,
-        type: 'horn',
-        data: {
-          counter: 87,
-        },
+    },
+    {
+      timestamp: 5226.02,
+      type: 'horn',
+      data: {
+        counter: 87,
       },
-      {
-        timestamp: 5226.02,
-        type: 'song',
-        data: {
-          artist: "Destiny's Child",
-          title: 'Survivor',
-        },
+    },
+    {
+      timestamp: 5226.02,
+      type: 'song',
+      data: {
+        artist: "Destiny's Child",
+        title: 'Survivor',
       },
-      {
-        timestamp: 5287.02,
-        type: 'horn',
-        data: {
-          counter: 88,
-        },
+    },
+    {
+      timestamp: 5287.02,
+      type: 'horn',
+      data: {
+        counter: 88,
       },
-      {
-        timestamp: 5287.02,
-        type: 'song',
-        data: {
-          artist: 'K3',
-          title: 'Hippie Shake',
-        },
+    },
+    {
+      timestamp: 5287.02,
+      type: 'song',
+      data: {
+        artist: 'K3',
+        title: 'Hippie Shake',
       },
-      {
-        timestamp: 5350.17,
-        type: 'horn',
-        data: {
-          counter: 89,
-        },
+    },
+    {
+      timestamp: 5350.17,
+      type: 'horn',
+      data: {
+        counter: 89,
       },
-      {
-        timestamp: 5350.17,
-        type: 'song',
-        data: {
-          artist: 'Olivia Rodrigo',
-          title: 'Good 4 U',
-        },
+    },
+    {
+      timestamp: 5350.17,
+      type: 'song',
+      data: {
+        artist: 'Olivia Rodrigo',
+        title: 'Good 4 U',
       },
-      {
-        timestamp: 5410.27,
-        type: 'horn',
-        data: {
-          counter: 90,
-        },
+    },
+    {
+      timestamp: 5410.27,
+      type: 'horn',
+      data: {
+        counter: 90,
       },
-      {
-        timestamp: 5410.27,
-        type: 'song',
-        data: {
-          artist: 'Suzan en Freek',
-          title: 'Slapeloosheid',
-        },
+    },
+    {
+      timestamp: 5410.27,
+      type: 'song',
+      data: {
+        artist: 'Suzan en Freek',
+        title: 'Slapeloosheid',
       },
-      {
-        timestamp: 5468.16,
-        type: 'horn',
-        data: {
-          counter: 91,
-        },
+    },
+    {
+      timestamp: 5468.16,
+      type: 'horn',
+      data: {
+        counter: 91,
       },
-      {
-        timestamp: 5468.16,
-        type: 'song',
-        data: {
-          artist: 'Frozen',
-          title: 'Do You Wanna Build A Snowman',
-        },
+    },
+    {
+      timestamp: 5468.16,
+      type: 'song',
+      data: {
+        artist: 'Frozen',
+        title: 'Do You Wanna Build A Snowman',
       },
-      {
-        timestamp: 5527.12,
-        type: 'horn',
-        data: {
-          counter: 92,
-        },
+    },
+    {
+      timestamp: 5527.12,
+      type: 'horn',
+      data: {
+        counter: 92,
       },
-      {
-        timestamp: 5527.12,
-        type: 'song',
-        data: {
-          artist: 'Sia',
-          title: 'Unstoppable',
-        },
+    },
+    {
+      timestamp: 5527.12,
+      type: 'song',
+      data: {
+        artist: 'Sia',
+        title: 'Unstoppable',
       },
-      {
-        timestamp: 5582.15,
-        type: 'horn',
-        data: {
-          counter: 93,
-        },
+    },
+    {
+      timestamp: 5582.15,
+      type: 'horn',
+      data: {
+        counter: 93,
       },
-      {
-        timestamp: 5582.15,
-        type: 'song',
-        data: {
-          artist: 'Mega Mindy',
-          title: 'Mega Mindy Tijd',
-        },
+    },
+    {
+      timestamp: 5582.15,
+      type: 'song',
+      data: {
+        artist: 'Mega Mindy',
+        title: 'Mega Mindy Tijd',
       },
-      {
-        timestamp: 5639.05,
-        type: 'horn',
-        data: {
-          counter: 94,
-        },
+    },
+    {
+      timestamp: 5639.05,
+      type: 'horn',
+      data: {
+        counter: 94,
       },
-      {
-        timestamp: 5639.05,
-        type: 'song',
-        data: {
-          artist: 'Rachel Platten',
-          title: 'Fight Song',
-        },
+    },
+    {
+      timestamp: 5639.05,
+      type: 'song',
+      data: {
+        artist: 'Rachel Platten',
+        title: 'Fight Song',
       },
-      {
-        timestamp: 5698.12,
-        type: 'horn',
-        data: {
-          counter: 95,
-        },
+    },
+    {
+      timestamp: 5698.12,
+      type: 'horn',
+      data: {
+        counter: 95,
       },
-      {
-        timestamp: 5698.12,
-        type: 'song',
-        data: {
-          artist: 'Katy Perry',
-          title: 'Roar',
-        },
+    },
+    {
+      timestamp: 5698.12,
+      type: 'song',
+      data: {
+        artist: 'Katy Perry',
+        title: 'Roar',
       },
-      {
-        timestamp: 5754.13,
-        type: 'horn',
-        data: {
-          counter: 96,
-        },
+    },
+    {
+      timestamp: 5754.13,
+      type: 'horn',
+      data: {
+        counter: 96,
       },
-      {
-        timestamp: 5754.13,
-        type: 'song',
-        data: {
-          artist: 'Suzan en Freek',
-          title: 'Weg Van Jou',
-        },
+    },
+    {
+      timestamp: 5754.13,
+      type: 'song',
+      data: {
+        artist: 'Suzan en Freek',
+        title: 'Weg Van Jou',
       },
-      {
-        timestamp: 5812.25,
-        type: 'horn',
-        data: {
-          counter: 97,
-        },
+    },
+    {
+      timestamp: 5812.25,
+      type: 'horn',
+      data: {
+        counter: 97,
       },
-      {
-        timestamp: 5812.25,
-        type: 'song',
-        data: {
-          artist: 'Las Ketchup',
-          title: 'The Ketchup Song',
-        },
+    },
+    {
+      timestamp: 5812.25,
+      type: 'song',
+      data: {
+        artist: 'Las Ketchup',
+        title: 'The Ketchup Song',
       },
-      {
-        timestamp: 5870.09,
-        type: 'horn',
-        data: {
-          counter: 98,
-        },
+    },
+    {
+      timestamp: 5870.09,
+      type: 'horn',
+      data: {
+        counter: 98,
       },
-      {
-        timestamp: 5870.09,
-        type: 'song',
-        data: {
-          artist: 'The Greatest Showman',
-          title: 'This Is Me',
-        },
+    },
+    {
+      timestamp: 5870.09,
+      type: 'song',
+      data: {
+        artist: 'The Greatest Showman',
+        title: 'This Is Me',
       },
-      {
-        timestamp: 5929.06,
-        type: 'horn',
-        data: {
-          counter: 99,
-        },
+    },
+    {
+      timestamp: 5929.06,
+      type: 'horn',
+      data: {
+        counter: 99,
       },
-      {
-        timestamp: 5929.06,
-        type: 'song',
-        data: {
-          artist: 'Beyoncé',
-          title: 'Single Ladies',
-        },
+    },
+    {
+      timestamp: 5929.06,
+      type: 'song',
+      data: {
+        artist: 'Beyoncé',
+        title: 'Single Ladies',
       },
-      {
-        timestamp: 5999.25,
-        type: 'horn',
-        data: {
-          counter: 100,
-        },
+    },
+    {
+      timestamp: 5999.25,
+      type: 'horn',
+      data: {
+        counter: 100,
       },
+    },
   ],
 };
 
-export default centurion;
+export default athenaCenturion;
