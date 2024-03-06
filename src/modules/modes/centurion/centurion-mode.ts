@@ -102,7 +102,12 @@ export default class CenturionMode extends BaseMode {
    * Start playing the given mixtape and register all timed effects
    */
   public start(): boolean {
-    this.audioHandler.play(`/static${this.tape.songFile}`, this.timestamp);
+    if (this.tape.songFile.startsWith('http')){
+      this.audioHandler.play(this.tape.songFile, this.timestamp);
+    } else {
+      this.audioHandler.play(`/static${this.tape.songFile}`, this.timestamp);
+    }
+
     this.registerFeedEvents(this.timestamp);
     this.fireLastFeedEvent(this.timestamp);
 
