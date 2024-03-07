@@ -1,7 +1,7 @@
 import { Controller } from '@tsoa/runtime';
 import { Get, Route, Tags } from 'tsoa';
 
-interface OidcParameters {
+interface OidcConfig {
   clientId: string;
   redirectUri: string;
   authUrl: string;
@@ -11,7 +11,7 @@ interface OidcParameters {
 @Tags('Authentication')
 export class AuthController extends Controller {
   @Get('oidc')
-  public getOidcParameters(): OidcParameters {
+  public getOidcParameters(): OidcConfig {
     return {
       clientId: process.env.KEYCLOAK_CLIENT_ID || '',
       redirectUri: process.env.KEYCLOAK_REDIRECT_URI || '',

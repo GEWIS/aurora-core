@@ -1,6 +1,6 @@
 import { Response as ExResponse, Request as ExRequest, NextFunction, Express } from 'express';
 import { ValidateError } from 'tsoa';
-import { ApiError, HttpStatusCode } from './helpers/customError';
+import { ApiException, HttpStatusCode } from './helpers/customError';
 import logger from './logger';
 
 export function setupErrorHandler(app: Express) {
@@ -20,7 +20,7 @@ export function setupErrorHandler(app: Express) {
         });
       }
 
-      if (err instanceof ApiError) {
+      if (err instanceof ApiException) {
         logger.warn(`Caught '${err.statusCode} - ${err.name}' for ${req.path}.`);
         return res.status(err.statusCode).json({
           message: err.name,

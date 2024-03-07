@@ -2,7 +2,7 @@ import { HttpStatusCode } from 'axios';
 
 export { HttpStatusCode } from 'axios';
 
-export class ApiError extends Error {
+export class ApiException extends Error {
   public statusCode: number;
 
   constructor(statusCode: HttpStatusCode, message?: string) {
