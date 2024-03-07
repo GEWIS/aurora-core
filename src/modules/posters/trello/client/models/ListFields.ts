@@ -4,6 +4,6 @@
 /* eslint-disable */
 
 export enum ListFields {
-    ID = 'id',
-    ALL = 'all',
+  ID = 'id',
+  ALL = 'all'
 }

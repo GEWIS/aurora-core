@@ -3,7 +3,8 @@ import { Audio } from './entities';
 import dataSource from '../../database';
 import AuthService from '../auth/auth-service';
 
-export interface AudioResponse extends Pick<Audio, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
+export interface AudioResponse
+  extends Pick<Audio, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
 
 export interface AudioCreateParams extends Pick<Audio, 'name'> {}
 
@@ -20,7 +21,7 @@ export default class RootAudioService {
       createdAt: audio.createdAt,
       updatedAt: audio.updatedAt,
       name: audio.name,
-      socketIds: audio.socketIds,
+      socketIds: audio.socketIds
     };
   }
 
@@ -34,7 +35,7 @@ export default class RootAudioService {
 
   public async createAudio(params: AudioCreateParams): Promise<Audio> {
     const audio = await this.repository.save({
-      name: params.name,
+      name: params.name
     });
     await new AuthService().createApiKey({ audio });
     return audio;

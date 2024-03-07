@@ -3,32 +3,32 @@ import {
   LightsScene,
   LightsSceneMovingHeadRgb,
   LightsSceneMovingHeadWheel,
-  LightsScenePars,
+  LightsScenePars
 } from '../../lights/entities/scenes';
 import dataSource from '../../../database';
 
 export interface LightsSceneFixtureResponse {
-  fixtureId: number,
-  dmxValues: number[],
+  fixtureId: number;
+  dmxValues: number[];
 }
 
 export interface LightsSceneResponse {
-  name: string,
-  pars: LightsSceneFixtureResponse[],
-  movingHeadRgbs: LightsSceneFixtureResponse[],
-  movingHeadWheels: LightsSceneFixtureResponse[],
+  name: string;
+  pars: LightsSceneFixtureResponse[];
+  movingHeadRgbs: LightsSceneFixtureResponse[];
+  movingHeadWheels: LightsSceneFixtureResponse[];
 }
 
 export interface SceneFixtureParams {
-  id: number,
-  dmxValues: number[],
+  id: number;
+  dmxValues: number[];
 }
 
 export interface CreateSceneParams {
-  name: string,
-  pars: SceneFixtureParams[],
-  movingHeadRgbs: SceneFixtureParams[],
-  movingHeadWheels: SceneFixtureParams[],
+  name: string;
+  pars: SceneFixtureParams[];
+  movingHeadRgbs: SceneFixtureParams[];
+  movingHeadWheels: SceneFixtureParams[];
 }
 
 export default class ScenesService {
@@ -43,16 +43,16 @@ export default class ScenesService {
       name: scene.name,
       pars: scene.pars.map((p) => ({
         fixtureId: p.groupParId,
-        dmxValues: p.dmxValues,
+        dmxValues: p.dmxValues
       })),
       movingHeadRgbs: scene.movingHeadRgbs.map((m) => ({
         fixtureId: m.groupMovingHeadRgbId,
-        dmxValues: m.dmxValues,
+        dmxValues: m.dmxValues
       })),
       movingHeadWheels: scene.movingHeadWheels.map((m) => ({
         fixtureId: m.groupMovingHeadWheelId,
-        dmxValues: m.dmxValues,
-      })),
+        dmxValues: m.dmxValues
+      }))
     };
   }
 
@@ -66,8 +66,8 @@ export default class ScenesService {
       relations: {
         pars: { par: true },
         movingHeadRgbs: { movingHeadRgb: true },
-        movingHeadWheels: { movingHeadWheel: true },
-      },
+        movingHeadWheels: { movingHeadWheel: true }
+      }
     });
   }
 
@@ -78,32 +78,42 @@ export default class ScenesService {
       const movingHeadRgbsRepo = manager.getRepository(LightsSceneMovingHeadRgb);
       const movingHeadWheelsRepo = manager.getRepository(LightsSceneMovingHeadWheel);
       const scene: LightsScene = await sceneRepo.save({
-        name: params.name,
+        name: params.name
       });
 
-      await Promise.all(params.pars
-        .map(async ({ id, dmxValues }): Promise<LightsScenePars> => parsRepo.save({
-          scene,
-          sceneId: scene.id,
-          groupParId: id,
-          dmxValues,
-        })));
-      await Promise.all(params.movingHeadRgbs
-        .map(async ({ id, dmxValues }): Promise<LightsSceneMovingHeadRgb> => movingHeadRgbsRepo
-          .save({
-            scene,
-            sceneId: scene.id,
-            groupParId: id,
-            dmxValues,
-          })));
-      await Promise.all(params.movingHeadWheels
-        .map(async ({ id, dmxValues }): Promise<LightsSceneMovingHeadWheel> => movingHeadWheelsRepo
-          .save({
-            scene,
-            sceneId: scene.id,
-            groupParId: id,
-            dmxValues,
-          })));
+      await Promise.all(
+        params.pars.map(
+          async ({ id, dmxValues }): Promise<LightsScenePars> =>
+            parsRepo.save({
+              scene,
+              sceneId: scene.id,
+              groupParId: id,
+              dmxValues
+            })
+        )
+      );
+      await Promise.all(
+        params.movingHeadRgbs.map(
+          async ({ id, dmxValues }): Promise<LightsSceneMovingHeadRgb> =>
+            movingHeadRgbsRepo.save({
+              scene,
+              sceneId: scene.id,
+              groupParId: id,
+              dmxValues
+            })
+        )
+      );
+      await Promise.all(
+        params.movingHeadWheels.map(
+          async ({ id, dmxValues }): Promise<LightsSceneMovingHeadWheel> =>
+            movingHeadWheelsRepo.save({
+              scene,
+              sceneId: scene.id,
+              groupParId: id,
+              dmxValues
+            })
+        )
+      );
 
       return scene;
     });

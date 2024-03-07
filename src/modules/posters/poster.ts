@@ -8,13 +8,13 @@ export enum PosterType {
   LOGO = 'logo',
   EXTERNAL = 'extern',
   PHOTO = 'photo',
-  VIDEO = 'video',
+  VIDEO = 'video'
 }
 
 export enum FooterSize {
   FULL = 'full',
   MINIMAL = 'minimal',
-  HIDDEN = 'hidden',
+  HIDDEN = 'hidden'
 }
 
 export interface BasePoster {
@@ -25,26 +25,30 @@ export interface BasePoster {
   footer: FooterSize;
 }
 
-export type LocalPosterType = PosterType.AGENDA | PosterType.INFIMA
-| PosterType.LOGO | PosterType.TRAINS | PosterType.UNKNOWN;
+export type LocalPosterType =
+  | PosterType.AGENDA
+  | PosterType.INFIMA
+  | PosterType.LOGO
+  | PosterType.TRAINS
+  | PosterType.UNKNOWN;
 
 export type LocalPoster = BasePoster & {
-  type: LocalPosterType,
+  type: LocalPosterType;
 };
 
 export type MediaPoster = BasePoster & {
-  type: PosterType.IMAGE | PosterType.VIDEO | PosterType.EXTERNAL,
+  type: PosterType.IMAGE | PosterType.VIDEO | PosterType.EXTERNAL;
   source: string[];
 };
 
 export type PhotoPoster = BasePoster & {
-  type: PosterType.PHOTO,
-  albums: number[],
+  type: PosterType.PHOTO;
+  albums: number[];
 };
 
 export type ErrorPoster = BasePoster & {
-  type: PosterType.ERROR,
-  message: string,
+  type: PosterType.ERROR;
+  message: string;
 };
 
 export type Poster = LocalPoster | MediaPoster | PhotoPoster | ErrorPoster;

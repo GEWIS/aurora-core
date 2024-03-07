@@ -13,7 +13,7 @@ export interface StrobeProps {
 
 export type StrobeCreateParams = BaseLightsEffectCreateParams & {
   type: 'Strobe';
-  props: StrobeProps
+  props: StrobeProps;
 };
 
 export default class Strobe extends LightsEffect<StrobeProps> {

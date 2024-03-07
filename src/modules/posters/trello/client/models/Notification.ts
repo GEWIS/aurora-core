@@ -3,5 +3,4 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type Notification = {
-};
+export type Notification = {};

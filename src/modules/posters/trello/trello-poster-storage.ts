@@ -28,23 +28,26 @@ export class TrelloPosterStorage {
 
     // New trello update
     const headers = {
-      Authorization: `OAuth oauth_consumer_key="${process.env.TRELLO_KEY}", oauth_token="${process.env.TRELLO_TOKEN}"`,
+      Authorization: `OAuth oauth_consumer_key="${process.env.TRELLO_KEY}", oauth_token="${process.env.TRELLO_TOKEN}"`
     };
 
-    return axios.get(attachment.url, { responseType: 'stream', headers }).then((response) => new Promise((resolve, reject) => {
-      const fileWriter = fs.createWriteStream(fileLocationDisk);
-      response.data.pipe(fileWriter);
-      let error: Error;
-      fileWriter.on('error', (err) => {
-        error = err;
-        fileWriter.close();
-        reject(err);
-      });
-      fileWriter.on('close', () => {
-        if (!error) {
-          resolve(fileLocationWeb);
-        }
-      });
-    }));
+    return axios.get(attachment.url, { responseType: 'stream', headers }).then(
+      (response) =>
+        new Promise((resolve, reject) => {
+          const fileWriter = fs.createWriteStream(fileLocationDisk);
+          response.data.pipe(fileWriter);
+          let error: Error;
+          fileWriter.on('error', (err) => {
+            error = err;
+            fileWriter.close();
+            reject(err);
+          });
+          fileWriter.on('close', () => {
+            if (!error) {
+              resolve(fileLocationWeb);
+            }
+          });
+        })
+    );
   }
 }

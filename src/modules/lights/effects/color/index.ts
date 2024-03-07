@@ -12,9 +12,12 @@ export { default as Sparkle } from './sparkle';
 export { default as StaticColor } from './static-color';
 export { default as Wave } from './wave';
 
-export type LightsEffectsColorCreateParams = BeatFadeOutCreateParams
-| SingleFloodCreateParams | SparkleCreateParams | StaticColorCreateParams
-| StrobeCreateParams | WaveCreateParams;
+export type LightsEffectsColorCreateParams =
+  | BeatFadeOutCreateParams
+  | SingleFloodCreateParams
+  | SparkleCreateParams
+  | StaticColorCreateParams
+  | StrobeCreateParams
+  | WaveCreateParams;
 
-export const LIGHTS_EFFECTS_COLOR = [BeatFadeOut, SingleFlood, Sparkle,
-  StaticColor, Strobe, Wave];
+export const LIGHTS_EFFECTS_COLOR = [BeatFadeOut, SingleFlood, Sparkle, StaticColor, Strobe, Wave];

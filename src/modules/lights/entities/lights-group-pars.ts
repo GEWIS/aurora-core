@@ -1,6 +1,4 @@
-import {
-  Column, Entity, JoinColumn, ManyToOne,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import BaseEntity from '../../root/entities/base-entity';
 // eslint-disable-next-line import/no-cycle
 import LightsGroup from './lights-group';

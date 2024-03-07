@@ -9,7 +9,7 @@ import { customOrigin, enableCors } from './http';
 const devEnv = process.env.NODE_ENV === 'development';
 
 interface SocketData {
-  user: User,
+  user: User;
 }
 
 /**
@@ -20,20 +20,19 @@ interface SocketData {
  * namespaces. Authentication with a session cookie is necessary.
  * @param httpServer Express.JS HttpServer instance
  */
-export default function createWebsocket(
-  httpServer: HttpServer,
-) {
-  const io = new SocketIoServer<
-  DefaultEventsMap, EventsMap, DefaultEventsMap, SocketData
-  >(httpServer, {
-    cookie: true,
-    cors: {
-      origin: enableCors ? customOrigin : undefined,
-      allowedHeaders: devEnv ? ['cookie', 'cookie_development'] : ['cookie'],
-    },
-    connectTimeout: 2000,
-    pingTimeout: 1000,
-  });
+export default function createWebsocket(httpServer: HttpServer) {
+  const io = new SocketIoServer<DefaultEventsMap, EventsMap, DefaultEventsMap, SocketData>(
+    httpServer,
+    {
+      cookie: true,
+      cors: {
+        origin: enableCors ? customOrigin : undefined,
+        allowedHeaders: devEnv ? ['cookie', 'cookie_development'] : ['cookie']
+      },
+      connectTimeout: 2000,
+      pingTimeout: 1000
+    }
+  );
 
   /**
    * Set the "cookies" header to "cookie" in development to allow SocketIO auth without CORS
@@ -73,7 +72,7 @@ export default function createWebsocket(
         res.writeHead(401);
         res.end();
       }
-    }),
+    })
   );
 
   return io;

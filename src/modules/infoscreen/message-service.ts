@@ -24,7 +24,7 @@ export default class MessageService {
 
   public async createMessage(params: MessageParams): Promise<Message> {
     const message = {
-      ...params,
+      ...params
     };
     return this.repo.save(message);
   }

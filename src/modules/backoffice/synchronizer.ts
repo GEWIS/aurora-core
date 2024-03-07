@@ -3,13 +3,13 @@ import { MusicEmitter } from '../events';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 
 interface Emitters {
-  musicEmitter: MusicEmitter,
-  backofficeEmitter: BackofficeSyncEmitter,
+  musicEmitter: MusicEmitter;
+  backofficeEmitter: BackofficeSyncEmitter;
 }
 
 export default function initBackofficeSynchronizer(
   socket: Namespace,
-  { musicEmitter, backofficeEmitter }: Emitters,
+  { musicEmitter, backofficeEmitter }: Emitters
 ) {
   musicEmitter.on('beat', (event) => {
     socket.emit('beat', event);

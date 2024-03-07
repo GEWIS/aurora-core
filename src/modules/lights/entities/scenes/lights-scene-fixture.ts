@@ -1,6 +1,5 @@
-import {
-  BaseEntity, Column, JoinColumn, ManyToOne, PrimaryColumn,
-} from 'typeorm';
+import { BaseEntity, Column, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+// eslint-disable-next-line import/no-cycle -- cross reference
 import LightsScene from './lights-scene';
 
 export default class LightsSceneFixture extends BaseEntity {
@@ -19,8 +18,8 @@ export default class LightsSceneFixture extends BaseEntity {
       },
       to(value: number[]): string {
         return JSON.stringify(value);
-      },
-    },
+      }
+    }
   })
   public dmxValues: number[];
 }

@@ -3,5 +3,4 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type NotificationChannelSettings = {
-};
+export type NotificationChannelSettings = {};

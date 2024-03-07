@@ -8,7 +8,10 @@ import LightsGroupMovingHeadRgbs from './lights-group-moving-head-rgbs';
 import LightsGroupMovingHeadWheels from './lights-group-moving-head-wheels';
 import LightsWheelChannelValue from './lights-wheel-channel-value';
 import {
-  LightsScene, LightsSceneMovingHeadRgb, LightsSceneMovingHeadWheel, LightsScenePars,
+  LightsScene,
+  LightsSceneMovingHeadRgb,
+  LightsSceneMovingHeadWheel,
+  LightsScenePars
 } from './scenes';
 import { LightsPredefinedEffect } from './sequences/lights-predefined-effect';
 
@@ -21,9 +24,17 @@ export { default as LightsGroupMovingHeadRgbs } from './lights-group-moving-head
 export { default as LightsGroupMovingHeadWheels } from './lights-group-moving-head-wheels';
 
 export const Entities = [
-  LightsGroup, LightsPar, LightsMovingHeadRgb, LightsMovingHeadWheel,
-  LightsGroupPars, LightsGroupMovingHeadRgbs, LightsGroupMovingHeadWheels,
+  LightsGroup,
+  LightsPar,
+  LightsMovingHeadRgb,
+  LightsMovingHeadWheel,
+  LightsGroupPars,
+  LightsGroupMovingHeadRgbs,
+  LightsGroupMovingHeadWheels,
   LightsWheelChannelValue,
-  LightsScene, LightsScenePars, LightsSceneMovingHeadRgb, LightsSceneMovingHeadWheel,
-  LightsPredefinedEffect,
+  LightsScene,
+  LightsScenePars,
+  LightsSceneMovingHeadRgb,
+  LightsSceneMovingHeadWheel,
+  LightsPredefinedEffect
 ];

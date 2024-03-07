@@ -4,5 +4,5 @@
 /* eslint-disable */
 
 export type CFValue = {
-    number?: string;
+  number?: string;
 };

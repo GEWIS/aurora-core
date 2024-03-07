@@ -29,27 +29,35 @@ async function createApp(): Promise<void> {
   const socketConnectionManager = new SocketConnectionManager(
     handlerManager,
     io,
-    backofficeSyncEmitter,
+    backofficeSyncEmitter
   );
   await socketConnectionManager.clearSavedSocketIds();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO should this be used somewhere?
   const lightsControllerManager = new LightsControllerManager(
     io.of(SocketioNamespaces.LIGHTS),
     handlerManager,
-    musicEmitter,
+    musicEmitter
   );
 
   ModeManager.getInstance().init(musicEmitter, backofficeSyncEmitter);
   ArtificialBeatGenerator.getInstance().init(musicEmitter);
 
-  if (process.env.SPOTIFY_ENABLE === 'true' && process.env.SPOTIFY_CLIENT_ID
-    && process.env.SPOTIFY_CLIENT_SECRET && process.env.SPOTIFY_REDIRECT_URI) {
+  if (
+    process.env.SPOTIFY_ENABLE === 'true' &&
+    process.env.SPOTIFY_CLIENT_ID &&
+    process.env.SPOTIFY_CLIENT_SECRET &&
+    process.env.SPOTIFY_REDIRECT_URI
+  ) {
     logger.info('Initialize Spotify...');
     await SpotifyApiHandler.getInstance().init();
     await SpotifyTrackHandler.getInstance().init(musicEmitter);
     logger.info('Spotify initialized!');
   }
 
-  initBackofficeSynchronizer(io.of('/backoffice'), { musicEmitter, backofficeEmitter: backofficeSyncEmitter });
+  initBackofficeSynchronizer(io.of('/backoffice'), {
+    musicEmitter,
+    backofficeEmitter: backofficeSyncEmitter
+  });
 
   const port = process.env.PORT || 3000;
   httpServer.listen(port, () => logger.info(`Listening at http://localhost:${port}`));

@@ -6,7 +6,7 @@ import {
   LightsGroupPars,
   LightsGroupMovingHeadRgbs,
   LightsGroupMovingHeadWheels,
-  LightsGroup,
+  LightsGroup
 } from '../lights/entities';
 import HandlerManager from './handler-manager';
 import { TrackPropertiesEvent } from '../events/music-emitter-events';
@@ -27,7 +27,7 @@ export default class LightsControllerManager {
     protected websocket: Namespace,
     protected handlerManager: HandlerManager,
     musicEmitter: MusicEmitter,
-    lightControllers: LightsController[] = [],
+    lightControllers: LightsController[] = []
   ) {
     lightControllers.forEach((c) => {
       this.lightsControllersValues.set(c.id, this.constructNewValuesArray());
@@ -68,7 +68,7 @@ export default class LightsControllerManager {
   private reuseOldDmxValues(
     p: LightsGroupPars | LightsGroupMovingHeadRgbs | LightsGroupMovingHeadWheels,
     oldValues: number[],
-    newValues: number[],
+    newValues: number[]
   ): number[] {
     const oldRelativePacket = oldValues.slice(p.firstChannel - 1, p.firstChannel + 15);
     newValues.splice(p.firstChannel - 1, 16, ...oldRelativePacket);
@@ -83,7 +83,7 @@ export default class LightsControllerManager {
    */
   private calculateNewDmxValues(
     p: LightsGroupPars | LightsGroupMovingHeadRgbs | LightsGroupMovingHeadWheels,
-    packet: number[],
+    packet: number[]
   ) {
     const dmxValues = p.fixture.toDmx();
     packet.splice(p.firstChannel - 1, dmxValues.length, ...dmxValues);
@@ -127,32 +127,29 @@ export default class LightsControllerManager {
       const oldValues = this.getOldValues(g.controller);
       let newValues = newControllerValues.get(g.controller.id) ?? this.constructNewValuesArray();
 
-      g.pars
-        .forEach((p) => {
-          if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
-            newValues = this.calculateNewDmxValues(p, newValues);
-          } else {
-            newValues = this.reuseOldDmxValues(p, oldValues, newValues);
-          }
-        });
+      g.pars.forEach((p) => {
+        if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
+          newValues = this.calculateNewDmxValues(p, newValues);
+        } else {
+          newValues = this.reuseOldDmxValues(p, oldValues, newValues);
+        }
+      });
 
-      g.movingHeadRgbs
-        .forEach((p) => {
-          if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
-            newValues = this.calculateNewDmxValues(p, newValues);
-          } else {
-            newValues = this.reuseOldDmxValues(p, oldValues, newValues);
-          }
-        });
+      g.movingHeadRgbs.forEach((p) => {
+        if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
+          newValues = this.calculateNewDmxValues(p, newValues);
+        } else {
+          newValues = this.reuseOldDmxValues(p, oldValues, newValues);
+        }
+      });
 
-      g.movingHeadWheels
-        .forEach((p) => {
-          if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
-            newValues = this.calculateNewDmxValues(p, newValues);
-          } else {
-            newValues = this.reuseOldDmxValues(p, oldValues, newValues);
-          }
-        });
+      g.movingHeadWheels.forEach((p) => {
+        if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
+          newValues = this.calculateNewDmxValues(p, newValues);
+        } else {
+          newValues = this.reuseOldDmxValues(p, oldValues, newValues);
+        }
+      });
 
       newControllerValues.set(g.controller.id, newValues);
     });

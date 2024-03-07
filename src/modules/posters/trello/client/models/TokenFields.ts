@@ -4,10 +4,10 @@
 /* eslint-disable */
 
 export enum TokenFields {
-    IDENTIFIER = 'identifier',
-    ID_MEMBER = 'idMember',
-    DATE_CREATED = 'dateCreated',
-    DATE_EXPIRES = 'dateExpires',
-    PERMISSIONS = 'permissions',
-    ALL = 'all',
+  IDENTIFIER = 'identifier',
+  ID_MEMBER = 'idMember',
+  DATE_CREATED = 'dateCreated',
+  DATE_EXPIRES = 'dateExpires',
+  PERMISSIONS = 'permissions',
+  ALL = 'all'
 }

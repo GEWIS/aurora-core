@@ -6,5 +6,5 @@
 import type { TrelloID } from './TrelloID';
 
 export type Memberships = {
-    id?: TrelloID;
+  id?: TrelloID;
 };

@@ -40,8 +40,7 @@ export class MusicEmitter extends EventEmitter {
    * @private
    */
   private forwardOnAudioNotPlaying(eventName: string, ...args: any[]) {
-    const someAudioPlaying = this.audioHandlers.some((h) => h.entities
-      .some((a) => a.playing));
+    const someAudioPlaying = this.audioHandlers.some((h) => h.entities.some((a) => a.playing));
     if (someAudioPlaying) return;
     this.emit(eventName, ...args);
   }

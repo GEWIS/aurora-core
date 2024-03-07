@@ -25,8 +25,7 @@ export default abstract class EffectsHandler extends BaseLightsHandler {
 
   // We should also remove the entity from the effects mapping
   public removeEntity(entityCopy: LightsGroup) {
-    const entity: LightsGroup | undefined = this.entities
-      .find((e) => e.id === entityCopy.id);
+    const entity: LightsGroup | undefined = this.entities.find((e) => e.id === entityCopy.id);
     if (!entity) return;
 
     this.groupColorEffects.delete(entity);

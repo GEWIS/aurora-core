@@ -1,6 +1,4 @@
-import {
-  Body, Get, Post, Route, Security, Tags,
-} from 'tsoa';
+import { Body, Get, Post, Route, Security, Tags } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import RootScreenService, { ScreenCreateParams, ScreenResponse } from './root-screen-service';
 import { SecurityGroup } from '../../helpers/security';

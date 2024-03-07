@@ -7,28 +7,28 @@ export interface SparkleProps {
   /**
    * Colors of the lights
    */
-  colors: RgbColor[],
+  colors: RgbColor[];
 
   /**
    * What percentage (on average) of the lights should be turned on
    * @minimum 0
    * @maximum 1
    */
-  ratio?: number,
+  ratio?: number;
 
   /**
    * How many ms the light should take to slowly turn off
    * @isInt
    * @minimum 1
    */
-  dimDuration?: number,
+  dimDuration?: number;
 
   /**
    * After how many ms (approximately) a ratio of lights should be turned on
    * @isInt
    * @minimum 0
    */
-  cycleTime?: number,
+  cycleTime?: number;
 }
 
 export type SparkleCreateParams = BaseLightsEffectCreateParams & {
@@ -56,16 +56,13 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
    * @param props
    * @param features
    */
-  constructor(
-    lightsGroup: LightsGroup,
-    props: SparkleProps,
-    features?: TrackPropertiesEvent,
-  ) {
+  constructor(lightsGroup: LightsGroup, props: SparkleProps, features?: TrackPropertiesEvent) {
     super(lightsGroup, features);
 
-    const nrFixtures = lightsGroup.pars.length
-      + lightsGroup.movingHeadWheels.length
-      + lightsGroup.movingHeadRgbs.length;
+    const nrFixtures =
+      lightsGroup.pars.length +
+      lightsGroup.movingHeadWheels.length +
+      lightsGroup.movingHeadRgbs.length;
     this.beatsPars = new Array(nrFixtures).fill(new Date(0));
     this.colorIndicesPars = new Array(nrFixtures).fill(0);
 
@@ -73,10 +70,8 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
   }
 
   public static build(props: SparkleProps): LightsEffectBuilder<SparkleProps, Sparkle> {
-    return (
-      lightsGroup: LightsGroup,
-      features?: TrackPropertiesEvent,
-    ) => new Sparkle(lightsGroup, props, features);
+    return (lightsGroup: LightsGroup, features?: TrackPropertiesEvent) =>
+      new Sparkle(lightsGroup, props, features);
   }
 
   destroy(): void {}
@@ -86,10 +81,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
   private getProgression(beat: Date) {
     const dimDuration = this.props.dimDuration ?? DEFAULT_DIM_DURATION;
 
-    return Math.max(
-      1 - ((new Date().getTime() - beat.getTime()) / (dimDuration)),
-      0,
-    );
+    return Math.max(1 - (new Date().getTime() - beat.getTime()) / dimDuration, 0);
   }
 
   tick(): LightsGroup {
@@ -101,15 +93,13 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
     if (new Date().getTime() - this.previousTick.getTime() >= cycleTime) {
       this.beatsPars?.forEach((b, i) => {
         if (Math.random() <= ratio) {
-          this.colorIndicesPars[i] = (this.colorIndicesPars[i] + i) % Math
-            .max(colors.length);
+          this.colorIndicesPars[i] = (this.colorIndicesPars[i] + i) % Math.max(colors.length);
           this.beatsPars[i] = new Date();
         }
       });
       this.beatsMHRgbs?.forEach((b, i) => {
         if (Math.random() <= ratio) {
-          this.colorIndicesMHRgbs[i] = (this.colorIndicesMHRgbs[i] + i) % Math
-            .max(colors.length);
+          this.colorIndicesMHRgbs[i] = (this.colorIndicesMHRgbs[i] + i) % Math.max(colors.length);
           this.beatsMHRgbs[i] = new Date();
         }
       });

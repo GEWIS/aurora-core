@@ -17,13 +17,13 @@ export default class LightsPar extends LightsFixture {
     coldWhiteChannel: 0,
     warmWhiteChannel: 0,
     amberChannel: 0,
-    uvChannel: 0,
+    uvChannel: 0
   };
 
   setCurrentValues(values: Partial<Colors & LightsFixtureCurrentValues>) {
     this.currentValues = {
       ...this.currentValues,
-      ...values,
+      ...values
     };
     this.valuesUpdatedAt = new Date();
   }
@@ -35,7 +35,7 @@ export default class LightsPar extends LightsFixture {
   setMasterDimmer(masterDimChannel: number) {
     if (this.currentValues.masterDimChannel === masterDimChannel) return;
     this.setCurrentValues({
-      masterDimChannel,
+      masterDimChannel
     });
   }
 
@@ -50,7 +50,7 @@ export default class LightsPar extends LightsFixture {
       coldWhiteChannel: 0,
       warmWhiteChannel: 0,
       amberChannel: 0,
-      uvChannel: 0,
+      uvChannel: 0
     });
   }
 
@@ -105,7 +105,7 @@ export default class LightsPar extends LightsFixture {
     values = this.applyDmxOverride(values);
 
     if (this.shouldReset !== undefined) {
-      if ((new Date().getTime() - this.shouldReset.getTime()) > 5000) {
+      if (new Date().getTime() - this.shouldReset.getTime() > 5000) {
         this.shouldReset = undefined;
       }
       if (this.resetChannelAndValue && this.resetChannelAndValue.length >= 2) {

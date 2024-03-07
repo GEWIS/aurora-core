@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle -- TODO fix cyclic dependency
 import LightsController from './lights-controller';
 import Audio from './audio';
 import Screen from './screen';

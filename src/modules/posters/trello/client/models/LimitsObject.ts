@@ -4,17 +4,14 @@
 /* eslint-disable */
 
 export type LimitsObject = {
-    status?: LimitsObject.status;
-    disableAt?: number;
-    warnAt?: number;
+  status?: LimitsObject.status;
+  disableAt?: number;
+  warnAt?: number;
 };
 
 export namespace LimitsObject {
-
-    export enum status {
-        OK = 'ok',
-        WARNING = 'warning',
-    }
-
-
+  export enum status {
+    OK = 'ok',
+    WARNING = 'warning'
+  }
 }

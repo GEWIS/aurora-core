@@ -2,65 +2,70 @@ import axios from 'axios';
 
 export enum TrainDepartureStatus {
   ON_STATION = 'ON_STATION',
-  INCOMING = 'INCOMING',
+  INCOMING = 'INCOMING'
 }
 
 interface NsTrainResponse {
-  direction: string,
-  name: string,
-  plannedDateTime: string,
-  plannedTimeZoneOffset: number,
-  actualDateTime: string,
-  actualTimeZoneOffset: number,
-  plannedTrack: string,
-  actualTrack: string,
+  direction: string;
+  name: string;
+  plannedDateTime: string;
+  plannedTimeZoneOffset: number;
+  actualDateTime: string;
+  actualTimeZoneOffset: number;
+  plannedTrack: string;
+  actualTrack: string;
   product: {
-    number: string,
-    categoryCode: string,
-    shortCategoryName: string,
-    longCategoryName: string,
-    operatorCode: string,
-    operatorName: string,
-    type: string,
-  },
-  trainCategory: string,
-  cancelled: boolean,
+    number: string;
+    categoryCode: string;
+    shortCategoryName: string;
+    longCategoryName: string;
+    operatorCode: string;
+    operatorName: string;
+    type: string;
+  };
+  trainCategory: string;
+  cancelled: boolean;
   routeStations: {
-    uicCode: string,
-    mediumName: string,
-  }[],
+    uicCode: string;
+    mediumName: string;
+  }[];
   messages: {
-    style: string,
-    message: string,
-  }[],
-  departureStatus: TrainDepartureStatus,
+    style: string;
+    message: string;
+  }[];
+  departureStatus: TrainDepartureStatus;
 }
 
 export interface TrainResponse {
-  direction: string,
-  plannedDateTime: string,
-  delay: number,
-  trainType: string,
-  operator: string,
-  cancelled: boolean,
-  routeStations: string[],
+  direction: string;
+  plannedDateTime: string;
+  delay: number;
+  trainType: string;
+  operator: string;
+  cancelled: boolean;
+  routeStations: string[];
   messages: {
-    style: string,
-    message: string,
-  }[],
+    style: string;
+    message: string;
+  }[];
 }
 
 export default class NsTrainsService {
   public async getTrains() {
     const config = {
       headers: {
-        'Ocp-Apim-Subscription-Key': process.env.NS_KEY,
-      },
+        'Ocp-Apim-Subscription-Key': process.env.NS_KEY
+      }
     };
 
-    const departures = (await axios.get('https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2/departures'
-      + '?station=EHV&maxJourneys=40', config)).data.payload.departures as NsTrainResponse[];
-    const minDepartTime = new Date((new Date()).getTime() + 8 * 60000);
+    const departures = (
+      await axios.get(
+        'https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2/departures' +
+          '?station=EHV&maxJourneys=40',
+        config
+      )
+    ).data.payload.departures as NsTrainResponse[];
+    const minDepartTime = new Date(new Date().getTime() + 8 * 60000);
 
     const futureDepartures = departures.filter((departure) => {
       const actualDepartTime = new Date(departure.actualDateTime);
@@ -72,7 +77,7 @@ export default class NsTrainsService {
       const actualDepartTime = new Date(departure.actualDateTime);
       if (departure.plannedDateTime !== departure.actualDateTime) {
         delay = new Date(
-          actualDepartTime.getTime() - new Date(departure.plannedDateTime).getTime(),
+          actualDepartTime.getTime() - new Date(departure.plannedDateTime).getTime()
         ).getMinutes();
       }
 
@@ -86,7 +91,7 @@ export default class NsTrainsService {
         operator: departure.product.operatorCode,
         cancelled: departure.cancelled,
         routeStations,
-        messages: departure.messages,
+        messages: departure.messages
       };
     });
   }

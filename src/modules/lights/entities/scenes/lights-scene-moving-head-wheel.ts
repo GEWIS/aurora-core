@@ -1,7 +1,7 @@
-import {
-  Entity, JoinColumn, ManyToOne, PrimaryColumn,
-} from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+// eslint-disable-next-line import/no-cycle -- cross reference
 import LightsSceneFixture from './lights-scene-fixture';
+// eslint-disable-next-line import/no-cycle -- cross reference
 import LightsGroupMovingHeadWheels from '../lights-group-moving-head-wheels';
 
 @Entity()

@@ -10,7 +10,11 @@ export default class SessionMiddleware {
   private static instance: SessionMiddleware;
 
   private readonly middleware: RequestHandler<
-  ParamsDictionary, any, any, ParsedQs, Record<string, any>
+    ParamsDictionary,
+    any,
+    any,
+    ParsedQs,
+    Record<string, any>
   >;
 
   constructor() {
@@ -19,8 +23,8 @@ export default class SessionMiddleware {
       resave: false,
       saveUninitialized: false,
       store: new TypeormStore({
-        limitSubquery: false, // MariaDB
-      }).connect(dataSource.getRepository(Session)),
+        limitSubquery: false // MariaDB
+      }).connect(dataSource.getRepository(Session))
     });
   }
 

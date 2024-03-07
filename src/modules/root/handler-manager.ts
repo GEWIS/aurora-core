@@ -13,6 +13,7 @@ import SetEffectsHandler from '../handlers/lights/set-effects-handler';
 import DevelopEffectsHandler from '../handlers/lights/develop-effects-handler';
 import { BeatEvent, TrackChangeEvent } from '../events/music-emitter-events';
 import { CurrentlyPlayingTrackHandler, CenturionScreenHandler } from '../handlers/screen';
+// eslint-disable-next-line import/no-cycle -- TODO fix cyclic dependency
 import { PosterScreenHandler } from '../handlers/screen/poster';
 import { ScenesHandler } from '../handlers/lights/scenes-handler';
 import EffectSequenceHandler from '../handlers/lights/effect-sequence-handler';
@@ -36,10 +37,10 @@ export default class HandlerManager {
 
   private _handlers: Map<typeof SubscribeEntity, BaseHandler<SubscribeEntity>[]> = new Map();
 
-  protected restoreHandlers<
-    T extends SubscribeEntity,
-    U extends BaseHandler<T>,
-  >(entity: T, handlers: U[]) {
+  protected restoreHandlers<T extends SubscribeEntity, U extends BaseHandler<T>>(
+    entity: T,
+    handlers: U[]
+  ) {
     handlers.forEach((handler) => {
       if (handler.constructor.name === entity.currentHandler) {
         handler.registerEntity(entity);
@@ -55,14 +56,17 @@ export default class HandlerManager {
    */
   public async init() {
     if (this.initialized) throw new Error('HandlerManager already initialized.');
-    await Promise.all(Array.from(this._handlers.keys()).map(async (entity) => {
-      const entities = await dataSource.manager.find(entity);
-      entities.forEach((instance) => {
-        const handlers = this._handlers.get(instance.constructor as typeof SubscribeEntity);
-        if (handlers === undefined) throw new Error(`Unknown entity: ${instance.constructor.name}`);
-        this.restoreHandlers(instance, handlers);
-      });
-    }));
+    await Promise.all(
+      Array.from(this._handlers.keys()).map(async (entity) => {
+        const entities = await dataSource.manager.find(entity);
+        entities.forEach((instance) => {
+          const handlers = this._handlers.get(instance.constructor as typeof SubscribeEntity);
+          if (handlers === undefined)
+            throw new Error(`Unknown entity: ${instance.constructor.name}`);
+          this.restoreHandlers(instance, handlers);
+        });
+      })
+    );
   }
 
   /**
@@ -71,7 +75,7 @@ export default class HandlerManager {
   private constructor(
     private io: Server,
     private musicEmitter: MusicEmitter,
-    private backofficeSyncEmitter: BackofficeSyncEmitter,
+    private backofficeSyncEmitter: BackofficeSyncEmitter
   ) {
     this.musicEmitter.on('beat', this.beat.bind(this));
     this.musicEmitter.on('change_track', this.changeTrack.bind(this));
@@ -82,19 +86,19 @@ export default class HandlerManager {
       new SetEffectsHandler(),
       new DevelopEffectsHandler(),
       new ScenesHandler(),
-      new EffectSequenceHandler(musicEmitter),
+      new EffectSequenceHandler(musicEmitter)
     ];
 
     // Register all handlers
     this._handlers.set(Audio, [
-      new SimpleAudioHandler(io.of(SocketioNamespaces.AUDIO), this.musicEmitter),
+      new SimpleAudioHandler(io.of(SocketioNamespaces.AUDIO), this.musicEmitter)
     ] as BaseAudioHandler[]);
     this._handlers.set(LightsGroup, lightsHandlers);
     this._handlers.set(Screen, [
       new CurrentlyPlayingTrackHandler(io.of(SocketioNamespaces.SCREEN)),
       new CenturionScreenHandler(io.of(SocketioNamespaces.SCREEN)),
       new PosterScreenHandler(io.of(SocketioNamespaces.SCREEN)),
-      new StageEffectsHandler(io.of(SocketioNamespaces.SCREEN)),
+      new StageEffectsHandler(io.of(SocketioNamespaces.SCREEN))
     ] as BaseScreenHandler[]);
   }
 
@@ -108,10 +112,12 @@ export default class HandlerManager {
   public static getInstance(
     io?: Server,
     musicEmitter?: MusicEmitter,
-    backofficeSyncEmitter?: BackofficeSyncEmitter,
+    backofficeSyncEmitter?: BackofficeSyncEmitter
   ) {
-    if (this.instance == null
-      && (io === undefined || musicEmitter === undefined || backofficeSyncEmitter === undefined)) {
+    if (
+      this.instance == null &&
+      (io === undefined || musicEmitter === undefined || backofficeSyncEmitter === undefined)
+    ) {
       throw new Error('Not all parameters provided to initialize');
     } else if (this.instance == null) {
       this.instance = new HandlerManager(io!, musicEmitter!, backofficeSyncEmitter!);
@@ -140,7 +146,7 @@ export default class HandlerManager {
       handler.removeEntity(entity);
     });
 
-    const socketId = entity.socketIds ? (entity.socketIds[SocketioNamespaces.BASE] ?? '') : '';
+    const socketId = entity.socketIds ? entity.socketIds[SocketioNamespaces.BASE] ?? '' : '';
     const socket = this.io.sockets.sockets.get(socketId);
 
     if (newHandler !== '') {

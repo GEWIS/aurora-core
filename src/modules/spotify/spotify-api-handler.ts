@@ -1,4 +1,8 @@
-import { AccessToken, ProvidedAccessTokenStrategy, SpotifyApi } from '@fostertheweb/spotify-web-sdk';
+import {
+  AccessToken,
+  ProvidedAccessTokenStrategy,
+  SpotifyApi
+} from '@fostertheweb/spotify-web-sdk';
 import { Repository } from 'typeorm';
 import { SpotifyUser } from './entities';
 import dataSource from '../../database';
@@ -50,11 +54,11 @@ export default class SpotifyApiHandler {
    */
   private static async refreshAccessToken(
     clientId: string,
-    accessToken: AccessToken,
+    accessToken: AccessToken
   ): Promise<AccessToken> {
     const content: { [key: string]: string } = {
       grant_type: 'refresh_token',
-      refresh_token: accessToken.refresh_token,
+      refresh_token: accessToken.refresh_token
     };
 
     const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -62,8 +66,8 @@ export default class SpotifyApiHandler {
       body: new URLSearchParams(content),
       headers: {
         Authorization: `Basic ${btoa(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`)}`,
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      },
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      }
     });
     const json = await response.json();
     if (!response.ok) throw new Error(`Could not get access token: ${json.error}`);
@@ -78,7 +82,7 @@ export default class SpotifyApiHandler {
       ...token,
       expires: Date.now() + token.expires_in * 1000,
       // A (new) refresh token is not returned, so reuse the old to make a correct AccessToken
-      refresh_token: accessToken.refresh_token,
+      refresh_token: accessToken.refresh_token
     };
   }
 
@@ -88,7 +92,11 @@ export default class SpotifyApiHandler {
    * @private
    */
   private createSdk(accessToken: AccessToken): SpotifyApi {
-    const strategy = new ProvidedAccessTokenStrategy(process.env.SPOTIFY_CLIENT_ID || '', accessToken, SpotifyApiHandler.refreshAccessToken);
+    const strategy = new ProvidedAccessTokenStrategy(
+      process.env.SPOTIFY_CLIENT_ID || '',
+      accessToken,
+      SpotifyApiHandler.refreshAccessToken
+    );
     return new SpotifyApi(strategy);
   }
 
@@ -101,7 +109,7 @@ export default class SpotifyApiHandler {
     const content: { [key: string]: string } = {
       grant_type: 'authorization_code',
       code,
-      redirect_uri: process.env.SPOTIFY_REDIRECT_URI || '',
+      redirect_uri: process.env.SPOTIFY_REDIRECT_URI || ''
     };
 
     const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -109,8 +117,8 @@ export default class SpotifyApiHandler {
       body: new URLSearchParams(content),
       headers: {
         Authorization: `Basic ${btoa(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`)}`,
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      },
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      }
     });
     const json = await response.json();
     if (!response.ok) throw new Error(`Could not get access token: ${json.error}`);
@@ -189,9 +197,9 @@ export default class SpotifyApiHandler {
         name: profile.display_name,
         token: {
           ...accessToken,
-          expires: accessToken.expires || (new Date().getTime() + (accessToken.expires_in * 1000)),
+          expires: accessToken.expires || new Date().getTime() + accessToken.expires_in * 1000
         },
-        active: true,
+        active: true
       } as SpotifyUser);
     } else if (accessToken.refresh_token) {
       // SpotifyUser exists and we have a (new) refresh token

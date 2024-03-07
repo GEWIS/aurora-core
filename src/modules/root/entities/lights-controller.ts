@@ -1,6 +1,4 @@
-import {
-  Entity, OneToMany,
-} from 'typeorm';
+import { Entity, OneToMany } from 'typeorm';
 // eslint-disable-next-line import/no-cycle
 import { LightsGroup } from '../../lights/entities';
 import SubscribeEntity from './subscribe-entity';

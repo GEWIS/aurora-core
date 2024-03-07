@@ -6,12 +6,12 @@ import { AlcoholTime } from './entities/enums/alcoholTime';
 import { ApiError, HttpStatusCode } from '../../helpers/customError';
 
 export interface InformationParams {
-  roomStatus: RoomStatus,
-  alcoholTime: AlcoholTime,
-  firstResponsible: string,
-  secondResponsible?: string,
-  firstERO?: string,
-  secondERO?: string
+  roomStatus: RoomStatus;
+  alcoholTime: AlcoholTime;
+  firstResponsible: string;
+  secondResponsible?: string;
+  firstERO?: string;
+  secondERO?: string;
 }
 
 export default class InformationService {
@@ -23,7 +23,11 @@ export default class InformationService {
 
   public async getInformation(): Promise<Information> {
     const information = await this.repo.find();
-    if (information.length > 1) throw new ApiError(HttpStatusCode.InternalServerError, 'Clashing information in the database.');
+    if (information.length > 1)
+      throw new ApiError(
+        HttpStatusCode.InternalServerError,
+        'Clashing information in the database.'
+      );
     if (information.length === 0) return this.createInformation();
     return information[0];
   }
@@ -38,7 +42,7 @@ export default class InformationService {
     const information = {
       roomStatus: RoomStatus.CLOSED,
       alcoholTime: AlcoholTime.NORMAL,
-      firstResponsible: 'NOT SET',
+      firstResponsible: 'NOT SET'
     } as InformationParams;
     return this.repo.save(information);
   }

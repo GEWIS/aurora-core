@@ -1,7 +1,5 @@
 import { Controller } from '@tsoa/runtime';
-import {
-  Get, Route, Tags, Response, Request, SuccessResponse, Security,
-} from 'tsoa';
+import { Get, Route, Tags, Response, Request, SuccessResponse, Security } from 'tsoa';
 import * as express from 'express';
 import { HttpStatusCode } from 'axios';
 import { ApiError } from '../../helpers/customError';
@@ -14,9 +12,7 @@ export class UserController extends Controller {
   @Get('me')
   @Response<ApiError>(HttpStatusCode.NotFound, 'User not found')
   @SuccessResponse(HttpStatusCode.Ok)
-  public async getInformation(
-    @Request() req: express.Request,
-  ): Promise<User> {
+  public async getInformation(@Request() req: express.Request): Promise<User> {
     return req.user as User;
   }
 }

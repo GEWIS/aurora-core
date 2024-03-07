@@ -4,6 +4,6 @@
 /* eslint-disable */
 
 export enum CardAging {
-    PIRATE = 'pirate',
-    REGULAR = 'regular',
+  PIRATE = 'pirate',
+  REGULAR = 'regular'
 }

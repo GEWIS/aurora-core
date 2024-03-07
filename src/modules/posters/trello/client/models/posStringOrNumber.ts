@@ -3,4 +3,4 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type posStringOrNumber = ('top' | 'bottom' | number);
+export type posStringOrNumber = 'top' | 'bottom' | number;

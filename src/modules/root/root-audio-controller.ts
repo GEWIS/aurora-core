@@ -1,6 +1,4 @@
-import {
-  Body, Controller, Get, Post, Res, Route, Security, Tags, Request,
-} from 'tsoa';
+import { Body, Controller, Get, Post, Res, Route, Security, Tags, Request } from 'tsoa';
 import { TsoaResponse } from '@tsoa/runtime';
 import { Request as ExpressRequest } from 'express';
 import RootAudioService, { AudioCreateParams, AudioResponse } from './root-audio-service';
@@ -37,7 +35,7 @@ export class RootAudioController extends Controller {
     id: number,
     @Request() req: ExpressRequest,
     @Body() params: SetAudioPlayingParams,
-    @Res() forbiddenResponse: TsoaResponse<403, string>,
+    @Res() forbiddenResponse: TsoaResponse<403, string>
   ): Promise<void> {
     if ((req.user as User).audioId !== id) {
       forbiddenResponse(403, 'You can only set the playing state of yourself.');
@@ -47,12 +45,13 @@ export class RootAudioController extends Controller {
     logger.debug(`Update playing state for audio ${id}: ${JSON.stringify(params)}`);
 
     const audioHandlers = HandlerManager.getInstance().getHandlers(Audio);
-    audioHandlers.forEach((h) => (h.entities as Audio[])
-      .forEach((audio: Audio) => {
+    audioHandlers.forEach((h) =>
+      (h.entities as Audio[]).forEach((audio: Audio) => {
         if (audio.id === id) {
           // eslint-disable-next-line no-param-reassign
           audio.playing = params.playing;
         }
-      }));
+      })
+    );
   }
 }

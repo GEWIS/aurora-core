@@ -7,11 +7,7 @@ import TableRotate from '../../lights/effects/movement/table-rotate';
 export default class DevelopEffectsHandler extends EffectsHandler {
   public registerEntity(entity: LightsGroup) {
     super.registerEntity(entity);
-    this.groupColorEffects.set(entity, [
-      new StaticColor(entity, { color: RgbColor.WHITE }),
-    ]);
-    this.groupMovementEffects.set(entity, [
-      new TableRotate(entity, {}),
-    ]);
+    this.groupColorEffects.set(entity, [new StaticColor(entity, { color: RgbColor.WHITE })]);
+    this.groupMovementEffects.set(entity, [new TableRotate(entity, {})]);
   }
 }

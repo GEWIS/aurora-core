@@ -20,8 +20,8 @@ export function customOrigin(
   requestOrigin: string | undefined,
   callback: (
     err: Error | null,
-    origin?: boolean | string | RegExp | (boolean | string | RegExp)[],
-  ) => void,
+    origin?: boolean | string | RegExp | (boolean | string | RegExp)[]
+  ) => void
 ) {
   if (origins && origins.length > 0) {
     callback(null, origins);
@@ -40,19 +40,23 @@ export function customOrigin(
 export default async function createHttp() {
   const app = express();
 
-  app.use(pinoHttp({
-    useLevel: 'debug',
-  }));
+  app.use(
+    pinoHttp({
+      useLevel: 'debug'
+    })
+  );
 
-  app.use(cors({
-    allowedHeaders: ['Cookie', 'Cookies'],
-    origin: enableCors ? customOrigin : undefined,
-  }));
+  app.use(
+    cors({
+      allowedHeaders: ['Cookie', 'Cookies'],
+      origin: enableCors ? customOrigin : undefined
+    })
+  );
 
   app.use(
     bodyParser.urlencoded({
-      extended: true,
-    }),
+      extended: true
+    })
   );
   app.use(bodyParser.json());
   app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -66,9 +70,9 @@ export default async function createHttp() {
   app.post('/api/auth/oidc', passport.authenticate('oidc'), oidcResponse);
   app.post('/api/auth/key', passport.authenticate('apikey'), apiKeyResponse);
 
-  app.use('/api-docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => res.send(
-    swaggerUi.generateHTML(apiDocs),
-  ));
+  app.use('/api-docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) =>
+    res.send(swaggerUi.generateHTML(apiDocs))
+  );
 
   if (process.env.NODE_ENV === 'development') {
     app.post('/api/auth/mock', passport.authenticate('mock'), mockLogin);

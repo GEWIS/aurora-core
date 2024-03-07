@@ -4,5 +4,5 @@
 /* eslint-disable */
 
 export type customFieldItemValue = {
-    value?: Record<string, any>;
+  value?: Record<string, any>;
 };

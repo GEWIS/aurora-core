@@ -16,16 +16,16 @@ const dataSource = new DataSource({
   logging: process.env.TYPEORM_LOGGING === 'true',
   extra: {
     authPlugins: {
-      mysql_clear_password: () => () => Buffer.from(`${process.env.TYPEORM_PASSWORD}\0`),
-    },
+      mysql_clear_password: () => () => Buffer.from(`${process.env.TYPEORM_PASSWORD}\0`)
+    }
   },
   entities: [
     ...BaseEntities,
     ...AuthEntities,
     ...SpotifyEntities,
     ...LightsEntities,
-    ...InfoScreenEntities,
-  ],
+    ...InfoScreenEntities
+  ]
 });
 
 export default dataSource;

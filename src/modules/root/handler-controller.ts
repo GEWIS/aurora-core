@@ -1,7 +1,5 @@
 import { Controller, Path } from '@tsoa/runtime';
-import {
-  Body, Get, Post, Route, Security, Tags,
-} from 'tsoa';
+import { Body, Get, Post, Route, Security, Tags } from 'tsoa';
 import HandlerManager from './handler-manager';
 import { Audio, Screen } from './entities';
 import RootAudioService, { AudioResponse } from './root-audio-service';
@@ -36,11 +34,16 @@ export class HandlerController extends Controller {
     return this.handlersManager.getHandlers(Audio).map((h) => ({
       name: h.constructor.name,
       id: h.identifier,
-      entities: h.entities.map((audio) => RootAudioService.toAudioResponse(audio as Audio)),
+      entities: h.entities.map((audio) => RootAudioService.toAudioResponse(audio as Audio))
     }));
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD
+  ])
   @Post('audio/{id}')
   public async setAudioHandler(@Path() id: number, @Body() params: NewHandlerParams) {
     const audio = await new RootAudioService().getSingleAudio(id);
@@ -61,12 +64,18 @@ export class HandlerController extends Controller {
     return this.handlersManager.getHandlers(LightsGroup).map((h) => ({
       name: h.constructor.name,
       id: h.identifier,
-      entities: h.entities.map((lightsGroup) => RootLightsService
-        .toLightsGroupResponse(lightsGroup as LightsGroup)),
+      entities: h.entities.map((lightsGroup) =>
+        RootLightsService.toLightsGroupResponse(lightsGroup as LightsGroup)
+      )
     }));
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD
+  ])
   @Post('lights/{id}')
   public async setLightsHandler(@Path() id: number, @Body() params: NewHandlerParams) {
     const group = await new RootLightsService().getSingleLightsGroup(id);
@@ -87,11 +96,16 @@ export class HandlerController extends Controller {
     return this.handlersManager.getHandlers(Screen).map((h) => ({
       name: h.constructor.name,
       id: h.identifier,
-      entities: h.entities.map((screen) => RootScreenService.toScreenResponse(screen)),
+      entities: h.entities.map((screen) => RootScreenService.toScreenResponse(screen))
     }));
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD
+  ])
   @Post('screen/{id}')
   public async setScreenHandler(@Path() id: number, @Body() params: NewHandlerParams) {
     const screen = await new RootScreenService().getSingleScreen(id);

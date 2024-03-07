@@ -1,6 +1,4 @@
-import {
-  BaseEntity, Entity, JoinColumn, OneToOne, PrimaryColumn,
-} from 'typeorm';
+import { BaseEntity, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Audio, LightsController, Screen } from '../../root/entities';
 
 @Entity()

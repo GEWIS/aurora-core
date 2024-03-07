@@ -7,8 +7,8 @@ import type { posStringOrNumber } from './posStringOrNumber';
 import type { TrelloID } from './TrelloID';
 
 export type SavedSearch = {
-    id?: TrelloID;
-    name?: string;
-    query?: string;
-    pos?: posStringOrNumber;
+  id?: TrelloID;
+  name?: string;
+  query?: string;
+  pos?: posStringOrNumber;
 };

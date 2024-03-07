@@ -1,9 +1,7 @@
 import { Controller } from '@tsoa/runtime';
-import {
-  Body,
-  Get, Post, Route, Security, Tags,
-} from 'tsoa';
+import { Body, Get, Post, Route, Security, Tags } from 'tsoa';
 import { PosterScreenHandler } from './poster-screen-handler';
+// eslint-disable-next-line import/no-cycle -- TODO fix cyclic dependency
 import HandlerManager from '../../../root/handler-manager';
 import { Screen } from '../../../root/entities';
 import { Poster } from '../../../posters/poster';
@@ -24,7 +22,12 @@ export class PosterScreenController extends Controller {
       .filter((h) => h.constructor.name === PosterScreenHandler.name)[0] as PosterScreenHandler;
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BOARD, SecurityGroup.SCREEN_SUBSCRIBER])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BOARD,
+    SecurityGroup.SCREEN_SUBSCRIBER
+  ])
   @Get('')
   public async getPosters(): Promise<Poster[]> {
     if (!this.screenHandler.posterManager.posters) {

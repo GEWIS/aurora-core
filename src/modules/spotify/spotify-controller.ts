@@ -1,6 +1,4 @@
-import {
-  Get, Route, Tags, Request, Query, Delete, Response, Security,
-} from 'tsoa';
+import { Get, Route, Tags, Request, Query, Delete, Response, Security } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import { Request as ExpressRequest } from 'express';
 import * as querystring from 'querystring';
@@ -29,7 +27,7 @@ export class SpotifyController extends Controller {
       updatedAt: user.updatedAt,
       name: user.name,
       spotifyId: user.spotifyId,
-      active: user.active,
+      active: user.active
     };
   }
 
@@ -47,22 +45,25 @@ export class SpotifyController extends Controller {
 
     response?.cookie('spotifyOAuthState', state, { maxAge: 1000 * 60 * 5, signed: true });
 
-    response?.redirect(`https://accounts.spotify.com/authorize?${querystring.stringify({
-      response_type: 'code',
-      client_id: process.env.SPOTIFY_CLIENT_ID,
-      scope: 'user-read-playback-state user-modify-playback-state user-read-currently-playing user-read-playback-position',
-      redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
-      state,
-    })}`);
+    response?.redirect(
+      `https://accounts.spotify.com/authorize?${querystring.stringify({
+        response_type: 'code',
+        client_id: process.env.SPOTIFY_CLIENT_ID,
+        scope:
+          'user-read-playback-state user-modify-playback-state user-read-currently-playing user-read-playback-position',
+        redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+        state
+      })}`
+    );
   }
 
   @Security('local', [SecurityGroup.ADMIN])
   @Get('callback')
   public async spotifyLoginCallback(
-  @Request() req: ExpressRequest,
+    @Request() req: ExpressRequest,
     @Query() state: string,
     @Query() code?: string,
-    @Query() error?: string,
+    @Query() error?: string
   ) {
     const { spotifyOAuthState } = req.signedCookies;
     if (state !== spotifyOAuthState) {

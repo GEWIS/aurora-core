@@ -24,13 +24,13 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
     finePanChannel: 0,
     tiltChannel: 0,
     fineTiltChannel: 0,
-    movingSpeedChannel: 0,
+    movingSpeedChannel: 0
   };
 
   setCurrentValues(values: Partial<Colors & Movement & LightsFixtureCurrentValues>) {
     this.currentValues = {
       ...this.currentValues,
-      ...values,
+      ...values
     };
     this.valuesUpdatedAt = new Date();
   }
@@ -42,7 +42,7 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
   setMasterDimmer(masterDimChannel: number) {
     if (this.currentValues.masterDimChannel === masterDimChannel) return;
     this.setCurrentValues({
-      masterDimChannel,
+      masterDimChannel
     });
   }
 
@@ -62,7 +62,7 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
       finePanChannel: 0,
       tiltChannel: 0,
       fineTiltChannel: 0,
-      movingSpeedChannel: 0,
+      movingSpeedChannel: 0
     });
   }
 
@@ -143,14 +143,14 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
       values.splice(
         nrStartingZeroes,
         nrStartingZeroes + strobeDmxValues.length,
-        ...strobeDmxValues,
+        ...strobeDmxValues
       );
     }
 
     values = this.applyDmxOverride(values);
 
     if (this.shouldReset !== undefined) {
-      if ((new Date().getTime() - this.shouldReset.getTime()) > 5000) {
+      if (new Date().getTime() - this.shouldReset.getTime() > 5000) {
         this.shouldReset = undefined;
       }
       if (this.resetChannelAndValue && this.resetChannelAndValue.length >= 2) {

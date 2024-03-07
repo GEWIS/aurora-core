@@ -6,9 +6,7 @@ import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
 import MixTape, { FeedEvent, SongData } from './tapes/mix-tape';
 import { BeatFadeOut } from '../../lights/effects/color';
 import { SearchLight } from '../../lights/effects/movement';
-import {
-  getTwoComplementaryRgbColors, RgbColor,
-} from '../../lights/color-definitions';
+import { getTwoComplementaryRgbColors, RgbColor } from '../../lights/color-definitions';
 import { MusicEmitter } from '../../events';
 import { TrackChangeEvent } from '../../events/music-emitter-events';
 import { CenturionScreenHandler } from '../../handlers/screen';
@@ -54,11 +52,7 @@ export default class CenturionMode extends BaseMode {
     return this.feedEvents.length > 0;
   }
 
-  constructor(
-    lights: LightsGroup[],
-    screens: Screen[],
-    audios: Audio[],
-  ) {
+  constructor(lights: LightsGroup[], screens: Screen[], audios: Audio[]) {
     super(lights, screens, audios);
 
     lights.forEach((lightsGroup) => {
@@ -71,11 +65,14 @@ export default class CenturionMode extends BaseMode {
       this.handlerManager.registerHandler(screen, SCREEN_HANDLER);
     });
 
-    this.lightsHandler = this.handlerManager.getHandlers(LightsGroup)
+    this.lightsHandler = this.handlerManager
+      .getHandlers(LightsGroup)
       .find((h) => h.constructor.name === LIGHTS_HANDLER) as SetEffectsHandler;
-    this.audioHandler = this.handlerManager.getHandlers(Audio)
+    this.audioHandler = this.handlerManager
+      .getHandlers(Audio)
       .find((h) => h.constructor.name === AUDIO_HANDLER) as SimpleAudioHandler;
-    this.screenHandler = this.handlerManager.getHandlers(Screen)
+    this.screenHandler = this.handlerManager
+      .getHandlers(Screen)
       .find((h) => h.constructor.name === SCREEN_HANDLER) as CenturionScreenHandler;
 
     this.audioHandler.addSyncAudioTimingHandler(this.syncFeedEvents.bind(this));
@@ -102,7 +99,7 @@ export default class CenturionMode extends BaseMode {
    * Start playing the given mixtape and register all timed effects
    */
   public start(): boolean {
-    if (this.tape.songFile.startsWith('http')){
+    if (this.tape.songFile.startsWith('http')) {
       this.audioHandler.play(this.tape.songFile, this.timestamp);
     } else {
       this.audioHandler.play(`/static${this.tape.songFile}`, this.timestamp);
@@ -156,29 +153,38 @@ export default class CenturionMode extends BaseMode {
 
     this.beatGenerator.start(songs[0].bpm ?? 130);
 
-    this.musicEmitter.emitAudio('change_track', songs.map((s) => ({
-      title: s.title,
-      artists: s.artist.split(', '),
-      cover: this.tape.coverUrl,
-    })) as TrackChangeEvent[]);
+    this.musicEmitter.emitAudio(
+      'change_track',
+      songs.map((s) => ({
+        title: s.title,
+        artists: s.artist.split(', '),
+        cover: this.tape.coverUrl
+      })) as TrackChangeEvent[]
+    );
   }
 
   private getRandomEffect(colors: RgbColor[]): LightsEffectBuilder {
-    const effects = [{
-      effect: BeatFadeOut.build({ colors, enableFade: false, nrBlacks: 1 }),
-      probability: 0.8,
-    }, {
-      effect: Wave.build({ color: colors[0] }),
-      probability: 0.1,
-    }, {
-      effect: Sparkle.build({ colors }),
-      probability: 0.1,
-    }];
+    const effects = [
+      {
+        effect: BeatFadeOut.build({ colors, enableFade: false, nrBlacks: 1 }),
+        probability: 0.8
+      },
+      {
+        effect: Wave.build({ color: colors[0] }),
+        probability: 0.1
+      },
+      {
+        effect: Sparkle.build({ colors }),
+        probability: 0.1
+      }
+    ];
     const factor = Math.random();
-    return effects.find((effect, i) => {
-      const previous = effects.slice(0, i).reduce((x, e) => x + e.probability, 0);
-      return previous <= factor && previous + effect.probability > factor;
-    })?.effect || BeatFadeOut.build({ colors, enableFade: false });
+    return (
+      effects.find((effect, i) => {
+        const previous = effects.slice(0, i).reduce((x, e) => x + e.probability, 0);
+        return previous <= factor && previous + effect.probability > factor;
+      })?.effect || BeatFadeOut.build({ colors, enableFade: false })
+    );
   }
 
   /**
@@ -241,12 +247,12 @@ export default class CenturionMode extends BaseMode {
       this.stopFeedEvents();
     }
 
-    this.startTime = new Date(new Date().getTime() - (seconds * 1000));
+    this.startTime = new Date(new Date().getTime() - seconds * 1000);
 
     const stopEvent: FeedEvent = {
       type: 'other',
       data: 'stop',
-      timestamp: this.tape.duration,
+      timestamp: this.tape.duration
     };
 
     [...this.tape.feed, stopEvent]
@@ -257,7 +263,7 @@ export default class CenturionMode extends BaseMode {
 
         this.feedEvents.push({
           event,
-          timeouts,
+          timeouts
         });
       });
   }
@@ -276,7 +282,7 @@ export default class CenturionMode extends BaseMode {
    * @param timestamp progression of the audio in ms
    * @private
    */
-  private syncFeedEvents({ startTime, timestamp }: { startTime: number, timestamp: number }) {
+  private syncFeedEvents({ startTime, timestamp }: { startTime: number; timestamp: number }) {
     const msDifference = new Date().getTime() - startTime;
 
     this.registerFeedEvents((timestamp + msDifference) / 1000);

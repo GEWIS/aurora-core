@@ -55,23 +55,28 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
 
     const timestamps = Array.from(new Set(this.sequence.map((s) => s.timestamp))).sort();
 
-    this.events = timestamps.map((timestamp): LightsGroupEffect[] => {
-      const predefinedEffects = this.sequence.filter((s) => s.timestamp === timestamp);
-      return predefinedEffects.map((e): LightsGroupEffect => ({
-        startMs: e.timestamp,
-        durationMs: e.duration,
-        endMs: e.timestamp + e.duration,
-        effectName: e.effect,
-        effectProps: JSON.parse(e.effectProps),
-        lightsGroupIds: e.lightGroups.map((l) => l.id),
-        id: e.id,
-      }));
-    }).flat();
+    this.events = timestamps
+      .map((timestamp): LightsGroupEffect[] => {
+        const predefinedEffects = this.sequence.filter((s) => s.timestamp === timestamp);
+        return predefinedEffects.map(
+          (e): LightsGroupEffect => ({
+            startMs: e.timestamp,
+            durationMs: e.duration,
+            endMs: e.timestamp + e.duration,
+            effectName: e.effect,
+            effectProps: JSON.parse(e.effectProps),
+            lightsGroupIds: e.lightGroups.map((l) => l.id),
+            id: e.id
+          })
+        );
+      })
+      .flat();
 
     // Get all effects that have passed the relative start time
     // but not the relative end time
-    const currentlyActiveEffects = this.events
-      .filter((e) => e.startMs < progression && e.endMs > progression);
+    const currentlyActiveEffects = this.events.filter(
+      (e) => e.startMs < progression && e.endMs > progression
+    );
     currentlyActiveEffects.forEach((e) => this.startEffect(e));
 
     return this.events;
@@ -84,15 +89,17 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
    */
   private startEffect(effectToActivate: LightsGroupEffect) {
     // Get the light groups this effect should apply to
-    const lightsGroups = this.entities
-      .filter((e) => effectToActivate.lightsGroupIds.includes(e.id));
+    const lightsGroups = this.entities.filter((e) =>
+      effectToActivate.lightsGroupIds.includes(e.id)
+    );
 
     const effects = LIGHTS_EFFECTS.map((EFFECT) => {
       if (EFFECT.name === effectToActivate.effectName) {
         return lightsGroups.map((g) => new EFFECT(g, effectToActivate.effectProps));
       }
       return undefined;
-    }).filter((e) => e !== undefined)
+    })
+      .filter((e) => e !== undefined)
       .map((e) => e!)
       .flat();
 
@@ -101,7 +108,7 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
       startMs: effectToActivate.startMs,
       durationMs: effectToActivate.durationMs,
       endMs: effectToActivate.endMs,
-      id: effectToActivate.id,
+      id: effectToActivate.id
     }));
 
     this.activeEffects.push(...activeEffects);
@@ -149,8 +156,9 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
     const expiredEffectIndices = expiredEffects.map((e) => e.id);
     this.activeEffects = this.activeEffects.filter((e) => !expiredEffectIndices.includes(e.id));
 
-    const effectsToStart = this.events
-      .filter((e) => e.startMs > songProgressionPreviousTick && e.startMs <= songProgression);
+    const effectsToStart = this.events.filter(
+      (e) => e.startMs > songProgressionPreviousTick && e.startMs <= songProgression
+    );
     effectsToStart.forEach((e) => this.startEffect(e));
 
     this.lastTick = new Date();
@@ -168,10 +176,12 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
 
     this.stopSequence(true);
 
-    dataSource.getRepository(LightsPredefinedEffect).find({
-      where: { trackUri: event.trackURI },
-      relations: { lightGroups: true },
-    })
+    dataSource
+      .getRepository(LightsPredefinedEffect)
+      .find({
+        where: { trackUri: event.trackURI },
+        relations: { lightGroups: true }
+      })
       .then((sequence) => {
         this.sequence = sequence;
         this.startSequence(event.startTime);

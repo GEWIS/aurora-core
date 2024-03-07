@@ -1,6 +1,4 @@
-import {
-  Body, Get, Post, Res, Response, Route, Security, SuccessResponse, Tags,
-} from 'tsoa';
+import { Body, Get, Post, Res, Response, Route, Security, SuccessResponse, Tags } from 'tsoa';
 import { Controller, TsoaResponse } from '@tsoa/runtime';
 import ModeManager from '../mode-manager';
 import CenturionMode from './centurion-mode';
@@ -22,15 +20,15 @@ interface CenturionResponse {
 }
 
 interface HornEvent {
-  type: 'horn',
-  timestamp: number,
-  data: HornData,
+  type: 'horn';
+  timestamp: number;
+  data: HornData;
 }
 
 interface SongEvent {
-  type: 'song',
-  timestamp: number,
-  data: SongData | SongData[],
+  type: 'song';
+  timestamp: number;
+  data: SongData | SongData[];
 }
 
 interface MixTapeResponse extends Pick<MixTape, 'name' | 'coverUrl'> {
@@ -63,14 +61,19 @@ export class CenturionController extends Controller {
     return {
       name: mode.tape.name,
       startTime: mode.startTime,
-      playing: mode.playing,
+      playing: mode.playing
     };
   }
 
   /**
    * Start a centurion
    */
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD
+  ])
   @Post('start')
   @SuccessResponse(204, 'Start commands sent')
   @Response<string>(411, 'Centurion not enabled')
@@ -90,7 +93,12 @@ export class CenturionController extends Controller {
     return '';
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD
+  ])
   @Post('skip')
   @SuccessResponse(204, 'Skip commands sent')
   @Response<string>(400, 'Invalid timestamp provided')
@@ -111,7 +119,12 @@ export class CenturionController extends Controller {
   /**
    * Stop a centurion
    */
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD
+  ])
   @Post('stop')
   @SuccessResponse(204, 'Start commands sent')
   @Response<string>(411, 'Centurion not enabled')
@@ -127,17 +140,22 @@ export class CenturionController extends Controller {
     return '';
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD
+  ])
   @Get('tapes')
   public getCenturionTapes(): MixTapeResponse[] {
-    return tapes
-      .map((t) => ({
-        name: t.name,
-        coverUrl: t.coverUrl,
-        events: t.feed.filter((e) => ['horn', 'song'].includes(e.type))
-          .map((e) => e as HornEvent | SongEvent),
-        horns: t.feed.filter((e) => e.type === 'horn').length,
-        duration: t.duration,
-      }));
+    return tapes.map((t) => ({
+      name: t.name,
+      coverUrl: t.coverUrl,
+      events: t.feed
+        .filter((e) => ['horn', 'song'].includes(e.type))
+        .map((e) => e as HornEvent | SongEvent),
+      horns: t.feed.filter((e) => e.type === 'horn').length,
+      duration: t.duration
+    }));
   }
 }

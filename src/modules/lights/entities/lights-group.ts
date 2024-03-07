@@ -1,6 +1,4 @@
-import {
-  Entity, JoinColumn, ManyToOne, OneToMany,
-} from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 // eslint-disable-next-line import/no-cycle
 import { LightsController } from '../../root/entities';
 // eslint-disable-next-line import/no-cycle
@@ -26,8 +24,11 @@ export default class LightsGroup extends SubscribeEntity {
   @OneToMany(() => LightsGroupMovingHeadRgbs, (pars) => pars.group, { eager: true })
   public movingHeadRgbs: LightsGroupMovingHeadRgbs[];
 
-  public get fixtures(): (LightsGroupPars
-  | LightsGroupMovingHeadWheels | LightsGroupMovingHeadRgbs)[] {
+  public get fixtures(): (
+    | LightsGroupPars
+    | LightsGroupMovingHeadWheels
+    | LightsGroupMovingHeadRgbs
+  )[] {
     return [...this.pars, ...this.movingHeadWheels, ...this.movingHeadRgbs];
   }
 

@@ -6,14 +6,14 @@ import logger from '../../../logger';
 export default class SimpleAudioHandler extends BaseAudioHandler {
   private socket: Namespace;
 
-  private onSyncAudioTimings: ((params: { startTime: number, timestamp: number }) => void)[] = [];
+  private onSyncAudioTimings: ((params: { startTime: number; timestamp: number }) => void)[] = [];
 
   constructor(socket: Namespace, musicEmitter: MusicEmitter) {
     super(musicEmitter);
     this.socket = socket;
 
     this.socket.on('connection', (sc) => {
-      sc.on('sync_audio_timings', (params: { startTime: number, timestamp: number }) => {
+      sc.on('sync_audio_timings', (params: { startTime: number; timestamp: number }) => {
         logger.debug(`Sync audio timings: ${params.startTime - params.timestamp}`);
         this.onSyncAudioTimings.forEach((h) => h(params));
       });
@@ -25,7 +25,7 @@ export default class SimpleAudioHandler extends BaseAudioHandler {
    * @param handler
    */
   public addSyncAudioTimingHandler(
-    handler: (params: { startTime: number, timestamp: number }) => void,
+    handler: (params: { startTime: number; timestamp: number }) => void
   ) {
     this.onSyncAudioTimings.push(handler);
   }
@@ -35,7 +35,7 @@ export default class SimpleAudioHandler extends BaseAudioHandler {
    * @param handler
    */
   public removeSyncAudioTimingHandler(
-    handler: (params: { startTime: number, timestamp: number }) => void,
+    handler: (params: { startTime: number; timestamp: number }) => void
   ) {
     this.onSyncAudioTimings = this.onSyncAudioTimings.filter((h) => h === handler);
   }

@@ -39,9 +39,7 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
     this.lightsGroup.fixtures.forEach((f) => {
       f.fixture.setColor(this.props.color);
       if (!this.props.beatToggle) {
-        f.fixture.setMasterDimmer(
-          Math.round((this.props.relativeBrightness ?? 1) * 255),
-        );
+        f.fixture.setMasterDimmer(Math.round((this.props.relativeBrightness ?? 1) * 255));
       }
     });
 
@@ -66,8 +64,7 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
     this.ping = (this.ping + 1) % 2;
   }
 
-  destroy(): void {
-  }
+  destroy(): void {}
 
   tick(): LightsGroup {
     return this.lightsGroup;

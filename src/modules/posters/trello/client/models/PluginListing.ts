@@ -6,9 +6,9 @@
 import type { TrelloID } from './TrelloID';
 
 export type PluginListing = {
-    id?: TrelloID;
-    name?: string;
-    locale?: string;
-    description?: string;
-    overview?: string;
+  id?: TrelloID;
+  name?: string;
+  locale?: string;
+  description?: string;
+  overview?: string;
 };

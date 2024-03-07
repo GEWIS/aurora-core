@@ -7,7 +7,7 @@ export interface RandomPositionProps {
    * @isInt
    * @minimum 0
    */
-  beatsToMove?: number
+  beatsToMove?: number;
 }
 
 export type RandomPositionCreateParams = BaseLightsEffectCreateParams & {
@@ -24,12 +24,13 @@ export default class RandomPosition extends LightsEffect<RandomPositionProps> {
     super(lightsGroup);
     this.props = props;
     const count = lightsGroup.movingHeadRgbs.length + lightsGroup.movingHeadWheels.length;
-    this.counters = new Array(count).fill(0)
+    this.counters = new Array(count)
+      .fill(0)
       .map((x, i) => i % (props.beatsToMove ?? DEFAULT_BEATS_TO_MOVE));
   }
 
   public static build(
-    props: RandomPositionProps = {},
+    props: RandomPositionProps = {}
   ): LightsEffectBuilder<RandomPositionProps, RandomPosition> {
     return (lightsGroup) => new RandomPosition(lightsGroup, props);
   }
@@ -42,7 +43,7 @@ export default class RandomPosition extends LightsEffect<RandomPositionProps> {
 
       m.fixture.setCurrentValues({
         panChannel: Math.round(Math.random() * (255 / 3)),
-        tiltChannel: Math.round(Math.random() * 255),
+        tiltChannel: Math.round(Math.random() * 255)
       });
     });
     this.lightsGroup.movingHeadWheels.forEach((m, i) => {
@@ -50,12 +51,13 @@ export default class RandomPosition extends LightsEffect<RandomPositionProps> {
 
       m.fixture.setCurrentValues({
         panChannel: Math.round(Math.random() * (255 / 3)),
-        tiltChannel: Math.round(Math.random() * 255),
+        tiltChannel: Math.round(Math.random() * 255)
       });
     });
 
-    this.counters = this.counters
-      .map((c) => (c + 1) % (this.props.beatsToMove ?? DEFAULT_BEATS_TO_MOVE));
+    this.counters = this.counters.map(
+      (c) => (c + 1) % (this.props.beatsToMove ?? DEFAULT_BEATS_TO_MOVE)
+    );
   }
 
   destroy(): void {}

@@ -7,32 +7,28 @@ import { Attachment } from '../models/Attachment';
 export class TrelloService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
-  public getBoard(
-    id: TrelloID,
-  ): CancelablePromise<Board> {
+  public getBoard(id: TrelloID): CancelablePromise<Board> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/boards/{id}',
       path: {
-        id,
+        id
       },
       query: {
         cards: 'visible',
         checklists: 'all',
-        lists: 'open',
-      },
+        lists: 'open'
+      }
     });
   }
 
-  public getCardAttachments(
-    cardId: TrelloID,
-  ): CancelablePromise<Attachment[]> {
+  public getCardAttachments(cardId: TrelloID): CancelablePromise<Attachment[]> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/cards/{id}/attachments',
       path: {
-        id: cardId,
-      },
+        id: cardId
+      }
     });
   }
 }

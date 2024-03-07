@@ -8,7 +8,7 @@ export enum WheelColor {
   YELLOW = 'yellow',
   LIGHTBLUE = 'lightblue',
   ORANGE = 'orange',
-  ROSERED = 'rosered',
+  ROSERED = 'rosered'
 }
 
 export enum RgbColor {
@@ -28,7 +28,7 @@ export enum RgbColor {
   LIGHTPINK = 'lightpink',
   LIME = 'lime',
   UV = 'uv',
-  BLINDINGWHITE = 'blindingwhite',
+  BLINDINGWHITE = 'blindingwhite'
 }
 
 export const wheelColors = Object.values(WheelColor);
@@ -40,10 +40,10 @@ export type RgbColorDefinition = { [k in ColorChannel]: number };
 export type WheelColorDefinition = RgbColorDefinition;
 
 export type RgbColorSpecification = {
-  definition: RgbColorDefinition,
-  alternative: WheelColor,
-  complementary: RgbColor[],
-  hex: string,
+  definition: RgbColorDefinition;
+  alternative: WheelColor;
+  complementary: RgbColor[];
+  hex: string;
 };
 
 export type RgbColorSet = {
@@ -63,11 +63,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 255,
       coldWhiteChannel: 255,
       amberChannel: 0,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.WHITE,
     complementary: [],
-    hex: '#fff',
+    hex: '#fff'
   },
   [RgbColor.RED]: {
     definition: {
@@ -77,12 +77,20 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 0,
       coldWhiteChannel: 0,
       amberChannel: 0,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.RED,
-    complementary: [RgbColor.BLUE, RgbColor.GREEN, RgbColor.YELLOW, RgbColor.LIGHTBLUE,
-      RgbColor.PURPLE, RgbColor.CYAN, RgbColor.GOLD, RgbColor.LIME],
-    hex: '#ff1919',
+    complementary: [
+      RgbColor.BLUE,
+      RgbColor.GREEN,
+      RgbColor.YELLOW,
+      RgbColor.LIGHTBLUE,
+      RgbColor.PURPLE,
+      RgbColor.CYAN,
+      RgbColor.GOLD,
+      RgbColor.LIME
+    ],
+    hex: '#ff1919'
   },
   [RgbColor.GREEN]: {
     definition: {
@@ -92,13 +100,24 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 0,
       coldWhiteChannel: 0,
       amberChannel: 0,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.GREEN,
-    complementary: [RgbColor.RED, RgbColor.BLUE, RgbColor.YELLOW, RgbColor.LIGHTBLUE,
-      RgbColor.ORANGE, RgbColor.ROSERED, RgbColor.PURPLE, RgbColor.CYAN,
-      RgbColor.PINK, RgbColor.GOLD, RgbColor.BROWN, RgbColor.LIGHTPINK],
-    hex: '#00e60c',
+    complementary: [
+      RgbColor.RED,
+      RgbColor.BLUE,
+      RgbColor.YELLOW,
+      RgbColor.LIGHTBLUE,
+      RgbColor.ORANGE,
+      RgbColor.ROSERED,
+      RgbColor.PURPLE,
+      RgbColor.CYAN,
+      RgbColor.PINK,
+      RgbColor.GOLD,
+      RgbColor.BROWN,
+      RgbColor.LIGHTPINK
+    ],
+    hex: '#00e60c'
   },
   [RgbColor.BLUE]: {
     definition: {
@@ -108,13 +127,22 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 0,
       coldWhiteChannel: 64,
       amberChannel: 0,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.BLUE,
-    complementary: [RgbColor.RED, RgbColor.GREEN, RgbColor.YELLOW, RgbColor.ORANGE,
-      RgbColor.ROSERED, RgbColor.PINK, RgbColor.GOLD, RgbColor.BROWN,
-      RgbColor.LIGHTPINK, RgbColor.LIME],
-    hex: '#0000ff',
+    complementary: [
+      RgbColor.RED,
+      RgbColor.GREEN,
+      RgbColor.YELLOW,
+      RgbColor.ORANGE,
+      RgbColor.ROSERED,
+      RgbColor.PINK,
+      RgbColor.GOLD,
+      RgbColor.BROWN,
+      RgbColor.LIGHTPINK,
+      RgbColor.LIME
+    ],
+    hex: '#0000ff'
   },
   [RgbColor.YELLOW]: {
     definition: {
@@ -124,12 +152,19 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 0,
       coldWhiteChannel: 0,
       amberChannel: 255,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.YELLOW,
-    complementary: [RgbColor.RED, RgbColor.GREEN, RgbColor.BLUE, RgbColor.LIGHTBLUE,
-      RgbColor.PURPLE, RgbColor.CYAN, RgbColor.LIME],
-    hex: '#fba900',
+    complementary: [
+      RgbColor.RED,
+      RgbColor.GREEN,
+      RgbColor.BLUE,
+      RgbColor.LIGHTBLUE,
+      RgbColor.PURPLE,
+      RgbColor.CYAN,
+      RgbColor.LIME
+    ],
+    hex: '#fba900'
   },
   [RgbColor.LIGHTBLUE]: {
     definition: {
@@ -139,13 +174,22 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 0,
       coldWhiteChannel: 128,
       amberChannel: 0,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.BLUE,
-    complementary: [RgbColor.RED, RgbColor.GREEN, RgbColor.YELLOW, RgbColor.ORANGE,
-      RgbColor.ROSERED, RgbColor.PURPLE, RgbColor.PINK, RgbColor.GOLD,
-      RgbColor.BROWN, RgbColor.LIME],
-    hex: '#6a6aff',
+    complementary: [
+      RgbColor.RED,
+      RgbColor.GREEN,
+      RgbColor.YELLOW,
+      RgbColor.ORANGE,
+      RgbColor.ROSERED,
+      RgbColor.PURPLE,
+      RgbColor.PINK,
+      RgbColor.GOLD,
+      RgbColor.BROWN,
+      RgbColor.LIME
+    ],
+    hex: '#6a6aff'
   },
   [RgbColor.ORANGE]: {
     definition: {
@@ -155,12 +199,20 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 0,
       coldWhiteChannel: 0,
       amberChannel: 100,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.ORANGE,
-    complementary: [RgbColor.GREEN, RgbColor.BLUE, RgbColor.LIGHTBLUE, RgbColor.PURPLE,
-      RgbColor.CYAN, RgbColor.PINK, RgbColor.LIGHTPINK, RgbColor.LIME],
-    hex: '#ff8000',
+    complementary: [
+      RgbColor.GREEN,
+      RgbColor.BLUE,
+      RgbColor.LIGHTBLUE,
+      RgbColor.PURPLE,
+      RgbColor.CYAN,
+      RgbColor.PINK,
+      RgbColor.LIGHTPINK,
+      RgbColor.LIME
+    ],
+    hex: '#ff8000'
   },
   [RgbColor.ROSERED]: {
     definition: {
@@ -170,12 +222,19 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 0,
       coldWhiteChannel: 64,
       amberChannel: 0,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.RED,
-    complementary: [RgbColor.GREEN, RgbColor.BLUE, RgbColor.LIGHTBLUE, RgbColor.PURPLE,
-      RgbColor.CYAN, RgbColor.BROWN, RgbColor.LIME],
-    hex: '#ff3a7c',
+    complementary: [
+      RgbColor.GREEN,
+      RgbColor.BLUE,
+      RgbColor.LIGHTBLUE,
+      RgbColor.PURPLE,
+      RgbColor.CYAN,
+      RgbColor.BROWN,
+      RgbColor.LIME
+    ],
+    hex: '#ff3a7c'
   },
   [RgbColor.PURPLE]: {
     definition: {
@@ -185,13 +244,23 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 0,
       coldWhiteChannel: 0,
       amberChannel: 0,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.BLUE,
-    complementary: [RgbColor.RED, RgbColor.GREEN, RgbColor.YELLOW, RgbColor.LIGHTBLUE,
-      RgbColor.ORANGE, RgbColor.ROSERED, RgbColor.CYAN, RgbColor.GOLD,
-      RgbColor.BROWN, RgbColor.LIGHTPINK, RgbColor.LIME],
-    hex: '#ff00f9',
+    complementary: [
+      RgbColor.RED,
+      RgbColor.GREEN,
+      RgbColor.YELLOW,
+      RgbColor.LIGHTBLUE,
+      RgbColor.ORANGE,
+      RgbColor.ROSERED,
+      RgbColor.CYAN,
+      RgbColor.GOLD,
+      RgbColor.BROWN,
+      RgbColor.LIGHTPINK,
+      RgbColor.LIME
+    ],
+    hex: '#ff00f9'
   },
   [RgbColor.CYAN]: {
     definition: {
@@ -201,13 +270,22 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 0,
       coldWhiteChannel: 0,
       amberChannel: 0,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.BLUE,
-    complementary: [RgbColor.RED, RgbColor.BLUE, RgbColor.YELLOW, RgbColor.ORANGE,
-      RgbColor.ROSERED, RgbColor.PINK, RgbColor.GOLD, RgbColor.BROWN,
-      RgbColor.LIGHTPINK, RgbColor.LIME],
-    hex: '#00d7fc',
+    complementary: [
+      RgbColor.RED,
+      RgbColor.BLUE,
+      RgbColor.YELLOW,
+      RgbColor.ORANGE,
+      RgbColor.ROSERED,
+      RgbColor.PINK,
+      RgbColor.GOLD,
+      RgbColor.BROWN,
+      RgbColor.LIGHTPINK,
+      RgbColor.LIME
+    ],
+    hex: '#00d7fc'
   },
   [RgbColor.PINK]: {
     definition: {
@@ -217,12 +295,20 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 0,
       coldWhiteChannel: 0,
       amberChannel: 0,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.RED,
-    complementary: [RgbColor.GREEN, RgbColor.BLUE, RgbColor.LIGHTBLUE, RgbColor.ORANGE,
-      RgbColor.CYAN, RgbColor.GOLD, RgbColor.BROWN, RgbColor.LIME],
-    hex: '#f948c4',
+    complementary: [
+      RgbColor.GREEN,
+      RgbColor.BLUE,
+      RgbColor.LIGHTBLUE,
+      RgbColor.ORANGE,
+      RgbColor.CYAN,
+      RgbColor.GOLD,
+      RgbColor.BROWN,
+      RgbColor.LIME
+    ],
+    hex: '#f948c4'
   },
   [RgbColor.GOLD]: {
     definition: {
@@ -232,13 +318,21 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 32,
       coldWhiteChannel: 0,
       amberChannel: 255,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.YELLOW,
-    complementary: [RgbColor.RED, RgbColor.GREEN, RgbColor.BLUE, RgbColor.LIGHTBLUE,
-      RgbColor.PURPLE, RgbColor.CYAN, RgbColor.PINK, RgbColor.LIGHTPINK,
-      RgbColor.LIME],
-    hex: '#ffbf00',
+    complementary: [
+      RgbColor.RED,
+      RgbColor.GREEN,
+      RgbColor.BLUE,
+      RgbColor.LIGHTBLUE,
+      RgbColor.PURPLE,
+      RgbColor.CYAN,
+      RgbColor.PINK,
+      RgbColor.LIGHTPINK,
+      RgbColor.LIME
+    ],
+    hex: '#ffbf00'
   },
   [RgbColor.BROWN]: {
     definition: {
@@ -248,12 +342,20 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 0,
       coldWhiteChannel: 0,
       amberChannel: 192,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.YELLOW,
-    complementary: [RgbColor.GREEN, RgbColor.BLUE, RgbColor.LIGHTBLUE, RgbColor.PURPLE,
-      RgbColor.CYAN, RgbColor.PINK, RgbColor.LIGHTPINK, RgbColor.LIME],
-    hex: '#ff4d00',
+    complementary: [
+      RgbColor.GREEN,
+      RgbColor.BLUE,
+      RgbColor.LIGHTBLUE,
+      RgbColor.PURPLE,
+      RgbColor.CYAN,
+      RgbColor.PINK,
+      RgbColor.LIGHTPINK,
+      RgbColor.LIME
+    ],
+    hex: '#ff4d00'
   },
   [RgbColor.LIGHTPINK]: {
     definition: {
@@ -263,12 +365,19 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 64,
       coldWhiteChannel: 64,
       amberChannel: 0,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.RED,
-    complementary: [RgbColor.GREEN, RgbColor.BLUE, RgbColor.ORANGE, RgbColor.CYAN,
-      RgbColor.GOLD, RgbColor.BROWN, RgbColor.LIME],
-    hex: '#fc8ddb',
+    complementary: [
+      RgbColor.GREEN,
+      RgbColor.BLUE,
+      RgbColor.ORANGE,
+      RgbColor.CYAN,
+      RgbColor.GOLD,
+      RgbColor.BROWN,
+      RgbColor.LIME
+    ],
+    hex: '#fc8ddb'
   },
   [RgbColor.LIME]: {
     definition: {
@@ -278,14 +387,25 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 0,
       coldWhiteChannel: 0,
       amberChannel: 0,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.GREEN,
-    complementary: [RgbColor.RED, RgbColor.GREEN, RgbColor.BLUE, RgbColor.YELLOW,
-      RgbColor.LIGHTBLUE, RgbColor.ORANGE, RgbColor.ROSERED, RgbColor.PURPLE,
-      RgbColor.CYAN, RgbColor.PINK, RgbColor.GOLD, RgbColor.BROWN,
-      RgbColor.LIGHTPINK],
-    hex: '#80ff00',
+    complementary: [
+      RgbColor.RED,
+      RgbColor.GREEN,
+      RgbColor.BLUE,
+      RgbColor.YELLOW,
+      RgbColor.LIGHTBLUE,
+      RgbColor.ORANGE,
+      RgbColor.ROSERED,
+      RgbColor.PURPLE,
+      RgbColor.CYAN,
+      RgbColor.PINK,
+      RgbColor.GOLD,
+      RgbColor.BROWN,
+      RgbColor.LIGHTPINK
+    ],
+    hex: '#80ff00'
   },
   [RgbColor.BLINDINGWHITE]: {
     definition: {
@@ -295,11 +415,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 255,
       coldWhiteChannel: 255,
       amberChannel: 255,
-      uvChannel: 0,
+      uvChannel: 0
     },
     alternative: WheelColor.WHITE,
     complementary: [],
-    hex: '#ffffff',
+    hex: '#ffffff'
   },
   [RgbColor.UV]: {
     definition: {
@@ -309,32 +429,34 @@ export const rgbColorDefinitions: RgbColorSet = {
       warmWhiteChannel: 0,
       coldWhiteChannel: 0,
       amberChannel: 0,
-      uvChannel: 255,
+      uvChannel: 255
     },
     alternative: WheelColor.WHITE,
     complementary: [],
-    hex: '#330066',
-  },
+    hex: '#330066'
+  }
 };
 
 export function getTwoComplementaryRgbColors(): {
-  colorNames: RgbColor[], colorSpecs: RgbColorSpecification[],
+  colorNames: RgbColor[];
+  colorSpecs: RgbColorSpecification[];
 } {
   // Account for the colors without any complements
-  const possibleColors = (Object.keys(rgbColorDefinitions) as RgbColor[])
-    .filter((c) => rgbColorDefinitions[c].complementary.length > 0);
+  const possibleColors = (Object.keys(rgbColorDefinitions) as RgbColor[]).filter(
+    (c) => rgbColorDefinitions[c].complementary.length > 0
+  );
 
   const index = Math.floor(Math.random() * possibleColors.length);
   const baseColorName = possibleColors[index];
   const baseColor = rgbColorDefinitions[baseColorName];
-  if (baseColor.complementary.length === 0) throw new Error(`Selected color ${baseColorName}, which has no complements`);
-  const complementaryName = baseColor.complementary[
-    Math.floor(Math.random() * baseColor.complementary.length)
-  ];
+  if (baseColor.complementary.length === 0)
+    throw new Error(`Selected color ${baseColorName}, which has no complements`);
+  const complementaryName =
+    baseColor.complementary[Math.floor(Math.random() * baseColor.complementary.length)];
   const complementaryColor = rgbColorDefinitions[complementaryName];
 
   return {
     colorNames: [baseColorName, complementaryName],
-    colorSpecs: [baseColor, complementaryColor],
+    colorSpecs: [baseColor, complementaryColor]
   };
 }

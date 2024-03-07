@@ -1,6 +1,8 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import BaseEntity from '../../../root/entities/base-entity';
+// eslint-disable-next-line import/no-cycle -- cross reference
 import LightsScenePars from './lights-scene-pars';
+// eslint-disable-next-line import/no-cycle -- cross reference
 import LightsSceneMovingHeadRgb from './lights-scene-moving-head-rgb';
 import LightsSceneMovingHeadWheel from './lights-scene-moving-head-wheel';
 

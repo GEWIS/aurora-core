@@ -6,5 +6,5 @@
 import type { TrelloID } from './TrelloID';
 
 export type Organization = {
-    id?: TrelloID;
+  id?: TrelloID;
 };

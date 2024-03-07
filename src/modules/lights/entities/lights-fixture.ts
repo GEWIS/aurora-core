@@ -2,8 +2,8 @@ import { AfterLoad, Column } from 'typeorm';
 import BaseEntity from '../../root/entities/base-entity';
 
 export interface LightsFixtureCurrentValues {
-  masterDimChannel: number,
-  strobeChannel: number,
+  masterDimChannel: number;
+  strobeChannel: number;
 }
 
 export default abstract class LightsFixture extends BaseEntity {
@@ -26,9 +26,9 @@ export default abstract class LightsFixture extends BaseEntity {
       to(value: number[] | null): string | null {
         if (value == null) return null;
         return JSON.stringify(value);
-      },
+      }
     },
-    nullable: true,
+    nullable: true
   })
   public resetChannelAndValue?: number[] | null;
 

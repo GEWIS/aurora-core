@@ -1,6 +1,4 @@
-import {
-  Body, Delete, Post, Route, Security, SuccessResponse, Tags,
-} from 'tsoa';
+import { Body, Delete, Post, Route, Security, SuccessResponse, Tags } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import { In } from 'typeorm';
 import HandlerManager from '../root/handler-manager';
@@ -39,15 +37,15 @@ export class ModeController extends Controller {
 
   private async findEntities(
     entity: typeof SubscribeEntity,
-    ids: number[],
+    ids: number[]
   ): Promise<SubscribeEntity[]> {
     return dataSource.getRepository(entity).find({ where: { id: In(ids) } });
   }
 
   private async mapBodyToEntities(params: EnableModeParams) {
-    const lights = await this.findEntities(LightsGroup, params.lightsGroupIds) as LightsGroup[];
-    const screens = await this.findEntities(Screen, params.lightsGroupIds) as Screen[];
-    const audios = await this.findEntities(Audio, params.lightsGroupIds) as Audio[];
+    const lights = (await this.findEntities(LightsGroup, params.lightsGroupIds)) as LightsGroup[];
+    const screens = (await this.findEntities(Screen, params.lightsGroupIds)) as Screen[];
+    const audios = (await this.findEntities(Audio, params.lightsGroupIds)) as Audio[];
 
     return { lights, screens, audios };
   }
@@ -55,7 +53,12 @@ export class ModeController extends Controller {
   /**
    * Enable Centurion mode for the given devices
    */
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD
+  ])
   @Post('centurion')
   @SuccessResponse(HttpStatusCode.NoContent)
   public async enableCenturion(@Body() params: CenturionParams): Promise<string> {
@@ -75,7 +78,12 @@ export class ModeController extends Controller {
     return '';
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD
+  ])
   @Delete('centurion')
   @SuccessResponse(HttpStatusCode.Ok)
   public disableCenturion() {

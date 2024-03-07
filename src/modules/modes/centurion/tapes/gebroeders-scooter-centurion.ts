@@ -12,1642 +12,1642 @@ const centurion: MixTape = {
       timestamp: 1,
       type: 'effect',
       data: {
-        effects: [SearchLight.build()],
-      },
+        effects: [SearchLight.build()]
+      }
     },
     {
       timestamp: 39,
       type: 'effect',
       data: {
-        effects: [SingleFlood.build()],
-      },
+        effects: [SingleFlood.build()]
+      }
     },
     {
       timestamp: 40,
       type: 'effect',
       data: {
-        effects: [SingleFlood.build()],
-      },
+        effects: [SingleFlood.build()]
+      }
     },
     {
       timestamp: 41,
       type: 'effect',
       data: {
-        effects: [SingleFlood.build()],
-      },
+        effects: [SingleFlood.build()]
+      }
     },
     {
-      timestamp: 41.90,
+      timestamp: 41.9,
       type: 'horn',
       data: {
-        counter: 0,
-      },
+        counter: 0
+      }
     },
     {
-      timestamp: 42.00,
+      timestamp: 42.0,
       type: 'song',
       data: {
         artist: 'Nena',
-        title: '99 Luftballons',
-      },
+        title: '99 Luftballons'
+      }
     },
     {
-      timestamp: 108.50,
+      timestamp: 108.5,
       type: 'horn',
       data: {
-        counter: 1,
-      },
+        counter: 1
+      }
     },
     {
-      timestamp: 148.00,
+      timestamp: 148.0,
       type: 'song',
       data: {
         artist: 'Hermes House Band',
-        title: 'Country Roads',
-      },
+        title: 'Country Roads'
+      }
     },
     {
       timestamp: 166.99,
       type: 'horn',
       data: {
-        counter: 2,
-      },
+        counter: 2
+      }
     },
     {
-      timestamp: 185.00,
+      timestamp: 185.0,
       type: 'song',
       data: {
         artist: 'Vinzzent',
-        title: 'Dromendans',
-      },
+        title: 'Dromendans'
+      }
     },
     {
       timestamp: 222.95,
       type: 'horn',
       data: {
-        counter: 3,
-      },
+        counter: 3
+      }
     },
     {
-      timestamp: 223.00,
+      timestamp: 223.0,
       type: 'song',
       data: {
         artist: 'Linda, Roos & Jessica',
-        title: 'Ademnood',
-      },
+        title: 'Ademnood'
+      }
     },
     {
-      timestamp: 283.00,
+      timestamp: 283.0,
       type: 'song',
       data: {
         artist: 'Peter de Koning',
-        title: 'Het is altijd lente in de ogen van de tandarts-assistente',
-      },
+        title: 'Het is altijd lente in de ogen van de tandarts-assistente'
+      }
     },
     {
-      timestamp: 283.50,
+      timestamp: 283.5,
       type: 'horn',
       data: {
-        counter: 4,
-      },
+        counter: 4
+      }
     },
     {
-      timestamp: 339.50,
+      timestamp: 339.5,
       type: 'horn',
       data: {
-        counter: 5,
-      },
+        counter: 5
+      }
     },
     {
-      timestamp: 340.00,
+      timestamp: 340.0,
       type: 'song',
       data: {
         artist: 'Liquido',
-        title: 'Narcotic',
-      },
+        title: 'Narcotic'
+      }
     },
     {
       timestamp: 411.68,
       type: 'horn',
       data: {
-        counter: 6,
-      },
+        counter: 6
+      }
     },
     {
-      timestamp: 412.00,
+      timestamp: 412.0,
       type: 'song',
       data: {
         artist: 'Snoop Dogg feat. Pharrell',
-        title: "Drop It Like It's Hot",
-      },
+        title: "Drop It Like It's Hot"
+      }
     },
     {
-      timestamp: 449.00,
+      timestamp: 449.0,
       type: 'song',
       data: {
         artist: 'M.O.P.',
-        title: 'Ante Up',
-      },
+        title: 'Ante Up'
+      }
     },
     {
-      timestamp: 458.30,
+      timestamp: 458.3,
       type: 'horn',
       data: {
-        counter: 7,
-      },
+        counter: 7
+      }
     },
     {
-      timestamp: 514.00,
+      timestamp: 514.0,
       type: 'song',
       data: {
         artist: 'Los Del Rio',
-        title: 'Macarena',
-      },
+        title: 'Macarena'
+      }
     },
     {
       timestamp: 514.27,
       type: 'horn',
       data: {
-        counter: 8,
-      },
+        counter: 8
+      }
     },
     {
-      timestamp: 560.00,
+      timestamp: 560.0,
       type: 'song',
       data: {
         artist: 'Spice Girls',
-        title: 'Wannabe',
-      },
+        title: 'Wannabe'
+      }
     },
     {
       timestamp: 573.85,
       type: 'horn',
       data: {
-        counter: 9,
-      },
+        counter: 9
+      }
     },
     {
-      timestamp: 617.00,
+      timestamp: 617.0,
       type: 'song',
       data: {
         artist: 'Major Lazer feat. Busy Signal, The Flexican & FS Green',
-        title: 'Watch Out For This (Bumaye)',
-      },
+        title: 'Watch Out For This (Bumaye)'
+      }
     },
     {
       timestamp: 634.46,
       type: 'horn',
       data: {
-        counter: 10,
-      },
+        counter: 10
+      }
     },
     {
-      timestamp: 650.00,
+      timestamp: 650.0,
       type: 'song',
       data: {
         artist: 'André van Duin',
-        title: 'Er staat een paard in de gang',
-      },
+        title: 'Er staat een paard in de gang'
+      }
     },
     {
-      timestamp: 667.00,
+      timestamp: 667.0,
       type: 'song',
       data: {
         artist: 'Lil Kleine & Ronnie Flex',
-        title: 'Drank & Drugs',
-      },
+        title: 'Drank & Drugs'
+      }
     },
     {
-      timestamp: 684.00,
+      timestamp: 684.0,
       type: 'song',
       data: {
         artist: 'Kabouter Plop',
-        title: 'Kabouterdans',
-      },
+        title: 'Kabouterdans'
+      }
     },
     {
       timestamp: 698.83,
       type: 'horn',
       data: {
-        counter: 11,
-      },
+        counter: 11
+      }
     },
     {
-      timestamp: 725.00,
+      timestamp: 725.0,
       type: 'song',
       data: {
         artist: 'K3',
-        title: 'Alle kleuren',
-      },
+        title: 'Alle kleuren'
+      }
     },
     {
-      timestamp: 756.10,
+      timestamp: 756.1,
       type: 'horn',
       data: {
-        counter: 12,
-      },
+        counter: 12
+      }
     },
     {
-      timestamp: 757.00,
+      timestamp: 757.0,
       type: 'song',
       data: {
         artist: 'Kinderen voor Kinderen',
-        title: 'Tietenlied',
-      },
+        title: 'Tietenlied'
+      }
     },
     {
-      timestamp: 811.50,
+      timestamp: 811.5,
       type: 'horn',
       data: {
-        counter: 13,
-      },
+        counter: 13
+      }
     },
     {
-      timestamp: 814.00,
+      timestamp: 814.0,
       type: 'song',
       data: {
         artist: 'Guus Meeuwis',
-        title: 'Het dondert en het bliksemt',
-      },
+        title: 'Het dondert en het bliksemt'
+      }
     },
     {
-      timestamp: 873.80,
+      timestamp: 873.8,
       type: 'horn',
       data: {
-        counter: 14,
-      },
+        counter: 14
+      }
     },
     {
-      timestamp: 876.00,
+      timestamp: 876.0,
       type: 'song',
       data: {
         artist: 'Harry Vermeegen',
-        title: '1-2-3-4 Dennis bier',
-      },
+        title: '1-2-3-4 Dennis bier'
+      }
     },
     {
-      timestamp: 906.00,
+      timestamp: 906.0,
       type: 'song',
       data: {
         artist: 'Puhdys',
-        title: "Hey, wir woll’n die Eisbär'n sehn!",
-      },
+        title: "Hey, wir woll’n die Eisbär'n sehn!"
+      }
     },
     {
-      timestamp: 934.90,
+      timestamp: 934.9,
       type: 'horn',
       data: {
-        counter: 15,
-      },
+        counter: 15
+      }
     },
     {
-      timestamp: 966.00,
+      timestamp: 966.0,
       type: 'song',
       data: {
         artist: 'DJ Ötzi',
-        title: 'Burger Dance',
-      },
+        title: 'Burger Dance'
+      }
     },
     {
-      timestamp: 994.70,
+      timestamp: 994.7,
       type: 'horn',
       data: {
-        counter: 16,
-      },
+        counter: 16
+      }
     },
     {
-      timestamp: 996.00,
+      timestamp: 996.0,
       type: 'song',
       data: {
         artist: 'Mickie Krause',
-        title: 'Hütte auf der Alm',
-      },
+        title: 'Hütte auf der Alm'
+      }
     },
     {
-      timestamp: 1030.00,
+      timestamp: 1030.0,
       type: 'song',
       data: {
         artist: 'Ali B & Yes-R & The Partysquad',
-        title: 'Rampeneren',
-      },
+        title: 'Rampeneren'
+      }
     },
     {
-      timestamp: 1045.70,
+      timestamp: 1045.7,
       type: 'horn',
       data: {
-        counter: 17,
-      },
+        counter: 17
+      }
     },
     {
       timestamp: 1106.41,
       type: 'horn',
       data: {
-        counter: 18,
-      },
+        counter: 18
+      }
     },
     {
-      timestamp: 1107.00,
+      timestamp: 1107.0,
       type: 'song',
       data: {
         artist: 'Martin Solveig',
-        title: 'Intoxicated',
-      },
+        title: 'Intoxicated'
+      }
     },
     {
-      timestamp: 1137.00,
+      timestamp: 1137.0,
       type: 'song',
       data: {
         artist: 'Nicki Minaj',
-        title: 'Starships',
-      },
+        title: 'Starships'
+      }
     },
     {
       timestamp: 1172.72,
       type: 'horn',
       data: {
-        counter: 19,
-      },
+        counter: 19
+      }
     },
     {
-      timestamp: 1222.00,
+      timestamp: 1222.0,
       type: 'song',
       data: {
         artist: '2Unlimited',
-        title: 'Get Ready For This',
-      },
+        title: 'Get Ready For This'
+      }
     },
     {
       timestamp: 1235.15,
       type: 'horn',
       data: {
-        counter: 20,
-      },
+        counter: 20
+      }
     },
     {
-      timestamp: 1275.00,
+      timestamp: 1275.0,
       type: 'song',
       data: {
         artist: 'The Village People',
-        title: 'YMCA',
-      },
+        title: 'YMCA'
+      }
     },
     {
-      timestamp: 1288.80,
+      timestamp: 1288.8,
       type: 'horn',
       data: {
-        counter: 21,
-      },
+        counter: 21
+      }
     },
     {
-      timestamp: 1348.40,
+      timestamp: 1348.4,
       type: 'horn',
       data: {
-        counter: 22,
-      },
+        counter: 22
+      }
     },
     {
-      timestamp: 1350.00,
+      timestamp: 1350.0,
       type: 'song',
       data: {
         artist: 'Carly Rae Jepsen ft Owl City',
-        title: "It's Always A Good Time",
-      },
+        title: "It's Always A Good Time"
+      }
     },
     {
-      timestamp: 1395.00,
+      timestamp: 1395.0,
       type: 'song',
       data: {
         artist: 'Avicii',
-        title: 'Levels',
-      },
+        title: 'Levels'
+      }
     },
     {
       timestamp: 1410.38,
       type: 'horn',
       data: {
-        counter: 23,
-      },
+        counter: 23
+      }
     },
     {
-      timestamp: 1456.00,
+      timestamp: 1456.0,
       type: 'song',
       data: {
         artist: 'Flo-Rida feat. T-Pain',
-        title: 'Low',
-      },
+        title: 'Low'
+      }
     },
     {
       timestamp: 1470.45,
       type: 'horn',
       data: {
-        counter: 24,
-      },
+        counter: 24
+      }
     },
     {
-      timestamp: 1486.00,
+      timestamp: 1486.0,
       type: 'song',
       data: {
         artist: 'Taio Cruz',
-        title: 'Hangover',
-      },
+        title: 'Hangover'
+      }
     },
     {
       timestamp: 1530.36,
       type: 'horn',
       data: {
-        counter: 25,
-      },
+        counter: 25
+      }
     },
     {
-      timestamp: 1545.00,
+      timestamp: 1545.0,
       type: 'song',
       data: {
         artist: 'LMFAO',
-        title: 'Party Rock Anthem',
-      },
+        title: 'Party Rock Anthem'
+      }
     },
     {
       timestamp: 1593.63,
       type: 'horn',
       data: {
-        counter: 26,
-      },
+        counter: 26
+      }
     },
     {
-      timestamp: 1594.00,
+      timestamp: 1594.0,
       type: 'song',
       data: {
         artist: 'Hans Entertainment vs. Finger & Kadel',
-        title: 'Hoch die Hände',
-      },
+        title: 'Hoch die Hände'
+      }
     },
     {
-      timestamp: 1623.00,
+      timestamp: 1623.0,
       type: 'song',
       data: {
         artist: 'Galantis',
-        title: 'No Money',
-      },
+        title: 'No Money'
+      }
     },
     {
-      timestamp: 1653.00,
+      timestamp: 1653.0,
       type: 'horn',
       data: {
-        counter: 27,
-      },
+        counter: 27
+      }
     },
     {
-      timestamp: 1683.00,
+      timestamp: 1683.0,
       type: 'song',
       data: {
         artist: 'Kid Cudi',
-        title: 'Pursuit of Happiness (Steve Aoki remix)',
-      },
+        title: 'Pursuit of Happiness (Steve Aoki remix)'
+      }
     },
     {
       timestamp: 1711.91,
       type: 'horn',
       data: {
-        counter: 28,
-      },
+        counter: 28
+      }
     },
     {
-      timestamp: 1741.00,
+      timestamp: 1741.0,
       type: 'song',
       data: {
         artist: 'Yeah Yeah Yeahs',
-        title: 'Heads Will Roll (A-Trak remix)',
-      },
+        title: 'Heads Will Roll (A-Trak remix)'
+      }
     },
     {
       timestamp: 1768.71,
       type: 'horn',
       data: {
-        counter: 29,
-      },
+        counter: 29
+      }
     },
     {
-      timestamp: 1814.00,
+      timestamp: 1814.0,
       type: 'song',
       data: {
         artist: 'Michael Calfan',
-        title: 'Resurrection',
-      },
+        title: 'Resurrection'
+      }
     },
     {
-      timestamp: 1828.90,
+      timestamp: 1828.9,
       type: 'horn',
       data: {
-        counter: 30,
-      },
+        counter: 30
+      }
     },
     {
-      timestamp: 1858.00,
+      timestamp: 1858.0,
       type: 'song',
       data: {
         artist: 'Basto!',
-        title: 'Again and Again',
-      },
+        title: 'Again and Again'
+      }
     },
     {
-      timestamp: 1886.90,
+      timestamp: 1886.9,
       type: 'horn',
       data: {
-        counter: 31,
-      },
+        counter: 31
+      }
     },
     {
-      timestamp: 1916.00,
+      timestamp: 1916.0,
       type: 'song',
       data: {
         artist: 'David Guetta feat. Sia',
-        title: 'Titanium',
-      },
+        title: 'Titanium'
+      }
     },
     {
-      timestamp: 1944.90,
+      timestamp: 1944.9,
       type: 'horn',
       data: {
-        counter: 32,
-      },
+        counter: 32
+      }
     },
     {
-      timestamp: 1959.00,
+      timestamp: 1959.0,
       type: 'song',
       data: {
         artist: 'Gala',
-        title: 'Freed From Desire',
-      },
+        title: 'Freed From Desire'
+      }
     },
     {
-      timestamp: 2004.10,
+      timestamp: 2004.1,
       type: 'horn',
       data: {
-        counter: 33,
-      },
+        counter: 33
+      }
     },
     {
-      timestamp: 2034.00,
+      timestamp: 2034.0,
       type: 'song',
       data: {
         artist: 'Wolter Kroes',
-        title: 'Viva Hollandia',
-      },
+        title: 'Viva Hollandia'
+      }
     },
     {
       timestamp: 2063.97,
       type: 'horn',
       data: {
-        counter: 34,
-      },
+        counter: 34
+      }
     },
     {
-      timestamp: 2090.00,
+      timestamp: 2090.0,
       type: 'song',
       data: {
         artist: 'Spongebob Squarepants',
-        title: 'Het Spongebob Squarepants-lied',
-      },
+        title: 'Het Spongebob Squarepants-lied'
+      }
     },
     {
-      timestamp: 2124.70,
+      timestamp: 2124.7,
       type: 'horn',
       data: {
-        counter: 35,
-      },
+        counter: 35
+      }
     },
     {
-      timestamp: 2128.00,
+      timestamp: 2128.0,
       type: 'song',
       data: {
         artist: 'Westlife',
-        title: 'Uptown Girl',
-      },
+        title: 'Uptown Girl'
+      }
     },
     {
-      timestamp: 2179.00,
+      timestamp: 2179.0,
       type: 'song',
       data: {
         artist: 'Aqua',
-        title: 'Barbie Girl',
-      },
+        title: 'Barbie Girl'
+      }
     },
     {
       timestamp: 2193.89,
       type: 'horn',
       data: {
-        counter: 36,
-      },
+        counter: 36
+      }
     },
     {
-      timestamp: 2225.00,
+      timestamp: 2225.0,
       type: 'song',
       data: {
         artist: 'Guillermo & Tropical Danny',
-        title: 'Toppertje',
-      },
+        title: 'Toppertje'
+      }
     },
     {
       timestamp: 2244.79,
       type: 'horn',
       data: {
-        counter: 37,
-      },
+        counter: 37
+      }
     },
     {
       timestamp: 2304.47,
       type: 'horn',
       data: {
-        counter: 38,
-      },
+        counter: 38
+      }
     },
     {
-      timestamp: 2305.00,
+      timestamp: 2305.0,
       type: 'song',
       data: {
         artist: 'The Bloody Beetroots feat. Steve Aoki',
-        title: 'Warp 1.9',
-      },
+        title: 'Warp 1.9'
+      }
     },
     {
       timestamp: 2373.39,
       type: 'horn',
       data: {
-        counter: 39,
-      },
+        counter: 39
+      }
     },
     {
-      timestamp: 2374.00,
+      timestamp: 2374.0,
       type: 'song',
       data: {
         artist: 'David Guetta & Showtek feat. Vassy',
-        title: 'Bad',
-      },
+        title: 'Bad'
+      }
     },
     {
-      timestamp: 2431.00,
+      timestamp: 2431.0,
       type: 'song',
       data: {
         artist: 'Showtek & Justin Prime',
-        title: 'Cannonball',
-      },
+        title: 'Cannonball'
+      }
     },
     {
-      timestamp: 2431.20,
+      timestamp: 2431.2,
       type: 'horn',
       data: {
-        counter: 40,
-      },
+        counter: 40
+      }
     },
     {
-      timestamp: 2460.00,
+      timestamp: 2460.0,
       type: 'song',
       data: {
         artist: 'Die Atzen',
-        title: 'Disco Pogo',
-      },
+        title: 'Disco Pogo'
+      }
     },
     {
-      timestamp: 2488.60,
+      timestamp: 2488.6,
       type: 'horn',
       data: {
-        counter: 41,
-      },
+        counter: 41
+      }
     },
     {
-      timestamp: 2534.00,
+      timestamp: 2534.0,
       type: 'song',
       data: {
         artist: 'Lorenz Büffel',
-        title: 'Johnny Däpp',
-      },
+        title: 'Johnny Däpp'
+      }
     },
     {
-      timestamp: 2554.90,
+      timestamp: 2554.9,
       type: 'horn',
       data: {
-        counter: 42,
-      },
+        counter: 42
+      }
     },
     {
-      timestamp: 2587.00,
+      timestamp: 2587.0,
       type: 'song',
       data: {
         artist: 'Zware Jongens',
-        title: 'Jodeljump',
-      },
+        title: 'Jodeljump'
+      }
     },
     {
       timestamp: 2606.35,
       type: 'horn',
       data: {
-        counter: 43,
-      },
+        counter: 43
+      }
     },
     {
-      timestamp: 2635.00,
+      timestamp: 2635.0,
       type: 'song',
       data: {
         artist: 'Parla & Pardoux',
-        title: 'Liberté',
-      },
+        title: 'Liberté'
+      }
     },
     {
       timestamp: 2663.46,
       type: 'horn',
       data: {
-        counter: 44,
-      },
+        counter: 44
+      }
     },
     {
-      timestamp: 2695.00,
+      timestamp: 2695.0,
       type: 'song',
       data: {
         artist: 'Markus Becker',
-        title: 'Das rote Pferd',
-      },
+        title: 'Das rote Pferd'
+      }
     },
     {
-      timestamp: 2729.00,
+      timestamp: 2729.0,
       type: 'horn',
       data: {
-        counter: 45,
-      },
+        counter: 45
+      }
     },
     {
-      timestamp: 2743.00,
+      timestamp: 2743.0,
       type: 'song',
       data: {
         artist: 'Olaf Henning',
-        title: 'Cowboy und Indianer',
-      },
+        title: 'Cowboy und Indianer'
+      }
     },
     {
-      timestamp: 2783.30,
+      timestamp: 2783.3,
       type: 'horn',
       data: {
-        counter: 46,
-      },
+        counter: 46
+      }
     },
     {
-      timestamp: 2785.00,
+      timestamp: 2785.0,
       type: 'song',
       data: {
         artist: 'Ch!pz',
-        title: 'Cowboy',
-      },
+        title: 'Cowboy'
+      }
     },
     {
-      timestamp: 2824.00,
+      timestamp: 2824.0,
       type: 'song',
       data: {
         artist: 'Toy-Box',
-        title: 'Tarzan & Jane',
-      },
+        title: 'Tarzan & Jane'
+      }
     },
     {
-      timestamp: 2849.40,
+      timestamp: 2849.4,
       type: 'horn',
       data: {
-        counter: 47,
-      },
+        counter: 47
+      }
     },
     {
-      timestamp: 2879.00,
+      timestamp: 2879.0,
       type: 'song',
       data: {
         artist: 'Toy-Box',
-        title: 'Sailor Song',
-      },
+        title: 'Sailor Song'
+      }
     },
     {
-      timestamp: 2919.00,
+      timestamp: 2919.0,
       type: 'horn',
       data: {
-        counter: 48,
-      },
+        counter: 48
+      }
     },
     {
-      timestamp: 2922.00,
+      timestamp: 2922.0,
       type: 'song',
       data: {
         artist: 'Vengaboys',
-        title: 'Boom, Boom, Boom, Boom!!',
-      },
+        title: 'Boom, Boom, Boom, Boom!!'
+      }
     },
     {
       timestamp: 2974.58,
       type: 'horn',
       data: {
-        counter: 49,
-      },
+        counter: 49
+      }
     },
     {
-      timestamp: 2998.00,
+      timestamp: 2998.0,
       type: 'song',
       data: {
         artist: 'Vengaboys',
-        title: 'To Brazil!',
-      },
+        title: 'To Brazil!'
+      }
     },
     {
       timestamp: 3038.76,
       type: 'horn',
       data: {
-        counter: 50,
-      },
+        counter: 50
+      }
     },
     {
-      timestamp: 3070.00,
+      timestamp: 3070.0,
       type: 'song',
       data: {
         artist: 'Snollebollekes',
-        title: 'Bam bam (bam)',
-      },
+        title: 'Bam bam (bam)'
+      }
     },
     {
       timestamp: 3103.18,
       type: 'horn',
       data: {
-        counter: 51,
-      },
+        counter: 51
+      }
     },
     {
-      timestamp: 3120.00,
+      timestamp: 3120.0,
       type: 'song',
       data: {
         artist: 'Def Rhymz',
-        title: 'Schudden',
-      },
+        title: 'Schudden'
+      }
     },
     {
       timestamp: 3160.16,
       type: 'horn',
       data: {
-        counter: 52,
-      },
+        counter: 52
+      }
     },
     {
-      timestamp: 3190.00,
+      timestamp: 3190.0,
       type: 'song',
       data: {
         artist: 'Cooldown Café',
-        title: 'Hey baby',
-      },
+        title: 'Hey baby'
+      }
     },
     {
-      timestamp: 3214.80,
+      timestamp: 3214.8,
       type: 'horn',
       data: {
-        counter: 53,
-      },
+        counter: 53
+      }
     },
     {
-      timestamp: 3232.00,
+      timestamp: 3232.0,
       type: 'song',
       data: {
         artist: 'Gebroeders Ko',
-        title: 'Schatje, mag ik je foto',
-      },
+        title: 'Schatje, mag ik je foto'
+      }
     },
     {
       timestamp: 3278.55,
       type: 'horn',
       data: {
-        counter: 54,
-      },
+        counter: 54
+      }
     },
     {
-      timestamp: 3279.00,
+      timestamp: 3279.0,
       type: 'song',
       data: {
         artist: 'Guus Meeuwis',
-        title: 'Het is een nacht',
-      },
+        title: 'Het is een nacht'
+      }
     },
     {
-      timestamp: 3340.80,
+      timestamp: 3340.8,
       type: 'horn',
       data: {
-        counter: 55,
-      },
+        counter: 55
+      }
     },
     {
-      timestamp: 3356.00,
+      timestamp: 3356.0,
       type: 'song',
       data: {
         artist: 'Tom Waes',
-        title: 'Dos cervezas',
-      },
+        title: 'Dos cervezas'
+      }
     },
     {
       timestamp: 3398.04,
       type: 'horn',
       data: {
-        counter: 56,
-      },
+        counter: 56
+      }
     },
     {
-      timestamp: 3412.00,
+      timestamp: 3412.0,
       type: 'song',
       data: {
         artist: 'Peter Wackel',
-        title: 'Vollgas',
-      },
+        title: 'Vollgas'
+      }
     },
     {
-      timestamp: 3439.00,
+      timestamp: 3439.0,
       type: 'song',
       data: {
         artist: 'Peter Wackel',
-        title: 'Scheiß drauf!',
-      },
+        title: 'Scheiß drauf!'
+      }
     },
     {
       timestamp: 3464.95,
       type: 'horn',
       data: {
-        counter: 57,
-      },
+        counter: 57
+      }
     },
     {
-      timestamp: 3467.00,
+      timestamp: 3467.0,
       type: 'song',
       data: {
         artist: 'Ikke Hüftgold',
-        title: 'Dicke titten, kartoffelsalat',
-      },
+        title: 'Dicke titten, kartoffelsalat'
+      }
     },
     {
       timestamp: 3519.75,
       type: 'horn',
       data: {
-        counter: 58,
-      },
+        counter: 58
+      }
     },
     {
-      timestamp: 3521.00,
+      timestamp: 3521.0,
       type: 'song',
       data: {
         artist: 'Tim Toupet',
-        title: 'Fliegerlied (So ein schöner Tag)',
-      },
+        title: 'Fliegerlied (So ein schöner Tag)'
+      }
     },
     {
-      timestamp: 3564.00,
+      timestamp: 3564.0,
       type: 'song',
       data: {
         artist: 'Cooldown Café',
-        title: "Met z'n allen",
-      },
+        title: "Met z'n allen"
+      }
     },
     {
       timestamp: 3576.36,
       type: 'horn',
       data: {
-        counter: 59,
-      },
+        counter: 59
+      }
     },
     {
       timestamp: 3642.86,
       type: 'horn',
       data: {
-        counter: 60,
-      },
+        counter: 60
+      }
     },
     {
-      timestamp: 3659.00,
+      timestamp: 3659.0,
       type: 'song',
       data: {
         artist: 'The Partysquad feat. Jayh, Sjaak & Reverse',
-        title: 'Helemaal naar de klote',
-      },
+        title: 'Helemaal naar de klote'
+      }
     },
     {
-      timestamp: 3687.00,
+      timestamp: 3687.0,
       type: 'song',
       data: {
         artist: 'K-Liber',
-        title: 'Viben',
-      },
+        title: 'Viben'
+      }
     },
     {
       timestamp: 3699.38,
       type: 'horn',
       data: {
-        counter: 61,
-      },
+        counter: 61
+      }
     },
     {
       timestamp: 3752.85,
       type: 'horn',
       data: {
-        counter: 62,
-      },
+        counter: 62
+      }
     },
     {
-      timestamp: 3755.00,
+      timestamp: 3755.0,
       type: 'song',
       data: {
         artist: 'FeestDJRuud & Dirtcaps feat. Sjaak & Kraantje Pappie',
-        title: 'Weekend',
-      },
+        title: 'Weekend'
+      }
     },
     {
-      timestamp: 3807.60,
+      timestamp: 3807.6,
       type: 'horn',
       data: {
-        counter: 63,
-      },
+        counter: 63
+      }
     },
     {
-      timestamp: 3808.00,
+      timestamp: 3808.0,
       type: 'song',
       data: {
         artist: 'Lawineboys',
-        title: 'Joost',
-      },
+        title: 'Joost'
+      }
     },
     {
-      timestamp: 3860.00,
+      timestamp: 3860.0,
       type: 'song',
       data: {
         artist: 'Gebroeders Ko',
-        title: 'Ik heb een toeter op mijn waterscooter',
-      },
+        title: 'Ik heb een toeter op mijn waterscooter'
+      }
     },
     {
-      timestamp: 3873.60,
+      timestamp: 3873.6,
       type: 'horn',
       data: {
-        counter: 64,
-      },
+        counter: 64
+      }
     },
     {
-      timestamp: 3904.00,
+      timestamp: 3904.0,
       type: 'song',
       data: {
         artist: 'Gebroeders Ko',
-        title: 'Tringeling',
-      },
+        title: 'Tringeling'
+      }
     },
     {
       timestamp: 3931.55,
       type: 'horn',
       data: {
-        counter: 65,
-      },
+        counter: 65
+      }
     },
     {
-      timestamp: 3975.00,
+      timestamp: 3975.0,
       type: 'song',
       data: {
         artist: 'Basshunter',
-        title: 'Boten Anna',
-      },
+        title: 'Boten Anna'
+      }
     },
     {
       timestamp: 3987.41,
       type: 'horn',
       data: {
-        counter: 66,
-      },
+        counter: 66
+      }
     },
     {
-      timestamp: 4029.00,
+      timestamp: 4029.0,
       type: 'song',
       data: {
         artist: 'Lawineboys',
-        title: 'Wat zullen we drinken',
-      },
+        title: 'Wat zullen we drinken'
+      }
     },
     {
-      timestamp: 4050.00,
+      timestamp: 4050.0,
       type: 'horn',
       data: {
-        counter: 67,
-      },
+        counter: 67
+      }
     },
     {
-      timestamp: 4081.00,
+      timestamp: 4081.0,
       type: 'song',
       data: {
         artist: 'Lamme Frans',
-        title: 'Wakker met een biertje!',
-      },
+        title: 'Wakker met een biertje!'
+      }
     },
     {
-      timestamp: 4112.80,
+      timestamp: 4112.8,
       type: 'horn',
       data: {
-        counter: 68,
-      },
+        counter: 68
+      }
     },
     {
       timestamp: 4124.18,
       type: 'song',
       data: {
         artist: 'Lawineboys feat. DJ Jerome',
-        title: 'Seks met die kale',
-      },
+        title: 'Seks met die kale'
+      }
     },
     {
-      timestamp: 4175.00,
+      timestamp: 4175.0,
       type: 'horn',
       data: {
-        counter: 69,
-      },
+        counter: 69
+      }
     },
     {
-      timestamp: 4177.00,
+      timestamp: 4177.0,
       type: 'song',
       data: {
         artist: 'Zombie Nation',
-        title: 'Kernkraft 400',
-      },
+        title: 'Kernkraft 400'
+      }
     },
     {
       timestamp: 4227.53,
       type: 'horn',
       data: {
-        counter: 70,
-      },
+        counter: 70
+      }
     },
     {
-      timestamp: 4230.00,
+      timestamp: 4230.0,
       type: 'song',
       data: {
         artist: 'DJ Boozywoozy',
-        title: 'Party Affair',
-      },
+        title: 'Party Affair'
+      }
     },
     {
       timestamp: 4280.12,
       type: 'horn',
       data: {
-        counter: 71,
-      },
+        counter: 71
+      }
     },
     {
-      timestamp: 4289.00,
+      timestamp: 4289.0,
       type: 'song',
       data: {
         artist: '2Unlimited',
-        title: 'No Limit',
-      },
+        title: 'No Limit'
+      }
     },
     {
       timestamp: 4340.73,
       type: 'horn',
       data: {
-        counter: 72,
-      },
+        counter: 72
+      }
     },
     {
-      timestamp: 4343.00,
+      timestamp: 4343.0,
       type: 'song',
       data: {
         artist: 'DJ Kicken vs. MC-Q',
-        title: "Ain't No Party",
-      },
+        title: "Ain't No Party"
+      }
     },
     {
-      timestamp: 4408.00,
+      timestamp: 4408.0,
       type: 'horn',
       data: {
-        counter: 73,
-      },
+        counter: 73
+      }
     },
     {
-      timestamp: 4411.00,
+      timestamp: 4411.0,
       type: 'song',
       data: {
         artist: 'Jan Wayne',
-        title: 'Becuase the Night',
-      },
+        title: 'Becuase the Night'
+      }
     },
     {
-      timestamp: 4455.00,
+      timestamp: 4455.0,
       type: 'song',
       data: {
         artist: 'Cascada',
-        title: 'Everytime We Touch',
-      },
+        title: 'Everytime We Touch'
+      }
     },
     {
-      timestamp: 4466.80,
+      timestamp: 4466.8,
       type: 'horn',
       data: {
-        counter: 74,
-      },
+        counter: 74
+      }
     },
     {
-      timestamp: 4510.00,
+      timestamp: 4510.0,
       type: 'song',
       data: {
         artist: "Gigi D'Agostino",
-        title: "L'amour toujours",
-      },
+        title: "L'amour toujours"
+      }
     },
     {
       timestamp: 4520.84,
       type: 'horn',
       data: {
-        counter: 75,
-      },
+        counter: 75
+      }
     },
     {
-      timestamp: 4573.00,
+      timestamp: 4573.0,
       type: 'song',
       data: {
         artist: 'Jason Paige',
-        title: "Gotta Catch 'M All",
-      },
+        title: "Gotta Catch 'M All"
+      }
     },
     {
-      timestamp: 4578.00,
+      timestamp: 4578.0,
       type: 'horn',
       data: {
-        counter: 76,
-      },
+        counter: 76
+      }
     },
     {
-      timestamp: 4636.00,
+      timestamp: 4636.0,
       type: 'song',
       data: {
         artist: 'Scooter',
-        title: 'How Much Is The Fish',
-      },
+        title: 'How Much Is The Fish'
+      }
     },
     {
       timestamp: 4644.94,
       type: 'horn',
       data: {
-        counter: 77,
-      },
+        counter: 77
+      }
     },
     {
-      timestamp: 4674.00,
+      timestamp: 4674.0,
       type: 'song',
       data: {
         artist: 'Scooter',
-        title: 'Weekend',
-      },
+        title: 'Weekend'
+      }
     },
     {
-      timestamp: 4700.50,
+      timestamp: 4700.5,
       type: 'horn',
       data: {
-        counter: 78,
-      },
+        counter: 78
+      }
     },
     {
-      timestamp: 4714.00,
+      timestamp: 4714.0,
       type: 'song',
       data: {
         artist: 'Scooter',
-        title: 'One (Always Hardcore)',
-      },
+        title: 'One (Always Hardcore)'
+      }
     },
     {
-      timestamp: 4764.00,
+      timestamp: 4764.0,
       type: 'horn',
       data: {
-        counter: 79,
-      },
+        counter: 79
+      }
     },
     {
-      timestamp: 4766.00,
+      timestamp: 4766.0,
       type: 'song',
       data: {
         artist: 'Scooter',
-        title: 'Maria (I Like It Loud)',
-      },
+        title: 'Maria (I Like It Loud)'
+      }
     },
     {
-      timestamp: 4818.00,
+      timestamp: 4818.0,
       type: 'song',
       data: {
         artist: 'Scooter',
-        title: "J'adore Hardcore",
-      },
+        title: "J'adore Hardcore"
+      }
     },
     {
-      timestamp: 4829.10,
+      timestamp: 4829.1,
       type: 'horn',
       data: {
-        counter: 80,
-      },
+        counter: 80
+      }
     },
     {
-      timestamp: 4860.00,
+      timestamp: 4860.0,
       type: 'song',
       data: {
         artist: 'Wildstylez feat. Niels Geusebroek',
-        title: 'Year of Summer',
-      },
+        title: 'Year of Summer'
+      }
     },
     {
-      timestamp: 4887.70,
+      timestamp: 4887.7,
       type: 'horn',
       data: {
-        counter: 81,
-      },
+        counter: 81
+      }
     },
     {
-      timestamp: 4929.00,
+      timestamp: 4929.0,
       type: 'song',
       data: {
         artist: 'Brennan Heart & Wildstylez',
-        title: 'Lose My Mind',
-      },
+        title: 'Lose My Mind'
+      }
     },
     {
       timestamp: 4952.43,
       type: 'horn',
       data: {
-        counter: 82,
-      },
+        counter: 82
+      }
     },
     {
-      timestamp: 5004.50,
+      timestamp: 5004.5,
       type: 'horn',
       data: {
-        counter: 83,
-      },
+        counter: 83
+      }
     },
     {
-      timestamp: 5006.00,
+      timestamp: 5006.0,
       type: 'song',
       data: {
         artist: 'Starkoo',
-        title: 'Ik wil je',
-      },
+        title: 'Ik wil je'
+      }
     },
     {
-      timestamp: 5059.00,
+      timestamp: 5059.0,
       type: 'song',
       data: {
         artist: 'Feestteam',
-        title: 'Let It Be / Hey Jude (mix)',
-      },
+        title: 'Let It Be / Hey Jude (mix)'
+      }
     },
     {
       timestamp: 5070.43,
       type: 'horn',
       data: {
-        counter: 84,
-      },
+        counter: 84
+      }
     },
     {
       timestamp: 5124.46,
       type: 'horn',
       data: {
-        counter: 85,
-      },
+        counter: 85
+      }
     },
     {
-      timestamp: 5179.00,
+      timestamp: 5179.0,
       type: 'song',
       data: {
         artist: 'DJ Nikolai & DJ Mike van Dijk',
-        title: 'Piano Man',
-      },
+        title: 'Piano Man'
+      }
     },
     {
-      timestamp: 5187.80,
+      timestamp: 5187.8,
       type: 'horn',
       data: {
-        counter: 86,
-      },
+        counter: 86
+      }
     },
     {
-      timestamp: 5237.00,
+      timestamp: 5237.0,
       type: 'song',
       data: {
         artist: 'Robbie Williams',
-        title: 'Angels',
-      },
+        title: 'Angels'
+      }
     },
     {
       timestamp: 5242.71,
       type: 'horn',
       data: {
-        counter: 87,
-      },
+        counter: 87
+      }
     },
     {
-      timestamp: 5278.00,
+      timestamp: 5278.0,
       type: 'song',
       data: {
         artist: 'Enrique Iglesias',
-        title: 'Hero',
-      },
+        title: 'Hero'
+      }
     },
     {
-      timestamp: 5307.70,
+      timestamp: 5307.7,
       type: 'horn',
       data: {
-        counter: 88,
-      },
+        counter: 88
+      }
     },
     {
-      timestamp: 5331.00,
+      timestamp: 5331.0,
       type: 'song',
       data: {
         artist: 'Whitney Houston',
-        title: 'I Will Always Love You',
-      },
+        title: 'I Will Always Love You'
+      }
     },
     {
-      timestamp: 5373.80,
+      timestamp: 5373.8,
       type: 'horn',
       data: {
-        counter: 89,
-      },
+        counter: 89
+      }
     },
     {
-      timestamp: 5380.00,
+      timestamp: 5380.0,
       type: 'song',
       data: {
         artist: 'Mariah Carey',
-        title: 'All I Want For Christmas',
-      },
+        title: 'All I Want For Christmas'
+      }
     },
     {
       timestamp: 5431.74,
       type: 'horn',
       data: {
-        counter: 90,
-      },
+        counter: 90
+      }
     },
     {
-      timestamp: 5444.00,
+      timestamp: 5444.0,
       type: 'song',
       data: {
         artist: 'Kraantje Pappie',
-        title: 'Feesttent (FeestDJRuud remix)',
-      },
+        title: 'Feesttent (FeestDJRuud remix)'
+      }
     },
     {
-      timestamp: 5487.80,
+      timestamp: 5487.8,
       type: 'horn',
       data: {
-        counter: 91,
-      },
+        counter: 91
+      }
     },
     {
       timestamp: 5490.25,
       type: 'song',
       data: {
         artist: 'New Kids feat. DJ Paul Elstak',
-        title: 'Turbo',
-      },
+        title: 'Turbo'
+      }
     },
     {
       timestamp: 5555.55,
       type: 'horn',
       data: {
-        counter: 92,
-      },
+        counter: 92
+      }
     },
     {
-      timestamp: 5558.00,
+      timestamp: 5558.0,
       type: 'song',
       data: {
         artist: 'Lipstick',
-        title: "I'm a Raver",
-      },
+        title: "I'm a Raver"
+      }
     },
     {
-      timestamp: 5591.00,
+      timestamp: 5591.0,
       type: 'song',
       data: {
         artist: 'Nakatomi',
-        title: 'Children of the Night',
-      },
+        title: 'Children of the Night'
+      }
     },
     {
-      timestamp: 5612.00,
+      timestamp: 5612.0,
       type: 'horn',
       data: {
-        counter: 93,
-      },
+        counter: 93
+      }
     },
     {
-      timestamp: 5614.00,
+      timestamp: 5614.0,
       type: 'song',
       data: {
         artist: 'Charly Lownoise & Mental Theo',
-        title: 'Wonderful Days',
-      },
+        title: 'Wonderful Days'
+      }
     },
     {
-      timestamp: 5659.00,
+      timestamp: 5659.0,
       type: 'song',
       data: {
         artist: 'DJ Paul Elstak',
-        title: 'Luv You More',
-      },
+        title: 'Luv You More'
+      }
     },
     {
       timestamp: 5667.15,
       type: 'horn',
       data: {
-        counter: 94,
-      },
+        counter: 94
+      }
     },
     {
-      timestamp: 5704.00,
+      timestamp: 5704.0,
       type: 'song',
       data: {
         artist: 'DJ Paul Elstak',
-        title: 'Rainbow In The Sky',
-      },
+        title: 'Rainbow In The Sky'
+      }
     },
     {
       timestamp: 5730.65,
       type: 'horn',
       data: {
-        counter: 95,
-      },
+        counter: 95
+      }
     },
     {
-      timestamp: 5733.00,
+      timestamp: 5733.0,
       type: 'song',
       data: {
         artist: 'Evil Activities',
-        title: 'Nobody Said It Was Easy',
-      },
+        title: 'Nobody Said It Was Easy'
+      }
     },
     {
-      timestamp: 5782.90,
+      timestamp: 5782.9,
       type: 'horn',
       data: {
-        counter: 96,
-      },
+        counter: 96
+      }
     },
     {
-      timestamp: 5827.00,
+      timestamp: 5827.0,
       type: 'song',
       data: {
         artist: 'Melrose',
-        title: 'O',
-      },
+        title: 'O'
+      }
     },
     {
       timestamp: 5846.32,
       type: 'horn',
       data: {
-        counter: 97,
-      },
+        counter: 97
+      }
     },
     {
-      timestamp: 5855.00,
+      timestamp: 5855.0,
       type: 'song',
       data: {
         artist: 'Backstreet Boys',
-        title: 'I Want It That Way',
-      },
+        title: 'I Want It That Way'
+      }
     },
     {
       timestamp: 5902.03,
       type: 'horn',
       data: {
-        counter: 98,
-      },
+        counter: 98
+      }
     },
     {
-      timestamp: 5933.00,
+      timestamp: 5933.0,
       type: 'song',
       data: {
         artist: 'R. Kelly',
-        title: "The World's Greatest",
-      },
+        title: "The World's Greatest"
+      }
     },
     {
       timestamp: 5969.88,
       type: 'horn',
       data: {
-        counter: 99,
-      },
+        counter: 99
+      }
     },
     {
-      timestamp: 5970.00,
+      timestamp: 5970.0,
       type: 'song',
       data: {
         artist: 'Céline Dion',
-        title: 'My Heart Will Go On',
-      },
+        title: 'My Heart Will Go On'
+      }
     },
     {
-      timestamp: 6020.00,
+      timestamp: 6020.0,
       type: 'horn',
       data: {
-        counter: 100,
-      },
-    },
-  ],
+        counter: 100
+      }
+    }
+  ]
 };
 
 export default centurion;

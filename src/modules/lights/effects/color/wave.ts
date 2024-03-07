@@ -6,21 +6,21 @@ export interface WaveProps {
   /**
    * Color of the lights
    */
-  color: RgbColor,
+  color: RgbColor;
 
   /**
    * Relative size of the wave
    * @minimum 0
    * @maximum 1
    */
-  size?: number,
+  size?: number;
 
   /**
    * How many ms each cycle of the wave takes
    * @isInt
    * @minimum 0
    */
-  cycleTime?: number,
+  cycleTime?: number;
 }
 
 export type WaveCreateParams = BaseLightsEffectCreateParams & {
@@ -64,14 +64,14 @@ export default class Wave extends LightsEffect<WaveProps> {
     this.lightsGroup.pars
       .sort((p1, p2) => p2.firstChannel - p1.firstChannel)
       .forEach((p, i) => {
-        const brightness = Math.sin(((i / nrLights) + progression) * 2 * Math.PI);
+        const brightness = Math.sin((i / nrLights + progression) * 2 * Math.PI);
         p.fixture.setMasterDimmer(Math.max(0, brightness * 255));
         p.fixture.setColor(this.props.color);
       });
     this.lightsGroup.movingHeadRgbs
       .sort((p1, p2) => p2.firstChannel - p1.firstChannel)
       .forEach((p, i) => {
-        const brightness = Math.sin(((i / nrLights) + progression) * 2 * Math.PI);
+        const brightness = Math.sin((i / nrLights + progression) * 2 * Math.PI);
         p.fixture.setMasterDimmer(Math.max(0, brightness * 255));
         p.fixture.setColor(this.props.color);
       });

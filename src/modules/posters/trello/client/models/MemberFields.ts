@@ -4,6 +4,6 @@
 /* eslint-disable */
 
 export enum MemberFields {
-    ID = 'id',
-    ALL = 'all',
+  ID = 'id',
+  ALL = 'all'
 }

@@ -7,11 +7,9 @@ import {
   LocalPosterType,
   MediaPoster,
   Poster,
-  PosterType,
+  PosterType
 } from '../poster';
-import {
-  Board, Card, Checklist, TrelloClient, TrelloList,
-} from './client';
+import { Board, Card, Checklist, TrelloClient, TrelloList } from './client';
 import { TrelloPosterStorage } from './trello-poster-storage';
 
 const DEFAULT_POSTER_TIMEOUT = 15;
@@ -37,61 +35,62 @@ export class TrelloPosterManager extends PosterManager {
   private async parseLists(
     list: TrelloList,
     board: Board,
-    listType?: PosterType,
+    listType?: PosterType
   ): Promise<Poster[]> {
     const { cards: allCards, lists: allLists, checklists: allChecklists } = board;
     const cards = allCards?.filter((card) => card.idList === list.id) || [];
 
     const now = new Date();
 
-    const posters = await Promise.all(cards.map(async (card) => {
-      const labels = card.labels?.map((l) => l.name ?? '') ?? [];
-      const checklists = allChecklists?.filter((checklist) => card
-        .idChecklists?.includes(checklist.id)) ?? [];
+    const posters = await Promise.all(
+      cards.map(async (card) => {
+        const labels = card.labels?.map((l) => l.name ?? '') ?? [];
+        const checklists =
+          allChecklists?.filter((checklist) => card.idChecklists?.includes(checklist.id)) ?? [];
 
-      // A card can be two things: a poster, or a reference to a new list of cards.
-      // If it has the correct label ("Posterlist"), it means the card is a reference to a list
-      if (labels.includes('Posterlist')) {
-        const newList = allLists?.find((l) => l.name === card.name);
-        if (newList) {
-          return this.parseLists(newList, board, card.desc as PosterType);
+        // A card can be two things: a poster, or a reference to a new list of cards.
+        // If it has the correct label ("Posterlist"), it means the card is a reference to a list
+        if (labels.includes('Posterlist')) {
+          const newList = allLists?.find((l) => l.name === card.name);
+          if (newList) {
+            return this.parseLists(newList, board, card.desc as PosterType);
+          }
+          throw new Error(`Unknown list: ${card.name}`);
         }
-        throw new Error(`Unknown list: ${card.name}`);
-      }
 
-      // If the card has a due date and this due date is in the past, skip this card
-      if (card.due && new Date(card.due) < now) return undefined;
-      // If the card has a start date and this start date is in the future, skip this card
-      if (card.badges?.start != null && new Date(card.badges.start) > now) return undefined;
+        // If the card has a due date and this due date is in the past, skip this card
+        if (card.due && new Date(card.due) < now) return undefined;
+        // If the card has a start date and this start date is in the future, skip this card
+        if (card.badges?.start != null && new Date(card.badges.start) > now) return undefined;
 
-      switch (listType) {
-        case 'img':
-        case 'video':
-          return this.parseMediaPoster(card, checklists);
-        case 'extern':
-          return this.parseExternalPoster(card, checklists);
-        case 'photo':
-          return this.parsePhotoPoster(card, checklists);
-        default: break;
-      }
+        switch (listType) {
+          case 'img':
+          case 'video':
+            return this.parseMediaPoster(card, checklists);
+          case 'extern':
+            return this.parseExternalPoster(card, checklists);
+          case 'photo':
+            return this.parsePhotoPoster(card, checklists);
+          default:
+            break;
+        }
 
-      let type: LocalPosterType = (listType as LocalPosterType) || PosterType.UNKNOWN;
-      const cardType = card.desc;
-      if (listType === undefined && Object.values(PosterType).includes(cardType as any)) {
-        type = cardType as LocalPosterType;
-      }
+        let type: LocalPosterType = (listType as LocalPosterType) || PosterType.UNKNOWN;
+        const cardType = card.desc;
+        if (listType === undefined && Object.values(PosterType).includes(cardType as any)) {
+          type = cardType as LocalPosterType;
+        }
 
-      const poster: LocalPoster = {
-        ...this.parseBasePoster(card, checklists),
-        type,
-      };
+        const poster: LocalPoster = {
+          ...this.parseBasePoster(card, checklists),
+          type
+        };
 
-      return poster;
-    }));
+        return poster;
+      })
+    );
 
-    return posters
-      .filter((p) => p !== undefined)
-      .flat() as Poster[];
+    return posters.filter((p) => p !== undefined).flat() as Poster[];
   }
 
   /**
@@ -103,7 +102,9 @@ export class TrelloPosterManager extends PosterManager {
   private parseBasePoster(card: Card, checklists: Checklist[]): BasePoster {
     // Find the index of the "timeout" checklist if it exists
     // @ts-ignore
-    const indexTimeout = checklists.findIndex((checklist) => checklist.name.toLowerCase() === 'timeout');
+    const indexTimeout = checklists.findIndex(
+      (checklist) => checklist.name.toLowerCase() === 'timeout'
+    );
     // If it does exist, take the value of the first checkbox and make it the timeout value
     let timeout: number = DEFAULT_POSTER_TIMEOUT;
     if (indexTimeout !== undefined && indexTimeout > -1) {
@@ -123,7 +124,7 @@ export class TrelloPosterManager extends PosterManager {
       // If there are labels, set the label of this poster to be the first label of the card
       label: footers.length > 0 ? labels[0] : '',
       // If the card has a HIDE_LABEL label, set the footer size to minimal
-      footer: hideBorder ? FooterSize.MINIMAL : FooterSize.FULL,
+      footer: hideBorder ? FooterSize.MINIMAL : FooterSize.FULL
     };
   }
 
@@ -135,7 +136,7 @@ export class TrelloPosterManager extends PosterManager {
    */
   private async parseMediaPoster(
     card: Card,
-    checklists: Checklist[],
+    checklists: Checklist[]
   ): Promise<MediaPoster | ErrorPoster> {
     const poster = this.parseBasePoster(card, checklists);
 
@@ -143,19 +144,21 @@ export class TrelloPosterManager extends PosterManager {
       return {
         ...poster,
         type: PosterType.ERROR,
-        message: 'Card has no ID',
+        message: 'Card has no ID'
       };
     }
     const attachments = await this.client.default.getCardAttachments(card.id);
-    const source = await Promise.all(attachments.map(async (attachment) => {
-      const storage = new TrelloPosterStorage();
-      return storage.storeAttachment(attachment);
-    }));
+    const source = await Promise.all(
+      attachments.map(async (attachment) => {
+        const storage = new TrelloPosterStorage();
+        return storage.storeAttachment(attachment);
+      })
+    );
 
     return {
       ...poster,
       type: PosterType.IMAGE,
-      source,
+      source
     };
   }
 
@@ -173,7 +176,7 @@ export class TrelloPosterManager extends PosterManager {
       return {
         ...this.parseBasePoster(card, checklists),
         type: PosterType.ERROR,
-        message: 'Photo card has no checklist named "photos"',
+        message: 'Photo card has no checklist named "photos"'
       };
     }
     // Get the checklist for the albums
@@ -183,7 +186,7 @@ export class TrelloPosterManager extends PosterManager {
     return {
       ...this.parseBasePoster(card, checklists),
       type: PosterType.PHOTO,
-      albums,
+      albums
     };
   }
 
@@ -204,7 +207,7 @@ export class TrelloPosterManager extends PosterManager {
       }
     };
 
-    const regexMarkdown = /(?=\[(!\[.+?\]\(.+?\)|.+?)]\((https:\/\/[^\)]+)\))/gi;
+    const regexMarkdown = /(?=\[(!\[.+?]\(.+?\)|.+?)]\((https:\/\/[^)]+)\))/gi;
     const match = [...(card.desc ?? '').matchAll(regexMarkdown)].map((m) => m[1])[0]?.trim();
 
     const url = isUrl(match) ? match : card.desc ?? '';
@@ -213,13 +216,13 @@ export class TrelloPosterManager extends PosterManager {
       return {
         ...this.parseBasePoster(card, checklists),
         type: PosterType.ERROR,
-        message: 'Card description does not exist or is not a valid HTTP/HTTPS URL',
+        message: 'Card description does not exist or is not a valid HTTP/HTTPS URL'
       };
     }
     return {
       ...this.parseBasePoster(card, checklists),
       type: PosterType.EXTERNAL,
-      source: [url || ''],
+      source: [url || '']
     };
   }
 
@@ -252,7 +255,7 @@ export class TrelloPosterManager extends PosterManager {
       if (p.type === PosterType.IMAGE || p.type === PosterType.VIDEO) {
         return {
           ...p,
-          source: p.source.map((s) => `/static${s.replaceAll('\\', '/')}`),
+          source: p.source.map((s) => `/static${s.replaceAll('\\', '/')}`)
         };
       }
       return p;

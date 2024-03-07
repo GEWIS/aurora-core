@@ -28,8 +28,8 @@ export default class SubscribeEntity extends BaseEntity {
       to(value: Partial<Record<SocketioNamespaces, string>> | undefined | null): string | null {
         if (!value) return null;
         return JSON.stringify(value);
-      },
-    },
+      }
+    }
   })
   public socketIds?: Partial<Record<SocketioNamespaces, string>> | null;
 

@@ -6,22 +6,19 @@
 import type { TrelloID } from './TrelloID';
 
 export type CustomFieldItems = {
-    id?: TrelloID;
-    value?: {
-checked?: string;
-};
-    idCustomField?: TrelloID;
-    idModel?: TrelloID;
-    modelType?: CustomFieldItems.modelType;
+  id?: TrelloID;
+  value?: {
+    checked?: string;
+  };
+  idCustomField?: TrelloID;
+  idModel?: TrelloID;
+  modelType?: CustomFieldItems.modelType;
 };
 
 export namespace CustomFieldItems {
-
-    export enum modelType {
-        CARD = 'card',
-        BOARD = 'board',
-        MEMBER = 'member',
-    }
-
-
+  export enum modelType {
+    CARD = 'card',
+    BOARD = 'board',
+    MEMBER = 'member'
+  }
 }

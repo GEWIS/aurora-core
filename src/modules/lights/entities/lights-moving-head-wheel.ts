@@ -2,15 +2,14 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import LightsMovingHead from './lights-moving-head';
 import Movement from './movement';
 import { LightsFixtureCurrentValues } from './lights-fixture';
+// eslint-disable-next-line import/no-cycle -- cross reference
 import LightsWheelChannelValue from './lights-wheel-channel-value';
-import {
-  RgbColor, rgbColorDefinitions, WheelColor,
-} from '../color-definitions';
+import { RgbColor, rgbColorDefinitions, WheelColor } from '../color-definitions';
 
 interface LightsMovingHeadWheelCurrentValues extends Movement, LightsFixtureCurrentValues {
-  colorWheelChannel: number,
-  goboWheelChannel: number,
-  goboRotateChannel?: number,
+  colorWheelChannel: number;
+  goboWheelChannel: number;
+  goboRotateChannel?: number;
 }
 
 @Entity()
@@ -40,21 +39,21 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     movingSpeedChannel: 0,
     colorWheelChannel: 0,
     goboWheelChannel: 0,
-    goboRotateChannel: 0,
+    goboRotateChannel: 0
   };
 
   setColor(color: RgbColor) {
     const wheelColor = rgbColorDefinitions[color].alternative;
     const channelValueObj = this.colorWheelChannelValues.find((v) => v.name === wheelColor);
     this.setCurrentValues({
-      colorWheelChannel: channelValueObj?.value ?? 0,
+      colorWheelChannel: channelValueObj?.value ?? 0
     });
   }
 
   setMasterDimmer(masterDimChannel: number) {
     if (this.currentValues.masterDimChannel === masterDimChannel) return;
     this.setCurrentValues({
-      masterDimChannel,
+      masterDimChannel
     });
   }
 
@@ -70,14 +69,14 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
       movingSpeedChannel: 0,
       colorWheelChannel: 0,
       goboWheelChannel: 0,
-      goboRotateChannel: 0,
+      goboRotateChannel: 0
     });
   }
 
   setCurrentValues(values: Partial<LightsMovingHeadWheelCurrentValues>) {
     this.currentValues = {
       ...this.currentValues,
-      ...values,
+      ...values
     };
     this.valuesUpdatedAt = new Date();
   }
@@ -123,7 +122,7 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     values = this.applyDmxOverride(values);
 
     if (this.shouldReset !== undefined) {
-      if ((new Date().getTime() - this.shouldReset.getTime()) > 5000) {
+      if (new Date().getTime() - this.shouldReset.getTime() > 5000) {
         this.shouldReset = undefined;
       }
       if (this.resetChannelAndValue && this.resetChannelAndValue.length >= 2) {

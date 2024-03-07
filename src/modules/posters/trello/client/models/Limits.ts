@@ -6,7 +6,7 @@
 import type { LimitsObject } from './LimitsObject';
 
 export type Limits = {
-    attachments?: {
-perBoard?: LimitsObject;
-};
+  attachments?: {
+    perBoard?: LimitsObject;
+  };
 };

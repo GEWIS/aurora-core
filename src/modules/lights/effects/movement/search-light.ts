@@ -38,16 +38,13 @@ export default class SearchLight extends LightsEffect<SearchLightProps> {
    * @param lightsGroup
    * @param props
    */
-  constructor(
-    lightsGroup: LightsGroup,
-    props: SearchLightProps,
-  ) {
+  constructor(lightsGroup: LightsGroup, props: SearchLightProps) {
     super(lightsGroup);
     this.props = props;
   }
 
   public static build(
-    props: SearchLightProps = {},
+    props: SearchLightProps = {}
   ): LightsEffectBuilder<SearchLightProps, SearchLight> {
     return (lightsGroup) => new SearchLight(lightsGroup, props);
   }
@@ -64,13 +61,13 @@ export default class SearchLight extends LightsEffect<SearchLightProps> {
   private setPosition(
     movingHead: LightsMovingHeadWheel | LightsMovingHeadRgb,
     progression: number,
-    offset: number = 0,
+    offset: number = 0
   ) {
     const radiusFactor = this.props.radiusFactor ?? DEFAULT_RADIUS_FACTOR;
 
     movingHead.setCurrentValues({
       panChannel: Math.cos(progression * 2 * Math.PI + offset) * 42 + 42,
-      tiltChannel: Math.sin(progression * 2 * Math.PI + offset) * 64 * radiusFactor + 128,
+      tiltChannel: Math.sin(progression * 2 * Math.PI + offset) * 64 * radiusFactor + 128
     });
   }
 

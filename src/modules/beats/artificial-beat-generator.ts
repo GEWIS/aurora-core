@@ -83,8 +83,8 @@ export class ArtificialBeatGenerator {
       beat: {
         start: (new Date().getTime() - this.beatStart.getTime()) / 1000,
         duration: this.beatInterval,
-        confidence: 0.5,
-      },
+        confidence: 0.5
+      }
     };
 
     if (process.env.LOG_AUDIO_BEATS === 'true') {

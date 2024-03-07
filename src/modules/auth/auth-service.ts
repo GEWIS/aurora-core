@@ -5,9 +5,9 @@ import dataSource from '../../database';
 import { Audio, LightsController, Screen } from '../root/entities';
 
 export interface GenerateApiKeyParams {
-  audio?: Audio | null,
-  screen?: Screen | null,
-  lightsController?: LightsController | null,
+  audio?: Audio | null;
+  screen?: Screen | null;
+  lightsController?: LightsController | null;
 }
 
 export default class AuthService {
@@ -26,7 +26,7 @@ export default class AuthService {
       key: this.generateKey(),
       audio,
       screen,
-      lightsController,
+      lightsController
     });
   }
 
@@ -40,7 +40,7 @@ export default class AuthService {
 
   public async getLightsControllerApiKey(lightsController: LightsController) {
     return this.apiKeyRepository.findOne({
-      where: { lightsController: { id: lightsController.id } },
+      where: { lightsController: { id: lightsController.id } }
     });
   }
 }

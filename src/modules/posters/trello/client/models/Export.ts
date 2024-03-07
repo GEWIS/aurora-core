@@ -6,13 +6,13 @@
 import type { TrelloID } from './TrelloID';
 
 export type Export = {
-    id?: TrelloID;
-    status?: {
-attempts?: number;
-finished?: boolean;
-stage?: string;
-};
-    startedAt?: string;
-    size?: string | null;
-    exportUrl?: string | null;
+  id?: TrelloID;
+  status?: {
+    attempts?: number;
+    finished?: boolean;
+    stage?: string;
+  };
+  startedAt?: string;
+  size?: string | null;
+  exportUrl?: string | null;
 };

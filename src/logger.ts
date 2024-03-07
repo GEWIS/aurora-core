@@ -4,10 +4,10 @@ const logger = pino({
   transport: {
     target: 'pino-pretty',
     options: {
-      colorize: true,
-    },
+      colorize: true
+    }
   },
-  level: process.env.LOG_LEVEL || 'info',
+  level: process.env.LOG_LEVEL || 'info'
 });
 
 export default logger;

@@ -15,9 +15,12 @@ export default class SetEffectsHandler extends EffectsHandler {
   private setEffect(
     lightsGroup: LightsGroup,
     effects: LightsEffectBuilder[],
-    effectsMap: GroupEffectsMap,
+    effectsMap: GroupEffectsMap
   ) {
-    effectsMap.set(lightsGroup, effects.map((e) => e(lightsGroup, this.trackFeatures)));
+    effectsMap.set(
+      lightsGroup,
+      effects.map((e) => e(lightsGroup, this.trackFeatures))
+    );
   }
 
   /**
@@ -40,25 +43,30 @@ export default class SetEffectsHandler extends EffectsHandler {
   private parseAndSetEffects(
     id: number,
     effects: LightsEffectsCreateParams[],
-    effectsMap: GroupEffectsMap,
+    effectsMap: GroupEffectsMap
   ) {
     const lightsGroup = this.entities.find((e) => e.id === id);
-    if (lightsGroup === undefined) throw new Error(`LightsGroup with ID ${id} is not registered to this handler.`);
+    if (lightsGroup === undefined)
+      throw new Error(`LightsGroup with ID ${id} is not registered to this handler.`);
 
     if (effects.length === 0) {
       this.removeEffect(lightsGroup, effectsMap);
       return;
     }
 
-    const effectBuilders = effects.map((effect) => LIGHTS_EFFECTS.map((EFFECT) => {
-      if (EFFECT.name === effect.type) {
-        // @ts-ignore No idea how to do this properly with Typescript
-        return EFFECT.build(effect.props);
-      }
-      return undefined;
-    }).filter((e) => e !== undefined)
-      .map((e) => e!)
-      .flat()[0]);
+    const effectBuilders = effects.map(
+      (effect) =>
+        LIGHTS_EFFECTS.map((EFFECT) => {
+          if (EFFECT.name === effect.type) {
+            // @ts-ignore No idea how to do this properly with Typescript
+            return EFFECT.build(effect.props);
+          }
+          return undefined;
+        })
+          .filter((e) => e !== undefined)
+          .map((e) => e!)
+          .flat()[0]
+    );
 
     this.setEffect(lightsGroup, effectBuilders, effectsMap);
   }

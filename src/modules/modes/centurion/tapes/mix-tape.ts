@@ -1,36 +1,36 @@
 import { LightsEffectBuilder } from '../../../lights/effects/lights-effect';
 
 export type HornData = {
-  counter: number,
+  counter: number;
 };
 
 export type Horn = {
-  type: 'horn',
-  data: HornData,
+  type: 'horn';
+  data: HornData;
 };
 
 export type SongData = {
   /** Performing artists, comma-separated if multiple */
-  artist: string,
-  title: string,
+  artist: string;
+  title: string;
   /** Tempo of the song. Defaults to 130 beats per minute */
-  bpm?: number,
+  bpm?: number;
 };
 
 type Song = {
-  type: 'song',
-  data: SongData | SongData[],
+  type: 'song';
+  data: SongData | SongData[];
 };
 
 type Effect = {
-  type: 'effect',
+  type: 'effect';
   data: {
-    effects: LightsEffectBuilder[],
-  }
+    effects: LightsEffectBuilder[];
+  };
 };
 
 type Other = {
-  type: 'other',
+  type: 'other';
   data: any;
 };
 

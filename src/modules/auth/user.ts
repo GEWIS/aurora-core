@@ -6,14 +6,15 @@ export interface User {
   name: string;
   roles: string[];
 
-  audioId?: number
+  audioId?: number;
   lightsControllerId?: number;
   screenId?: number;
 }
 
 export function userIsEntity(user: User, entity: SubscribeEntity): boolean {
-  return (entity.constructor.name === Audio.name && entity.id === user.audioId)
-    || (entity.constructor.name === Screen.name && entity.id === user.screenId)
-    || (entity.constructor.name === LightsGroup.name
-      && entity.id === user.lightsControllerId);
+  return (
+    (entity.constructor.name === Audio.name && entity.id === user.audioId) ||
+    (entity.constructor.name === Screen.name && entity.id === user.screenId) ||
+    (entity.constructor.name === LightsGroup.name && entity.id === user.lightsControllerId)
+  );
 }

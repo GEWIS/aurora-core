@@ -1,7 +1,5 @@
 import { Controller } from '@tsoa/runtime';
-import {
-  Body, Post, Route, Security, Tags,
-} from 'tsoa';
+import { Body, Post, Route, Security, Tags } from 'tsoa';
 import SetEffectsHandler from './set-effects-handler';
 import HandlerManager from '../../root/handler-manager';
 import { LightsGroup } from '../../lights/entities';
@@ -18,11 +16,16 @@ export class SetEffectsController extends Controller {
    * @param id
    * @param effects
    */
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD
+  ])
   @Post('{id}/color')
   public async applyLightsEffectColor(
     id: number,
-    @Body() effects: LightsEffectsColorCreateParams[],
+    @Body() effects: LightsEffectsColorCreateParams[]
   ) {
     const handler: SetEffectsHandler | undefined = HandlerManager.getInstance()
       .getHandlers(LightsGroup)
@@ -47,11 +50,16 @@ export class SetEffectsController extends Controller {
    * @param id
    * @param effects
    */
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD
+  ])
   @Post('{id}/movement')
   public async applyLightsEffectMovement(
     id: number,
-    @Body() effects: LightsEffectsMovementCreateParams[],
+    @Body() effects: LightsEffectsMovementCreateParams[]
   ) {
     const handler: SetEffectsHandler | undefined = HandlerManager.getInstance()
       .getHandlers(LightsGroup)

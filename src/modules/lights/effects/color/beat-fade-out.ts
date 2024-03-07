@@ -1,7 +1,10 @@
 import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
 import { BeatEvent, TrackPropertiesEvent } from '../../../events/music-emitter-events';
 import {
-  LightsGroup, LightsGroupMovingHeadRgbs, LightsGroupMovingHeadWheels, LightsGroupPars,
+  LightsGroup,
+  LightsGroupMovingHeadRgbs,
+  LightsGroupMovingHeadWheels,
+  LightsGroupPars
 } from '../../entities';
 import { RgbColor } from '../../color-definitions';
 
@@ -9,7 +12,7 @@ export interface BeatFadeOutProps {
   /**
    * One or more colors that should be shown
    */
-  colors: RgbColor[],
+  colors: RgbColor[];
 
   /**
    * Whether the lights should be turned off using a fade effect
@@ -45,11 +48,7 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
 
   private beatLength: number = 1; // in ms;
 
-  constructor(
-    lightsGroup: LightsGroup,
-    props: BeatFadeOutProps,
-    features?: TrackPropertiesEvent,
-  ) {
+  constructor(lightsGroup: LightsGroup, props: BeatFadeOutProps, features?: TrackPropertiesEvent) {
     super(lightsGroup, features);
     this.props = props;
 
@@ -64,13 +63,9 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
    * on each beat
    * @param props
    */
-  public static build(
-    props: BeatFadeOutProps,
-  ): LightsEffectBuilder<BeatFadeOutProps, BeatFadeOut> {
-    return (
-      lightsGroup: LightsGroup,
-      features?: TrackPropertiesEvent,
-    ) => new BeatFadeOut(lightsGroup, props, features);
+  public static build(props: BeatFadeOutProps): LightsEffectBuilder<BeatFadeOutProps, BeatFadeOut> {
+    return (lightsGroup: LightsGroup, features?: TrackPropertiesEvent) =>
+      new BeatFadeOut(lightsGroup, props, features);
   }
 
   destroy(): void {}
@@ -96,13 +91,12 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
 
   applyColorToFixture(
     p: LightsGroupPars | LightsGroupMovingHeadRgbs | LightsGroupMovingHeadWheels,
-    i: number,
+    i: number
   ) {
     const { enableFade } = this.props;
-    const beatProgression = enableFade ? Math.max(
-      1 - ((new Date().getTime() - this.lastBeat) / this.beatLength),
-      0,
-    ) : 1;
+    const beatProgression = enableFade
+      ? Math.max(1 - (new Date().getTime() - this.lastBeat) / this.beatLength, 0)
+      : 1;
 
     const color = this.getCurrentColor(i);
     if (color == null) {
