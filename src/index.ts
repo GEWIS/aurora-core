@@ -14,6 +14,7 @@ import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
 import { SocketioNamespaces } from './socketio-namespaces';
 import SocketConnectionManager from './modules/root/socket-connection-manager';
 import { BackofficeSyncEmitter } from './modules/events/backoffice-sync-emitter';
+import { activeDirectoryConnect } from './modules/infoscreen/entities/ldap-connector';
 
 async function createApp(): Promise<void> {
   await dataSource.initialize();
@@ -38,6 +39,7 @@ async function createApp(): Promise<void> {
     handlerManager,
     musicEmitter
   );
+  await activeDirectoryConnect();
 
   ModeManager.getInstance().init(musicEmitter, backofficeSyncEmitter);
   ArtificialBeatGenerator.getInstance().init(musicEmitter);

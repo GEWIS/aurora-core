@@ -15,19 +15,19 @@ export default class Information extends BaseEntity {
   @Column({
     type: process.env.TYPEORM_CONNECTION === 'sqlite' ? 'varchar' : 'enum',
     enum: AlcoholTime,
-    default: AlcoholTime.NORMAL
+    nullable: true
   })
-  public alcoholTime!: AlcoholTime;
+  public alcoholTime!: AlcoholTime | null;
 
-  @Column()
-  public firstResponsible!: string;
+  @Column({ type: 'text', nullable: true })
+  public firstResponsible!: string | null;
 
-  @Column({ nullable: true })
-  public secondResponsible?: string;
+  @Column({ type: 'text', nullable: true })
+  public secondResponsible!: string | null;
 
-  @Column({ nullable: true })
-  public firstERO?: string;
+  @Column({ type: 'text', nullable: true })
+  public firstERO!: string | null;
 
-  @Column({ nullable: true })
-  public secondERO?: string;
+  @Column({ type: 'text', nullable: true })
+  public secondERO!: string | null;
 }

@@ -4,14 +4,15 @@ import dataSource from '../../database';
 import { RoomStatus } from './entities/enums/roomStatus';
 import { AlcoholTime } from './entities/enums/alcoholTime';
 import { ApiException, HttpStatusCode } from '../../helpers/customError';
+import { getBoard, getERO, getKeyHolders, Member } from './entities/ldap-connector';
 
 export interface InformationParams {
   roomStatus: RoomStatus;
-  alcoholTime: AlcoholTime;
-  firstResponsible: string;
-  secondResponsible?: string;
-  firstERO?: string;
-  secondERO?: string;
+  alcoholTime: AlcoholTime | null;
+  firstResponsible: string | null;
+  secondResponsible: string | null;
+  firstERO: string | null;
+  secondERO: string | null;
 }
 
 export default class InformationService {
@@ -34,6 +35,29 @@ export default class InformationService {
 
   public async setInformation(params: InformationParams): Promise<Information> {
     const information = await this.getInformation();
+    if (params.roomStatus === RoomStatus.OPEN) {
+      if (!params.alcoholTime) {
+        throw new ApiException(
+          HttpStatusCode.Forbidden,
+          'There must be an alcohol time if the room is open.'
+        );
+      }
+      if (!params.firstResponsible) {
+        throw new ApiException(
+          HttpStatusCode.Forbidden,
+          'There must be a room responsible if the room is open.'
+        );
+      }
+    }
+
+    if (params.firstResponsible && params.firstResponsible === params.secondResponsible) {
+      throw new ApiException(HttpStatusCode.Forbidden, 'Room responsibles must be distinct.');
+    }
+
+    if (params.firstERO && params.firstERO === params.secondERO) {
+      throw new ApiException(HttpStatusCode.Forbidden, 'EROs must be distinct.');
+    }
+
     await this.repo.update(information.id, params);
     return this.getInformation();
   }
@@ -41,9 +65,24 @@ export default class InformationService {
   public async createInformation(): Promise<Information> {
     const information = {
       roomStatus: RoomStatus.CLOSED,
-      alcoholTime: AlcoholTime.NORMAL,
-      firstResponsible: 'NOT SET'
+      alcoholTime: AlcoholTime.NORMAL
     } as InformationParams;
     return this.repo.save(information);
+  }
+
+  public async getBoard(): Promise<Array<Member>> {
+    return getBoard();
+  }
+
+  public async getKeyHolders(): Promise<Array<Member>> {
+    const responsibles = await getKeyHolders();
+    responsibles.sort((a: Member, b: Member) => a.displayName.localeCompare(b.displayName));
+    return responsibles;
+  }
+
+  public async getERO(): Promise<Array<Member>> {
+    const responsibles = await getERO();
+    responsibles.sort((a: Member, b: Member) => a.displayName.localeCompare(b.displayName));
+    return responsibles;
   }
 }
