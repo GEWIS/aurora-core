@@ -1,6 +1,4 @@
 import { Client } from 'ldapts';
-import { HttpStatusCode } from 'axios';
-import { ApiException } from '../../../helpers/customError';
 
 export interface Member {
   dn: string;
@@ -8,21 +6,18 @@ export interface Member {
   displayName: string;
 }
 
-const activeDirectoryConnector = new Client({
-  url: process.env.LDAP_URI!
-});
+let activeDirectoryConnector: Client;
 
 export async function activeDirectoryConnect() {
-  await activeDirectoryConnector
-    .bind(process.env.LDAP_BIND_DN!, process.env.LDAP_BIND_DN_PASSWORD!)
-    .catch((e) => {
-      // eslint-disable-next-line no-console -- useful for when AD acts up
-      console.error(e);
-      throw new ApiException(
-        HttpStatusCode.InternalServerError,
-        'Failed to connect to Active Directory'
-      );
-    });
+  activeDirectoryConnector = new Client({
+    connectTimeout: 5000,
+    url: process.env.LDAP_URI!
+  });
+
+  await activeDirectoryConnector.bind(
+    process.env.LDAP_BIND_DN!,
+    process.env.LDAP_BIND_DN_PASSWORD!
+  );
 }
 
 export async function getBoard() {

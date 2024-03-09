@@ -39,7 +39,11 @@ async function createApp(): Promise<void> {
     handlerManager,
     musicEmitter
   );
-  await activeDirectoryConnect();
+
+  await activeDirectoryConnect().catch(() => {
+    // eslint-disable-next-line no-console -- non intrusive console warn for providing information
+    console.warn('Could not connect to LDAP. This will cause parts of the website to malfunction.');
+  });
 
   ModeManager.getInstance().init(musicEmitter, backofficeSyncEmitter);
   ArtificialBeatGenerator.getInstance().init(musicEmitter);
