@@ -4,7 +4,7 @@ import { Audio, Screen } from '../../root/entities';
 import SetEffectsHandler from '../../handlers/lights/set-effects-handler';
 import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
 import MixTape, { FeedEvent, SongData } from './tapes/mix-tape';
-import { BeatFadeOut } from '../../lights/effects/color';
+import { BeatFadeOut, StaticColor } from '../../lights/effects/color';
 import { SearchLight } from '../../lights/effects/movement';
 import { getTwoComplementaryRgbColors, RgbColor } from '../../lights/color-definitions';
 import { MusicEmitter } from '../../events';
@@ -205,12 +205,22 @@ export default class CenturionMode extends BaseMode {
     } else if (event.type === 'song') {
       const { colorNames } = getTwoComplementaryRgbColors();
 
-      const movingHeadEffect = SearchLight.build({ radiusFactor: 1.5, cycleTime: 3000 });
+      const movingHeadEffectMovement = SearchLight.build({ radiusFactor: 1.5, cycleTime: 3000 });
+      const movingHeadEffectColor = StaticColor.build({ color: RgbColor.WHITE });
       const newEffectBuilder = this.getRandomEffect(colorNames);
 
       this.lights.forEach((l) => {
-        this.lightsHandler.setColorEffect(l, [newEffectBuilder]);
-        this.lightsHandler.setMovementEffect(l, [movingHeadEffect]);
+        // If we have a moving head, assign a movement effect
+        if (l.movingHeadRgbs.length > 0 || l.movingHeadWheels.length > 0) {
+          this.lightsHandler.setMovementEffect(l, [movingHeadEffectMovement]);
+        }
+        // If we have a wheel moving head, assign a static color
+        if (l.movingHeadWheels.length > 0) {
+          this.lightsHandler.setColorEffect(l, [movingHeadEffectColor]);
+        // Otherwise use a random effect!
+        } else {
+          this.lightsHandler.setColorEffect(l, [newEffectBuilder]);
+        }
       });
       this.screenHandler.changeColors(colorNames);
       this.emitSong(event.data);
