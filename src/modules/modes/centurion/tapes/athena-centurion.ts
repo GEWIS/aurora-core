@@ -2,7 +2,7 @@ import MixTape from './mix-tape';
 
 const athenaCenturion: MixTape = {
   name: 'ATHENA Centurion',
-  songFile: 'https://barcommissie.nl/centurion/athena-centurion.mp3',
+  songFile: '/audio/athena-centurion.mp3',
   coverUrl: '',
   duration: 6006,
   feed: [
