@@ -5,6 +5,9 @@ import { LightsFixtureCurrentValues } from './lights-fixture';
 // eslint-disable-next-line import/no-cycle -- cross reference
 import LightsWheelChannelValue from './lights-wheel-channel-value';
 import { RgbColor, rgbColorDefinitions, WheelColor } from '../color-definitions';
+// eslint-disable-next-line import/no-cycle
+import LightsMovingHeadWheelShutterOptions from "./lights-moving-head-wheel-shutter-options";
+import { ShutterOption } from "./lights-fixture-shutter-options";
 
 interface LightsMovingHeadWheelCurrentValues extends Movement, LightsFixtureCurrentValues {
   colorWheelChannel: number;
@@ -14,6 +17,9 @@ interface LightsMovingHeadWheelCurrentValues extends Movement, LightsFixtureCurr
 
 @Entity()
 export default class LightsMovingHeadWheel extends LightsMovingHead {
+  @OneToMany(() => LightsMovingHeadWheelShutterOptions, (opt) => opt.fixture, { eager: true })
+  public shutterOptions: LightsMovingHeadWheelShutterOptions[];
+
   @Column({ type: 'tinyint', unsigned: true })
   public colorWheelChannel: number;
 
@@ -31,7 +37,6 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
 
   private currentValues: LightsMovingHeadWheelCurrentValues = {
     masterDimChannel: 0,
-    strobeChannel: 0,
     panChannel: 0,
     finePanChannel: 0,
     tiltChannel: 0,
@@ -61,7 +66,6 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     if (Object.values(this.currentValues).every((v) => v === 0)) return;
     this.setCurrentValues({
       masterDimChannel: 0,
-      strobeChannel: 0,
       panChannel: 0,
       finePanChannel: 0,
       tiltChannel: 0,
@@ -93,7 +97,7 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     let values: number[] = new Array(16).fill(0);
 
     values[this.masterDimChannel - 1] = this.channelValues.masterDimChannel;
-    values[this.strobeChannel - 1] = this.channelValues.masterDimChannel;
+    values[this.shutterChannel - 1] = this.shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
     values[this.movement.panChannel - 1] = this.channelValues.panChannel;
     values[this.colorWheelChannel - 1] = this.channelValues.colorWheelChannel;
     values[this.goboWheelChannel - 1] = this.channelValues.goboWheelChannel;
@@ -116,7 +120,7 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
       values[this.goboWheelChannel - 1] = 0;
       if (this.goboRotateChannel != null) values[this.goboRotateChannel - 1] = 0;
       values[this.masterDimChannel - 1] = 255;
-      values[this.strobeChannel - 1] = 220;
+      values[this.shutterChannel - 1] = 220;
     }
 
     values = this.applyDmxOverride(values);

@@ -28,7 +28,11 @@ export default async function seedDatabase() {
   const eurolite_LED_7C_7 = await rootLightsService.createLightsPar({
     name: 'Eurolite LED 7C-7',
     masterDimChannel: 1,
-    strobeChannel: 2,
+    shutterChannel: 2,
+    shutterOptionValues: {
+      open: 0,
+      strobe: 220,
+    },
     colorRedChannel: 3,
     colorGreenChannel: 4,
     colorBlueChannel: 5,
@@ -41,7 +45,11 @@ export default async function seedDatabase() {
   const eurolite_LED_TMH_S30 = await rootLightsService.createMovingHeadWheel({
     name: 'Eurolite LED TMH-S30',
     masterDimChannel: 10,
-    strobeChannel: 9,
+    shutterChannel: 9,
+    shutterOptionValues: {
+      open: 0,
+      strobe: 220,
+    },
     colorWheelChannel: 6,
     goboWheelChannel: 7,
     goboRotateChannel: 8,
@@ -60,7 +68,11 @@ export default async function seedDatabase() {
   const ayra_ERO_506 = await rootLightsService.createMovingHeadRgb({
     name: 'Ayra ERO 506',
     masterDimChannel: 6,
-    strobeChannel: 7,
+    shutterChannel: 7,
+    shutterOptionValues: {
+      open: 255,
+      strobe: 110,
+    },
     panChannel: 1,
     finePanChannel: 2,
     tiltChannel: 3,

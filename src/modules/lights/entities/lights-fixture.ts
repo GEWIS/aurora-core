@@ -1,10 +1,7 @@
 import { AfterLoad, Column } from 'typeorm';
 import BaseEntity from '../../root/entities/base-entity';
 
-export interface LightsFixtureCurrentValues {
-  masterDimChannel: number;
-  strobeChannel: number;
-}
+export interface LightsFixtureCurrentValues extends Pick<LightsFixture, "masterDimChannel"> {}
 
 export default abstract class LightsFixture extends BaseEntity {
   @Column()
@@ -14,7 +11,7 @@ export default abstract class LightsFixture extends BaseEntity {
   public masterDimChannel: number;
 
   @Column({ type: 'tinyint', unsigned: true })
-  public strobeChannel: number;
+  public shutterChannel: number;
 
   @Column({
     type: 'varchar',

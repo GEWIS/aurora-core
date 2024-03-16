@@ -1,18 +1,23 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from "typeorm";
 import LightsMovingHead from './lights-moving-head';
 import Colors from './colors';
 import Movement from './movement';
 import { LightsFixtureCurrentValues } from './lights-fixture';
 import { RgbColor, rgbColorDefinitions } from '../color-definitions';
+// eslint-disable-next-line import/no-cycle
+import LightsMovingHeadRgbShutterOptions from "./lights-moving-head-rgb-shutter-options";
+import { ShutterOption } from "./lights-fixture-shutter-options";
 
 @Entity()
 export default class LightsMovingHeadRgb extends LightsMovingHead {
+  @OneToMany(() => LightsMovingHeadRgbShutterOptions, (opt) => opt.fixture, { eager: true })
+  public shutterOptions: LightsMovingHeadRgbShutterOptions[];
+
   @Column(() => Colors)
   public color: Colors;
 
   public currentValues: Colors & Movement & LightsFixtureCurrentValues = {
     masterDimChannel: 0,
-    strobeChannel: 0,
     redChannel: 0,
     greenChannel: 0,
     blueChannel: 0,
@@ -50,7 +55,6 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
     if (Object.values(this.currentValues).every((v) => v === 0)) return;
     this.setCurrentValues({
       masterDimChannel: 0,
-      strobeChannel: 0,
       redChannel: 0,
       greenChannel: 0,
       blueChannel: 0,
@@ -77,7 +81,7 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
   protected getStrobeDMX(): number[] {
     const values: number[] = new Array(16).fill(0);
     values[this.masterDimChannel - 1] = 255;
-    values[this.strobeChannel - 1] = 220;
+    values[this.shutterChannel - 1] = this.shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
     values[this.color.redChannel - 1] = 255;
     values[this.color.blueChannel - 1] = 255;
     values[this.color.greenChannel - 1] = 255;
@@ -88,8 +92,6 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
   }
 
   toDmx(): number[] {
-    if (this.strobeEnabled) return this.getStrobeDMX();
-
     if (this.frozenDmx != null && this.frozenDmx.length > 0) {
       return this.frozenDmx;
     }
@@ -97,7 +99,7 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
     let values: number[] = new Array(16).fill(0);
 
     values[this.masterDimChannel - 1] = this.channelValues.masterDimChannel;
-    values[this.strobeChannel - 1] = this.channelValues.strobeChannel;
+    values[this.shutterChannel - 1] = this.shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
     values[this.color.redChannel - 1] = this.channelValues.redChannel;
     values[this.color.greenChannel - 1] = this.channelValues.greenChannel;
     values[this.color.blueChannel - 1] = this.channelValues.blueChannel;

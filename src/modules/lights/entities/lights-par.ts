@@ -1,16 +1,21 @@
-import { Column, Entity } from 'typeorm';
-import LightsFixture, { LightsFixtureCurrentValues } from './lights-fixture';
-import Colors from './colors';
-import { RgbColor, rgbColorDefinitions } from '../color-definitions';
+import { Column, Entity, OneToMany } from "typeorm";
+import LightsFixture, { LightsFixtureCurrentValues } from "./lights-fixture";
+import Colors from "./colors";
+import { RgbColor, rgbColorDefinitions } from "../color-definitions";
+// eslint-disable-next-line import/no-cycle
+import LightsParShutterOptions from "./lights-par-shutter-options";
+import { ShutterOption } from "./lights-fixture-shutter-options";
 
 @Entity()
 export default class LightsPar extends LightsFixture {
+  @OneToMany(() => LightsParShutterOptions, (opt) => opt.fixture, { eager: true })
+  public shutterOptions: LightsParShutterOptions[];
+
   @Column(() => Colors)
   public color: Colors;
 
   private currentValues: Required<Colors & LightsFixtureCurrentValues> = {
     masterDimChannel: 0,
-    strobeChannel: 0,
     redChannel: 0,
     greenChannel: 0,
     blueChannel: 0,
@@ -43,7 +48,6 @@ export default class LightsPar extends LightsFixture {
     if (Object.values(this.currentValues).every((v) => v === 0)) return;
     this.setCurrentValues({
       masterDimChannel: 0,
-      strobeChannel: 0,
       redChannel: 0,
       greenChannel: 0,
       blueChannel: 0,
@@ -65,7 +69,7 @@ export default class LightsPar extends LightsFixture {
   protected getStrobeDMX(): number[] {
     const values: number[] = new Array(16).fill(0);
     values[this.masterDimChannel - 1] = 255;
-    values[this.strobeChannel - 1] = 220;
+    values[this.shutterChannel - 1] = this.shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
     values[this.color.redChannel - 1] = 255;
     values[this.color.blueChannel - 1] = 255;
     values[this.color.greenChannel - 1] = 255;
@@ -84,8 +88,8 @@ export default class LightsPar extends LightsFixture {
 
     let values: number[] = new Array(16).fill(0);
 
-    values[this.masterDimChannel - 1] = this.currentValues.masterDimChannel;
-    values[this.strobeChannel - 1] = this.channelValues.strobeChannel;
+    values[this.masterDimChannel - 1] = this.channelValues.masterDimChannel;
+    values[this.shutterChannel - 1] = this.shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
     values[this.color.redChannel - 1] = this.channelValues.redChannel;
     values[this.color.greenChannel - 1] = this.channelValues.greenChannel;
     values[this.color.blueChannel - 1] = this.channelValues.blueChannel;

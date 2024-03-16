@@ -1,20 +1,19 @@
-import { Repository } from 'typeorm';
-import { LightsController } from './entities';
-import {
-  LightsGroup,
-  LightsMovingHeadRgb,
-  LightsMovingHeadWheel,
-  LightsPar
-} from '../lights/entities';
-import dataSource from '../../database';
-import LightsFixture from '../lights/entities/lights-fixture';
-import Colors from '../lights/entities/colors';
-import LightsMovingHead from '../lights/entities/lights-moving-head';
-import LightsGroupPars from '../lights/entities/lights-group-pars';
-import LightsGroupMovingHeadRgbs from '../lights/entities/lights-group-moving-head-rgbs';
-import LightsGroupMovingHeadWheels from '../lights/entities/lights-group-moving-head-wheels';
-import Movement from '../lights/entities/movement';
-import AuthService from '../auth/auth-service';
+import { Repository } from "typeorm";
+import { LightsController } from "./entities";
+import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel, LightsPar } from "../lights/entities";
+import dataSource from "../../database";
+import LightsFixture from "../lights/entities/lights-fixture";
+import Colors from "../lights/entities/colors";
+import LightsMovingHead from "../lights/entities/lights-moving-head";
+import LightsGroupPars from "../lights/entities/lights-group-pars";
+import LightsGroupMovingHeadRgbs from "../lights/entities/lights-group-moving-head-rgbs";
+import LightsGroupMovingHeadWheels from "../lights/entities/lights-group-moving-head-wheels";
+import Movement from "../lights/entities/movement";
+import AuthService from "../auth/auth-service";
+import LightsParShutterOptions from "../lights/entities/lights-par-shutter-options";
+import LightsMovingHeadRgbShutterOptions from "../lights/entities/lights-moving-head-rgb-shutter-options";
+import LightsMovingHeadWheelShutterOptions from "../lights/entities/lights-moving-head-wheel-shutter-options";
+import LightsFixtureShutterOptions, { ShutterOption } from "../lights/entities/lights-fixture-shutter-options";
 
 export interface LightsControllerResponse
   extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
@@ -22,7 +21,7 @@ export interface LightsControllerResponse
 export interface LightsFixtureResponse
   extends Pick<
     LightsFixture,
-    'id' | 'createdAt' | 'updatedAt' | 'name' | 'masterDimChannel' | 'strobeChannel'
+    'id' | 'createdAt' | 'updatedAt' | 'name' | 'masterDimChannel' | 'shutterChannel'
   > {}
 
 // do not remove; tsoa cannot deal with multiple utility types.
@@ -64,8 +63,15 @@ export interface ColorParams {
   colorUvChannel?: number;
 }
 
+export interface ShutterOptionValues {
+  open: number;
+  strobe: number;
+}
+
 export interface LightsFixtureParams
-  extends Pick<LightsFixture, 'name' | 'masterDimChannel' | 'strobeChannel'> {}
+  extends Pick<LightsFixture, 'name' | 'masterDimChannel' | 'shutterChannel'> {
+  shutterOptionValues: ShutterOptionValues;
+}
 
 export interface LightsParCreateParams extends LightsFixtureParams, ColorParams {}
 
@@ -145,7 +151,7 @@ export default class RootLightsService {
       updatedAt: f.updatedAt,
       name: f.name,
       masterDimChannel: f.masterDimChannel + firstChannel - 1,
-      strobeChannel: f.strobeChannel + firstChannel - 1
+      shutterChannel: f.shutterChannel + firstChannel - 1
     };
   }
 
@@ -319,7 +325,7 @@ export default class RootLightsService {
     return {
       name: params.name,
       masterDimChannel: params.masterDimChannel,
-      strobeChannel: params.strobeChannel
+      shutterChannel: params.shutterChannel
     } as LightsFixture;
   }
 
@@ -357,35 +363,64 @@ export default class RootLightsService {
     return dataSource.getRepository(LightsMovingHeadWheel).find();
   }
 
+  public async createFixtureShutterOptions(
+    repo: Repository<LightsParShutterOptions | LightsMovingHeadRgbShutterOptions | LightsMovingHeadWheelShutterOptions>,
+    fixture: LightsFixture,
+    params: ShutterOptionValues,
+  ): Promise<LightsFixtureShutterOptions[]> {
+    return Promise.all([
+      repo.save({ fixtureId: fixture.id, shutterOption: ShutterOption.OPEN, channelValue: params.open }),
+      repo.save({ fixtureId: fixture.id, shutterOption: ShutterOption.STROBE, channelValue: params.strobe }),
+    ]);
+  }
+
   public async createLightsPar(params: LightsParCreateParams): Promise<LightsPar> {
     const repository = dataSource.getRepository(LightsPar);
-    return repository.save({
+    const par = await repository.save({
       ...this.toFixture(params),
       color: this.toColor(params)
     });
+    par.shutterOptions = await this.createFixtureShutterOptions(
+      dataSource.getRepository(LightsParShutterOptions),
+      par,
+      params.shutterOptionValues,
+    ) as LightsParShutterOptions[];
+    return par;
   }
 
   public async createMovingHeadRgb(
     params: LightsMovingHeadRgbCreateParams
   ): Promise<LightsMovingHeadRgb> {
     const repository = dataSource.getRepository(LightsMovingHeadRgb);
-    return repository.save({
+    const movingHead = await repository.save({
       ...this.toFixture(params),
       movement: this.toMovement(params),
       color: this.toColor(params)
     });
+    movingHead.shutterOptions = await this.createFixtureShutterOptions(
+      dataSource.getRepository(LightsMovingHeadRgbShutterOptions),
+      movingHead,
+      params.shutterOptionValues,
+    ) as LightsMovingHeadRgbShutterOptions[];
+    return movingHead;
   }
 
   public async createMovingHeadWheel(
     params: LightsMovingHeadWheelCreateParams
   ): Promise<LightsMovingHeadWheel> {
     const repository = dataSource.getRepository(LightsMovingHeadWheel);
-    return repository.save({
+    const movingHead = await repository.save({
       ...this.toFixture(params),
       movement: this.toMovement(params),
       colorWheelChannel: params.colorWheelChannel,
       goboWheelChannel: params.goboWheelChannel,
       goboRotateChannel: params.goboRotateChannel
     });
+    movingHead.shutterOptions = await this.createFixtureShutterOptions(
+      dataSource.getRepository(LightsMovingHeadWheelShutterOptions),
+      movingHead,
+      params.shutterOptionValues,
+    ) as LightsMovingHeadWheelShutterOptions[];
+    return movingHead;
   }
 }
