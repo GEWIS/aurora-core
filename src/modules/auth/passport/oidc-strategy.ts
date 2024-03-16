@@ -34,7 +34,7 @@ passport.use(
     if (!req.body.state || !req.body.session_state || !req.body.code) {
       throw new ApiException(
         HttpStatusCode.BadRequest,
-        'Missing OIDC state, session state or code.'
+        'Missing OIDC state, session state or code.',
       );
     }
 
@@ -47,12 +47,12 @@ passport.use(
           client_id: process.env.KEYCLOAK_CLIENT_ID!,
           client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
           redirect_uri: process.env.KEYCLOAK_REDIRECT_URI!,
-          code: req.body.code
+          code: req.body.code,
         }),
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      },
     );
 
     try {
@@ -68,14 +68,14 @@ passport.use(
       } else {
         callback(null, {
           name: tokenDetails.given_name,
-          roles: securityRoles
+          roles: securityRoles,
         });
       }
     } catch (e) {
       logger.error(e);
       req.res?.sendStatus(500);
     }
-  })
+  }),
 );
 
 export const oidcResponse = (req: ExRequest, res: ExResponse): void => {

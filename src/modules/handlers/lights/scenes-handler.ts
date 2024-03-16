@@ -21,7 +21,7 @@ export class ScenesHandler extends BaseLightsHandler {
       });
       lightsGroup.movingHeadRgbs.forEach((movingHeadRgb) => {
         const sceneForFixture = scene.movingHeadRgbs.find(
-          (p) => p.groupMovingHeadRgbId === movingHeadRgb.id
+          (p) => p.groupMovingHeadRgbId === movingHeadRgb.id,
         );
         if (sceneForFixture) {
           movingHeadRgb.fixture.setOverrideDmx(sceneForFixture.dmxValues);
@@ -31,7 +31,7 @@ export class ScenesHandler extends BaseLightsHandler {
       });
       lightsGroup.movingHeadWheels.forEach((movingHeadWheels) => {
         const sceneForFixture = scene.movingHeadWheels.find(
-          (p) => p.groupMovingHeadWheelId === movingHeadWheels.id
+          (p) => p.groupMovingHeadWheelId === movingHeadWheels.id,
         );
         if (sceneForFixture) {
           movingHeadWheels.fixture.setOverrideDmx(sceneForFixture.dmxValues);

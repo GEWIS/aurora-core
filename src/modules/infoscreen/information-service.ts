@@ -27,7 +27,7 @@ export default class InformationService {
     if (information.length > 1)
       throw new ApiException(
         HttpStatusCode.InternalServerError,
-        'Clashing information in the database.'
+        'Clashing information in the database.',
       );
     if (information.length === 0) return this.createInformation();
     return information[0];
@@ -39,13 +39,13 @@ export default class InformationService {
       if (!params.alcoholTime) {
         throw new ApiException(
           HttpStatusCode.Forbidden,
-          'There must be an alcohol time if the room is open.'
+          'There must be an alcohol time if the room is open.',
         );
       }
       if (!params.firstResponsible) {
         throw new ApiException(
           HttpStatusCode.Forbidden,
-          'There must be a room responsible if the room is open.'
+          'There must be a room responsible if the room is open.',
         );
       }
     }
@@ -65,7 +65,7 @@ export default class InformationService {
   public async createInformation(): Promise<Information> {
     const information = {
       roomStatus: RoomStatus.CLOSED,
-      alcoholTime: AlcoholTime.NORMAL
+      alcoholTime: AlcoholTime.NORMAL,
     } as InformationParams;
     return this.repo.save(information);
   }

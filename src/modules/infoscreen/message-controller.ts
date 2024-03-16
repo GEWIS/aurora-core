@@ -10,7 +10,7 @@ import {
   Security,
   SuccessResponse,
   Tags,
-  ValidateError
+  ValidateError,
 } from 'tsoa';
 import { HttpStatusCode } from 'axios';
 import MessageService, { MessageParams } from './message-service';
@@ -23,7 +23,7 @@ export class MessageController extends Controller {
   @Security('local', [
     SecurityGroup.ADMIN,
     SecurityGroup.KEY_HOLDER,
-    SecurityGroup.SCREEN_SUBSCRIBER
+    SecurityGroup.SCREEN_SUBSCRIBER,
   ])
   @Get('messages')
   @SuccessResponse(HttpStatusCode.Ok)

@@ -27,18 +27,18 @@ export default class SocketConnectionManager {
   constructor(
     private handlerManager: HandlerManager,
     private ioServer: Server,
-    private backofficeEmitter: BackofficeSyncEmitter
+    private backofficeEmitter: BackofficeSyncEmitter,
   ) {
     this.lock = new AsyncLock();
 
     Object.values(SocketioNamespaces).forEach((namespace) => {
       ioServer.of(namespace).on('connect', (socket) => {
         this.updateSocketId((socket.request as any).user, namespace, socket.id).catch((e) =>
-          logger.error(e)
+          logger.error(e),
         );
         socket.on('disconnect', () => {
           this.updateSocketId((socket.request as any).user, namespace).catch((e) =>
-            logger.error(e)
+            logger.error(e),
           );
         });
       });
@@ -60,7 +60,7 @@ export default class SocketConnectionManager {
     id: number,
     handlers: BaseHandler<T>[],
     namespace: SocketioNamespaces,
-    socketId?: string
+    socketId?: string,
   ) {
     // @ts-ignore
     const entity = await repo.findOne({ where: { id } });
@@ -119,7 +119,7 @@ export default class SocketConnectionManager {
           user.audioId,
           this.handlerManager.getHandlers(Audio),
           namespace,
-          socketId
+          socketId,
         );
         this.backofficeEmitter.emit('connect_audio');
       }
@@ -129,7 +129,7 @@ export default class SocketConnectionManager {
           user.screenId,
           this.handlerManager.getHandlers(Screen),
           namespace,
-          socketId
+          socketId,
         );
         this.backofficeEmitter.emit('connect_screen');
       }
@@ -139,11 +139,11 @@ export default class SocketConnectionManager {
           user.lightsControllerId,
           [],
           namespace,
-          socketId
+          socketId,
         );
         if (controller) {
           const lightsHandlers: BaseLightsHandler[] = this.handlerManager.getHandlers(
-            LightsGroup
+            LightsGroup,
           ) as BaseLightsHandler[];
           const lightGroups = lightsHandlers.map((h) => h.entities).flat();
           lightGroups.forEach((g) => {

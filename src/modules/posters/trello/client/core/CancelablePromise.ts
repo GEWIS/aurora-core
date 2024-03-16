@@ -36,8 +36,8 @@ export class CancelablePromise<T> implements Promise<T> {
     executor: (
       resolve: (value: T | PromiseLike<T>) => void,
       reject: (reason?: any) => void,
-      onCancel: OnCancel
-    ) => void
+      onCancel: OnCancel,
+    ) => void,
   ) {
     this.#isResolved = false;
     this.#isRejected = false;
@@ -71,15 +71,15 @@ export class CancelablePromise<T> implements Promise<T> {
       };
 
       Object.defineProperty(onCancel, 'isResolved', {
-        get: (): boolean => this.#isResolved
+        get: (): boolean => this.#isResolved,
       });
 
       Object.defineProperty(onCancel, 'isRejected', {
-        get: (): boolean => this.#isRejected
+        get: (): boolean => this.#isRejected,
       });
 
       Object.defineProperty(onCancel, 'isCancelled', {
-        get: (): boolean => this.#isCancelled
+        get: (): boolean => this.#isCancelled,
       });
 
       return executor(onResolve, onReject, onCancel as OnCancel);
@@ -92,13 +92,13 @@ export class CancelablePromise<T> implements Promise<T> {
 
   public then<TResult1 = T, TResult2 = never>(
     onFulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | null,
-    onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null
+    onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null,
   ): Promise<TResult1 | TResult2> {
     return this.#promise.then(onFulfilled, onRejected);
   }
 
   public catch<TResult = never>(
-    onRejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null
+    onRejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null,
   ): Promise<T | TResult> {
     return this.#promise.catch(onRejected);
   }

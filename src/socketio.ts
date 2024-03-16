@@ -27,11 +27,11 @@ export default function createWebsocket(httpServer: HttpServer) {
       cookie: true,
       cors: {
         origin: enableCors ? customOrigin : undefined,
-        allowedHeaders: devEnv ? ['cookie', 'cookie_development'] : ['cookie']
+        allowedHeaders: devEnv ? ['cookie', 'cookie_development'] : ['cookie'],
       },
       connectTimeout: 2000,
-      pingTimeout: 1000
-    }
+      pingTimeout: 1000,
+    },
   );
 
   /**
@@ -72,7 +72,7 @@ export default function createWebsocket(httpServer: HttpServer) {
         res.writeHead(401);
         res.end();
       }
-    })
+    }),
   );
 
   return io;

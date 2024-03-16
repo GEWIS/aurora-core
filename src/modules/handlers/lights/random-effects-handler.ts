@@ -33,7 +33,7 @@ export default class RandomEffectsHandler extends EffectsHandler {
     // We currently have only one effect, so that makes our choice easy
     this.groupColorEffects.set(
       entity,
-      new BeatFadeOut(entity, { colors: colorNames, enableFade: false }, this.trackFeatures)
+      new BeatFadeOut(entity, { colors: colorNames, enableFade: false }, this.trackFeatures),
     );
     this.groupMovementEffects.set(entity, new SearchLight(entity, {}));
   }

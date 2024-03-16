@@ -2,7 +2,7 @@ import { BaseEntity, Column, PrimaryColumn } from 'typeorm';
 
 export enum ShutterOption {
   OPEN = 'open',
-  STROBE = 'strobe'
+  STROBE = 'strobe',
 }
 export default class LightsFixtureShutterOptions extends BaseEntity {
   @PrimaryColumn({ type: 'varchar' })

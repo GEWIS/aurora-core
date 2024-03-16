@@ -12,13 +12,13 @@ export class TrelloService {
       method: 'GET',
       url: '/boards/{id}',
       path: {
-        id
+        id,
       },
       query: {
         cards: 'visible',
         checklists: 'all',
-        lists: 'open'
-      }
+        lists: 'open',
+      },
     });
   }
 
@@ -27,8 +27,8 @@ export class TrelloService {
       method: 'GET',
       url: '/cards/{id}/attachments',
       path: {
-        id: cardId
-      }
+        id: cardId,
+      },
     });
   }
 }

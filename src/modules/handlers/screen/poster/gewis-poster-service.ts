@@ -13,8 +13,8 @@ export default class GEWISPosterService {
   public async getPhoto(params: GEWISPhotoAlbumParams): Promise<PhotoResponse> {
     const config = {
       headers: {
-        'X-Auth-Token': process.env.GEWIS_KEY
-      }
+        'X-Auth-Token': process.env.GEWIS_KEY,
+      },
     };
 
     const chosenAlbumIndex = Math.floor(Math.random() * params.albumIds.length);
@@ -27,7 +27,7 @@ export default class GEWISPosterService {
 
     return {
       label: returnObj.album.name,
-      url: `https://gewis.nl/data/${photo.path}`
+      url: `https://gewis.nl/data/${photo.path}`,
     };
   }
 }

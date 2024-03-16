@@ -5,7 +5,7 @@ import { User } from './user';
 export async function expressAuthentication(
   request: express.Request,
   securityName: string,
-  scopes: string[] = []
+  scopes: string[] = [],
 ): Promise<User> {
   if (securityName === 'local') {
     if (!request.isAuthenticated() || request.user === undefined) {

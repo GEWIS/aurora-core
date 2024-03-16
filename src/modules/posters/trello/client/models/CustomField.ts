@@ -31,6 +31,6 @@ export namespace CustomField {
   export enum modelType {
     CARD = 'card',
     BOARD = 'board',
-    MEMBER = 'member'
+    MEMBER = 'member',
   }
 }

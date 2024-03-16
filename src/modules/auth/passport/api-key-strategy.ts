@@ -17,7 +17,7 @@ passport.use(
 
     const identity = await database.getRepository(ApiKey).findOne({
       where: { key: req.body.key },
-      relations: { audio: true, lightsController: true, screen: true }
+      relations: { audio: true, lightsController: true, screen: true },
     });
     if (!identity) {
       callback(new ApiException(HttpStatusCode.NotFound, 'Key not found'), undefined);
@@ -44,9 +44,9 @@ passport.use(
       roles,
       audioId: identity.audio?.id,
       screenId: identity.screen?.id,
-      lightsControllerId: identity.lightsController?.id
+      lightsControllerId: identity.lightsController?.id,
     } as User);
-  })
+  }),
 );
 
 export const apiKeyResponse = (req: ExRequest, res: ExResponse): void => {

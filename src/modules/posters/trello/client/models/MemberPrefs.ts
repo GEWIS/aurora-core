@@ -31,12 +31,12 @@ export namespace MemberPrefs {
   export enum fullName {
     PUBLIC = 'public',
     PRIVATE = 'private',
-    COLLABORATOR = 'collaborator'
+    COLLABORATOR = 'collaborator',
   }
 
   export enum avatar {
     PUBLIC = 'public',
     PRIVATE = 'private',
-    COLLABORATOR = 'collaborator'
+    COLLABORATOR = 'collaborator',
   }
 }

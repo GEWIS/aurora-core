@@ -35,16 +35,16 @@ export type Prefs = {
 export namespace Prefs {
   export enum permissionLevel {
     ORG = 'org',
-    BOARD = 'board'
+    BOARD = 'board',
   }
 
   export enum voting {
     DISABLED = 'disabled',
-    ENABLED = 'enabled'
+    ENABLED = 'enabled',
   }
 
   export enum invitations {
     ADMINS = 'admins',
-    MEMBERS = 'members'
+    MEMBERS = 'members',
   }
 }

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export enum TrainDepartureStatus {
   ON_STATION = 'ON_STATION',
-  INCOMING = 'INCOMING'
+  INCOMING = 'INCOMING',
 }
 
 interface NsTrainResponse {
@@ -54,15 +54,15 @@ export default class NsTrainsService {
   public async getTrains() {
     const config = {
       headers: {
-        'Ocp-Apim-Subscription-Key': process.env.NS_KEY
-      }
+        'Ocp-Apim-Subscription-Key': process.env.NS_KEY,
+      },
     };
 
     const departures = (
       await axios.get(
         'https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2/departures' +
           '?station=EHV&maxJourneys=40',
-        config
+        config,
       )
     ).data.payload.departures as NsTrainResponse[];
     const minDepartTime = new Date(new Date().getTime() + 8 * 60000);
@@ -77,7 +77,7 @@ export default class NsTrainsService {
       const actualDepartTime = new Date(departure.actualDateTime);
       if (departure.plannedDateTime !== departure.actualDateTime) {
         delay = new Date(
-          actualDepartTime.getTime() - new Date(departure.plannedDateTime).getTime()
+          actualDepartTime.getTime() - new Date(departure.plannedDateTime).getTime(),
         ).getMinutes();
       }
 
@@ -91,7 +91,7 @@ export default class NsTrainsService {
         operator: departure.product.operatorCode,
         cancelled: departure.cancelled,
         routeStations,
-        messages: departure.messages
+        messages: departure.messages,
       };
     });
   }

@@ -10,14 +10,14 @@ import RootLightsService, {
   LightsParCreateParams,
   MovingHeadRgbResponse,
   MovingHeadWheelResponse,
-  ParResponse
+  ParResponse,
 } from './root-lights-service';
 import { LIGHTS_EFFECTS } from '../lights/effects';
 import {
   RgbColor,
   rgbColorDefinitions,
   rgbColors,
-  RgbColorSpecification
+  RgbColorSpecification,
 } from '../lights/color-definitions';
 import { SecurityGroup } from '../../helpers/security';
 
@@ -39,7 +39,7 @@ export class RootLightsController extends Controller {
   @Security('local', ['*'])
   @Get('controller/{id}')
   public async getSingleLightsController(
-    id: number
+    id: number,
   ): Promise<LightsControllerResponse | undefined> {
     const controller = await new RootLightsService().getSingleController(id);
     if (!controller) {
@@ -52,7 +52,7 @@ export class RootLightsController extends Controller {
   @Security('local', [SecurityGroup.ADMIN])
   @Post('controller')
   public async createLightsController(
-    @Body() params: LightsControllerCreateParams
+    @Body() params: LightsControllerCreateParams,
   ): Promise<LightsControllerResponse> {
     return new RootLightsService().createController(params);
   }
@@ -79,7 +79,7 @@ export class RootLightsController extends Controller {
   @Post('controller/{controllerId}/group')
   public async createLightsGroup(
     controllerId: number,
-    @Body() params: LightsGroupCreateParams
+    @Body() params: LightsGroupCreateParams,
   ): Promise<LightsGroupResponse | undefined> {
     const group = await new RootLightsService().createLightGroup(controllerId, params);
     if (!group) {
@@ -113,7 +113,7 @@ export class RootLightsController extends Controller {
   @Security('local', [SecurityGroup.ADMIN])
   @Post('fixture/moving-head/rgb')
   public async createLightsMovingHeadRgb(
-    @Body() params: LightsMovingHeadRgbCreateParams
+    @Body() params: LightsMovingHeadRgbCreateParams,
   ): Promise<MovingHeadRgbResponse> {
     const movingHead = await new RootLightsService().createMovingHeadRgb(params);
     return RootLightsService.toMovingHeadRgbResponse(movingHead);
@@ -129,7 +129,7 @@ export class RootLightsController extends Controller {
   @Security('local', [SecurityGroup.ADMIN])
   @Post('fixture/moving-head/wheel')
   public async createLightsMovingHeadWheel(
-    @Body() params: LightsMovingHeadWheelCreateParams
+    @Body() params: LightsMovingHeadWheelCreateParams,
   ): Promise<MovingHeadWheelResponse> {
     const movingHead = await new RootLightsService().createMovingHeadWheel(params);
     return RootLightsService.toMovingHeadWheelResponse(movingHead);
@@ -147,8 +147,8 @@ export class RootLightsController extends Controller {
     return rgbColors.map(
       (color: RgbColor): LightsColorResponse => ({
         color,
-        spec: rgbColorDefinitions[color]
-      })
+        spec: rgbColorDefinitions[color],
+      }),
     );
   }
 }

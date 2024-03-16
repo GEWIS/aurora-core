@@ -66,8 +66,8 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
             effectName: e.effect,
             effectProps: JSON.parse(e.effectProps),
             lightsGroupIds: e.lightGroups.map((l) => l.id),
-            id: e.id
-          })
+            id: e.id,
+          }),
         );
       })
       .flat();
@@ -75,7 +75,7 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
     // Get all effects that have passed the relative start time
     // but not the relative end time
     const currentlyActiveEffects = this.events.filter(
-      (e) => e.startMs < progression && e.endMs > progression
+      (e) => e.startMs < progression && e.endMs > progression,
     );
     currentlyActiveEffects.forEach((e) => this.startEffect(e));
 
@@ -90,7 +90,7 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
   private startEffect(effectToActivate: LightsGroupEffect) {
     // Get the light groups this effect should apply to
     const lightsGroups = this.entities.filter((e) =>
-      effectToActivate.lightsGroupIds.includes(e.id)
+      effectToActivate.lightsGroupIds.includes(e.id),
     );
 
     const effects = LIGHTS_EFFECTS.map((EFFECT) => {
@@ -108,7 +108,7 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
       startMs: effectToActivate.startMs,
       durationMs: effectToActivate.durationMs,
       endMs: effectToActivate.endMs,
-      id: effectToActivate.id
+      id: effectToActivate.id,
     }));
 
     this.activeEffects.push(...activeEffects);
@@ -157,7 +157,7 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
     this.activeEffects = this.activeEffects.filter((e) => !expiredEffectIndices.includes(e.id));
 
     const effectsToStart = this.events.filter(
-      (e) => e.startMs > songProgressionPreviousTick && e.startMs <= songProgression
+      (e) => e.startMs > songProgressionPreviousTick && e.startMs <= songProgression,
     );
     effectsToStart.forEach((e) => this.startEffect(e));
 
@@ -180,7 +180,7 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
       .getRepository(LightsPredefinedEffect)
       .find({
         where: { trackUri: event.trackURI },
-        relations: { lightGroups: true }
+        relations: { lightGroups: true },
       })
       .then((sequence) => {
         this.sequence = sequence;

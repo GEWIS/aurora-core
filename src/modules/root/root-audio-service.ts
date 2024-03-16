@@ -21,7 +21,7 @@ export default class RootAudioService {
       createdAt: audio.createdAt,
       updatedAt: audio.updatedAt,
       name: audio.name,
-      socketIds: audio.socketIds
+      socketIds: audio.socketIds,
     };
   }
 
@@ -35,7 +35,7 @@ export default class RootAudioService {
 
   public async createAudio(params: AudioCreateParams): Promise<Audio> {
     const audio = await this.repository.save({
-      name: params.name
+      name: params.name,
     });
     await new AuthService().createApiKey({ audio });
     return audio;

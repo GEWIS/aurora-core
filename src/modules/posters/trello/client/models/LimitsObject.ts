@@ -12,6 +12,6 @@ export type LimitsObject = {
 export namespace LimitsObject {
   export enum status {
     OK = 'ok',
-    WARNING = 'warning'
+    WARNING = 'warning',
   }
 }

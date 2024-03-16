@@ -11,7 +11,7 @@ import type { OpenAPIConfig } from './OpenAPI';
 import logger from '../../../../../logger';
 
 export const isDefined = <T>(
-  value: T | null | undefined
+  value: T | null | undefined,
 ): value is Exclude<T, null | undefined> => {
   return value !== undefined && value !== null;
 };
@@ -137,7 +137,7 @@ type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
 
 export const resolve = async <T>(
   options: ApiRequestOptions,
-  resolver?: T | Resolver<T>
+  resolver?: T | Resolver<T>,
 ): Promise<T | undefined> => {
   if (typeof resolver === 'function') {
     return (resolver as Resolver<T>)(options);
@@ -147,7 +147,7 @@ export const resolve = async <T>(
 
 export const getHeaders = async (
   config: OpenAPIConfig,
-  options: ApiRequestOptions
+  options: ApiRequestOptions,
 ): Promise<Headers> => {
   const token = await resolve(options, config.TOKEN);
   const key = await resolve(options, config.KEY);
@@ -158,15 +158,15 @@ export const getHeaders = async (
   const headers = Object.entries({
     Accept: 'application/json',
     ...additionalHeaders,
-    ...options.headers
+    ...options.headers,
   })
     .filter(([_, value]) => isDefined(value))
     .reduce(
       (headers, [key, value]) => ({
         ...headers,
-        [key]: String(value)
+        [key]: String(value),
       }),
-      {} as Record<string, string>
+      {} as Record<string, string>,
     );
 
   if (isStringWithValue(token) && isStringWithValue(key)) {
@@ -214,7 +214,7 @@ export const sendRequest = async (
   body: any,
   formData: FormData | undefined,
   headers: Headers,
-  onCancel: OnCancel
+  onCancel: OnCancel,
 ): Promise<Response> => {
   const controller = new AbortController();
 
@@ -222,7 +222,7 @@ export const sendRequest = async (
     headers,
     body: body ?? formData,
     method: options.method,
-    signal: controller.signal
+    signal: controller.signal,
   };
 
   if (config.WITH_CREDENTIALS) {
@@ -236,7 +236,7 @@ export const sendRequest = async (
 
 export const getResponseHeader = (
   response: Response,
-  responseHeader?: string
+  responseHeader?: string,
 ): string | undefined => {
   if (responseHeader) {
     const content = response.headers.get(responseHeader);
@@ -276,7 +276,7 @@ export const catchErrorCodes = (options: ApiRequestOptions, result: ApiResult): 
     500: 'Internal Server Error',
     502: 'Bad Gateway',
     503: 'Service Unavailable',
-    ...options.errors
+    ...options.errors,
   };
 
   const error = errors[result.status];
@@ -298,7 +298,7 @@ export const catchErrorCodes = (options: ApiRequestOptions, result: ApiResult): 
     throw new ApiError(
       options,
       result,
-      `Generic Error: status: ${errorStatus}; status text: ${errorStatusText}; body: ${errorBody}`
+      `Generic Error: status: ${errorStatus}; status text: ${errorStatusText}; body: ${errorBody}`,
     );
   }
 };
@@ -312,7 +312,7 @@ export const catchErrorCodes = (options: ApiRequestOptions, result: ApiResult): 
  */
 export const request = <T>(
   config: OpenAPIConfig,
-  options: ApiRequestOptions
+  options: ApiRequestOptions,
 ): CancelablePromise<T> => {
   return new CancelablePromise(async (resolve, reject, onCancel) => {
     try {
@@ -331,7 +331,7 @@ export const request = <T>(
           ok: response.ok,
           status: response.status,
           statusText: response.statusText,
-          body: responseHeader ?? responseBody
+          body: responseHeader ?? responseBody,
         };
 
         catchErrorCodes(options, result);

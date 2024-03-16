@@ -7,7 +7,7 @@ import {
   LocalPosterType,
   MediaPoster,
   Poster,
-  PosterType
+  PosterType,
 } from '../poster';
 import { Board, Card, Checklist, TrelloClient, TrelloList } from './client';
 import { TrelloPosterStorage } from './trello-poster-storage';
@@ -35,7 +35,7 @@ export class TrelloPosterManager extends PosterManager {
   private async parseLists(
     list: TrelloList,
     board: Board,
-    listType?: PosterType
+    listType?: PosterType,
   ): Promise<Poster[]> {
     const { cards: allCards, lists: allLists, checklists: allChecklists } = board;
     const cards = allCards?.filter((card) => card.idList === list.id) || [];
@@ -83,11 +83,11 @@ export class TrelloPosterManager extends PosterManager {
 
         const poster: LocalPoster = {
           ...this.parseBasePoster(card, checklists),
-          type
+          type,
         };
 
         return poster;
-      })
+      }),
     );
 
     return posters.filter((p) => p !== undefined).flat() as Poster[];
@@ -103,7 +103,7 @@ export class TrelloPosterManager extends PosterManager {
     // Find the index of the "timeout" checklist if it exists
     // @ts-ignore
     const indexTimeout = checklists.findIndex(
-      (checklist) => checklist.name.toLowerCase() === 'timeout'
+      (checklist) => checklist.name.toLowerCase() === 'timeout',
     );
     // If it does exist, take the value of the first checkbox and make it the timeout value
     let timeout: number = DEFAULT_POSTER_TIMEOUT;
@@ -124,7 +124,7 @@ export class TrelloPosterManager extends PosterManager {
       // If there are labels, set the label of this poster to be the first label of the card
       label: footers.length > 0 ? labels[0] : '',
       // If the card has a HIDE_LABEL label, set the footer size to minimal
-      footer: hideBorder ? FooterSize.MINIMAL : FooterSize.FULL
+      footer: hideBorder ? FooterSize.MINIMAL : FooterSize.FULL,
     };
   }
 
@@ -136,7 +136,7 @@ export class TrelloPosterManager extends PosterManager {
    */
   private async parseMediaPoster(
     card: Card,
-    checklists: Checklist[]
+    checklists: Checklist[],
   ): Promise<MediaPoster | ErrorPoster> {
     const poster = this.parseBasePoster(card, checklists);
 
@@ -144,7 +144,7 @@ export class TrelloPosterManager extends PosterManager {
       return {
         ...poster,
         type: PosterType.ERROR,
-        message: 'Card has no ID'
+        message: 'Card has no ID',
       };
     }
     const attachments = await this.client.default.getCardAttachments(card.id);
@@ -152,13 +152,13 @@ export class TrelloPosterManager extends PosterManager {
       attachments.map(async (attachment) => {
         const storage = new TrelloPosterStorage();
         return storage.storeAttachment(attachment);
-      })
+      }),
     );
 
     return {
       ...poster,
       type: PosterType.IMAGE,
-      source
+      source,
     };
   }
 
@@ -176,7 +176,7 @@ export class TrelloPosterManager extends PosterManager {
       return {
         ...this.parseBasePoster(card, checklists),
         type: PosterType.ERROR,
-        message: 'Photo card has no checklist named "photos"'
+        message: 'Photo card has no checklist named "photos"',
       };
     }
     // Get the checklist for the albums
@@ -186,7 +186,7 @@ export class TrelloPosterManager extends PosterManager {
     return {
       ...this.parseBasePoster(card, checklists),
       type: PosterType.PHOTO,
-      albums
+      albums,
     };
   }
 
@@ -216,13 +216,13 @@ export class TrelloPosterManager extends PosterManager {
       return {
         ...this.parseBasePoster(card, checklists),
         type: PosterType.ERROR,
-        message: 'Card description does not exist or is not a valid HTTP/HTTPS URL'
+        message: 'Card description does not exist or is not a valid HTTP/HTTPS URL',
       };
     }
     return {
       ...this.parseBasePoster(card, checklists),
       type: PosterType.EXTERNAL,
-      source: [url || '']
+      source: [url || ''],
     };
   }
 
@@ -255,7 +255,7 @@ export class TrelloPosterManager extends PosterManager {
       if (p.type === PosterType.IMAGE || p.type === PosterType.VIDEO) {
         return {
           ...p,
-          source: p.source.map((s) => `/static${s.replaceAll('\\', '/')}`)
+          source: p.source.map((s) => `/static${s.replaceAll('\\', '/')}`),
         };
       }
       return p;

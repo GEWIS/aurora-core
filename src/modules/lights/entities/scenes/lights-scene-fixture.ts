@@ -18,8 +18,8 @@ export default class LightsSceneFixture extends BaseEntity {
       },
       to(value: number[]): string {
         return JSON.stringify(value);
-      }
-    }
+      },
+    },
   })
   public dmxValues: number[];
 }

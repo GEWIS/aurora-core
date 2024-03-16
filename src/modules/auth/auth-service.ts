@@ -26,7 +26,7 @@ export default class AuthService {
       key: this.generateKey(),
       audio,
       screen,
-      lightsController
+      lightsController,
     });
   }
 
@@ -40,7 +40,7 @@ export default class AuthService {
 
   public async getLightsControllerApiKey(lightsController: LightsController) {
     return this.apiKeyRepository.findOne({
-      where: { lightsController: { id: lightsController.id } }
+      where: { lightsController: { id: lightsController.id } },
     });
   }
 }

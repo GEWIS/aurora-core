@@ -8,7 +8,7 @@ export enum SecurityGroup {
   // Entities
   SCREEN_SUBSCRIBER = 'screen-subscriber',
   AUDIO_SUBSCRIBER = 'audio-subscriber',
-  LIGHTS_SUBSCRIBER = 'lights-subscriber'
+  LIGHTS_SUBSCRIBER = 'lights-subscriber',
 }
 
 export function parseRoles(roles: string[]): SecurityGroup[] {

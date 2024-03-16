@@ -29,13 +29,13 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
     finePanChannel: 0,
     tiltChannel: 0,
     fineTiltChannel: 0,
-    movingSpeedChannel: 0
+    movingSpeedChannel: 0,
   };
 
   setCurrentValues(values: Partial<Colors & Movement & LightsFixtureCurrentValues>) {
     this.currentValues = {
       ...this.currentValues,
-      ...values
+      ...values,
     };
     this.valuesUpdatedAt = new Date();
   }
@@ -47,7 +47,7 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
   setMasterDimmer(masterDimChannel: number) {
     if (this.currentValues.masterDimChannel === masterDimChannel) return;
     this.setCurrentValues({
-      masterDimChannel
+      masterDimChannel,
     });
   }
 
@@ -66,7 +66,7 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
       finePanChannel: 0,
       tiltChannel: 0,
       fineTiltChannel: 0,
-      movingSpeedChannel: 0
+      movingSpeedChannel: 0,
     });
   }
 
@@ -147,7 +147,7 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
       values.splice(
         nrStartingZeroes,
         nrStartingZeroes + strobeDmxValues.length,
-        ...strobeDmxValues
+        ...strobeDmxValues,
       );
     }
 

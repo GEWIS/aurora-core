@@ -8,13 +8,13 @@ export enum PosterType {
   LOGO = 'logo',
   EXTERNAL = 'extern',
   PHOTO = 'photo',
-  VIDEO = 'video'
+  VIDEO = 'video',
 }
 
 export enum FooterSize {
   FULL = 'full',
   MINIMAL = 'minimal',
-  HIDDEN = 'hidden'
+  HIDDEN = 'hidden',
 }
 
 export interface BasePoster {

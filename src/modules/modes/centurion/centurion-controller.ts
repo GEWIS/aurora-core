@@ -61,7 +61,7 @@ export class CenturionController extends Controller {
     return {
       name: mode.tape.name,
       startTime: mode.startTime,
-      playing: mode.playing
+      playing: mode.playing,
     };
   }
 
@@ -72,7 +72,7 @@ export class CenturionController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('start')
   @SuccessResponse(204, 'Start commands sent')
@@ -97,7 +97,7 @@ export class CenturionController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('skip')
   @SuccessResponse(204, 'Skip commands sent')
@@ -123,7 +123,7 @@ export class CenturionController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('stop')
   @SuccessResponse(204, 'Start commands sent')
@@ -144,7 +144,7 @@ export class CenturionController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Get('tapes')
   public getCenturionTapes(): MixTapeResponse[] {
@@ -155,7 +155,7 @@ export class CenturionController extends Controller {
         .filter((e) => ['horn', 'song'].includes(e.type))
         .map((e) => e as HornEvent | SongEvent),
       horns: t.feed.filter((e) => e.type === 'horn').length,
-      duration: t.duration
+      duration: t.duration,
     }));
   }
 }

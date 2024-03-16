@@ -11,5 +11,5 @@ export enum ActionFields {
   DATE = 'date',
   LIMITS = 'limits',
   DISPLAY = 'display',
-  MEMBER_CREATOR = 'memberCreator'
+  MEMBER_CREATOR = 'memberCreator',
 }

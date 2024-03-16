@@ -44,21 +44,21 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     movingSpeedChannel: 0,
     colorWheelChannel: 0,
     goboWheelChannel: 0,
-    goboRotateChannel: 0
+    goboRotateChannel: 0,
   };
 
   setColor(color: RgbColor) {
     const wheelColor = rgbColorDefinitions[color].alternative;
     const channelValueObj = this.colorWheelChannelValues.find((v) => v.name === wheelColor);
     this.setCurrentValues({
-      colorWheelChannel: channelValueObj?.value ?? 0
+      colorWheelChannel: channelValueObj?.value ?? 0,
     });
   }
 
   setMasterDimmer(masterDimChannel: number) {
     if (this.currentValues.masterDimChannel === masterDimChannel) return;
     this.setCurrentValues({
-      masterDimChannel
+      masterDimChannel,
     });
   }
 
@@ -73,14 +73,14 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
       movingSpeedChannel: 0,
       colorWheelChannel: 0,
       goboWheelChannel: 0,
-      goboRotateChannel: 0
+      goboRotateChannel: 0,
     });
   }
 
   setCurrentValues(values: Partial<LightsMovingHeadWheelCurrentValues>) {
     this.currentValues = {
       ...this.currentValues,
-      ...values
+      ...values,
     };
     this.valuesUpdatedAt = new Date();
   }

@@ -35,7 +35,7 @@ export default class TableRotate extends LightsEffect<TableRotateProps> {
   }
 
   public static build(
-    props: TableRotateProps = {}
+    props: TableRotateProps = {},
   ): LightsEffectBuilder<TableRotateProps, TableRotate> {
     return (lightsGroup) => new TableRotate(lightsGroup, props);
   }
@@ -52,7 +52,7 @@ export default class TableRotate extends LightsEffect<TableRotateProps> {
   private setPosition(
     movingHead: LightsMovingHeadWheel | LightsMovingHeadRgb,
     progression: number,
-    offset: number = 0
+    offset: number = 0,
   ) {
     const panChannel = Math.cos(progression * 2 * Math.PI + offset) * (255 / 6) + 255 / 6;
     const tiltChannel = Math.sin(progression * 6 * Math.PI + offset) * 48 + 96;
@@ -61,7 +61,7 @@ export default class TableRotate extends LightsEffect<TableRotateProps> {
       panChannel: Math.floor(panChannel),
       finePanChannel: Math.round((panChannel % 1) * 255),
       tiltChannel: Math.floor(tiltChannel),
-      fineTiltChannel: Math.round((tiltChannel % 1) * 255)
+      fineTiltChannel: Math.round((tiltChannel % 1) * 255),
     });
   }
 

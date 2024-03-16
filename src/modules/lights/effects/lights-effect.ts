@@ -3,7 +3,7 @@ import { LightsGroup } from '../entities';
 
 export type LightsEffectBuilder<P = {}, T extends LightsEffect<P> = LightsEffect<P>> = (
   lightsGroup: LightsGroup,
-  features?: TrackPropertiesEvent
+  features?: TrackPropertiesEvent,
 ) => T;
 
 export type BaseLightsEffectCreateParams = {};

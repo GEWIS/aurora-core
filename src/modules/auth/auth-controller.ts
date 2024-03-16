@@ -15,7 +15,7 @@ export class AuthController extends Controller {
     return {
       clientId: process.env.KEYCLOAK_CLIENT_ID || '',
       redirectUri: process.env.KEYCLOAK_REDIRECT_URI || '',
-      authUrl: process.env.KEYCLOAK_AUTH_URI || ''
+      authUrl: process.env.KEYCLOAK_AUTH_URI || '',
     };
   }
 }

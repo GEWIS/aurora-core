@@ -5,5 +5,5 @@
 
 export enum ListFields {
   ID = 'id',
-  ALL = 'all'
+  ALL = 'all',
 }

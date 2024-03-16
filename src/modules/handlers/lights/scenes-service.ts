@@ -3,7 +3,7 @@ import {
   LightsScene,
   LightsSceneMovingHeadRgb,
   LightsSceneMovingHeadWheel,
-  LightsScenePars
+  LightsScenePars,
 } from '../../lights/entities/scenes';
 import dataSource from '../../../database';
 
@@ -43,16 +43,16 @@ export default class ScenesService {
       name: scene.name,
       pars: scene.pars.map((p) => ({
         fixtureId: p.groupParId,
-        dmxValues: p.dmxValues
+        dmxValues: p.dmxValues,
       })),
       movingHeadRgbs: scene.movingHeadRgbs.map((m) => ({
         fixtureId: m.groupMovingHeadRgbId,
-        dmxValues: m.dmxValues
+        dmxValues: m.dmxValues,
       })),
       movingHeadWheels: scene.movingHeadWheels.map((m) => ({
         fixtureId: m.groupMovingHeadWheelId,
-        dmxValues: m.dmxValues
-      }))
+        dmxValues: m.dmxValues,
+      })),
     };
   }
 
@@ -66,8 +66,8 @@ export default class ScenesService {
       relations: {
         pars: { par: true },
         movingHeadRgbs: { movingHeadRgb: true },
-        movingHeadWheels: { movingHeadWheel: true }
-      }
+        movingHeadWheels: { movingHeadWheel: true },
+      },
     });
   }
 
@@ -78,7 +78,7 @@ export default class ScenesService {
       const movingHeadRgbsRepo = manager.getRepository(LightsSceneMovingHeadRgb);
       const movingHeadWheelsRepo = manager.getRepository(LightsSceneMovingHeadWheel);
       const scene: LightsScene = await sceneRepo.save({
-        name: params.name
+        name: params.name,
       });
 
       await Promise.all(
@@ -88,9 +88,9 @@ export default class ScenesService {
               scene,
               sceneId: scene.id,
               groupParId: id,
-              dmxValues
-            })
-        )
+              dmxValues,
+            }),
+        ),
       );
       await Promise.all(
         params.movingHeadRgbs.map(
@@ -99,9 +99,9 @@ export default class ScenesService {
               scene,
               sceneId: scene.id,
               groupParId: id,
-              dmxValues
-            })
-        )
+              dmxValues,
+            }),
+        ),
       );
       await Promise.all(
         params.movingHeadWheels.map(
@@ -110,9 +110,9 @@ export default class ScenesService {
               scene,
               sceneId: scene.id,
               groupParId: id,
-              dmxValues
-            })
-        )
+              dmxValues,
+            }),
+        ),
       );
 
       return scene;

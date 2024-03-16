@@ -39,7 +39,7 @@ export default class HandlerManager {
 
   protected restoreHandlers<T extends SubscribeEntity, U extends BaseHandler<T>>(
     entity: T,
-    handlers: U[]
+    handlers: U[],
   ) {
     handlers.forEach((handler) => {
       if (handler.constructor.name === entity.currentHandler) {
@@ -65,7 +65,7 @@ export default class HandlerManager {
             throw new Error(`Unknown entity: ${instance.constructor.name}`);
           this.restoreHandlers(instance, handlers);
         });
-      })
+      }),
     );
   }
 
@@ -75,7 +75,7 @@ export default class HandlerManager {
   private constructor(
     private io: Server,
     private musicEmitter: MusicEmitter,
-    private backofficeSyncEmitter: BackofficeSyncEmitter
+    private backofficeSyncEmitter: BackofficeSyncEmitter,
   ) {
     this.musicEmitter.on('beat', this.beat.bind(this));
     this.musicEmitter.on('change_track', this.changeTrack.bind(this));
@@ -86,19 +86,19 @@ export default class HandlerManager {
       new SetEffectsHandler(),
       new DevelopEffectsHandler(),
       new ScenesHandler(),
-      new EffectSequenceHandler(musicEmitter)
+      new EffectSequenceHandler(musicEmitter),
     ];
 
     // Register all handlers
     this._handlers.set(Audio, [
-      new SimpleAudioHandler(io.of(SocketioNamespaces.AUDIO), this.musicEmitter)
+      new SimpleAudioHandler(io.of(SocketioNamespaces.AUDIO), this.musicEmitter),
     ] as BaseAudioHandler[]);
     this._handlers.set(LightsGroup, lightsHandlers);
     this._handlers.set(Screen, [
       new CurrentlyPlayingTrackHandler(io.of(SocketioNamespaces.SCREEN)),
       new CenturionScreenHandler(io.of(SocketioNamespaces.SCREEN)),
       new PosterScreenHandler(io.of(SocketioNamespaces.SCREEN)),
-      new StageEffectsHandler(io.of(SocketioNamespaces.SCREEN))
+      new StageEffectsHandler(io.of(SocketioNamespaces.SCREEN)),
     ] as BaseScreenHandler[]);
   }
 
@@ -112,7 +112,7 @@ export default class HandlerManager {
   public static getInstance(
     io?: Server,
     musicEmitter?: MusicEmitter,
-    backofficeSyncEmitter?: BackofficeSyncEmitter
+    backofficeSyncEmitter?: BackofficeSyncEmitter,
   ) {
     if (
       this.instance == null &&

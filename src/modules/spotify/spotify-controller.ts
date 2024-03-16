@@ -27,7 +27,7 @@ export class SpotifyController extends Controller {
       updatedAt: user.updatedAt,
       name: user.name,
       spotifyId: user.spotifyId,
-      active: user.active
+      active: user.active,
     };
   }
 
@@ -52,8 +52,8 @@ export class SpotifyController extends Controller {
         scope:
           'user-read-playback-state user-modify-playback-state user-read-currently-playing user-read-playback-position',
         redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
-        state
-      })}`
+        state,
+      })}`,
     );
   }
 
@@ -63,7 +63,7 @@ export class SpotifyController extends Controller {
     @Request() req: ExpressRequest,
     @Query() state: string,
     @Query() code?: string,
-    @Query() error?: string
+    @Query() error?: string,
   ) {
     const { spotifyOAuthState } = req.signedCookies;
     if (state !== spotifyOAuthState) {

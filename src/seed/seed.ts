@@ -18,7 +18,7 @@ export default async function seedDatabase() {
   await Promise.all([
     rootScreenService.createScreen({ name: 'PCGEWISB-links' }),
     rootScreenService.createScreen({ name: 'PCGEWISB-rechts' }),
-    rootScreenService.createScreen({ name: 'PCGEWISINFO' })
+    rootScreenService.createScreen({ name: 'PCGEWISINFO' }),
   ]);
 
   const rootLightsService = new RootLightsService();
@@ -31,7 +31,7 @@ export default async function seedDatabase() {
     shutterChannel: 2,
     shutterOptionValues: {
       open: 0,
-      strobe: 220
+      strobe: 220,
     },
     colorRedChannel: 3,
     colorGreenChannel: 4,
@@ -39,7 +39,7 @@ export default async function seedDatabase() {
     colorColdWhiteChannel: 6,
     colorWarmWhiteChannel: 7,
     colorAmberChannel: 8,
-    colorUvChannel: 9
+    colorUvChannel: 9,
   });
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const eurolite_LED_TMH_S30 = await rootLightsService.createMovingHeadWheel({
@@ -48,7 +48,7 @@ export default async function seedDatabase() {
     shutterChannel: 9,
     shutterOptionValues: {
       open: 0,
-      strobe: 220
+      strobe: 220,
     },
     colorWheelChannel: 6,
     goboWheelChannel: 7,
@@ -59,7 +59,7 @@ export default async function seedDatabase() {
     fineTiltChannel: 4,
     movingSpeedChannel: 5,
     colorWheelChannelValues: [],
-    goboWheelChannelValues: []
+    goboWheelChannelValues: [],
   });
   eurolite_LED_TMH_S30.resetChannelAndValue = [12, 255];
   await dataSource.getRepository(LightsMovingHeadWheel).save(eurolite_LED_TMH_S30);
@@ -71,7 +71,7 @@ export default async function seedDatabase() {
     shutterChannel: 7,
     shutterOptionValues: {
       open: 255,
-      strobe: 110
+      strobe: 110,
     },
     panChannel: 1,
     finePanChannel: 2,
@@ -82,7 +82,7 @@ export default async function seedDatabase() {
     colorBlueChannel: 10,
     colorColdWhiteChannel: 11,
     colorAmberChannel: 12,
-    colorUvChannel: 13
+    colorUvChannel: 13,
   });
 
   const gewisRoom = await rootLightsService.createLightGroup(controller.id, {
@@ -99,10 +99,10 @@ export default async function seedDatabase() {
       { fixtureId: eurolite_LED_7C_7.id, firstChannel: 225 },
       { fixtureId: eurolite_LED_7C_7.id, firstChannel: 241 },
       { fixtureId: eurolite_LED_7C_7.id, firstChannel: 257 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 273 }
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 273 },
     ],
     movingHeadRgbs: [],
-    movingHeadWheels: []
+    movingHeadWheels: [],
   });
   const gewisBar = await rootLightsService.createLightGroup(controller.id, {
     name: 'Bar',
@@ -110,16 +110,16 @@ export default async function seedDatabase() {
       { fixtureId: eurolite_LED_7C_7.id, firstChannel: 97 },
       { fixtureId: eurolite_LED_7C_7.id, firstChannel: 113 },
       { fixtureId: eurolite_LED_7C_7.id, firstChannel: 289 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 305 }
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 305 },
     ],
     movingHeadRgbs: [],
-    movingHeadWheels: []
+    movingHeadWheels: [],
   });
   const gewisLounge = await rootLightsService.createLightGroup(controller.id, {
     name: 'Lounge',
     pars: [{ fixtureId: eurolite_LED_7C_7.id, firstChannel: 129 }],
     movingHeadRgbs: [],
-    movingHeadWheels: []
+    movingHeadWheels: [],
   });
   const gewisMHRoom = await rootLightsService.createLightGroup(controller.id, {
     name: 'Ruimte MH',
@@ -127,23 +127,23 @@ export default async function seedDatabase() {
     movingHeadRgbs: [],
     movingHeadWheels: [
       { fixtureId: eurolite_LED_TMH_S30.id, firstChannel: 161 },
-      { fixtureId: eurolite_LED_TMH_S30.id, firstChannel: 177 }
-    ]
+      { fixtureId: eurolite_LED_TMH_S30.id, firstChannel: 177 },
+    ],
   });
   const royMHs = await rootLightsService.createLightGroup(controller.id, {
     name: 'Roy MH',
     pars: [],
     movingHeadRgbs: [
       { fixtureId: ayra_ERO_506.id, firstChannel: 353 },
-      { fixtureId: ayra_ERO_506.id, firstChannel: 369 }
+      { fixtureId: ayra_ERO_506.id, firstChannel: 369 },
     ],
-    movingHeadWheels: []
+    movingHeadWheels: [],
   });
 
   return Promise.all(
     [gewisRoom, gewisBar, gewisLounge, gewisMHRoom, royMHs].map(
-      (g) => dataSource.getRepository(LightsGroup).findOne({ where: { id: g!.id } })!
-    )
+      (g) => dataSource.getRepository(LightsGroup).findOne({ where: { id: g!.id } })!,
+    ),
   );
 }
 
@@ -151,7 +151,7 @@ export async function seedOpeningSequence(
   room: LightsGroup,
   bar: LightsGroup,
   movingHeadsGEWIS: LightsGroup,
-  movingHeadsRoy?: LightsGroup
+  movingHeadsRoy?: LightsGroup,
 ) {
   const repo = dataSource.getRepository(LightsPredefinedEffect);
   const trackUri = 'spotify:track:22L7bfCiAkJo5xGSQgmiIO';
@@ -160,7 +160,7 @@ export async function seedOpeningSequence(
     effect: LightsEffectsCreateParams,
     timestamp: number,
     duration: number,
-    lightGroups: LightsGroup[]
+    lightGroups: LightsGroup[],
   ) => {
     await repo.save({
       trackUri,
@@ -168,7 +168,7 @@ export async function seedOpeningSequence(
       duration,
       effect: effect.type,
       effectProps: JSON.stringify(effect.props),
-      lightGroups
+      lightGroups,
     } as LightsPredefinedEffect);
   };
 
@@ -176,15 +176,15 @@ export async function seedOpeningSequence(
     type: 'StaticColor',
     props: {
       color: RgbColor.RED,
-      relativeBrightness: 0.8
-    }
+      relativeBrightness: 0.8,
+    },
   };
   const borrelBar: StaticColorCreateParams = {
     type: 'StaticColor',
     props: {
       color: RgbColor.GREEN,
-      relativeBrightness: 0.8
-    }
+      relativeBrightness: 0.8,
+    },
   };
 
   const allOfTheLights: SparkleCreateParams = {
@@ -193,13 +193,13 @@ export async function seedOpeningSequence(
       colors: [RgbColor.BLUE],
       ratio: 0.2,
       dimDuration: 25,
-      cycleTime: 75
-    }
+      cycleTime: 75,
+    },
   };
 
   const movingHeadsWhite: StaticColorCreateParams = {
     type: 'StaticColor',
-    props: { color: RgbColor.WHITE }
+    props: { color: RgbColor.WHITE },
   };
 
   const spots = [room, bar];
@@ -214,7 +214,7 @@ export async function seedOpeningSequence(
     stepDuration: number,
     dim = true,
     effectRoom: StaticColorCreateParams = borrelRuimte,
-    effectBar: StaticColorCreateParams = borrelBar
+    effectBar: StaticColorCreateParams = borrelBar,
   ) => {
     const steps = Math.round((dimEnd - dimStart) / stepDuration);
     await Promise.all(
@@ -224,22 +224,22 @@ export async function seedOpeningSequence(
         await addStep(
           {
             ...effectRoom,
-            props: { ...effectRoom.props, relativeBrightness }
+            props: { ...effectRoom.props, relativeBrightness },
           },
           dimStart + i * stepDuration,
           stepDuration + 25,
-          [room]
+          [room],
         );
         await addStep(
           {
             ...effectBar,
-            props: { ...effectBar.props, relativeBrightness }
+            props: { ...effectBar.props, relativeBrightness },
           },
           dimStart + i * stepDuration,
           stepDuration + 25,
-          [bar]
+          [bar],
         );
-      })
+      }),
     );
   };
 
@@ -247,7 +247,7 @@ export async function seedOpeningSequence(
 
   // Keep SearchLight animation on till the moving-head only blackout.
   await addStep({ type: 'SearchLight', props: { radiusFactor: 1.5 } }, 28000, 189000, [
-    movingHeadsGEWIS
+    movingHeadsGEWIS,
   ]);
 
   // Refrein 1
@@ -257,21 +257,21 @@ export async function seedOpeningSequence(
     { type: 'Wave', props: { color: RgbColor.ROSERED } } as WaveCreateParams,
     29000,
     4000,
-    spots
+    spots,
   );
   await addStep(allOfTheLights, 33000, 2000, [room, bar]);
   await addStep(
     { type: 'Wave', props: { color: RgbColor.ROSERED } } as WaveCreateParams,
     35000,
     5000,
-    spots
+    spots,
   );
   await addStep(allOfTheLights, 40000, 1500, [room, bar]);
   await addStep(
     { type: 'Wave', props: { color: RgbColor.ROSERED } } as WaveCreateParams,
     41500,
     13500,
-    spots
+    spots,
   );
 
   // Couplet
@@ -279,14 +279,14 @@ export async function seedOpeningSequence(
     { type: 'BeatFadeOut', props: { colors: [RgbColor.PURPLE, RgbColor.GREEN], nrBlacks: 1 } },
     55000,
     5500,
-    spots
+    spots,
   );
   // BLACKOUT (at 1 minute exactly for 2,5 seconds)
   await addStep(
     { type: 'BeatFadeOut', props: { colors: [RgbColor.PURPLE, RgbColor.GREEN], nrBlacks: 1 } },
     62500,
     19000,
-    spots
+    spots,
   );
   await addStep(movingHeadsWhite, 63000, 155000, [movingHeadsGEWIS]);
 
@@ -299,14 +299,14 @@ export async function seedOpeningSequence(
     { type: 'Sparkle', props: { colors: [RgbColor.GREEN, RgbColor.BROWN] } },
     96000,
     12400,
-    spots
+    spots,
   );
   await addStep(allOfTheLights, 108400, 1600, spots);
   await addStep(
     { type: 'BeatFadeOut', props: { colors: [RgbColor.ORANGE, RgbColor.LIGHTBLUE], nrBlacks: 1 } },
     110000,
     25800,
-    spots
+    spots,
   );
 
   // Refrein
@@ -320,7 +320,7 @@ export async function seedOpeningSequence(
     { type: 'Sparkle', props: { colors: [RgbColor.BLUE, RgbColor.LIME] } },
     150000,
     12500,
-    spots
+    spots,
   );
   await addStep(allOfTheLights, 162500, 1000, spots);
   await addStep(
@@ -330,23 +330,23 @@ export async function seedOpeningSequence(
         colors: [RgbColor.GOLD],
         dimDuration: 2000,
         cycleTime: 125,
-        ratio: 0.05
-      }
+        ratio: 0.05,
+      },
     },
     163500,
     27000,
-    spots
+    spots,
   );
   await addStep(
     { type: 'Wave', props: { color: RgbColor.YELLOW, cycleTime: 425 } },
     190500,
     27500,
-    spots
+    spots,
   );
 
   await addStep(movingHeadsWhite, 218000, 26000, [movingHeadsGEWIS]);
   await addStep({ type: 'SearchLight', props: { cycleTime: 10000 } }, 218000, 26000, [
-    movingHeadsGEWIS
+    movingHeadsGEWIS,
   ]);
 
   // Slowly turn on lights
@@ -356,7 +356,7 @@ export async function seedOpeningSequence(
     250,
     false,
     { type: 'StaticColor', props: { color: RgbColor.UV } },
-    { type: 'StaticColor', props: { color: RgbColor.UV } }
+    { type: 'StaticColor', props: { color: RgbColor.UV } },
   );
 
   await addStep({ type: 'SingleFlood', props: { dimMilliseconds: 5000 } }, 244000, 7000, spots);
@@ -368,11 +368,11 @@ export async function seedOpeningSequence(
     { type: 'BeatFadeOut', props: { colors: [RgbColor.RED, RgbColor.CYAN] } },
     262000,
     23000,
-    spots
+    spots,
   );
   await addStep(movingHeadsWhite, 262000, 23000, [movingHeadsGEWIS]);
   await addStep({ type: 'RandomPosition', props: { beatsToMove: 1 } }, 262000, 23000, [
-    movingHeadsGEWIS
+    movingHeadsGEWIS,
   ]);
 
   await addStep(borrelRuimte, 285000, 15000, [room]);

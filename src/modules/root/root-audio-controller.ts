@@ -35,7 +35,7 @@ export class RootAudioController extends Controller {
     id: number,
     @Request() req: ExpressRequest,
     @Body() params: SetAudioPlayingParams,
-    @Res() forbiddenResponse: TsoaResponse<403, string>
+    @Res() forbiddenResponse: TsoaResponse<403, string>,
   ): Promise<void> {
     if ((req.user as User).audioId !== id) {
       forbiddenResponse(403, 'You can only set the playing state of yourself.');
@@ -51,7 +51,7 @@ export class RootAudioController extends Controller {
           // eslint-disable-next-line no-param-reassign
           audio.playing = params.playing;
         }
-      })
+      }),
     );
   }
 }

@@ -17,6 +17,6 @@ export namespace TokenPermission {
     BOARD = 'board',
     MEMBER = 'member',
     ORGANIZATION = 'organization',
-    ENTERPRISE = 'enterprise'
+    ENTERPRISE = 'enterprise',
   }
 }

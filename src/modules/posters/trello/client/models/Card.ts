@@ -75,11 +75,11 @@ export type Card = {
 
 export namespace Card {
   export enum size {
-    NORMAL = 'normal'
+    NORMAL = 'normal',
   }
 
   export enum brightness {
     LIGHT = 'light',
-    DARK = 'dark'
+    DARK = 'dark',
   }
 }

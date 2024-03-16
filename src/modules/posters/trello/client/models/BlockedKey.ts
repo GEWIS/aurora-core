@@ -13,5 +13,5 @@ export enum BlockedKey {
   NOTIFICATION_CREATED_CARD = 'notification_created_card',
   NOTIFICATION_MOVED_CARD = 'notification_moved_card',
   NOTIFICATION_ARCHIVED_CARD = 'notification_archived_card',
-  NOTIFICATION_UNARCHIVED_CARD = 'notification_unarchived_card'
+  NOTIFICATION_UNARCHIVED_CARD = 'notification_unarchived_card',
 }

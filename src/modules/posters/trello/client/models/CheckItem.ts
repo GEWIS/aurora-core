@@ -17,6 +17,6 @@ export type CheckItem = {
 export namespace CheckItem {
   export enum state {
     COMPLETE = 'complete',
-    INCOMPLETE = 'incomplete'
+    INCOMPLETE = 'incomplete',
   }
 }

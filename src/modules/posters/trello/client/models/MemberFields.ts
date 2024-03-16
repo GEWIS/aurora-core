@@ -5,5 +5,5 @@
 
 export enum MemberFields {
   ID = 'id',
-  ALL = 'all'
+  ALL = 'all',
 }

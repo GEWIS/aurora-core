@@ -37,7 +37,7 @@ export class ModeController extends Controller {
 
   private async findEntities(
     entity: typeof SubscribeEntity,
-    ids: number[]
+    ids: number[],
   ): Promise<SubscribeEntity[]> {
     return dataSource.getRepository(entity).find({ where: { id: In(ids) } });
   }
@@ -57,7 +57,7 @@ export class ModeController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('centurion')
   @SuccessResponse(HttpStatusCode.NoContent)
@@ -82,7 +82,7 @@ export class ModeController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Delete('centurion')
   @SuccessResponse(HttpStatusCode.Ok)

@@ -7,7 +7,7 @@ const tapes = [
   gebroedersScooterCenturion,
   gebroedersScooterTotaleEscalatieNegendarisch,
   gebroedersScooterTotaleEscalatien,
-  athenaCenturion
+  athenaCenturion,
 ];
 
 export default tapes;

@@ -34,7 +34,7 @@ export class HandlerController extends Controller {
     return this.handlersManager.getHandlers(Audio).map((h) => ({
       name: h.constructor.name,
       id: h.identifier,
-      entities: h.entities.map((audio) => RootAudioService.toAudioResponse(audio as Audio))
+      entities: h.entities.map((audio) => RootAudioService.toAudioResponse(audio as Audio)),
     }));
   }
 
@@ -42,7 +42,7 @@ export class HandlerController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('audio/{id}')
   public async setAudioHandler(@Path() id: number, @Body() params: NewHandlerParams) {
@@ -65,8 +65,8 @@ export class HandlerController extends Controller {
       name: h.constructor.name,
       id: h.identifier,
       entities: h.entities.map((lightsGroup) =>
-        RootLightsService.toLightsGroupResponse(lightsGroup as LightsGroup)
-      )
+        RootLightsService.toLightsGroupResponse(lightsGroup as LightsGroup),
+      ),
     }));
   }
 
@@ -74,7 +74,7 @@ export class HandlerController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('lights/{id}')
   public async setLightsHandler(@Path() id: number, @Body() params: NewHandlerParams) {
@@ -96,7 +96,7 @@ export class HandlerController extends Controller {
     return this.handlersManager.getHandlers(Screen).map((h) => ({
       name: h.constructor.name,
       id: h.identifier,
-      entities: h.entities.map((screen) => RootScreenService.toScreenResponse(screen))
+      entities: h.entities.map((screen) => RootScreenService.toScreenResponse(screen)),
     }));
   }
 
@@ -104,7 +104,7 @@ export class HandlerController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('screen/{id}')
   public async setScreenHandler(@Path() id: number, @Body() params: NewHandlerParams) {

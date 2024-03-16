@@ -27,7 +27,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/{id}/strobe/enable')
   public async enableStrobeOnLightsGroup(id: number, @Body() params: StrobeProps = {}) {
@@ -47,7 +47,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/{id}/strobe/disable')
   public async disableStrobeOnLightsGroup(id: number) {
@@ -69,7 +69,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/{id}/freeze')
   public async freezeLightsGroup(id: number) {
@@ -90,7 +90,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/{id}/unfreeze')
   public async unfreezeLightsGroup(id: number) {
@@ -107,7 +107,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/par/{id}/override')
   public async setGroupParOverride(id: number, @Body() params: GroupFixtureOverrideParams) {
@@ -131,7 +131,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/par/{id}/reset')
   public async resetGroupPar(id: number) {
@@ -159,7 +159,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/par/{id}/freeze')
   public async freezeGroupPar(id: number) {
@@ -183,7 +183,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/par/{id}/unfreeze')
   public async unfreezeGroupPar(id: number) {
@@ -203,12 +203,12 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-rgb/{id}/override')
   public async setGroupMovingHeadRgbOverride(
     id: number,
-    @Body() params: GroupFixtureOverrideParams
+    @Body() params: GroupFixtureOverrideParams,
   ) {
     const movingHeadRgbs = this.getGroups()
       .map((g) => g.movingHeadRgbs)
@@ -230,7 +230,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-rgb/{id}/reset')
   public async resetGroupMovingHeadRgb(id: number) {
@@ -258,7 +258,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-rgb/{id}/freeze')
   public async freezeGroupMovingHeadRgb(id: number) {
@@ -282,7 +282,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-rgb/{id}/unfreeze')
   public async unfreezeMovingHeadRgb(id: number) {
@@ -302,12 +302,12 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-wheel/{id}/override')
   public async setGroupMovingHeadWheelOverride(
     id: number,
-    @Body() params: GroupFixtureOverrideParams
+    @Body() params: GroupFixtureOverrideParams,
   ) {
     const movingHeadWheels = this.getGroups()
       .map((g) => g.movingHeadWheels)
@@ -329,7 +329,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-wheel/{id}/reset')
   public async resetGroupMovingHeadWheel(id: number) {
@@ -357,7 +357,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-wheel/{id}/freeze')
   public async freezeGroupMovingHeadWheel(id: number) {
@@ -381,7 +381,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-wheel/{id}/unfreeze')
   public async unfreezeMovingHeadWheel(id: number) {

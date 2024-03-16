@@ -5,5 +5,5 @@
 
 export enum CardAging {
   PIRATE = 'pirate',
-  REGULAR = 'regular'
+  REGULAR = 'regular',
 }

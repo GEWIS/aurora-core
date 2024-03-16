@@ -23,8 +23,8 @@ export default class SessionMiddleware {
       resave: false,
       saveUninitialized: false,
       store: new TypeormStore({
-        limitSubquery: false // MariaDB
-      }).connect(dataSource.getRepository(Session))
+        limitSubquery: false, // MariaDB
+      }).connect(dataSource.getRepository(Session)),
     });
   }
 

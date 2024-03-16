@@ -13,5 +13,5 @@ export enum Color {
   BLACK = 'black',
   SKY = 'sky',
   PINK = 'pink',
-  LIME = 'lime'
+  LIME = 'lime',
 }

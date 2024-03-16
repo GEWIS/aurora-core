@@ -2,7 +2,7 @@ import { Controller } from '@tsoa/runtime';
 import { Body, Delete, Get, Post, Route, Security, Tags } from 'tsoa';
 import {
   ArtificialBeatGenerator,
-  ArtificialBeatGeneratorParams
+  ArtificialBeatGeneratorParams,
 } from './artificial-beat-generator';
 import { SecurityGroup } from '../../helpers/security';
 
@@ -13,14 +13,14 @@ export class ArtificialBeatController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Get('')
   public getArtificalBeatGenerator(): ArtificialBeatGeneratorParams | null {
     const generator = ArtificialBeatGenerator.getInstance();
     if (!generator.active || !generator.bpm) return null;
     return {
-      bpm: generator.bpm
+      bpm: generator.bpm,
     };
   }
 
@@ -28,7 +28,7 @@ export class ArtificialBeatController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('')
   public startArtificialBeatGenerator(@Body() params: ArtificialBeatGeneratorParams) {
@@ -40,7 +40,7 @@ export class ArtificialBeatController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Delete('')
   public stopArtificialBeatGenerator() {

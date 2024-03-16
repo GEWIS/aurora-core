@@ -9,5 +9,5 @@ export enum TokenFields {
   DATE_CREATED = 'dateCreated',
   DATE_EXPIRES = 'dateExpires',
   PERMISSIONS = 'permissions',
-  ALL = 'all'
+  ALL = 'all',
 }

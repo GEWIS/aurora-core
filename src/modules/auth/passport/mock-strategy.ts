@@ -10,9 +10,9 @@ passport.use(
 
     callback(null, {
       name: req.body.name ?? 'dev',
-      roles: req.body.roles ?? [SecurityGroup.ADMIN]
+      roles: req.body.roles ?? [SecurityGroup.ADMIN],
     });
-  })
+  }),
 );
 
 export const mockLogin = (req: ExRequest, res: ExResponse) => {

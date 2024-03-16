@@ -7,5 +7,5 @@ export enum ViewFilter {
   ALL = 'all',
   CLOSED = 'closed',
   NONE = 'none',
-  OPEN = 'open'
+  OPEN = 'open',
 }

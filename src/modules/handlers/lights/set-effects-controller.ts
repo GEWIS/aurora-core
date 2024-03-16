@@ -20,12 +20,12 @@ export class SetEffectsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('{id}/color')
   public async applyLightsEffectColor(
     id: number,
-    @Body() effects: LightsEffectsColorCreateParams[]
+    @Body() effects: LightsEffectsColorCreateParams[],
   ) {
     const handler: SetEffectsHandler | undefined = HandlerManager.getInstance()
       .getHandlers(LightsGroup)
@@ -54,12 +54,12 @@ export class SetEffectsController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('{id}/movement')
   public async applyLightsEffectMovement(
     id: number,
-    @Body() effects: LightsEffectsMovementCreateParams[]
+    @Body() effects: LightsEffectsMovementCreateParams[],
   ) {
     const handler: SetEffectsHandler | undefined = HandlerManager.getInstance()
       .getHandlers(LightsGroup)

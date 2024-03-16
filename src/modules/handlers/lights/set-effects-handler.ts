@@ -15,11 +15,11 @@ export default class SetEffectsHandler extends EffectsHandler {
   private setEffect(
     lightsGroup: LightsGroup,
     effects: LightsEffectBuilder[],
-    effectsMap: GroupEffectsMap
+    effectsMap: GroupEffectsMap,
   ) {
     effectsMap.set(
       lightsGroup,
-      effects.map((e) => e(lightsGroup, this.trackFeatures))
+      effects.map((e) => e(lightsGroup, this.trackFeatures)),
     );
   }
 
@@ -43,7 +43,7 @@ export default class SetEffectsHandler extends EffectsHandler {
   private parseAndSetEffects(
     id: number,
     effects: LightsEffectsCreateParams[],
-    effectsMap: GroupEffectsMap
+    effectsMap: GroupEffectsMap,
   ) {
     const lightsGroup = this.entities.find((e) => e.id === id);
     if (lightsGroup === undefined)
@@ -65,7 +65,7 @@ export default class SetEffectsHandler extends EffectsHandler {
         })
           .filter((e) => e !== undefined)
           .map((e) => e!)
-          .flat()[0]
+          .flat()[0],
     );
 
     this.setEffect(lightsGroup, effectBuilders, effectsMap);

@@ -23,9 +23,9 @@ export default abstract class LightsFixture extends BaseEntity {
       to(value: number[] | null): string | null {
         if (value == null) return null;
         return JSON.stringify(value);
-      }
+      },
     },
-    nullable: true
+    nullable: true,
   })
   public resetChannelAndValue?: number[] | null;
 

@@ -17,7 +17,7 @@ export class TrelloClient {
 
   constructor(
     config?: Partial<OpenAPIConfig>,
-    HttpRequest: HttpRequestConstructor = FetchHttpRequest
+    HttpRequest: HttpRequestConstructor = FetchHttpRequest,
   ) {
     this.request = new HttpRequest({
       BASE: config?.BASE ?? 'https://api.trello.com/1',
@@ -29,7 +29,7 @@ export class TrelloClient {
       USERNAME: config?.USERNAME,
       PASSWORD: config?.PASSWORD,
       HEADERS: config?.HEADERS,
-      ENCODE_PATH: config?.ENCODE_PATH
+      ENCODE_PATH: config?.ENCODE_PATH,
     });
 
     this.default = new TrelloService(this.request);

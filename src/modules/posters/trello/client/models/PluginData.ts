@@ -19,11 +19,11 @@ export namespace PluginData {
     MEMBER = 'member',
     BOARD = 'board',
     ORGANIZATION = 'organization',
-    CARD = 'card'
+    CARD = 'card',
   }
 
   export enum access {
     PRIVATE = 'private',
-    SHARED = 'shared'
+    SHARED = 'shared',
   }
 }

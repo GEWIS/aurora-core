@@ -28,7 +28,7 @@ export class TrelloPosterStorage {
 
     // New trello update
     const headers = {
-      Authorization: `OAuth oauth_consumer_key="${process.env.TRELLO_KEY}", oauth_token="${process.env.TRELLO_TOKEN}"`
+      Authorization: `OAuth oauth_consumer_key="${process.env.TRELLO_KEY}", oauth_token="${process.env.TRELLO_TOKEN}"`,
     };
 
     return axios.get(attachment.url, { responseType: 'stream', headers }).then(
@@ -47,7 +47,7 @@ export class TrelloPosterStorage {
               resolve(fileLocationWeb);
             }
           });
-        })
+        }),
     );
   }
 }

@@ -11,12 +11,12 @@ let activeDirectoryConnector: Client;
 export async function activeDirectoryConnect() {
   activeDirectoryConnector = new Client({
     connectTimeout: 5000,
-    url: process.env.LDAP_URI!
+    url: process.env.LDAP_URI!,
   });
 
   await activeDirectoryConnector.bind(
     process.env.LDAP_BIND_DN!,
-    process.env.LDAP_BIND_DN_PASSWORD!
+    process.env.LDAP_BIND_DN_PASSWORD!,
   );
 }
 
@@ -25,7 +25,7 @@ export async function getBoard() {
     await activeDirectoryConnector.search(process.env.LDAP_BASE_DN!, {
       scope: 'sub',
       filter: process.env.LDAP_BOARD_FILTER!,
-      attributes: ['employeeNumber', 'displayName']
+      attributes: ['employeeNumber', 'displayName'],
     })
   ).searchEntries as unknown as Array<Member>;
 }
@@ -35,7 +35,7 @@ export async function getKeyHolders() {
     await activeDirectoryConnector.search(process.env.LDAP_BASE_DN!, {
       scope: 'sub',
       filter: process.env.LDAP_KEY_FILTER!,
-      attributes: ['employeeNumber', 'displayName']
+      attributes: ['employeeNumber', 'displayName'],
     })
   ).searchEntries as unknown as Array<Member>;
 }
@@ -45,7 +45,7 @@ export async function getERO() {
     await activeDirectoryConnector.search(process.env.LDAP_BASE_DN!, {
       scope: 'sub',
       filter: process.env.LDAP_ERO_FILTER!,
-      attributes: ['employeeNumber', 'displayName']
+      attributes: ['employeeNumber', 'displayName'],
     })
   ).searchEntries as unknown as Array<Member>;
 }

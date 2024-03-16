@@ -30,7 +30,7 @@ export default class RandomPosition extends LightsEffect<RandomPositionProps> {
   }
 
   public static build(
-    props: RandomPositionProps = {}
+    props: RandomPositionProps = {},
   ): LightsEffectBuilder<RandomPositionProps, RandomPosition> {
     return (lightsGroup) => new RandomPosition(lightsGroup, props);
   }
@@ -43,7 +43,7 @@ export default class RandomPosition extends LightsEffect<RandomPositionProps> {
 
       m.fixture.setCurrentValues({
         panChannel: Math.round(Math.random() * (255 / 3)),
-        tiltChannel: Math.round(Math.random() * 255)
+        tiltChannel: Math.round(Math.random() * 255),
       });
     });
     this.lightsGroup.movingHeadWheels.forEach((m, i) => {
@@ -51,12 +51,12 @@ export default class RandomPosition extends LightsEffect<RandomPositionProps> {
 
       m.fixture.setCurrentValues({
         panChannel: Math.round(Math.random() * (255 / 3)),
-        tiltChannel: Math.round(Math.random() * 255)
+        tiltChannel: Math.round(Math.random() * 255),
       });
     });
 
     this.counters = this.counters.map(
-      (c) => (c + 1) % (this.props.beatsToMove ?? DEFAULT_BEATS_TO_MOVE)
+      (c) => (c + 1) % (this.props.beatsToMove ?? DEFAULT_BEATS_TO_MOVE),
     );
   }
 

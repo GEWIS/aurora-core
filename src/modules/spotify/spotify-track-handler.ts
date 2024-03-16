@@ -56,7 +56,7 @@ export default class SpotifyTrackHandler {
       artists: item.artists.map((a) => a.name),
       cover: item.album.images[0].url,
       startTime: new Date(this.playStateUpdateTime.getTime() - state.progress_ms),
-      trackURI: item.uri
+      trackURI: item.uri,
     };
   }
 
@@ -97,7 +97,7 @@ export default class SpotifyTrackHandler {
 
     this.syncLoopTimer = setTimeout(
       this.syncLoop.bind(this),
-      state.item.duration_ms - state.progress_ms + 10
+      state.item.duration_ms - state.progress_ms + 10,
     );
   }
 
@@ -111,28 +111,28 @@ export default class SpotifyTrackHandler {
           .filter((b) => b.start * 1000 >= progress)
           .map((beat) => {
             const segment = track.segments.find(
-              (s) => s.start <= beat.start && s.start + s.duration >= beat.start
+              (s) => s.start <= beat.start && s.start + s.duration >= beat.start,
             );
             const section = track.sections.find(
-              (s) => s.start <= beat.start && s.start + s.duration >= beat.start
+              (s) => s.start <= beat.start && s.start + s.duration >= beat.start,
             );
             const tatum = track.tatums.find(
-              (s) => s.start <= beat.start && s.start + s.duration >= beat.start
+              (s) => s.start <= beat.start && s.start + s.duration >= beat.start,
             );
 
             const beatEvent = {
               beat,
               segment,
               section,
-              tatum
+              tatum,
             };
             const timeout = setTimeout(
               this.syncBeat.bind(this, beatEvent),
-              beat.start * 1000 - progress
+              beat.start * 1000 - progress,
             );
             return {
               event: beatEvent,
-              timeout
+              timeout,
             };
           })
       : [];
@@ -164,11 +164,11 @@ export default class SpotifyTrackHandler {
 
       const item = state.item as Track;
       this.musicEmitter.emit('change_track', [
-        this.asTrackChangeEvent(item, state)
+        this.asTrackChangeEvent(item, state),
       ] as TrackChangeEvent[]);
 
       logger.info(
-        `Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name} (${item.uri})`
+        `Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name} (${item.uri})`,
       );
     }
 
@@ -217,7 +217,7 @@ export default class SpotifyTrackHandler {
       danceability: features.danceability,
       energy: features.energy,
       loudness: features.loudness,
-      valence: features.valence
+      valence: features.valence,
     };
     this.musicEmitter.emitSpotify('features', event);
   }

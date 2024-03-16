@@ -4,7 +4,7 @@ import {
   LightsGroup,
   LightsGroupMovingHeadRgbs,
   LightsGroupMovingHeadWheels,
-  LightsGroupPars
+  LightsGroupPars,
 } from '../../entities';
 import { RgbColor } from '../../color-definitions';
 
@@ -91,7 +91,7 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
 
   applyColorToFixture(
     p: LightsGroupPars | LightsGroupMovingHeadRgbs | LightsGroupMovingHeadWheels,
-    i: number
+    i: number,
   ) {
     const { enableFade } = this.props;
     const beatProgression = enableFade

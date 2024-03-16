@@ -4,5 +4,5 @@
 /* eslint-disable */
 
 export enum Channel {
-  EMAIL = 'email'
+  EMAIL = 'email',
 }

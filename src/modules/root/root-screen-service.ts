@@ -21,7 +21,7 @@ export default class RootScreenService {
       createdAt: screen.createdAt,
       updatedAt: screen.updatedAt,
       name: screen.name,
-      socketIds: screen.socketIds
+      socketIds: screen.socketIds,
     };
   }
 

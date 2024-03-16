@@ -26,7 +26,7 @@ export class PosterScreenController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BOARD,
-    SecurityGroup.SCREEN_SUBSCRIBER
+    SecurityGroup.SCREEN_SUBSCRIBER,
   ])
   @Get('')
   public async getPosters(): Promise<Poster[]> {

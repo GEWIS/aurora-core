@@ -14,5 +14,5 @@ export enum AttachmentFields {
   NAME = 'name',
   PREVIEWS = 'previews',
   URL = 'url',
-  POS = 'pos'
+  POS = 'pos',
 }

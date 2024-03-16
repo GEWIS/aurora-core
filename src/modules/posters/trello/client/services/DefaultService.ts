@@ -82,13 +82,13 @@ export class DefaultService {
     member: boolean = true,
     memberFields: string = 'avatarHash,fullName,initials,username',
     memberCreator: boolean = true,
-    memberCreatorFields: string = 'avatarHash,fullName,initials,username'
+    memberCreatorFields: string = 'avatarHash,fullName,initials,username',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/actions/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         display: display,
@@ -97,8 +97,8 @@ export class DefaultService {
         member: member,
         member_fields: memberFields,
         memberCreator: memberCreator,
-        memberCreator_fields: memberCreatorFields
-      }
+        memberCreator_fields: memberCreatorFields,
+      },
     });
   }
 
@@ -115,11 +115,11 @@ export class DefaultService {
       method: 'PUT',
       url: '/actions/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        text: text
-      }
+        text: text,
+      },
     });
   }
 
@@ -135,8 +135,8 @@ export class DefaultService {
       method: 'DELETE',
       url: '/actions/{id}',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -154,8 +154,8 @@ export class DefaultService {
       url: '/actions/{id}/{field}',
       path: {
         id: id,
-        field: field
-      }
+        field: field,
+      },
     });
   }
 
@@ -172,11 +172,11 @@ export class DefaultService {
       method: 'GET',
       url: '/actions/{id}/board',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -193,11 +193,11 @@ export class DefaultService {
       method: 'GET',
       url: '/actions/{id}/card',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -214,11 +214,11 @@ export class DefaultService {
       method: 'GET',
       url: '/actions/{id}/list',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -235,11 +235,11 @@ export class DefaultService {
       method: 'GET',
       url: '/actions/{id}/member',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -253,17 +253,17 @@ export class DefaultService {
    */
   public getActionsIdMembercreator(
     id: TrelloID,
-    fields: MemberFields = 'all'
+    fields: MemberFields = 'all',
   ): CancelablePromise<Member> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/actions/{id}/memberCreator',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -277,17 +277,17 @@ export class DefaultService {
    */
   public getActionsIdOrganization(
     id: TrelloID,
-    fields: OrganizationFields = 'all'
+    fields: OrganizationFields = 'all',
   ): CancelablePromise<Organization> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/actions/{id}/organization',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -304,11 +304,11 @@ export class DefaultService {
       method: 'PUT',
       url: '/actions/{id}/text',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -324,18 +324,18 @@ export class DefaultService {
   public getActionsIdactionReactions(
     idAction: TrelloID,
     member: boolean = true,
-    emoji: boolean = true
+    emoji: boolean = true,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/actions/{idAction}/reactions',
       path: {
-        idAction: idAction
+        idAction: idAction,
       },
       query: {
         member: member,
-        emoji: emoji
-      }
+        emoji: emoji,
+      },
     });
   }
 
@@ -366,16 +366,16 @@ export class DefaultService {
        * The `unified` value of the emoji to add. See [/emoji](#emoji)
        */
       unified?: string;
-    }
+    },
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/actions/{idAction}/reactions',
       path: {
-        idAction: idAction
+        idAction: idAction,
       },
       body: requestBody,
-      mediaType: 'application/json'
+      mediaType: 'application/json',
     });
   }
 
@@ -393,19 +393,19 @@ export class DefaultService {
     idAction: TrelloID,
     id: TrelloID,
     member: boolean = true,
-    emoji: boolean = true
+    emoji: boolean = true,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/actions/{idAction}/reactions/{id}',
       path: {
         idAction: idAction,
-        id: id
+        id: id,
       },
       query: {
         member: member,
-        emoji: emoji
-      }
+        emoji: emoji,
+      },
     });
   }
 
@@ -419,15 +419,15 @@ export class DefaultService {
    */
   public deleteActionsIdactionReactionsId(
     idAction: TrelloID,
-    id: TrelloID
+    id: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/actions/{idAction}/reactions/{id}',
       path: {
         idAction: idAction,
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -443,8 +443,8 @@ export class DefaultService {
       method: 'GET',
       url: '/actions/{idAction}/reactionsSummary',
       path: {
-        idAction: idAction
-      }
+        idAction: idAction,
+      },
     });
   }
 
@@ -459,8 +459,8 @@ export class DefaultService {
       method: 'GET',
       url: '/applications/{key}/compliance',
       path: {
-        key: key
-      }
+        key: key,
+      },
     });
   }
 
@@ -476,8 +476,8 @@ export class DefaultService {
       method: 'GET',
       url: '/batch',
       query: {
-        urls: urls
-      }
+        urls: urls,
+      },
     });
   }
 
@@ -499,21 +499,21 @@ export class DefaultService {
     activity: boolean = false,
     orgMemberType: boolean = false,
     member: boolean = false,
-    memberFields: MemberFields = 'fullname,username'
+    memberFields: MemberFields = 'fullname,username',
   ): CancelablePromise<Memberships> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/boards/{id}/memberships',
       path: {
-        id: id
+        id: id,
       },
       query: {
         filter: filter,
         activity: activity,
         orgMemberType: orgMemberType,
         member: member,
-        member_fields: memberFields
-      }
+        member_fields: memberFields,
+      },
     });
   }
 
@@ -558,13 +558,13 @@ export class DefaultService {
     organization: boolean = false,
     organizationPluginData: boolean = false,
     myPrefs: boolean = false,
-    tags: boolean = false
+    tags: boolean = false,
   ): CancelablePromise<Board | Error> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/boards/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         actions: actions,
@@ -582,12 +582,12 @@ export class DefaultService {
         organization: organization,
         organization_pluginData: organizationPluginData,
         myPrefs: myPrefs,
-        tags: tags
+        tags: tags,
       },
       errors: {
         401: `Unauthorized`,
-        404: `The specified resource was not found`
-      }
+        404: `The specified resource was not found`,
+      },
     });
   }
 
@@ -641,13 +641,13 @@ export class DefaultService {
     labelNamesOrange?: string,
     labelNamesRed?: string,
     labelNamesPurple?: string,
-    labelNamesBlue?: string
+    labelNamesBlue?: string,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/boards/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         name: name,
@@ -670,8 +670,8 @@ export class DefaultService {
         'labelNames/orange': labelNamesOrange,
         'labelNames/red': labelNamesRed,
         'labelNames/purple': labelNamesPurple,
-        'labelNames/blue': labelNamesBlue
-      }
+        'labelNames/blue': labelNamesBlue,
+      },
     });
   }
 
@@ -689,8 +689,8 @@ export class DefaultService {
       url: '/boards/{id}',
       path: {
         id: id,
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -708,8 +708,8 @@ export class DefaultService {
       url: '/boards/{id}/{field}',
       path: {
         id: id,
-        field: field
-      }
+        field: field,
+      },
     });
   }
 
@@ -746,13 +746,13 @@ export class DefaultService {
     page?: number,
     reactions?: boolean,
     before?: string,
-    since?: string
+    since?: string,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/boards/{boardId}/actions',
       path: {
-        boardId: boardId
+        boardId: boardId,
       },
       query: {
         fields: fields,
@@ -767,8 +767,8 @@ export class DefaultService {
         page: page,
         reactions: reactions,
         before: before,
-        since: since
-      }
+        since: since,
+      },
     });
   }
 
@@ -808,14 +808,14 @@ export class DefaultService {
     page?: number,
     reactions?: boolean,
     before?: string,
-    since?: string
+    since?: string,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/boards/{id}/cards/{idCard}',
       path: {
         id: id,
-        idCard: idCard
+        idCard: idCard,
       },
       query: {
         fields: fields,
@@ -830,8 +830,8 @@ export class DefaultService {
         page: page,
         reactions: reactions,
         before: before,
-        since: since
-      }
+        since: since,
+      },
     });
   }
 
@@ -844,17 +844,17 @@ export class DefaultService {
    */
   public getBoardsIdBoardstars(
     boardId: string,
-    filter: string = 'mine'
+    filter: string = 'mine',
   ): CancelablePromise<Array<BoardStars>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/boards/{boardId}/boardStars',
       path: {
-        boardId: boardId
+        boardId: boardId,
       },
       query: {
-        filter: filter
-      }
+        filter: filter,
+      },
     });
   }
 
@@ -870,8 +870,8 @@ export class DefaultService {
       method: 'GET',
       url: '/boards/{id}/checklists',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -887,8 +887,8 @@ export class DefaultService {
       method: 'GET',
       url: '/boards/{id}/cards',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -902,15 +902,15 @@ export class DefaultService {
    */
   public getBoardsIdCardsFilter(
     id: string,
-    filter: 'all' | 'closed' | 'none' | 'open' | 'visible'
+    filter: 'all' | 'closed' | 'none' | 'open' | 'visible',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/boards/{id}/cards/{filter}',
       path: {
         id: id,
-        filter: filter
-      }
+        filter: filter,
+      },
     });
   }
 
@@ -926,8 +926,8 @@ export class DefaultService {
       method: 'GET',
       url: '/boards/{id}/customFields',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -943,18 +943,18 @@ export class DefaultService {
   public getBoardsIdLabels(
     id: TrelloID,
     fields?: Label,
-    limit: number = 50
+    limit: number = 50,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/boards/{id}/labels',
       path: {
-        id: id
+        id: id,
       },
       query: {
         fields: fields,
-        limit: limit
-      }
+        limit: limit,
+      },
     });
   }
 
@@ -972,12 +972,12 @@ export class DefaultService {
       method: 'POST',
       url: '/boards/{id}/labels',
       path: {
-        id: id
+        id: id,
       },
       query: {
         name: name,
-        color: color
-      }
+        color: color,
+      },
     });
   }
 
@@ -997,20 +997,20 @@ export class DefaultService {
     cards?: ViewFilter,
     cardFields: string = 'all',
     filter?: ViewFilter,
-    fields: string = 'all'
+    fields: string = 'all',
   ): CancelablePromise<Array<TrelloList>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/boards/{id}/lists',
       path: {
-        id: id
+        id: id,
       },
       query: {
         cards: cards,
         card_fields: cardFields,
         filter: filter,
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -1026,18 +1026,18 @@ export class DefaultService {
   public postBoardsIdLists(
     id: TrelloID,
     name: string,
-    pos: string = 'top'
+    pos: string = 'top',
   ): CancelablePromise<TrelloList> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/boards/{id}/lists',
       path: {
-        id: id
+        id: id,
       },
       query: {
         name: name,
-        pos: pos
-      }
+        pos: pos,
+      },
     });
   }
 
@@ -1054,8 +1054,8 @@ export class DefaultService {
       url: '/boards/{id}/lists/{filter}',
       path: {
         id: id,
-        filter: filter
-      }
+        filter: filter,
+      },
     });
   }
 
@@ -1071,8 +1071,8 @@ export class DefaultService {
       method: 'GET',
       url: '/boards/{id}/members',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -1095,20 +1095,20 @@ export class DefaultService {
        * The full name of the user to as a member of the board. Must have a length of at least 1 and cannot begin nor end with a space.
        */
       fullName?: string;
-    }
+    },
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/boards/{id}/members',
       path: {
-        id: id
+        id: id,
       },
       query: {
         email: email,
-        type: type
+        type: type,
       },
       body: requestBody,
-      mediaType: 'application/json'
+      mediaType: 'application/json',
     });
   }
 
@@ -1126,19 +1126,19 @@ export class DefaultService {
     id: TrelloID,
     idMember: TrelloID,
     type: 'admin' | 'normal' | 'observer',
-    allowBillableGuest: boolean = false
+    allowBillableGuest: boolean = false,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/boards/{id}/members/{idMember}',
       path: {
         id: id,
-        idMember: idMember
+        idMember: idMember,
       },
       query: {
         type: type,
-        allowBillableGuest: allowBillableGuest
-      }
+        allowBillableGuest: allowBillableGuest,
+      },
     });
   }
 
@@ -1155,8 +1155,8 @@ export class DefaultService {
       url: '/boards/{id}/members/{idMember}',
       path: {
         id: id,
-        idMember: idMember
-      }
+        idMember: idMember,
+      },
     });
   }
 
@@ -1187,19 +1187,19 @@ export class DefaultService {
       | 'products'
       | 'status'
       | 'url'
-      | 'username' = 'fullName, username'
+      | 'username' = 'fullName, username',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/boards/{id}/memberships/{idMembership}',
       path: {
         id: id,
-        idMembership: idMembership
+        idMembership: idMembership,
       },
       query: {
         type: type,
-        member_fields: memberFields
-      }
+        member_fields: memberFields,
+      },
     });
   }
 
@@ -1213,17 +1213,17 @@ export class DefaultService {
    */
   public putBoardsIdMyprefsEmailposition(
     id: TrelloID,
-    value: 'bottom' | 'top'
+    value: 'bottom' | 'top',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/boards/{id}/myPrefs/emailPosition',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -1240,11 +1240,11 @@ export class DefaultService {
       method: 'PUT',
       url: '/boards/{id}/myPrefs/idEmailList',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -1260,11 +1260,11 @@ export class DefaultService {
       method: 'PUT',
       url: '/boards/{id}/myPrefs/showListGuide',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -1280,11 +1280,11 @@ export class DefaultService {
       method: 'PUT',
       url: '/boards/{id}/myPrefs/showSidebar',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -1297,17 +1297,17 @@ export class DefaultService {
    */
   public putBoardsIdMyPrefsShowsidebaractivity(
     id: TrelloID,
-    value: boolean
+    value: boolean,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/boards/{id}/myPrefs/showSidebarActivity',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -1320,17 +1320,17 @@ export class DefaultService {
    */
   public putBoardsIdMyPrefsShowsidebarboardactions(
     id: TrelloID,
-    value: boolean
+    value: boolean,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/boards/{id}/myPrefs/showSidebarBoardActions',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -1343,17 +1343,17 @@ export class DefaultService {
    */
   public putBoardsIdMyPrefsShowsidebarmembers(
     id: TrelloID,
-    value: boolean
+    value: boolean,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/boards/{id}/myPrefs/showSidebarMembers',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -1404,7 +1404,7 @@ export class DefaultService {
       | 'lime'
       | 'sky'
       | 'grey' = 'blue',
-    prefsCardAging: 'pirate' | 'regular' = 'regular'
+    prefsCardAging: 'pirate' | 'regular' = 'regular',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
@@ -1425,8 +1425,8 @@ export class DefaultService {
         prefs_selfJoin: prefsSelfJoin,
         prefs_cardCovers: prefsCardCovers,
         prefs_background: prefsBackground,
-        prefs_cardAging: prefsCardAging
-      }
+        prefs_cardAging: prefsCardAging,
+      },
     });
   }
 
@@ -1442,8 +1442,8 @@ export class DefaultService {
       method: 'POST',
       url: '/boards/{id}/calendarKey/generate',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -1458,8 +1458,8 @@ export class DefaultService {
       method: 'POST',
       url: '/boards/{id}/emailKey/generate',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -1475,11 +1475,11 @@ export class DefaultService {
       method: 'POST',
       url: '/boards/{id}/idTags',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -1494,8 +1494,8 @@ export class DefaultService {
       method: 'POST',
       url: '/boards/{id}/markedAsViewed',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -1511,8 +1511,8 @@ export class DefaultService {
       method: 'GET',
       url: '/boards/{id}/boardPlugins',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -1530,11 +1530,11 @@ export class DefaultService {
       method: 'POST',
       url: '/boards/{id}/boardPlugins',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        idPlugin: idPlugin
-      }
+        idPlugin: idPlugin,
+      },
     });
   }
 
@@ -1553,8 +1553,8 @@ export class DefaultService {
       url: '/boards/{id}/boardPlugins/{idPlugin}',
       path: {
         id: id,
-        idPlugin: idPlugin
-      }
+        idPlugin: idPlugin,
+      },
     });
   }
 
@@ -1568,17 +1568,17 @@ export class DefaultService {
    */
   public getBoardIdPlugins(
     id: TrelloID,
-    filter: 'enabled' | 'available' = 'enabled'
+    filter: 'enabled' | 'available' = 'enabled',
   ): CancelablePromise<Plugin> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/boards/{id}/plugins',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        filter: filter
-      }
+        filter: filter,
+      },
     });
   }
 
@@ -1632,7 +1632,7 @@ export class DefaultService {
       | 'stickers' = 'all',
     address?: string,
     locationName?: string,
-    coordinates?: string
+    coordinates?: string,
   ): CancelablePromise<Card> {
     return this.httpRequest.request({
       method: 'POST',
@@ -1654,8 +1654,8 @@ export class DefaultService {
         keepFromSource: keepFromSource,
         address: address,
         locationName: locationName,
-        coordinates: coordinates
-      }
+        coordinates: coordinates,
+      },
     });
   }
 
@@ -1703,13 +1703,13 @@ export class DefaultService {
     pluginData: boolean = false,
     stickers: boolean = false,
     stickerFields: string = 'all',
-    customFieldItems: boolean = false
+    customFieldItems: boolean = false,
   ): CancelablePromise<Card> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/cards/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         fields: fields,
@@ -1729,8 +1729,8 @@ export class DefaultService {
         pluginData: pluginData,
         stickers: stickers,
         sticker_fields: stickerFields,
-        customFieldItems: customFieldItems
-      }
+        customFieldItems: customFieldItems,
+      },
     });
   }
 
@@ -1820,13 +1820,13 @@ export class DefaultService {
          */
         url?: string;
       };
-    }
+    },
   ): CancelablePromise<Card> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/cards/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         name: name,
@@ -1845,8 +1845,8 @@ export class DefaultService {
         address: address,
         locationName: locationName,
         coordinates: coordinates,
-        cover: cover
-      }
+        cover: cover,
+      },
     });
   }
 
@@ -1862,8 +1862,8 @@ export class DefaultService {
       method: 'DELETE',
       url: '/cards/{id}',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -1881,8 +1881,8 @@ export class DefaultService {
       url: '/cards/{id}/{field}',
       path: {
         id: id,
-        field: field
-      }
+        field: field,
+      },
     });
   }
 
@@ -1898,18 +1898,18 @@ export class DefaultService {
   public getCardsIdActions(
     id: TrelloID,
     filter: string = 'commentCard, updateCard:idList',
-    page?: number
+    page?: number,
   ): CancelablePromise<Array<Action>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/cards/{id}/actions',
       path: {
-        id: id
+        id: id,
       },
       query: {
         filter: filter,
-        page: page
-      }
+        page: page,
+      },
     });
   }
 
@@ -1925,18 +1925,18 @@ export class DefaultService {
   public getCardsIdAttachments(
     id: TrelloID,
     fields: string = 'all',
-    filter: string = 'false'
+    filter: string = 'false',
   ): CancelablePromise<Array<Attachment>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/cards/{id}/attachments',
       path: {
-        id: id
+        id: id,
       },
       query: {
         fields: fields,
-        filter: filter
-      }
+        filter: filter,
+      },
     });
   }
 
@@ -1958,21 +1958,21 @@ export class DefaultService {
     file?: Blob,
     mimeType?: string,
     url?: string,
-    setCover: boolean = false
+    setCover: boolean = false,
   ): CancelablePromise<Array<Attachment>> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/cards/{id}/attachments',
       path: {
-        id: id
+        id: id,
       },
       query: {
         name: name,
         file: file,
         mimeType: mimeType,
         url: url,
-        setCover: setCover
-      }
+        setCover: setCover,
+      },
     });
   }
 
@@ -1988,18 +1988,18 @@ export class DefaultService {
   public getCardsIdAttachmentsIdattachment(
     id: TrelloID,
     idAttachment: TrelloID,
-    fields?: Array<AttachmentFields>
+    fields?: Array<AttachmentFields>,
   ): CancelablePromise<Array<Attachment>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/cards/{id}/attachments/{idAttachment}',
       path: {
         id: id,
-        idAttachment: idAttachment
+        idAttachment: idAttachment,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -2017,7 +2017,7 @@ export class DefaultService {
     id: TrelloID,
     idAttachment: TrelloID,
     id: TrelloID,
-    idAttachment: TrelloID
+    idAttachment: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
@@ -2026,8 +2026,8 @@ export class DefaultService {
         id: id,
         idAttachment: idAttachment,
         id: id,
-        idAttachment: idAttachment
-      }
+        idAttachment: idAttachment,
+      },
     });
   }
 
@@ -2044,11 +2044,11 @@ export class DefaultService {
       method: 'GET',
       url: '/cards/{id}/board',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -2065,11 +2065,11 @@ export class DefaultService {
       method: 'GET',
       url: '/cards/{id}/checkItemStates',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -2097,20 +2097,20 @@ export class DefaultService {
       | 'dueReminder'
       | 'idMember' = 'name,nameData,pos,state,due,dueReminder,idMember',
     filter: 'all' | 'none' = 'all',
-    fields: 'all' | 'name' | 'nameData' | 'pos' | 'state' | 'type' = 'all'
+    fields: 'all' | 'name' | 'nameData' | 'pos' | 'state' | 'type' = 'all',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/cards/{id}/checklists',
       path: {
-        id: id
+        id: id,
       },
       query: {
         checkItems: checkItems,
         checkItem_fields: checkItemFields,
         filter: filter,
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -2128,19 +2128,19 @@ export class DefaultService {
     id: TrelloID,
     name?: string,
     idChecklistSource?: TrelloID,
-    pos?: string
+    pos?: string,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/cards/{id}/checklists',
       path: {
-        id: id
+        id: id,
       },
       query: {
         name: name,
         idChecklistSource: idChecklistSource,
-        pos: pos
-      }
+        pos: pos,
+      },
     });
   }
 
@@ -2156,18 +2156,18 @@ export class DefaultService {
   public getCardsIdCheckitemIdcheckitem(
     id: TrelloID,
     idCheckItem: TrelloID,
-    fields: string = 'name,nameData,pos,state,due,dueReminder,idMember'
+    fields: string = 'name,nameData,pos,state,due,dueReminder,idMember',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/cards/{id}/checkItem/{idCheckItem}',
       path: {
         id: id,
-        idCheckItem: idCheckItem
+        idCheckItem: idCheckItem,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -2195,14 +2195,14 @@ export class DefaultService {
     pos?: posStringOrNumber,
     due?: string,
     dueReminder?: number | null,
-    idMember?: TrelloID
+    idMember?: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/cards/{id}/checkItem/{idCheckItem}',
       path: {
         id: id,
-        idCheckItem: idCheckItem
+        idCheckItem: idCheckItem,
       },
       query: {
         name: name,
@@ -2211,8 +2211,8 @@ export class DefaultService {
         pos: pos,
         due: due,
         dueReminder: dueReminder,
-        idMember: idMember
-      }
+        idMember: idMember,
+      },
     });
   }
 
@@ -2226,15 +2226,15 @@ export class DefaultService {
    */
   public deleteCardsIdCheckitemIdcheckitem(
     id: TrelloID,
-    idCheckItem: TrelloID
+    idCheckItem: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/cards/{id}/checkItem/{idCheckItem}',
       path: {
         id: id,
-        idCheckItem: idCheckItem
-      }
+        idCheckItem: idCheckItem,
+      },
     });
   }
 
@@ -2251,11 +2251,11 @@ export class DefaultService {
       method: 'GET',
       url: '/cards/{id}/list',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -2269,17 +2269,17 @@ export class DefaultService {
    */
   public getCardsIdMembers(
     id: TrelloID,
-    fields: string = 'avatarHash,fullName,initials,username'
+    fields: string = 'avatarHash,fullName,initials,username',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/cards/{id}/members',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -2293,17 +2293,17 @@ export class DefaultService {
    */
   public getCardsIdMembersvoted(
     id: TrelloID,
-    fields: string = 'avatarHash,fullName,initials,username'
+    fields: string = 'avatarHash,fullName,initials,username',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/cards/{id}/membersVoted',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -2320,11 +2320,11 @@ export class DefaultService {
       method: 'POST',
       url: '/cards/{id}/membersVoted',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -2340,8 +2340,8 @@ export class DefaultService {
       method: 'GET',
       url: '/cards/{id}/pluginData',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -2357,18 +2357,18 @@ export class DefaultService {
   public getCardsIdStickers(
     id: TrelloID,
     id: TrelloID,
-    fields: string = 'all'
+    fields: string = 'all',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/cards/{id}/stickers',
       path: {
         id: id,
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -2390,21 +2390,21 @@ export class DefaultService {
     top: number,
     left: number,
     zIndex: number,
-    rotate?: number
+    rotate?: number,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/cards/{id}/stickers',
       path: {
-        id: id
+        id: id,
       },
       query: {
         image: image,
         top: top,
         left: left,
         zIndex: zIndex,
-        rotate: rotate
-      }
+        rotate: rotate,
+      },
     });
   }
 
@@ -2420,18 +2420,18 @@ export class DefaultService {
   public getCardsIdStickersIdsticker(
     id: TrelloID,
     idSticker: TrelloID,
-    fields: string = 'all'
+    fields: string = 'all',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/cards/{id}/stickers/{idSticker}',
       path: {
         id: id,
-        idSticker: idSticker
+        idSticker: idSticker,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -2449,8 +2449,8 @@ export class DefaultService {
       url: '/cards/{id}/stickers/{idSticker}',
       path: {
         id: id,
-        idSticker: idSticker
-      }
+        idSticker: idSticker,
+      },
     });
   }
 
@@ -2472,21 +2472,21 @@ export class DefaultService {
     top: number,
     left: number,
     zIndex: number,
-    rotate?: number
+    rotate?: number,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/cards/{id}/stickers/{idSticker}',
       path: {
         id: id,
-        idSticker: idSticker
+        idSticker: idSticker,
       },
       query: {
         top: top,
         left: left,
         zIndex: zIndex,
-        rotate: rotate
-      }
+        rotate: rotate,
+      },
     });
   }
 
@@ -2502,18 +2502,18 @@ export class DefaultService {
   public putCardsIdActionsIdactionComments(
     id: TrelloID,
     idAction: TrelloID,
-    text: string
+    text: string,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/cards/{id}/actions/{idAction}/comments',
       path: {
         id: id,
-        idAction: idAction
+        idAction: idAction,
       },
       query: {
-        text: text
-      }
+        text: text,
+      },
     });
   }
 
@@ -2531,8 +2531,8 @@ export class DefaultService {
       url: '/cards/{id}/actions/{idAction}/comments',
       path: {
         id: id,
-        idAction: idAction
-      }
+        idAction: idAction,
+      },
     });
   }
 
@@ -2565,17 +2565,17 @@ export class DefaultService {
            * The ID of the option for the list type Custom Field
            */
           idValue?: TrelloID;
-        }
+        },
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/cards/{idCard}/customField/{idCustomField}/item',
       path: {
         idCard: idCard,
-        idCustomField: idCustomField
+        idCustomField: idCustomField,
       },
       body: requestBody,
-      mediaType: 'application/json'
+      mediaType: 'application/json',
     });
   }
 
@@ -2614,7 +2614,7 @@ export class DefaultService {
       method: 'PUT',
       url: '/cards/{idCard}/customFields',
       body: requestBody,
-      mediaType: 'application/json'
+      mediaType: 'application/json',
     });
   }
 
@@ -2630,8 +2630,8 @@ export class DefaultService {
       method: 'GET',
       url: '/cards/{id}/customFieldItems',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -2648,11 +2648,11 @@ export class DefaultService {
       method: 'POST',
       url: '/cards/{id}/actions/comments',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        text: text
-      }
+        text: text,
+      },
     });
   }
 
@@ -2669,11 +2669,11 @@ export class DefaultService {
       method: 'POST',
       url: '/cards/{id}/idLabels',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -2690,11 +2690,11 @@ export class DefaultService {
       method: 'POST',
       url: '/cards/{id}/idMembers',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -2712,12 +2712,12 @@ export class DefaultService {
       method: 'POST',
       url: '/cards/{id}/labels',
       path: {
-        id: id
+        id: id,
       },
       query: {
         color: color,
-        name: name
-      }
+        name: name,
+      },
     });
   }
 
@@ -2733,8 +2733,8 @@ export class DefaultService {
       method: 'POST',
       url: '/cards/{id}/markAssociatedNotificationsRead',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -2752,8 +2752,8 @@ export class DefaultService {
       url: '/cards/{id}/idLabels/{idLabel}',
       path: {
         id: id,
-        idLabel: idLabel
-      }
+        idLabel: idLabel,
+      },
     });
   }
 
@@ -2771,8 +2771,8 @@ export class DefaultService {
       url: '/cards/{id}/idMembers/{idMember}',
       path: {
         id: id,
-        idMember: idMember
-      }
+        idMember: idMember,
+      },
     });
   }
 
@@ -2786,15 +2786,15 @@ export class DefaultService {
    */
   public deleteCardsIdMembersvotedIdmember(
     id: TrelloID,
-    idMember: TrelloID
+    idMember: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/cards/{id}/membersVoted/{idMember}',
       path: {
         id: id,
-        idMember: idMember
-      }
+        idMember: idMember,
+      },
     });
   }
 
@@ -2812,7 +2812,7 @@ export class DefaultService {
     idCard: TrelloID,
     idCheckItem: TrelloID,
     idChecklist: TrelloID,
-    pos?: posStringOrNumber
+    pos?: posStringOrNumber,
   ): CancelablePromise<CheckItem> {
     return this.httpRequest.request({
       method: 'PUT',
@@ -2820,11 +2820,11 @@ export class DefaultService {
       path: {
         idCard: idCard,
         idCheckItem: idCheckItem,
-        idChecklist: idChecklist
+        idChecklist: idChecklist,
       },
       query: {
-        pos: pos
-      }
+        pos: pos,
+      },
     });
   }
 
@@ -2838,15 +2838,15 @@ export class DefaultService {
    */
   public deleteCardsIdChecklistsIdchecklist(
     id: TrelloID,
-    idChecklist: TrelloID
+    idChecklist: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/cards/{id}/checklists/{idChecklist}',
       path: {
         id: id,
-        idChecklist: idChecklist
-      }
+        idChecklist: idChecklist,
+      },
     });
   }
 
@@ -2863,7 +2863,7 @@ export class DefaultService {
     idCard: TrelloID,
     name?: string,
     pos?: posStringOrNumber,
-    idChecklistSource?: TrelloID
+    idChecklistSource?: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
@@ -2872,8 +2872,8 @@ export class DefaultService {
         idCard: idCard,
         name: name,
         pos: pos,
-        idChecklistSource: idChecklistSource
-      }
+        idChecklistSource: idChecklistSource,
+      },
     });
   }
 
@@ -2901,20 +2901,20 @@ export class DefaultService {
       | 'due'
       | 'dueReminder'
       | 'idMember' = 'name, nameData, pos, state, due, dueReminder, idMember',
-    fields: string = 'all'
+    fields: string = 'all',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/checklists/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         cards: cards,
         checkItems: checkItems,
         checkItem_fields: checkItemFields,
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -2930,18 +2930,18 @@ export class DefaultService {
   public putCheclistsId(
     id: TrelloID,
     name?: string,
-    pos?: posStringOrNumber
+    pos?: posStringOrNumber,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/checklists/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         name: name,
-        pos: pos
-      }
+        pos: pos,
+      },
     });
   }
 
@@ -2957,8 +2957,8 @@ export class DefaultService {
       method: 'DELETE',
       url: '/checklists/{id}',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -2975,8 +2975,8 @@ export class DefaultService {
       url: '/checklists/{id}/{field}',
       path: {
         id: id,
-        field: field
-      }
+        field: field,
+      },
     });
   }
 
@@ -2991,18 +2991,18 @@ export class DefaultService {
   public putChecklistsIdField(
     id: TrelloID,
     field: 'name' | 'pos',
-    value: posStringOrNumber | TrelloID
+    value: posStringOrNumber | TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/checklists/{id}/{field}',
       path: {
         id: id,
-        field: field
+        field: field,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -3015,17 +3015,17 @@ export class DefaultService {
    */
   public getChecklistsIdBoard(
     id: TrelloID,
-    fields: 'all' | 'name' = 'all'
+    fields: 'all' | 'name' = 'all',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/checklists/{id}/board',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -3040,8 +3040,8 @@ export class DefaultService {
       method: 'GET',
       url: '/checklists/{id}/cards',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -3065,18 +3065,18 @@ export class DefaultService {
       | 'type'
       | 'due'
       | 'dueReminder'
-      | 'idMember' = 'name, nameData, pos, state, due, dueReminder, idMember'
+      | 'idMember' = 'name, nameData, pos, state, due, dueReminder, idMember',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/checklists/{id}/checkItems',
       path: {
-        id: id
+        id: id,
       },
       query: {
         filter: filter,
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -3099,13 +3099,13 @@ export class DefaultService {
     checked: boolean = false,
     due?: string,
     dueReminder?: number | null,
-    idMember?: TrelloID
+    idMember?: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/checklists/{id}/checkItems',
       path: {
-        id: id
+        id: id,
       },
       query: {
         name: name,
@@ -3113,8 +3113,8 @@ export class DefaultService {
         checked: checked,
         due: due,
         dueReminder: dueReminder,
-        idMember: idMember
-      }
+        idMember: idMember,
+      },
     });
   }
 
@@ -3138,18 +3138,18 @@ export class DefaultService {
       | 'type'
       | 'due'
       | 'dueReminder'
-      | 'idMember' = 'name, nameData, pos, state, due, dueReminder, idMember'
+      | 'idMember' = 'name, nameData, pos, state, due, dueReminder, idMember',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/checklists/{id}/checkItems/{idCheckItem}',
       path: {
         id: id,
-        idCheckItem: idCheckItem
+        idCheckItem: idCheckItem,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -3163,15 +3163,15 @@ export class DefaultService {
    */
   public deleteChecklistsIdCheckitemsIdcheckitem(
     id: TrelloID,
-    idCheckItem: TrelloID
+    idCheckItem: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/checklists/{id}/checkItems/{idCheckItem}',
       path: {
         id: id,
-        idCheckItem: idCheckItem
-      }
+        idCheckItem: idCheckItem,
+      },
     });
   }
 
@@ -3213,7 +3213,7 @@ export class DefaultService {
       method: 'POST',
       url: '/customFields',
       body: requestBody,
-      mediaType: 'application/json'
+      mediaType: 'application/json',
     });
   }
 
@@ -3228,8 +3228,8 @@ export class DefaultService {
       method: 'GET',
       url: '/customFields/{id}',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -3253,16 +3253,16 @@ export class DefaultService {
        * Whether to display this custom field on the front of cards
        */
       'display/cardFront'?: boolean;
-    }
+    },
   ): CancelablePromise<CustomField> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/customFields/{id}',
       path: {
-        id: id
+        id: id,
       },
       body: requestBody,
-      mediaType: 'application/json'
+      mediaType: 'application/json',
     });
   }
 
@@ -3278,8 +3278,8 @@ export class DefaultService {
       method: 'DELETE',
       url: '/customFields/{id}',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -3295,8 +3295,8 @@ export class DefaultService {
       method: 'POST',
       url: '/customFields/{id}/options',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -3312,8 +3312,8 @@ export class DefaultService {
       method: 'GET',
       url: '/customFields/{id}/options',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -3327,15 +3327,15 @@ export class DefaultService {
    */
   public getCustomfieldsOptionsIdcustomfieldoption(
     id: TrelloID,
-    idCustomFieldOption: TrelloID
+    idCustomFieldOption: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/customFields/{id}/options/{idCustomFieldOption}',
       path: {
         id: id,
-        idCustomFieldOption: idCustomFieldOption
-      }
+        idCustomFieldOption: idCustomFieldOption,
+      },
     });
   }
 
@@ -3349,15 +3349,15 @@ export class DefaultService {
    */
   public deleteCustomfieldsOptionsIdcustomfieldoption(
     id: TrelloID,
-    idCustomFieldOption: TrelloID
+    idCustomFieldOption: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/customFields/{id}/options/{idCustomFieldOption}',
       path: {
         id: id,
-        idCustomFieldOption: idCustomFieldOption
-      }
+        idCustomFieldOption: idCustomFieldOption,
+      },
     });
   }
 
@@ -3375,8 +3375,8 @@ export class DefaultService {
       url: '/emoji',
       query: {
         locale: locale,
-        spritesheets: spritesheets
-      }
+        spritesheets: spritesheets,
+      },
     });
   }
 
@@ -3414,13 +3414,13 @@ export class DefaultService {
     organizations: string = 'none',
     organizationFields: string = 'none',
     organizationPaidAccounts: boolean = false,
-    organizationMemberships: string = 'none'
+    organizationMemberships: string = 'none',
   ): CancelablePromise<Enterprise> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/enterprises/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         fields: fields,
@@ -3435,8 +3435,8 @@ export class DefaultService {
         organizations: organizations,
         organization_fields: organizationFields,
         organization_paid_accounts: organizationPaidAccounts,
-        organization_memberships: organizationMemberships
-      }
+        organization_memberships: organizationMemberships,
+      },
     });
   }
 
@@ -3454,8 +3454,8 @@ export class DefaultService {
       method: 'GET',
       url: '/enterprises/{id}/auditlog',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -3470,21 +3470,21 @@ export class DefaultService {
    */
   public getEnterprisesIdAdmins(
     id: TrelloID,
-    fields: string = 'fullName, userName'
+    fields: string = 'fullName, userName',
   ): CancelablePromise<EnterpriseAdmin | Error> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/enterprises/{id}/admins',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
+        fields: fields,
       },
       errors: {
         401: `Unauthorized`,
-        404: `The specified resource was not found`
-      }
+        404: `The specified resource was not found`,
+      },
     });
   }
 
@@ -3504,7 +3504,7 @@ export class DefaultService {
     authenticate: boolean = false,
     confirmationAccepted: boolean = false,
     returnUrl: string | null = null,
-    tosAccepted: boolean = false
+    tosAccepted: boolean = false,
   ): CancelablePromise<{
     signupUrl?: string;
   }> {
@@ -3512,14 +3512,14 @@ export class DefaultService {
       method: 'GET',
       url: '/enterprises/{id}/signupUrl',
       path: {
-        id: id
+        id: id,
       },
       query: {
         authenticate: authenticate,
         confirmationAccepted: confirmationAccepted,
         returnUrl: returnUrl,
-        tosAccepted: tosAccepted
-      }
+        tosAccepted: tosAccepted,
+      },
     });
   }
 
@@ -3549,13 +3549,13 @@ export class DefaultService {
     activeSince: string = 'none',
     inactiveSince: string = 'none',
     search: string = 'none',
-    startIndex: string = 'none'
+    startIndex: string = 'none',
   ): CancelablePromise<Array<Membership>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/enterprises/{id}/members/query',
       path: {
-        id: id
+        id: id,
       },
       query: {
         licensed: licensed,
@@ -3566,8 +3566,8 @@ export class DefaultService {
         activeSince: activeSince,
         inactiveSince: inactiveSince,
         search: search,
-        startIndex: startIndex
-      }
+        startIndex: startIndex,
+      },
     });
   }
 
@@ -3597,13 +3597,13 @@ export class DefaultService {
     startIndex?: number,
     count: string = 'none',
     organizationFields: string = 'displayName',
-    boardFields: string = 'name'
+    boardFields: string = 'name',
   ): CancelablePromise<Array<Member>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/enterprises/{id}/members',
       path: {
-        id: id
+        id: id,
       },
       query: {
         fields: fields,
@@ -3614,8 +3614,8 @@ export class DefaultService {
         startIndex: startIndex,
         count: count,
         organization_fields: organizationFields,
-        board_fields: boardFields
-      }
+        board_fields: boardFields,
+      },
     });
   }
 
@@ -3636,24 +3636,24 @@ export class DefaultService {
     idMember: TrelloID,
     fields: string = 'avatarHash, fullName, initials, username',
     organizationFields: string = 'displayName',
-    boardFields: string = 'name'
+    boardFields: string = 'name',
   ): CancelablePromise<Member | Error> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/enterprises/{id}/members/{idMember}',
       path: {
         id: id,
-        idMember: idMember
+        idMember: idMember,
       },
       query: {
         fields: fields,
         organization_fields: organizationFields,
-        board_fields: boardFields
+        board_fields: boardFields,
       },
       errors: {
         401: `Unauthorized`,
-        404: `The specified resource was not found`
-      }
+        404: `The specified resource was not found`,
+      },
     });
   }
 
@@ -3668,19 +3668,19 @@ export class DefaultService {
    */
   public getEnterprisesIdTransferrableOrganizationIdOrganization(
     id: TrelloID,
-    idOrganization: TrelloID
+    idOrganization: TrelloID,
   ): CancelablePromise<TransferrableOrganization | Error> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/enterprises/{id}/transferrable/organization/{idOrganization}',
       path: {
         id: id,
-        idOrganization: idOrganization
+        idOrganization: idOrganization,
       },
       errors: {
         401: `Unauthorized`,
-        404: `The specified resource was not found`
-      }
+        404: `The specified resource was not found`,
+      },
     });
   }
 
@@ -3695,19 +3695,19 @@ export class DefaultService {
    */
   public getEnterprisesIdTransferrableBulkIdOrganizations(
     id: TrelloID,
-    idOrganizations: Array<Organization>
+    idOrganizations: Array<Organization>,
   ): CancelablePromise<Array<TransferrableOrganization> | Error> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/enterprises/{id}/transferrable/bulk/{idOrganizations}',
       path: {
         id: id,
-        idOrganizations: idOrganizations
+        idOrganizations: idOrganizations,
       },
       errors: {
         401: `Unauthorized`,
-        404: `The specified resource was not found`
-      }
+        404: `The specified resource was not found`,
+      },
     });
   }
 
@@ -3722,21 +3722,21 @@ export class DefaultService {
    */
   public putEnterprisesIdEnterpriseJoinRequestBulk(
     id: TrelloID,
-    idOrganizations: Array<Organization>
+    idOrganizations: Array<Organization>,
   ): CancelablePromise<any | Error> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/enterprises/${id}/enterpriseJoinRequest/bulk',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        idOrganizations: idOrganizations
+        idOrganizations: idOrganizations,
       },
       errors: {
         401: `Unauthorized`,
-        404: `The specified resource was not found`
-      }
+        404: `The specified resource was not found`,
+      },
     });
   }
 
@@ -3759,25 +3759,25 @@ export class DefaultService {
     cursor?: string,
     name?: string,
     activeSince?: string,
-    inactiveSince?: string
+    inactiveSince?: string,
   ): CancelablePromise<ClaimableOrganizations | Error> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/enterprises/{id}/claimableOrganizations',
       path: {
-        id: id
+        id: id,
       },
       query: {
         limit: limit,
         cursor: cursor,
         name: name,
         activeSince: activeSince,
-        inactiveSince: inactiveSince
+        inactiveSince: inactiveSince,
       },
       errors: {
         401: `Unauthorized`,
-        404: `The specified resource was not found`
-      }
+        404: `The specified resource was not found`,
+      },
     });
   }
 
@@ -3794,22 +3794,22 @@ export class DefaultService {
   public getEnterprisesIdPendingOrganizations(
     id: TrelloID,
     activeSince?: string,
-    inactiveSince?: string
+    inactiveSince?: string,
   ): CancelablePromise<Array<PendingOrganizations> | Error> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/enterprises/{id}/pendingOrganizations',
       path: {
-        id: id
+        id: id,
       },
       query: {
         activeSince: activeSince,
-        inactiveSince: inactiveSince
+        inactiveSince: inactiveSince,
       },
       errors: {
         401: `Unauthorized`,
-        404: `The specified resource was not found`
-      }
+        404: `The specified resource was not found`,
+      },
     });
   }
 
@@ -3826,11 +3826,11 @@ export class DefaultService {
       method: 'POST',
       url: '/enterprises/{id}/tokens',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        expiration: expiration
-      }
+        expiration: expiration,
+      },
     });
   }
 
@@ -3847,21 +3847,21 @@ export class DefaultService {
    */
   public putEnterprisesIdOrganizations(
     id: TrelloID,
-    idOrganization: string
+    idOrganization: string,
   ): CancelablePromise<Array<Organization> | Error> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/enterprises/{id}/organizations',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        idOrganization: idOrganization
+        idOrganization: idOrganization,
       },
       errors: {
         401: `Unauthorized`,
-        404: `The specified resource was not found`
-      }
+        404: `The specified resource was not found`,
+      },
     });
   }
 
@@ -3880,22 +3880,22 @@ export class DefaultService {
   public putEnterprisesIdMembersIdmemberLicensed(
     id: TrelloID,
     idMember: TrelloID,
-    value: boolean
+    value: boolean,
   ): CancelablePromise<Member | Error> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/enterprises/{id}/members/{idMember}/licensed',
       path: {
         id: id,
-        idMember: idMember
+        idMember: idMember,
       },
       query: {
-        value: value
+        value: value,
       },
       errors: {
         401: `Unauthorized`,
-        404: `The specified resource was not found`
-      }
+        404: `The specified resource was not found`,
+      },
     });
   }
 
@@ -3919,21 +3919,21 @@ export class DefaultService {
     value: boolean,
     fields: MemberFields = 'avatarHash, fullName, initials, username',
     organizationFields: OrganizationFields = 'displayName',
-    boardFields: BoardFields = 'name'
+    boardFields: BoardFields = 'name',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/enterprises/{id}/members/{idMember}/deactivated',
       path: {
         id: id,
-        idMember: idMember
+        idMember: idMember,
       },
       query: {
         value: value,
         fields: fields,
         organization_fields: organizationFields,
-        board_fields: boardFields
-      }
+        board_fields: boardFields,
+      },
     });
   }
 
@@ -3953,8 +3953,8 @@ export class DefaultService {
       url: '/enterprises/{id}/admins/{idMember}',
       path: {
         id: id,
-        idMember: idMember
-      }
+        idMember: idMember,
+      },
     });
   }
 
@@ -3970,15 +3970,15 @@ export class DefaultService {
    */
   public enterprisesIdOrganizationsIdmember(
     id: TrelloID,
-    idMember: TrelloID
+    idMember: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/enterprises/{id}/admins/{idMember}',
       path: {
         id: id,
-        idMember: idMember
-      }
+        idMember: idMember,
+      },
     });
   }
 
@@ -3992,15 +3992,15 @@ export class DefaultService {
    */
   public deleteEnterprisesIdOrganizationsIdorg(
     id: TrelloID,
-    idOrg: TrelloID
+    idOrg: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/enterprises/{id}/organizations/{idOrg}',
       path: {
         id: id,
-        idOrg: idOrg
-      }
+        idOrg: idOrg,
+      },
     });
   }
 
@@ -4017,19 +4017,19 @@ export class DefaultService {
    */
   public getEnterprisesIdOrganizationsBulkIdOrganizations(
     id: TrelloID,
-    idOrganizations: Array<Organization>
+    idOrganizations: Array<Organization>,
   ): CancelablePromise<any | Error> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/enterprises/{id}/organizations/bulk/{idOrganizations}',
       path: {
         id: id,
-        idOrganizations: idOrganizations
+        idOrganizations: idOrganizations,
       },
       errors: {
         401: `Unauthorized`,
-        404: `The specified resource was not found`
-      }
+        404: `The specified resource was not found`,
+      },
     });
   }
 
@@ -4046,11 +4046,11 @@ export class DefaultService {
       method: 'GET',
       url: '/labels/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -4068,12 +4068,12 @@ export class DefaultService {
       method: 'PUT',
       url: '/labels/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         name: name,
-        color: color
-      }
+        color: color,
+      },
     });
   }
 
@@ -4089,8 +4089,8 @@ export class DefaultService {
       method: 'DELETE',
       url: '/labels/{id}',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -4106,18 +4106,18 @@ export class DefaultService {
   public putLabelsIdField(
     id: string,
     field: 'color' | 'name',
-    value: TrelloID
+    value: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/labels/{id}/{field}',
       path: {
         id: id,
-        field: field
+        field: field,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -4137,8 +4137,8 @@ export class DefaultService {
       query: {
         name: name,
         color: color,
-        idBoard: idBoard
-      }
+        idBoard: idBoard,
+      },
     });
   }
 
@@ -4152,17 +4152,17 @@ export class DefaultService {
    */
   public getListsId(
     id: string,
-    fields: string = 'name,closed,idBoard,pos'
+    fields: string = 'name,closed,idBoard,pos',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/lists/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -4184,21 +4184,21 @@ export class DefaultService {
     closed?: boolean,
     idBoard?: TrelloID,
     pos?: number | 'top' | 'bottom',
-    subscribed?: boolean
+    subscribed?: boolean,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/lists/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         name: name,
         closed: closed,
         idBoard: idBoard,
         pos: pos,
-        subscribed: subscribed
-      }
+        subscribed: subscribed,
+      },
     });
   }
 
@@ -4216,7 +4216,7 @@ export class DefaultService {
     name: string,
     idBoard: TrelloID,
     idListSource?: TrelloID,
-    pos?: number | 'top' | 'bottom'
+    pos?: number | 'top' | 'bottom',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
@@ -4225,8 +4225,8 @@ export class DefaultService {
         name: name,
         idBoard: idBoard,
         idListSource: idListSource,
-        pos: pos
-      }
+        pos: pos,
+      },
     });
   }
 
@@ -4242,8 +4242,8 @@ export class DefaultService {
       method: 'POST',
       url: '/lists/{id}/archiveAllCards',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -4259,18 +4259,18 @@ export class DefaultService {
   public postListsIdMoveallcards(
     id: TrelloID,
     idBoard: TrelloID,
-    idList: TrelloID
+    idList: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/lists/{id}/moveAllCards',
       path: {
-        id: id
+        id: id,
       },
       query: {
         idBoard: idBoard,
-        idList: idList
-      }
+        idList: idList,
+      },
     });
   }
 
@@ -4287,11 +4287,11 @@ export class DefaultService {
       method: 'PUT',
       url: '/lists/{id}/closed',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -4308,11 +4308,11 @@ export class DefaultService {
       method: 'PUT',
       url: '/lists/{id}/idBoard',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -4328,18 +4328,18 @@ export class DefaultService {
   public putListsIdField(
     id: TrelloID,
     field: 'name' | 'pos' | 'subscribed',
-    value?: string | number | 'top' | 'bottom' | boolean
+    value?: string | number | 'top' | 'bottom' | boolean,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/lists/{id}/{field}',
       path: {
         id: id,
-        field: field
+        field: field,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -4356,11 +4356,11 @@ export class DefaultService {
       method: 'GET',
       url: '/lists/{id}/actions',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        filter: filter
-      }
+        filter: filter,
+      },
     });
   }
 
@@ -4377,11 +4377,11 @@ export class DefaultService {
       method: 'GET',
       url: '/lists/{id}/board',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -4397,8 +4397,8 @@ export class DefaultService {
       method: 'GET',
       url: '/lists/{id}/cards',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -4458,13 +4458,13 @@ export class DefaultService {
     organizationsInvitedFields: OrganizationFields = 'all',
     paidAccount: boolean = false,
     savedSearches: boolean = false,
-    tokens: 'all' | 'none' = 'none'
+    tokens: 'all' | 'none' = 'none',
   ): CancelablePromise<Member> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         actions: actions,
@@ -4486,8 +4486,8 @@ export class DefaultService {
         organizationsInvited_fields: organizationsInvitedFields,
         paid_account: paidAccount,
         savedSearches: savedSearches,
-        tokens: tokens
-      }
+        tokens: tokens,
+      },
     });
   }
 
@@ -4515,13 +4515,13 @@ export class DefaultService {
     avatarSource?: 'gravatar' | 'none' | 'upload',
     prefsColorBlind?: boolean,
     prefsLocale?: string,
-    prefsMinutesBetweenSummaries?: number
+    prefsMinutesBetweenSummaries?: number,
   ): CancelablePromise<Member> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/members/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         fullName: fullName,
@@ -4531,8 +4531,8 @@ export class DefaultService {
         avatarSource: avatarSource,
         'prefs/colorBlind': prefsColorBlind,
         'prefs/locale': prefsLocale,
-        'prefs/minutesBetweenSummaries': prefsMinutesBetweenSummaries
-      }
+        'prefs/minutesBetweenSummaries': prefsMinutesBetweenSummaries,
+      },
     });
   }
 
@@ -4550,8 +4550,8 @@ export class DefaultService {
       url: '/members/{id}/{field}',
       path: {
         id: id,
-        field: field
-      }
+        field: field,
+      },
     });
   }
 
@@ -4568,11 +4568,11 @@ export class DefaultService {
       method: 'GET',
       url: '/members/{id}/actions',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        filter: filter
-      }
+        filter: filter,
+      },
     });
   }
 
@@ -4586,17 +4586,17 @@ export class DefaultService {
    */
   public getMembersIdBoardbackgrounds(
     id: TrelloID,
-    filter: 'all' | 'custom' | 'default' | 'none' | 'premium' = 'all'
+    filter: 'all' | 'custom' | 'default' | 'none' | 'premium' = 'all',
   ): CancelablePromise<Array<BoardBackground>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/boardBackgrounds',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        filter: filter
-      }
+        filter: filter,
+      },
     });
   }
 
@@ -4610,17 +4610,17 @@ export class DefaultService {
    */
   public postMembersIdBoardbackgrounds1(
     id: TrelloID,
-    file: Blob
+    file: Blob,
   ): CancelablePromise<Array<BoardBackground>> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/members/{id}/boardBackgrounds',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        file: file
-      }
+        file: file,
+      },
     });
   }
 
@@ -4636,18 +4636,18 @@ export class DefaultService {
   public getMembersIdBoardbackgroundsIdbackground(
     id: TrelloID,
     idBackground: TrelloID,
-    fields: 'all' | 'brightness' | 'fullSizeUrl' | 'scaled' | 'tile' = 'all'
+    fields: 'all' | 'brightness' | 'fullSizeUrl' | 'scaled' | 'tile' = 'all',
   ): CancelablePromise<BoardBackground> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/boardBackgrounds/{idBackground}',
       path: {
         id: id,
-        idBackground: idBackground
+        idBackground: idBackground,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -4665,19 +4665,19 @@ export class DefaultService {
     id: TrelloID,
     idBackground: TrelloID,
     brightness?: 'dark' | 'light' | 'unknown',
-    tile?: boolean
+    tile?: boolean,
   ): CancelablePromise<BoardBackground> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/members/{id}/boardBackgrounds/{idBackground}',
       path: {
         id: id,
-        idBackground: idBackground
+        idBackground: idBackground,
       },
       query: {
         brightness: brightness,
-        tile: tile
-      }
+        tile: tile,
+      },
     });
   }
 
@@ -4691,15 +4691,15 @@ export class DefaultService {
    */
   public deleteMembersIdBoardbackgroundsIdbackground(
     id: TrelloID,
-    idBackground: TrelloID
+    idBackground: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/members/{id}/boardBackgrounds/{idBackground}',
       path: {
         id: id,
-        idBackground: idBackground
-      }
+        idBackground: idBackground,
+      },
     });
   }
 
@@ -4715,8 +4715,8 @@ export class DefaultService {
       method: 'GET',
       url: '/members/{id}/boardStars',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -4732,18 +4732,18 @@ export class DefaultService {
   public postMembersIdBoardstars(
     id: TrelloID | string,
     idBoard: TrelloID,
-    pos: posStringOrNumber
+    pos: posStringOrNumber,
   ): CancelablePromise<Array<BoardStars>> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/members/{id}/boardStars',
       path: {
-        id: id
+        id: id,
       },
       query: {
         idBoard: idBoard,
-        pos: pos
-      }
+        pos: pos,
+      },
     });
   }
 
@@ -4757,15 +4757,15 @@ export class DefaultService {
    */
   public getMembersIdBoardstarsIdstar(
     id: TrelloID,
-    idStar: TrelloID
+    idStar: TrelloID,
   ): CancelablePromise<BoardStars> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/boardStars/{idStar}',
       path: {
         id: id,
-        idStar: idStar
-      }
+        idStar: idStar,
+      },
     });
   }
 
@@ -4781,18 +4781,18 @@ export class DefaultService {
   public putMembersIdBoardstarsIdstar(
     id: TrelloID,
     idStar: TrelloID,
-    pos?: posStringOrNumber
+    pos?: posStringOrNumber,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/members/{id}/boardStars/{idStar}',
       path: {
         id: id,
-        idStar: idStar
+        idStar: idStar,
       },
       query: {
-        pos: pos
-      }
+        pos: pos,
+      },
     });
   }
 
@@ -4810,8 +4810,8 @@ export class DefaultService {
       url: '/members/{id}/boardStars/{idStar}',
       path: {
         id: id,
-        idStar: idStar
-      }
+        idStar: idStar,
+      },
     });
   }
 
@@ -4833,21 +4833,21 @@ export class DefaultService {
     fields: BoardFields = 'all',
     lists: 'all' | 'closed' | 'none' | 'open' = 'none',
     organization: boolean = false,
-    organizationFields: OrganizationFields = 'name,displayName'
+    organizationFields: OrganizationFields = 'name,displayName',
   ): CancelablePromise<Array<Board>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/boards',
       path: {
-        id: id
+        id: id,
       },
       query: {
         filter: filter,
         fields: fields,
         lists: lists,
         organization: organization,
-        organization_fields: organizationFields
-      }
+        organization_fields: organizationFields,
+      },
     });
   }
 
@@ -4861,17 +4861,17 @@ export class DefaultService {
    */
   public getMembersIdBoardsinvited(
     id: TrelloID,
-    fields: BoardFields = 'all'
+    fields: BoardFields = 'all',
   ): CancelablePromise<Array<Board>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/boardsInvited',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -4885,17 +4885,17 @@ export class DefaultService {
    */
   public getMembersIdCards(
     id: TrelloID,
-    filter: 'all' | 'closed' | 'none' | 'open' | 'visible' = 'visible'
+    filter: 'all' | 'closed' | 'none' | 'open' | 'visible' = 'visible',
   ): CancelablePromise<Array<Card>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/cards',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        filter: filter
-      }
+        filter: filter,
+      },
     });
   }
 
@@ -4907,14 +4907,14 @@ export class DefaultService {
    * @throws ApiError
    */
   public getMembersIdCustomboardbackgrounds(
-    id: TrelloID
+    id: TrelloID,
   ): CancelablePromise<Array<BoardBackground>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/customBoardBackgrounds',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -4928,17 +4928,17 @@ export class DefaultService {
    */
   public membersidcustomboardbackgrounds1(
     id: TrelloID,
-    file: Blob
+    file: Blob,
   ): CancelablePromise<BoardBackground> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/members/{id}/customBoardBackgrounds',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        file: file
-      }
+        file: file,
+      },
     });
   }
 
@@ -4952,15 +4952,15 @@ export class DefaultService {
    */
   public getMembersIdCustomboardbackgroundsIdbackground(
     id: TrelloID | string,
-    idBackground: TrelloID
+    idBackground: TrelloID,
   ): CancelablePromise<BoardBackground> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/customBoardBackgrounds/{idBackground}',
       path: {
         id: id,
-        idBackground: idBackground
-      }
+        idBackground: idBackground,
+      },
     });
   }
 
@@ -4978,19 +4978,19 @@ export class DefaultService {
     id: TrelloID | string,
     idBackground: TrelloID,
     brightness?: 'dark' | 'light' | 'unknown',
-    tile?: boolean
+    tile?: boolean,
   ): CancelablePromise<BoardBackground> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/members/{id}/customBoardBackgrounds/{idBackground}',
       path: {
         id: id,
-        idBackground: idBackground
+        idBackground: idBackground,
       },
       query: {
         brightness: brightness,
-        tile: tile
-      }
+        tile: tile,
+      },
     });
   }
 
@@ -5004,15 +5004,15 @@ export class DefaultService {
    */
   public deleteMembersIdCustomboardbackgroundsIdbackground(
     id: TrelloID | string,
-    idBackground: TrelloID
+    idBackground: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/members/{id}/customBoardBackgrounds/{idBackground}',
       path: {
         id: id,
-        idBackground: idBackground
-      }
+        idBackground: idBackground,
+      },
     });
   }
 
@@ -5028,8 +5028,8 @@ export class DefaultService {
       method: 'GET',
       url: '/members/{id}/customEmoji',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -5045,18 +5045,18 @@ export class DefaultService {
   public postMembersIdCustomemoji(
     id: TrelloID,
     file: Blob,
-    name: string
+    name: string,
   ): CancelablePromise<CustomEmoji> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/members/{id}/customEmoji',
       path: {
-        id: id
+        id: id,
       },
       query: {
         file: file,
-        name: name
-      }
+        name: name,
+      },
     });
   }
 
@@ -5072,18 +5072,18 @@ export class DefaultService {
   public membersidcustomemojiidemoji(
     id: TrelloID,
     idEmoji: TrelloID,
-    fields: 'name' | 'url' | 'all' = 'all'
+    fields: 'name' | 'url' | 'all' = 'all',
   ): CancelablePromise<CustomEmoji> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/customEmoji/{idEmoji}',
       path: {
         id: id,
-        idEmoji: idEmoji
+        idEmoji: idEmoji,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -5099,8 +5099,8 @@ export class DefaultService {
       method: 'GET',
       url: '/members/{id}/customStickers',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -5117,11 +5117,11 @@ export class DefaultService {
       method: 'POST',
       url: '/members/{id}/customStickers',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        file: file
-      }
+        file: file,
+      },
     });
   }
 
@@ -5137,18 +5137,18 @@ export class DefaultService {
   public getMembersIdCustomstickersIdsticker(
     id: TrelloID,
     idSticker: TrelloID,
-    fields: 'scaled' | 'url' | 'all' = 'all'
+    fields: 'scaled' | 'url' | 'all' = 'all',
   ): CancelablePromise<CustomSticker> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/customStickers/{idSticker}',
       path: {
         id: id,
-        idSticker: idSticker
+        idSticker: idSticker,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -5162,15 +5162,15 @@ export class DefaultService {
    */
   public deleteMembersIdCustomstickersIdsticker(
     id: TrelloID,
-    idSticker: TrelloID
+    idSticker: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/members/{id}/customStickers/{idSticker}',
       path: {
         id: id,
-        idSticker: idSticker
-      }
+        idSticker: idSticker,
+      },
     });
   }
 
@@ -5204,13 +5204,13 @@ export class DefaultService {
     before?: string,
     since?: string,
     memberCreator: boolean = true,
-    memberCreatorFields: string = 'avatarHash,fullName,initials,username'
+    memberCreatorFields: string = 'avatarHash,fullName,initials,username',
   ): CancelablePromise<Array<Notification>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/notifications',
       path: {
-        id: id
+        id: id,
       },
       query: {
         entities: entities,
@@ -5223,8 +5223,8 @@ export class DefaultService {
         before: before,
         since: since,
         memberCreator: memberCreator,
-        memberCreator_fields: memberCreatorFields
-      }
+        memberCreator_fields: memberCreatorFields,
+      },
     });
   }
 
@@ -5242,19 +5242,19 @@ export class DefaultService {
     id: TrelloID,
     filter: 'all' | 'members' | 'none' | 'public' = 'all',
     fields: OrganizationFields = 'all',
-    paidAccount: boolean = false
+    paidAccount: boolean = false,
   ): CancelablePromise<Array<Organization>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/organizations',
       path: {
-        id: id
+        id: id,
       },
       query: {
         filter: filter,
         fields: fields,
-        paid_account: paidAccount
-      }
+        paid_account: paidAccount,
+      },
     });
   }
 
@@ -5268,17 +5268,17 @@ export class DefaultService {
    */
   public getMembersIdOrganizationsinvited(
     id: TrelloID,
-    fields: OrganizationFields = 'all'
+    fields: OrganizationFields = 'all',
   ): CancelablePromise<Array<Organization>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/organizationsInvited',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -5294,8 +5294,8 @@ export class DefaultService {
       method: 'GET',
       url: '/members/{id}/savedSearches',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -5313,19 +5313,19 @@ export class DefaultService {
     id: TrelloID,
     name: string,
     query: string,
-    pos: posStringOrNumber
+    pos: posStringOrNumber,
   ): CancelablePromise<SavedSearch> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/members/{id}/savedSearches',
       path: {
-        id: id
+        id: id,
       },
       query: {
         name: name,
         query: query,
-        pos: pos
-      }
+        pos: pos,
+      },
     });
   }
 
@@ -5339,15 +5339,15 @@ export class DefaultService {
    */
   public getMembersIdSavedsearchesIdsearch(
     id: string,
-    idSearch: string
+    idSearch: string,
   ): CancelablePromise<SavedSearch> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/savedSearches/{idSearch}',
       path: {
         id: id,
-        idSearch: idSearch
-      }
+        idSearch: idSearch,
+      },
     });
   }
 
@@ -5367,20 +5367,20 @@ export class DefaultService {
     idSearch: string,
     name?: string,
     query?: string,
-    pos?: string
+    pos?: string,
   ): CancelablePromise<SavedSearch> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/members/{id}/savedSearches/{idSearch}',
       path: {
         id: id,
-        idSearch: idSearch
+        idSearch: idSearch,
       },
       query: {
         name: name,
         query: query,
-        pos: pos
-      }
+        pos: pos,
+      },
     });
   }
 
@@ -5394,15 +5394,15 @@ export class DefaultService {
    */
   public deleteMembersIdSavedsearchesIdsearch(
     id: string,
-    idSearch: string
+    idSearch: string,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/members/{id}/savedSearches/{idSearch}',
       path: {
         id: id,
-        idSearch: idSearch
-      }
+        idSearch: idSearch,
+      },
     });
   }
 
@@ -5416,17 +5416,17 @@ export class DefaultService {
    */
   public getMembersIdTokens(
     id: TrelloID,
-    webhooks: boolean = false
+    webhooks: boolean = false,
   ): CancelablePromise<Array<Token>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/tokens',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        webhooks: webhooks
-      }
+        webhooks: webhooks,
+      },
     });
   }
 
@@ -5443,11 +5443,11 @@ export class DefaultService {
       method: 'POST',
       url: '/members/{id}/avatar',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        file: file
-      }
+        file: file,
+      },
     });
   }
 
@@ -5461,17 +5461,17 @@ export class DefaultService {
    */
   public postMembersIdOnetimemessagesdismissed(
     id: TrelloID,
-    value: TrelloID
+    value: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/members/{id}/oneTimeMessagesDismissed',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -5483,14 +5483,14 @@ export class DefaultService {
    * @throws ApiError
    */
   public getMembersIdNotificationChannelSettings(
-    id: TrelloID | string
+    id: TrelloID | string,
   ): CancelablePromise<Array<NotificationChannelSettings>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/notificationsChannelSettings',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -5510,16 +5510,16 @@ export class DefaultService {
        * Blocked key or array of blocked keys.
        */
       blockedKeys: BlockedKey | Array<BlockedKey>;
-    }
+    },
   ): CancelablePromise<NotificationChannelSettings> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/members/{id}/notificationsChannelSettings',
       path: {
-        id: id
+        id: id,
       },
       body: requestBody,
-      mediaType: 'application/json'
+      mediaType: 'application/json',
     });
   }
 
@@ -5533,15 +5533,15 @@ export class DefaultService {
    */
   public getMembersIdNotificationChannelSettingsChannel(
     id: TrelloID | string,
-    channel: Channel
+    channel: Channel,
   ): CancelablePromise<NotificationChannelSettings> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/notificationsChannelSettings/{channel}',
       path: {
         id: id,
-        channel: channel
-      }
+        channel: channel,
+      },
     });
   }
 
@@ -5562,17 +5562,17 @@ export class DefaultService {
        * Singular key or array of notification keys
        */
       blockedKeys: BlockedKey | Array<BlockedKey>;
-    }
+    },
   ): CancelablePromise<NotificationChannelSettings> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/members/{id}/notificationsChannelSettings/{channel}',
       path: {
         id: id,
-        channel: channel
+        channel: channel,
       },
       body: requestBody,
-      mediaType: 'application/json'
+      mediaType: 'application/json',
     });
   }
 
@@ -5588,7 +5588,7 @@ export class DefaultService {
   public putMembersIdNotificationChannelSettingsChannelBlockedKeys2(
     id: TrelloID | string,
     channel: Channel,
-    blockedKeys: BlockedKey
+    blockedKeys: BlockedKey,
   ): CancelablePromise<NotificationChannelSettings> {
     return this.httpRequest.request({
       method: 'PUT',
@@ -5596,8 +5596,8 @@ export class DefaultService {
       path: {
         id: id,
         channel: channel,
-        blockedKeys: blockedKeys
-      }
+        blockedKeys: blockedKeys,
+      },
     });
   }
 
@@ -5636,13 +5636,13 @@ export class DefaultService {
     memberCreator: boolean = true,
     memberCreatorFields: MemberFields = 'avatarHash,fullName,initials,username',
     organization: boolean = false,
-    organizationFields: OrganizationFields = 'displayName'
+    organizationFields: OrganizationFields = 'displayName',
   ): CancelablePromise<Notification> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/notifications/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         board: board,
@@ -5658,8 +5658,8 @@ export class DefaultService {
         memberCreator: memberCreator,
         memberCreator_fields: memberCreatorFields,
         organization: organization,
-        organization_fields: organizationFields
-      }
+        organization_fields: organizationFields,
+      },
     });
   }
 
@@ -5676,11 +5676,11 @@ export class DefaultService {
       method: 'PUT',
       url: '/notifications/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        unread: unread
-      }
+        unread: unread,
+      },
     });
   }
 
@@ -5694,15 +5694,15 @@ export class DefaultService {
    */
   public getNotificationsIdField(
     id: TrelloID,
-    field: NotificationFields
+    field: NotificationFields,
   ): CancelablePromise<Notification> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/notifications/{id}/{field}',
       path: {
         id: id,
-        field: field
-      }
+        field: field,
+      },
     });
   }
 
@@ -5716,15 +5716,15 @@ export class DefaultService {
    */
   public postNotificationsAllRead(
     read: boolean = true,
-    ids?: Array<TrelloID>
+    ids?: Array<TrelloID>,
   ): CancelablePromise<Notification> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/notifications/all/read',
       query: {
         read: read,
-        ids: ids
-      }
+        ids: ids,
+      },
     });
   }
 
@@ -5741,11 +5741,11 @@ export class DefaultService {
       method: 'PUT',
       url: '/notifications/{id}/unread',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -5759,17 +5759,17 @@ export class DefaultService {
    */
   public getNotificationsIdBoard(
     id: TrelloID,
-    fields: BoardFields = 'all'
+    fields: BoardFields = 'all',
   ): CancelablePromise<Board> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/notifications/{id}/board',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -5786,11 +5786,11 @@ export class DefaultService {
       method: 'GET',
       url: '/notifications/{id}/card',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -5804,17 +5804,17 @@ export class DefaultService {
    */
   public getNotificationsIdList(
     id: TrelloID,
-    fields: ListFields = 'all'
+    fields: ListFields = 'all',
   ): CancelablePromise<TrelloList> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/notifications/{id}/list',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -5828,17 +5828,17 @@ export class DefaultService {
    */
   public notificationsidmember(
     id: TrelloID,
-    fields: MemberFields = 'all'
+    fields: MemberFields = 'all',
   ): CancelablePromise<Member> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/notifications/{id}/member',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -5852,17 +5852,17 @@ export class DefaultService {
    */
   public getNotificationsIdMembercreator(
     id: TrelloID,
-    fields: MemberFields = 'all'
+    fields: MemberFields = 'all',
   ): CancelablePromise<Member> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/notifications/{id}/memberCreator',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -5876,17 +5876,17 @@ export class DefaultService {
    */
   public getNotificationsIdOrganization(
     id: TrelloID,
-    fields: OrganizationFields = 'all'
+    fields: OrganizationFields = 'all',
   ): CancelablePromise<Organization> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/notifications/{id}/organization',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -5904,7 +5904,7 @@ export class DefaultService {
     displayName: string,
     desc?: string,
     name?: string,
-    website?: string
+    website?: string,
   ): CancelablePromise<Organization> {
     return this.httpRequest.request({
       method: 'POST',
@@ -5913,8 +5913,8 @@ export class DefaultService {
         displayName: displayName,
         desc: desc,
         name: name,
-        website: website
-      }
+        website: website,
+      },
     });
   }
 
@@ -5929,8 +5929,8 @@ export class DefaultService {
       method: 'GET',
       url: '/organizations/{id}',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -5966,13 +5966,13 @@ export class DefaultService {
     prefsBoardVisibilityRestrictPrivate?: string,
     prefsBoardVisibilityRestrictPublic?: string,
     prefsOrgInviteRestrict?: string,
-    prefsPermissionLevel?: string
+    prefsPermissionLevel?: string,
   ): CancelablePromise<Organization> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/organizations/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         name: name,
@@ -5986,8 +5986,8 @@ export class DefaultService {
         'prefs/boardVisibilityRestrict/private': prefsBoardVisibilityRestrictPrivate,
         'prefs/boardVisibilityRestrict/public': prefsBoardVisibilityRestrictPublic,
         'prefs/orgInviteRestrict': prefsOrgInviteRestrict,
-        'prefs/permissionLevel': prefsPermissionLevel
-      }
+        'prefs/permissionLevel': prefsPermissionLevel,
+      },
     });
   }
 
@@ -6003,8 +6003,8 @@ export class DefaultService {
       method: 'DELETE',
       url: '/organizations/{id}',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6017,15 +6017,15 @@ export class DefaultService {
    */
   public getOrganizationsIdField(
     id: TrelloID,
-    field: OrganizationFields
+    field: OrganizationFields,
   ): CancelablePromise<Organization> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/organizations/{id}/{field}',
       path: {
         id: id,
-        field: field
-      }
+        field: field,
+      },
     });
   }
 
@@ -6041,8 +6041,8 @@ export class DefaultService {
       method: 'GET',
       url: '/organizations/{id}/actions',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6058,18 +6058,18 @@ export class DefaultService {
   public getOrganizationsIdBoards(
     id: TrelloID,
     filter: 'all' | 'open' | 'closed' | 'members' | 'organization' | 'public' = 'all',
-    fields: BoardFields = 'all'
+    fields: BoardFields = 'all',
   ): CancelablePromise<Array<Board>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/organizations/{id}/boards',
       path: {
-        id: id
+        id: id,
       },
       query: {
         filter: filter,
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -6083,17 +6083,17 @@ export class DefaultService {
    */
   public postOrganizationsIdExports(
     id: TrelloID,
-    attachments: boolean = true
+    attachments: boolean = true,
   ): CancelablePromise<Export> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/organizations/{id}/exports',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        attachments: attachments
-      }
+        attachments: attachments,
+      },
     });
   }
 
@@ -6109,8 +6109,8 @@ export class DefaultService {
       method: 'GET',
       url: '/organizations/{id}/exports',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6126,8 +6126,8 @@ export class DefaultService {
       method: 'GET',
       url: '/organizations/{id}/members',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6144,19 +6144,19 @@ export class DefaultService {
     id: TrelloID,
     email: string,
     fullName: string,
-    type: 'admin' | 'normal' = 'normal'
+    type: 'admin' | 'normal' = 'normal',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/organizations/{id}/members',
       path: {
-        id: id
+        id: id,
       },
       query: {
         email: email,
         fullName: fullName,
-        type: type
-      }
+        type: type,
+      },
     });
   }
 
@@ -6172,18 +6172,18 @@ export class DefaultService {
   public getOrganizationsIdMemberships(
     id: TrelloID,
     filter: 'all' | 'active' | 'admin' | 'deactivated' | 'me' | 'normal' = 'all',
-    member: boolean = false
+    member: boolean = false,
   ): CancelablePromise<Array<Memberships>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/organizations/{id}/memberships',
       path: {
-        id: id
+        id: id,
       },
       query: {
         filter: filter,
-        member: member
-      }
+        member: member,
+      },
     });
   }
 
@@ -6199,18 +6199,18 @@ export class DefaultService {
   public getOrganizationsIdMembershipsIdmembership(
     id: TrelloID,
     idMembership: TrelloID,
-    member: boolean = false
+    member: boolean = false,
   ): CancelablePromise<Memberships> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/organizations/{id}/memberships/{idMembership}',
       path: {
         id: id,
-        idMembership: idMembership
+        idMembership: idMembership,
       },
       query: {
-        member: member
-      }
+        member: member,
+      },
     });
   }
 
@@ -6226,8 +6226,8 @@ export class DefaultService {
       method: 'GET',
       url: '/organizations/{id}/pluginData',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6243,8 +6243,8 @@ export class DefaultService {
       method: 'GET',
       url: '/organizations/{id}/tags',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6260,8 +6260,8 @@ export class DefaultService {
       method: 'POST',
       url: '/organizations/{id}/tags',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6277,18 +6277,18 @@ export class DefaultService {
   public putOrganizationsIdMembersIdmember(
     id: TrelloID,
     idMember: string | TrelloID,
-    type: 'admin' | 'normal'
+    type: 'admin' | 'normal',
   ): CancelablePromise<Member> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/organizations/{id}/members/{idMember}',
       path: {
         id: id,
-        idMember: idMember
+        idMember: idMember,
       },
       query: {
-        type: type
-      }
+        type: type,
+      },
     });
   }
 
@@ -6302,15 +6302,15 @@ export class DefaultService {
    */
   public deleteOrganizationsIdMembers(
     id: TrelloID | string,
-    idMember: TrelloID
+    idMember: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/organizations/{id}/members/{idMember}',
       path: {
         id: id,
-        idMember: idMember
-      }
+        idMember: idMember,
+      },
     });
   }
 
@@ -6326,18 +6326,18 @@ export class DefaultService {
   public putOrganizationsIdMembersIdmemberDeactivated(
     id: TrelloID,
     idMember: TrelloID | string,
-    value: boolean
+    value: boolean,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/organizations/{id}/members/{idMember}/deactivated',
       path: {
         id: id,
-        idMember: idMember
+        idMember: idMember,
       },
       query: {
-        value: value
-      }
+        value: value,
+      },
     });
   }
 
@@ -6354,11 +6354,11 @@ export class DefaultService {
       method: 'POST',
       url: '/organizations/{id}/logo',
       path: {
-        id: id
+        id: id,
       },
       query: {
-        file: file
-      }
+        file: file,
+      },
     });
   }
 
@@ -6374,8 +6374,8 @@ export class DefaultService {
       method: 'DELETE',
       url: '/organizations/{id}/logo',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6389,15 +6389,15 @@ export class DefaultService {
    */
   public organizationsIdMembersIdmemberAll(
     id: TrelloID,
-    idMember: TrelloID
+    idMember: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/organizations/{id}/members/{idMember}/all',
       path: {
         id: id,
-        idMember: idMember
-      }
+        idMember: idMember,
+      },
     });
   }
 
@@ -6413,8 +6413,8 @@ export class DefaultService {
       method: 'DELETE',
       url: '/organizations/{id}/prefs/associatedDomain',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6430,8 +6430,8 @@ export class DefaultService {
       method: 'DELETE',
       url: '/organizations/{id}/prefs/orgInviteRestrict',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6449,8 +6449,8 @@ export class DefaultService {
       url: '/organizations/{id}/tags/{idTag}',
       path: {
         id: id,
-        idTag: idTag
-      }
+        idTag: idTag,
+      },
     });
   }
 
@@ -6464,15 +6464,15 @@ export class DefaultService {
    */
   public getOrganizationsIdNewbillableguestsIdboard(
     id: TrelloID,
-    idBoard: TrelloID
+    idBoard: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/organizations/{id}/newBillableGuests/{idBoard}',
       path: {
         id: id,
-        idBoard: idBoard
-      }
+        idBoard: idBoard,
+      },
     });
   }
 
@@ -6488,8 +6488,8 @@ export class DefaultService {
       method: 'GET',
       url: '/plugins/{id}/',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6505,8 +6505,8 @@ export class DefaultService {
       method: 'PUT',
       url: '/plugins/{id}/',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6537,16 +6537,16 @@ export class DefaultService {
        * The name to use for the given locale.
        */
       name?: string;
-    }
+    },
   ): CancelablePromise<PluginListing> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/plugins/{idPlugin}/listing',
       path: {
-        idPlugin: idPlugin
+        idPlugin: idPlugin,
       },
       body: requestBody,
-      mediaType: 'application/json'
+      mediaType: 'application/json',
     });
   }
 
@@ -6561,8 +6561,8 @@ export class DefaultService {
       method: 'GET',
       url: '/plugins/{id}/compliance/memberPrivacy',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6595,17 +6595,17 @@ export class DefaultService {
        * The name to use for the given locale.
        */
       name?: string;
-    }
+    },
   ): CancelablePromise<PluginListing> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/plugins/{idPlugin}/listings/{idListing}',
       path: {
         idPlugin: idPlugin,
-        idListing: idListing
+        idListing: idListing,
       },
       body: requestBody,
-      mediaType: 'application/json'
+      mediaType: 'application/json',
     });
   }
 
@@ -6657,7 +6657,7 @@ export class DefaultService {
     organizationsLimit: number = 10,
     memberFields: string = 'avatarHash,fullName,initials,username,confirmed',
     membersLimit: number = 10,
-    partial: boolean = false
+    partial: boolean = false,
   ): CancelablePromise<Array<Member | Card | Board | Organization>> {
     return this.httpRequest.request({
       method: 'GET',
@@ -6683,8 +6683,8 @@ export class DefaultService {
         organizations_limit: organizationsLimit,
         member_fields: memberFields,
         members_limit: membersLimit,
-        partial: partial
-      }
+        partial: partial,
+      },
     });
   }
 
@@ -6704,7 +6704,7 @@ export class DefaultService {
     limit: number = 8,
     idBoard?: TrelloID,
     idOrganization?: TrelloID,
-    onlyOrgMembers: boolean = false
+    onlyOrgMembers: boolean = false,
   ): CancelablePromise<Array<Member>> {
     return this.httpRequest.request({
       method: 'GET',
@@ -6714,8 +6714,8 @@ export class DefaultService {
         limit: limit,
         idBoard: idBoard,
         idOrganization: idOrganization,
-        onlyOrgMembers: onlyOrgMembers
-      }
+        onlyOrgMembers: onlyOrgMembers,
+      },
     });
   }
 
@@ -6731,18 +6731,18 @@ export class DefaultService {
   public getTokensToken(
     token: string,
     fields: TokenFields = 'all',
-    webhooks: boolean = false
+    webhooks: boolean = false,
   ): CancelablePromise<Token> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/tokens/{token}',
       path: {
-        token: token
+        token: token,
       },
       query: {
         fields: fields,
-        webhooks: webhooks
-      }
+        webhooks: webhooks,
+      },
     });
   }
 
@@ -6756,17 +6756,17 @@ export class DefaultService {
    */
   public getTokensTokenMember(
     token: string,
-    fields: MemberFields = 'all'
+    fields: MemberFields = 'all',
   ): CancelablePromise<Member> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/tokens/{token}/member',
       path: {
-        token: token
+        token: token,
       },
       query: {
-        fields: fields
-      }
+        fields: fields,
+      },
     });
   }
 
@@ -6782,8 +6782,8 @@ export class DefaultService {
       method: 'GET',
       url: '/tokens/{token}/webhooks',
       path: {
-        token: token
-      }
+        token: token,
+      },
     });
   }
 
@@ -6801,19 +6801,19 @@ export class DefaultService {
     token: string,
     callbackUrl: string,
     idModel: TrelloID,
-    description?: string
+    description?: string,
   ): CancelablePromise<Webhook> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/tokens/{token}/webhooks',
       path: {
-        token: token
+        token: token,
       },
       query: {
         description: description,
         callbackURL: callbackUrl,
-        idModel: idModel
-      }
+        idModel: idModel,
+      },
     });
   }
 
@@ -6827,15 +6827,15 @@ export class DefaultService {
    */
   public getTokensTokenWebhooksIdwebhook(
     token: string,
-    idWebhook: TrelloID
+    idWebhook: TrelloID,
   ): CancelablePromise<Webhook> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/tokens/{token}/webhooks/{idWebhook}',
       path: {
         token: token,
-        idWebhook: idWebhook
-      }
+        idWebhook: idWebhook,
+      },
     });
   }
 
@@ -6849,15 +6849,15 @@ export class DefaultService {
    */
   public deleteTokensTokenWebhooksIdwebhook(
     token: string,
-    idWebhook: TrelloID
+    idWebhook: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/tokens/{token}/webhooks/{idWebhook}',
       path: {
         token: token,
-        idWebhook: idWebhook
-      }
+        idWebhook: idWebhook,
+      },
     });
   }
 
@@ -6877,20 +6877,20 @@ export class DefaultService {
     idWebhook: TrelloID,
     description?: string,
     callbackUrl?: string,
-    idModel?: TrelloID
+    idModel?: TrelloID,
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/tokens/{token}/webhooks/{idWebhook}',
       path: {
         token: token,
-        idWebhook: idWebhook
+        idWebhook: idWebhook,
       },
       query: {
         description: description,
         callbackURL: callbackUrl,
-        idModel: idModel
-      }
+        idModel: idModel,
+      },
     });
   }
 
@@ -6906,8 +6906,8 @@ export class DefaultService {
       method: 'DELETE',
       url: '/tokens/{token}/',
       path: {
-        token: token
-      }
+        token: token,
+      },
     });
   }
 
@@ -6925,7 +6925,7 @@ export class DefaultService {
     callbackUrl: string,
     idModel: TrelloID,
     description?: string,
-    active?: boolean
+    active?: boolean,
   ): CancelablePromise<Webhook> {
     return this.httpRequest.request({
       method: 'POST',
@@ -6934,8 +6934,8 @@ export class DefaultService {
         description: description,
         callbackURL: callbackUrl,
         idModel: idModel,
-        active: active
-      }
+        active: active,
+      },
     });
   }
 
@@ -6951,8 +6951,8 @@ export class DefaultService {
       method: 'GET',
       url: '/webhooks/{id}',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -6972,20 +6972,20 @@ export class DefaultService {
     description?: string,
     callbackUrl?: string,
     idModel?: TrelloID,
-    active?: boolean
+    active?: boolean,
   ): CancelablePromise<Webhook> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/webhooks/{id}',
       path: {
-        id: id
+        id: id,
       },
       query: {
         description: description,
         callbackURL: callbackUrl,
         idModel: idModel,
-        active: active
-      }
+        active: active,
+      },
     });
   }
 
@@ -7001,8 +7001,8 @@ export class DefaultService {
       method: 'DELETE',
       url: '/webhooks/{id}',
       path: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -7022,15 +7022,15 @@ export class DefaultService {
       | 'description'
       | 'idModel'
       | 'consecutiveFailures'
-      | 'firstConsecutiveFailDate'
+      | 'firstConsecutiveFailDate',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/webhooks/{id}/{field}',
       path: {
         id: id,
-        field: field
-      }
+        field: field,
+      },
     });
   }
 }

@@ -8,7 +8,7 @@ import {
   Post,
   Security,
   SuccessResponse,
-  ValidateError
+  ValidateError,
 } from 'tsoa';
 import InformationService, { InformationParams } from './information-service';
 import Information from './entities/information';
@@ -23,7 +23,7 @@ export class InformationController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.BOARD,
     SecurityGroup.KEY_HOLDER,
-    SecurityGroup.SCREEN_SUBSCRIBER
+    SecurityGroup.SCREEN_SUBSCRIBER,
   ])
   @Get('information')
   @SuccessResponse(HttpStatusCode.Ok)
@@ -35,7 +35,7 @@ export class InformationController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.BOARD,
     SecurityGroup.KEY_HOLDER,
-    SecurityGroup.SCREEN_SUBSCRIBER
+    SecurityGroup.SCREEN_SUBSCRIBER,
   ])
   @Post('information')
   @Response<ValidateError>(HttpStatusCode.BadRequest, 'Invalid Information')
@@ -48,7 +48,7 @@ export class InformationController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.BOARD,
     SecurityGroup.KEY_HOLDER,
-    SecurityGroup.SCREEN_SUBSCRIBER
+    SecurityGroup.SCREEN_SUBSCRIBER,
   ])
   @Get('keyholders')
   @SuccessResponse(HttpStatusCode.Ok)
@@ -60,7 +60,7 @@ export class InformationController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.BOARD,
     SecurityGroup.KEY_HOLDER,
-    SecurityGroup.SCREEN_SUBSCRIBER
+    SecurityGroup.SCREEN_SUBSCRIBER,
   ])
   @Get('board')
   @SuccessResponse(HttpStatusCode.Ok)
@@ -72,7 +72,7 @@ export class InformationController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.BOARD,
     SecurityGroup.KEY_HOLDER,
-    SecurityGroup.SCREEN_SUBSCRIBER
+    SecurityGroup.SCREEN_SUBSCRIBER,
   ])
   @Get('ero')
   @SuccessResponse(HttpStatusCode.Ok)

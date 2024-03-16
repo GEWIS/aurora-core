@@ -4,7 +4,7 @@ import {
   LightsGroup,
   LightsMovingHeadRgb,
   LightsMovingHeadWheel,
-  LightsPar
+  LightsPar,
 } from '../lights/entities';
 import dataSource from '../../database';
 import LightsFixture from '../lights/entities/lights-fixture';
@@ -19,7 +19,7 @@ import LightsParShutterOptions from '../lights/entities/lights-par-shutter-optio
 import LightsMovingHeadRgbShutterOptions from '../lights/entities/lights-moving-head-rgb-shutter-options';
 import LightsMovingHeadWheelShutterOptions from '../lights/entities/lights-moving-head-wheel-shutter-options';
 import LightsFixtureShutterOptions, {
-  ShutterOption
+  ShutterOption,
 } from '../lights/entities/lights-fixture-shutter-options';
 
 export interface LightsControllerResponse
@@ -137,7 +137,7 @@ export default class RootLightsService {
       coldWhiteChannel: c.coldWhiteChannel ? c.coldWhiteChannel + firstChannel - 1 : null,
       warmWhiteChannel: c.warmWhiteChannel ? c.warmWhiteChannel + firstChannel - 1 : null,
       amberChannel: c.amberChannel ? c.amberChannel + firstChannel - 1 : null,
-      uvChannel: c.uvChannel ? c.uvChannel + firstChannel - 1 : null
+      uvChannel: c.uvChannel ? c.uvChannel + firstChannel - 1 : null,
     };
   }
 
@@ -147,7 +147,7 @@ export default class RootLightsService {
       fineTiltChannel: m.fineTiltChannel ? m.fineTiltChannel + firstChannel - 1 : null,
       panChannel: m.panChannel + firstChannel - 1,
       finePanChannel: m.finePanChannel ? m.finePanChannel + firstChannel - 1 : null,
-      movingSpeedChannel: m.movingSpeedChannel ? m.movingSpeedChannel + firstChannel - 1 : null
+      movingSpeedChannel: m.movingSpeedChannel ? m.movingSpeedChannel + firstChannel - 1 : null,
     };
   }
 
@@ -158,46 +158,46 @@ export default class RootLightsService {
       updatedAt: f.updatedAt,
       name: f.name,
       masterDimChannel: f.masterDimChannel + firstChannel - 1,
-      shutterChannel: f.shutterChannel + firstChannel - 1
+      shutterChannel: f.shutterChannel + firstChannel - 1,
     };
   }
 
   private static toMovingHeadResponse(
     m: LightsMovingHead,
-    firstChannel: number
+    firstChannel: number,
   ): MovingHeadResponse {
     return {
       ...this.toFixtureResponse(m, firstChannel),
-      ...this.toMovementResponse(m.movement, firstChannel)
+      ...this.toMovementResponse(m.movement, firstChannel),
     };
   }
 
   public static toParResponse(p: LightsPar, firstChannel = 1): ParResponse {
     return {
       ...this.toFixtureResponse(p, firstChannel),
-      ...this.toColorResponse(p.color, firstChannel)
+      ...this.toColorResponse(p.color, firstChannel),
     };
   }
 
   public static toMovingHeadRgbResponse(
     m: LightsMovingHeadRgb,
-    firstChannel = 1
+    firstChannel = 1,
   ): MovingHeadRgbResponse {
     return {
       ...this.toMovingHeadResponse(m, firstChannel),
-      ...this.toColorResponse(m.color, firstChannel)
+      ...this.toColorResponse(m.color, firstChannel),
     };
   }
 
   public static toMovingHeadWheelResponse(
     m: LightsMovingHeadWheel,
-    firstChannel = 1
+    firstChannel = 1,
   ): MovingHeadWheelResponse {
     return {
       ...this.toMovingHeadResponse(m, firstChannel),
       colorWheelChannel: m.colorWheelChannel,
       goboWheelChannel: m.goboWheelChannel,
-      goboRotateChannel: m.goboRotateChannel ? m.goboRotateChannel + firstChannel - 1 : null
+      goboRotateChannel: m.goboRotateChannel ? m.goboRotateChannel + firstChannel - 1 : null,
     };
   }
 
@@ -210,11 +210,11 @@ export default class RootLightsService {
       controller: this.toLightsControllerResponse(g.controller),
       pars: g.pars.map((p) => this.toParResponse(p.fixture, p.firstChannel)),
       movingHeadRgbs: g.movingHeadRgbs.map((m) =>
-        this.toMovingHeadRgbResponse(m.fixture, m.firstChannel)
+        this.toMovingHeadRgbResponse(m.fixture, m.firstChannel),
       ),
       movingHeadWheels: g.movingHeadWheels.map((m) =>
-        this.toMovingHeadWheelResponse(m.fixture, m.firstChannel)
-      )
+        this.toMovingHeadWheelResponse(m.fixture, m.firstChannel),
+      ),
     };
   }
 
@@ -224,7 +224,7 @@ export default class RootLightsService {
       createdAt: c.createdAt,
       updatedAt: c.updatedAt,
       name: c.name,
-      socketIds: c.socketIds
+      socketIds: c.socketIds,
     };
   }
 
@@ -238,7 +238,7 @@ export default class RootLightsService {
 
   public async createController(params: LightsControllerCreateParams): Promise<LightsController> {
     const lightsController = await this.controllerRepository.save({
-      name: params.name
+      name: params.name,
     });
     await new AuthService().createApiKey({ lightsController });
     return lightsController;
@@ -254,7 +254,7 @@ export default class RootLightsService {
 
   public async createLightGroup(
     controllerId: number,
-    params: LightsGroupCreateParams
+    params: LightsGroupCreateParams,
   ): Promise<LightsGroup | null> {
     const controller = await this.controllerRepository.findOne({ where: { id: controllerId } });
     if (controller == null) return null;
@@ -262,7 +262,7 @@ export default class RootLightsService {
     return dataSource.transaction(async (manager) => {
       const group = (await manager.save(LightsGroup, {
         name: params.name,
-        controller
+        controller,
       })) as LightsGroup;
 
       await Promise.all(
@@ -272,39 +272,39 @@ export default class RootLightsService {
           await manager.save(LightsGroupPars, {
             group,
             fixture: par,
-            firstChannel: p.firstChannel
+            firstChannel: p.firstChannel,
           });
-        })
+        }),
       );
 
       await Promise.all(
         params.movingHeadRgbs.map(async (p) => {
           const movingHead = await manager.findOne(LightsMovingHeadRgb, {
-            where: { id: p.fixtureId }
+            where: { id: p.fixtureId },
           });
           if (movingHead == null)
             throw new Error(`LightsMovingHeadRgb with ID ${p.fixtureId} not found!`);
           await manager.save(LightsGroupMovingHeadRgbs, {
             group,
             fixture: movingHead,
-            firstChannel: p.firstChannel
+            firstChannel: p.firstChannel,
           });
-        })
+        }),
       );
 
       await Promise.all(
         params.movingHeadWheels.map(async (p) => {
           const movingHead = await manager.findOne(LightsMovingHeadWheel, {
-            where: { id: p.fixtureId }
+            where: { id: p.fixtureId },
           });
           if (movingHead == null)
             throw new Error(`LightsMovingHeadWheel with ID ${p.fixtureId} not found!`);
           await manager.save(LightsGroupMovingHeadWheels, {
             group,
             fixture: movingHead,
-            firstChannel: p.firstChannel
+            firstChannel: p.firstChannel,
           });
-        })
+        }),
       );
 
       return group;
@@ -322,7 +322,7 @@ export default class RootLightsService {
   }
 
   public async getLightsGroupMovingHeadWheel(
-    id: number
+    id: number,
   ): Promise<LightsGroupMovingHeadWheels | null> {
     const repository = dataSource.getRepository(LightsGroupMovingHeadWheels);
     return repository.findOne({ where: { id } });
@@ -332,7 +332,7 @@ export default class RootLightsService {
     return {
       name: params.name,
       masterDimChannel: params.masterDimChannel,
-      shutterChannel: params.shutterChannel
+      shutterChannel: params.shutterChannel,
     } as LightsFixture;
   }
 
@@ -344,7 +344,7 @@ export default class RootLightsService {
       coldWhiteChannel: params.colorColdWhiteChannel,
       warmWhiteChannel: params.colorWarmWhiteChannel,
       amberChannel: params.colorAmberChannel,
-      uvChannel: params.colorUvChannel
+      uvChannel: params.colorUvChannel,
     };
   }
 
@@ -354,7 +354,7 @@ export default class RootLightsService {
       finePanChannel: params.finePanChannel,
       tiltChannel: params.tiltChannel,
       fineTiltChannel: params.fineTiltChannel,
-      movingSpeedChannel: params.movingSpeedChannel
+      movingSpeedChannel: params.movingSpeedChannel,
     } as Movement;
   }
 
@@ -377,19 +377,19 @@ export default class RootLightsService {
       | LightsMovingHeadWheelShutterOptions
     >,
     fixture: LightsFixture,
-    params: ShutterOptionValues
+    params: ShutterOptionValues,
   ): Promise<LightsFixtureShutterOptions[]> {
     return Promise.all([
       repo.save({
         fixtureId: fixture.id,
         shutterOption: ShutterOption.OPEN,
-        channelValue: params.open
+        channelValue: params.open,
       }),
       repo.save({
         fixtureId: fixture.id,
         shutterOption: ShutterOption.STROBE,
-        channelValue: params.strobe
-      })
+        channelValue: params.strobe,
+      }),
     ]);
   }
 
@@ -397,35 +397,35 @@ export default class RootLightsService {
     const repository = dataSource.getRepository(LightsPar);
     const par = await repository.save({
       ...this.toFixture(params),
-      color: this.toColor(params)
+      color: this.toColor(params),
     });
     par.shutterOptions = (await this.createFixtureShutterOptions(
       dataSource.getRepository(LightsParShutterOptions),
       par,
-      params.shutterOptionValues
+      params.shutterOptionValues,
     )) as LightsParShutterOptions[];
     return par;
   }
 
   public async createMovingHeadRgb(
-    params: LightsMovingHeadRgbCreateParams
+    params: LightsMovingHeadRgbCreateParams,
   ): Promise<LightsMovingHeadRgb> {
     const repository = dataSource.getRepository(LightsMovingHeadRgb);
     const movingHead = await repository.save({
       ...this.toFixture(params),
       movement: this.toMovement(params),
-      color: this.toColor(params)
+      color: this.toColor(params),
     });
     movingHead.shutterOptions = (await this.createFixtureShutterOptions(
       dataSource.getRepository(LightsMovingHeadRgbShutterOptions),
       movingHead,
-      params.shutterOptionValues
+      params.shutterOptionValues,
     )) as LightsMovingHeadRgbShutterOptions[];
     return movingHead;
   }
 
   public async createMovingHeadWheel(
-    params: LightsMovingHeadWheelCreateParams
+    params: LightsMovingHeadWheelCreateParams,
   ): Promise<LightsMovingHeadWheel> {
     const repository = dataSource.getRepository(LightsMovingHeadWheel);
     const movingHead = await repository.save({
@@ -433,12 +433,12 @@ export default class RootLightsService {
       movement: this.toMovement(params),
       colorWheelChannel: params.colorWheelChannel,
       goboWheelChannel: params.goboWheelChannel,
-      goboRotateChannel: params.goboRotateChannel
+      goboRotateChannel: params.goboRotateChannel,
     });
     movingHead.shutterOptions = (await this.createFixtureShutterOptions(
       dataSource.getRepository(LightsMovingHeadWheelShutterOptions),
       movingHead,
-      params.shutterOptionValues
+      params.shutterOptionValues,
     )) as LightsMovingHeadWheelShutterOptions[];
     return movingHead;
   }

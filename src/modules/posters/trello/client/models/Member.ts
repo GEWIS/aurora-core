@@ -82,15 +82,15 @@ export type Member = {
 export namespace Member {
   export enum memberType {
     NORMAL = 'normal',
-    GHOST = 'ghost'
+    GHOST = 'ghost',
   }
 
   export enum status {
-    DISCONNECTED = 'disconnected'
+    DISCONNECTED = 'disconnected',
   }
 
   export enum avatarSource {
     GRAVATAR = 'gravatar',
-    UPLOAD = 'upload'
+    UPLOAD = 'upload',
   }
 }

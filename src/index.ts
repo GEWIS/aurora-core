@@ -30,14 +30,14 @@ async function createApp(): Promise<void> {
   const socketConnectionManager = new SocketConnectionManager(
     handlerManager,
     io,
-    backofficeSyncEmitter
+    backofficeSyncEmitter,
   );
   await socketConnectionManager.clearSavedSocketIds();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO should this be used somewhere?
   const lightsControllerManager = new LightsControllerManager(
     io.of(SocketioNamespaces.LIGHTS),
     handlerManager,
-    musicEmitter
+    musicEmitter,
   );
 
   await activeDirectoryConnect().catch(() => {
@@ -62,7 +62,7 @@ async function createApp(): Promise<void> {
 
   initBackofficeSynchronizer(io.of('/backoffice'), {
     musicEmitter,
-    backofficeEmitter: backofficeSyncEmitter
+    backofficeEmitter: backofficeSyncEmitter,
   });
 
   const port = process.env.PORT || 3000;

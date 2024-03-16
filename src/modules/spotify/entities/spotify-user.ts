@@ -27,7 +27,7 @@ export default class SpotifyUser extends BaseEntity {
   public setToken(token: SpotifyAccessToken) {
     this.token = {
       ...token,
-      expires: token.expires || new Date().getTime() + token.expires_in * 1000
+      expires: token.expires || new Date().getTime() + token.expires_in * 1000,
     };
   }
 }

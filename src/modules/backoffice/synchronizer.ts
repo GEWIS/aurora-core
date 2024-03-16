@@ -9,7 +9,7 @@ interface Emitters {
 
 export default function initBackofficeSynchronizer(
   socket: Namespace,
-  { musicEmitter, backofficeEmitter }: Emitters
+  { musicEmitter, backofficeEmitter }: Emitters,
 ) {
   musicEmitter.on('beat', (event) => {
     socket.emit('beat', event);

@@ -158,8 +158,8 @@ export default class CenturionMode extends BaseMode {
       songs.map((s) => ({
         title: s.title,
         artists: s.artist.split(', '),
-        cover: this.tape.coverUrl
-      })) as TrackChangeEvent[]
+        cover: this.tape.coverUrl,
+      })) as TrackChangeEvent[],
     );
   }
 
@@ -167,16 +167,16 @@ export default class CenturionMode extends BaseMode {
     const effects = [
       {
         effect: BeatFadeOut.build({ colors, enableFade: false, nrBlacks: 1 }),
-        probability: 0.8
+        probability: 0.8,
       },
       {
         effect: Wave.build({ color: colors[0] }),
-        probability: 0.1
+        probability: 0.1,
       },
       {
         effect: Sparkle.build({ colors }),
-        probability: 0.1
-      }
+        probability: 0.1,
+      },
     ];
     const factor = Math.random();
     return (
@@ -262,7 +262,7 @@ export default class CenturionMode extends BaseMode {
     const stopEvent: FeedEvent = {
       type: 'other',
       data: 'stop',
-      timestamp: this.tape.duration
+      timestamp: this.tape.duration,
     };
 
     [...this.tape.feed, stopEvent]
@@ -273,7 +273,7 @@ export default class CenturionMode extends BaseMode {
 
         this.feedEvents.push({
           event,
-          timeouts
+          timeouts,
         });
       });
   }

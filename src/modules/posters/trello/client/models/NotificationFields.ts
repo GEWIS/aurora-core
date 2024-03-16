@@ -14,5 +14,5 @@ export enum NotificationFields {
   BOARD = 'board',
   ID_MEMBER_CREATOR = 'idMemberCreator',
   ID_ACTION = 'idAction',
-  REACTIONS = 'reactions'
+  REACTIONS = 'reactions',
 }

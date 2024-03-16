@@ -14,7 +14,7 @@ export class ScenesController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Get('')
   public async getAllScenes(): Promise<LightsSceneResponse[]> {
@@ -26,7 +26,7 @@ export class ScenesController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Get('{id}')
   public async getSingleScene(id: number): Promise<LightsSceneResponse | undefined> {
@@ -48,22 +48,24 @@ export class ScenesController extends Controller {
     const lightsService = new RootLightsService();
 
     const dbPars = await Promise.all(
-      params.pars.map(async ({ id }) => lightsService.getLightsGroupPar(id))
+      params.pars.map(async ({ id }) => lightsService.getLightsGroupPar(id)),
     );
     const missingPars = params.pars.filter((f, index) => dbPars[index] == null);
 
     const dbMovingHeadRgbs = await Promise.all(
-      params.movingHeadRgbs.map(async ({ id }) => lightsService.getLightsGroupMovingHeadRgb(id))
+      params.movingHeadRgbs.map(async ({ id }) => lightsService.getLightsGroupMovingHeadRgb(id)),
     );
     const missingMovingHeadRgbs = params.movingHeadRgbs.filter(
-      (f, index) => dbMovingHeadRgbs[index] == null
+      (f, index) => dbMovingHeadRgbs[index] == null,
     );
 
     const dbMovingHeadWheels = await Promise.all(
-      params.movingHeadWheels.map(async ({ id }) => lightsService.getLightsGroupMovingHeadWheel(id))
+      params.movingHeadWheels.map(async ({ id }) =>
+        lightsService.getLightsGroupMovingHeadWheel(id),
+      ),
     );
     const missingMovingHeadWheels = params.movingHeadWheels.filter(
-      (p, index) => dbMovingHeadWheels[index] == null
+      (p, index) => dbMovingHeadWheels[index] == null,
     );
 
     if (
@@ -76,7 +78,7 @@ export class ScenesController extends Controller {
         message: 'Some fixtures do not exist',
         missingPars,
         missingMovingHeadRgbs,
-        missingMovingHeadWheels
+        missingMovingHeadWheels,
       };
     }
 
@@ -104,7 +106,7 @@ export class ScenesController extends Controller {
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
     SecurityGroup.BAC,
-    SecurityGroup.BOARD
+    SecurityGroup.BOARD,
   ])
   @Post('{id}/apply')
   public async applyScene(id: number) {

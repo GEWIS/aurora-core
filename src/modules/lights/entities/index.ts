@@ -11,7 +11,7 @@ import {
   LightsScene,
   LightsSceneMovingHeadRgb,
   LightsSceneMovingHeadWheel,
-  LightsScenePars
+  LightsScenePars,
 } from './scenes';
 import { LightsPredefinedEffect } from './sequences/lights-predefined-effect';
 import LightsParShutterOptions from './lights-par-shutter-options';
@@ -42,5 +42,5 @@ export const Entities = [
   LightsScenePars,
   LightsSceneMovingHeadRgb,
   LightsSceneMovingHeadWheel,
-  LightsPredefinedEffect
+  LightsPredefinedEffect,
 ];

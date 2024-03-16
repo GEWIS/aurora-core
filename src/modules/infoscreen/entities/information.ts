@@ -8,14 +8,14 @@ export default class Information extends BaseEntity {
   @Column({
     type: process.env.TYPEORM_CONNECTION === 'sqlite' ? 'varchar' : 'enum',
     enum: RoomStatus,
-    default: RoomStatus.CLOSED
+    default: RoomStatus.CLOSED,
   })
   public roomStatus!: RoomStatus;
 
   @Column({
     type: process.env.TYPEORM_CONNECTION === 'sqlite' ? 'varchar' : 'enum',
     enum: AlcoholTime,
-    nullable: true
+    nullable: true,
   })
   public alcoholTime!: AlcoholTime | null;
 
