@@ -59,7 +59,7 @@ export default class Wave extends LightsEffect<WaveProps> {
     if (progression >= 1) {
       this.cycleStartTick = currentTick;
     }
-    const nrLights = this.lightsGroup.pars.length;
+    const nrLights = this.lightsGroup.pars.length + this.lightsGroup.movingHeadRgbs.length;
 
     this.lightsGroup.pars
       .sort((p1, p2) => p2.firstChannel - p1.firstChannel)

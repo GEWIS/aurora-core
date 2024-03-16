@@ -41,13 +41,9 @@ const DEFAULT_DIM_DURATION = 800;
 const DEFAULT_CYCLE_TIME = 200;
 
 export default class Sparkle extends LightsEffect<SparkleProps> {
-  private beatsPars: Date[];
+  private beats: Date[];
 
-  private beatsMHRgbs: Date[];
-
-  private colorIndicesPars: number[];
-
-  private colorIndicesMHRgbs: number[];
+  private colorIndices: number[];
 
   private previousTick = new Date();
 
@@ -59,12 +55,9 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
   constructor(lightsGroup: LightsGroup, props: SparkleProps, features?: TrackPropertiesEvent) {
     super(lightsGroup, features);
 
-    const nrFixtures =
-      lightsGroup.pars.length +
-      lightsGroup.movingHeadWheels.length +
-      lightsGroup.movingHeadRgbs.length;
-    this.beatsPars = new Array(nrFixtures).fill(new Date(0));
-    this.colorIndicesPars = new Array(nrFixtures).fill(0);
+    const nrFixtures = lightsGroup.pars.length + lightsGroup.movingHeadRgbs.length;
+    this.beats = new Array(nrFixtures).fill(new Date(0));
+    this.colorIndices = new Array(nrFixtures).fill(0);
 
     this.props = props;
   }
@@ -85,22 +78,17 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
   }
 
   tick(): LightsGroup {
+    const nrPars = this.lightsGroup.pars.length;
     const { colors, cycleTime: propsCycleTime, ratio: propsRatio } = this.props;
     const cycleTime = propsCycleTime ?? DEFAULT_CYCLE_TIME;
     const ratio = propsRatio ?? DEFAULT_RATIO;
 
     // Turn on some lights according to the ratio if we have reached the time
     if (new Date().getTime() - this.previousTick.getTime() >= cycleTime) {
-      this.beatsPars?.forEach((b, i) => {
+      this.beats?.forEach((b, i) => {
         if (Math.random() <= ratio) {
-          this.colorIndicesPars[i] = (this.colorIndicesPars[i] + i) % Math.max(colors.length);
-          this.beatsPars[i] = new Date();
-        }
-      });
-      this.beatsMHRgbs?.forEach((b, i) => {
-        if (Math.random() <= ratio) {
-          this.colorIndicesMHRgbs[i] = (this.colorIndicesMHRgbs[i] + i) % Math.max(colors.length);
-          this.beatsMHRgbs[i] = new Date();
+          this.colorIndices[i] = (this.colorIndices[i] + i) % Math.max(colors.length);
+          this.beats[i] = new Date();
         }
       });
       this.previousTick = new Date();
@@ -108,16 +96,16 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
 
     this.lightsGroup.pars.forEach((p, i) => {
       const index = i;
-      const progression = this.getProgression(this.beatsPars[index]);
-      const colorIndex = this.colorIndicesPars[index];
+      const progression = this.getProgression(this.beats[index]);
+      const colorIndex = this.colorIndices[index];
       const color = colors[colorIndex % colors.length];
       p.fixture.setColor(color);
       p.fixture.setMasterDimmer(Math.round(255 * progression));
     });
     this.lightsGroup.movingHeadRgbs.forEach((p, i) => {
       const index = i;
-      const progression = this.getProgression(this.beatsMHRgbs[index]);
-      const colorIndex = this.colorIndicesMHRgbs[index];
+      const progression = this.getProgression(this.beats[nrPars + index]);
+      const colorIndex = this.colorIndices[nrPars + index];
       const color = colors[colorIndex % colors.length];
       p.fixture.setColor(color);
       p.fixture.setMasterDimmer(Math.round(255 * progression));
