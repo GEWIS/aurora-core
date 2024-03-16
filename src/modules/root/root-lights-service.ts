@@ -1,19 +1,26 @@
-import { Repository } from "typeorm";
-import { LightsController } from "./entities";
-import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel, LightsPar } from "../lights/entities";
-import dataSource from "../../database";
-import LightsFixture from "../lights/entities/lights-fixture";
-import Colors from "../lights/entities/colors";
-import LightsMovingHead from "../lights/entities/lights-moving-head";
-import LightsGroupPars from "../lights/entities/lights-group-pars";
-import LightsGroupMovingHeadRgbs from "../lights/entities/lights-group-moving-head-rgbs";
-import LightsGroupMovingHeadWheels from "../lights/entities/lights-group-moving-head-wheels";
-import Movement from "../lights/entities/movement";
-import AuthService from "../auth/auth-service";
-import LightsParShutterOptions from "../lights/entities/lights-par-shutter-options";
-import LightsMovingHeadRgbShutterOptions from "../lights/entities/lights-moving-head-rgb-shutter-options";
-import LightsMovingHeadWheelShutterOptions from "../lights/entities/lights-moving-head-wheel-shutter-options";
-import LightsFixtureShutterOptions, { ShutterOption } from "../lights/entities/lights-fixture-shutter-options";
+import { Repository } from 'typeorm';
+import { LightsController } from './entities';
+import {
+  LightsGroup,
+  LightsMovingHeadRgb,
+  LightsMovingHeadWheel,
+  LightsPar
+} from '../lights/entities';
+import dataSource from '../../database';
+import LightsFixture from '../lights/entities/lights-fixture';
+import Colors from '../lights/entities/colors';
+import LightsMovingHead from '../lights/entities/lights-moving-head';
+import LightsGroupPars from '../lights/entities/lights-group-pars';
+import LightsGroupMovingHeadRgbs from '../lights/entities/lights-group-moving-head-rgbs';
+import LightsGroupMovingHeadWheels from '../lights/entities/lights-group-moving-head-wheels';
+import Movement from '../lights/entities/movement';
+import AuthService from '../auth/auth-service';
+import LightsParShutterOptions from '../lights/entities/lights-par-shutter-options';
+import LightsMovingHeadRgbShutterOptions from '../lights/entities/lights-moving-head-rgb-shutter-options';
+import LightsMovingHeadWheelShutterOptions from '../lights/entities/lights-moving-head-wheel-shutter-options';
+import LightsFixtureShutterOptions, {
+  ShutterOption
+} from '../lights/entities/lights-fixture-shutter-options';
 
 export interface LightsControllerResponse
   extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
@@ -364,13 +371,25 @@ export default class RootLightsService {
   }
 
   public async createFixtureShutterOptions(
-    repo: Repository<LightsParShutterOptions | LightsMovingHeadRgbShutterOptions | LightsMovingHeadWheelShutterOptions>,
+    repo: Repository<
+      | LightsParShutterOptions
+      | LightsMovingHeadRgbShutterOptions
+      | LightsMovingHeadWheelShutterOptions
+    >,
     fixture: LightsFixture,
-    params: ShutterOptionValues,
+    params: ShutterOptionValues
   ): Promise<LightsFixtureShutterOptions[]> {
     return Promise.all([
-      repo.save({ fixtureId: fixture.id, shutterOption: ShutterOption.OPEN, channelValue: params.open }),
-      repo.save({ fixtureId: fixture.id, shutterOption: ShutterOption.STROBE, channelValue: params.strobe }),
+      repo.save({
+        fixtureId: fixture.id,
+        shutterOption: ShutterOption.OPEN,
+        channelValue: params.open
+      }),
+      repo.save({
+        fixtureId: fixture.id,
+        shutterOption: ShutterOption.STROBE,
+        channelValue: params.strobe
+      })
     ]);
   }
 
@@ -380,11 +399,11 @@ export default class RootLightsService {
       ...this.toFixture(params),
       color: this.toColor(params)
     });
-    par.shutterOptions = await this.createFixtureShutterOptions(
+    par.shutterOptions = (await this.createFixtureShutterOptions(
       dataSource.getRepository(LightsParShutterOptions),
       par,
-      params.shutterOptionValues,
-    ) as LightsParShutterOptions[];
+      params.shutterOptionValues
+    )) as LightsParShutterOptions[];
     return par;
   }
 
@@ -397,11 +416,11 @@ export default class RootLightsService {
       movement: this.toMovement(params),
       color: this.toColor(params)
     });
-    movingHead.shutterOptions = await this.createFixtureShutterOptions(
+    movingHead.shutterOptions = (await this.createFixtureShutterOptions(
       dataSource.getRepository(LightsMovingHeadRgbShutterOptions),
       movingHead,
-      params.shutterOptionValues,
-    ) as LightsMovingHeadRgbShutterOptions[];
+      params.shutterOptionValues
+    )) as LightsMovingHeadRgbShutterOptions[];
     return movingHead;
   }
 
@@ -416,11 +435,11 @@ export default class RootLightsService {
       goboWheelChannel: params.goboWheelChannel,
       goboRotateChannel: params.goboRotateChannel
     });
-    movingHead.shutterOptions = await this.createFixtureShutterOptions(
+    movingHead.shutterOptions = (await this.createFixtureShutterOptions(
       dataSource.getRepository(LightsMovingHeadWheelShutterOptions),
       movingHead,
-      params.shutterOptionValues,
-    ) as LightsMovingHeadWheelShutterOptions[];
+      params.shutterOptionValues
+    )) as LightsMovingHeadWheelShutterOptions[];
     return movingHead;
   }
 }

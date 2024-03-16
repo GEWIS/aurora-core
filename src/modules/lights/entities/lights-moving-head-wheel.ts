@@ -6,8 +6,8 @@ import { LightsFixtureCurrentValues } from './lights-fixture';
 import LightsWheelChannelValue from './lights-wheel-channel-value';
 import { RgbColor, rgbColorDefinitions, WheelColor } from '../color-definitions';
 // eslint-disable-next-line import/no-cycle
-import LightsMovingHeadWheelShutterOptions from "./lights-moving-head-wheel-shutter-options";
-import { ShutterOption } from "./lights-fixture-shutter-options";
+import LightsMovingHeadWheelShutterOptions from './lights-moving-head-wheel-shutter-options';
+import { ShutterOption } from './lights-fixture-shutter-options';
 
 interface LightsMovingHeadWheelCurrentValues extends Movement, LightsFixtureCurrentValues {
   colorWheelChannel: number;
@@ -97,7 +97,8 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     let values: number[] = new Array(16).fill(0);
 
     values[this.masterDimChannel - 1] = this.channelValues.masterDimChannel;
-    values[this.shutterChannel - 1] = this.shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
+    values[this.shutterChannel - 1] =
+      this.shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
     values[this.movement.panChannel - 1] = this.channelValues.panChannel;
     values[this.colorWheelChannel - 1] = this.channelValues.colorWheelChannel;
     values[this.goboWheelChannel - 1] = this.channelValues.goboWheelChannel;

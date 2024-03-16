@@ -1,7 +1,7 @@
 import { AfterLoad, Column } from 'typeorm';
 import BaseEntity from '../../root/entities/base-entity';
 
-export interface LightsFixtureCurrentValues extends Pick<LightsFixture, "masterDimChannel"> {}
+export interface LightsFixtureCurrentValues extends Pick<LightsFixture, 'masterDimChannel'> {}
 
 export default abstract class LightsFixture extends BaseEntity {
   @Column()

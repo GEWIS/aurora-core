@@ -217,7 +217,7 @@ export default class CenturionMode extends BaseMode {
         // If we have a wheel moving head, assign a static color
         if (l.movingHeadWheels.length > 0) {
           this.lightsHandler.setColorEffect(l, [movingHeadEffectColor]);
-        // Otherwise use a random effect!
+          // Otherwise use a random effect!
         } else {
           this.lightsHandler.setColorEffect(l, [newEffectBuilder]);
         }

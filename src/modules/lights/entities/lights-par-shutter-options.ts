@@ -1,7 +1,7 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import LightsFixtureShutterOptions from "./lights-fixture-shutter-options";
+import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import LightsFixtureShutterOptions from './lights-fixture-shutter-options';
 // eslint-disable-next-line import/no-cycle
-import LightsPar from "./lights-par";
+import LightsPar from './lights-par';
 
 @Entity()
 export default class LightsParShutterOptions extends LightsFixtureShutterOptions {

@@ -14,9 +14,9 @@ import {
   LightsScenePars
 } from './scenes';
 import { LightsPredefinedEffect } from './sequences/lights-predefined-effect';
-import LightsParShutterOptions from "./lights-par-shutter-options";
-import LightsMovingHeadRgbShutterOptions from "./lights-moving-head-rgb-shutter-options";
-import LightsMovingHeadWheelShutterOptions from "./lights-moving-head-wheel-shutter-options";
+import LightsParShutterOptions from './lights-par-shutter-options';
+import LightsMovingHeadRgbShutterOptions from './lights-moving-head-rgb-shutter-options';
+import LightsMovingHeadWheelShutterOptions from './lights-moving-head-wheel-shutter-options';
 
 export { default as LightsGroup } from './lights-group';
 export { default as LightsPar } from './lights-par';

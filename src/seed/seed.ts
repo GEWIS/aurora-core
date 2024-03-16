@@ -31,7 +31,7 @@ export default async function seedDatabase() {
     shutterChannel: 2,
     shutterOptionValues: {
       open: 0,
-      strobe: 220,
+      strobe: 220
     },
     colorRedChannel: 3,
     colorGreenChannel: 4,
@@ -48,7 +48,7 @@ export default async function seedDatabase() {
     shutterChannel: 9,
     shutterOptionValues: {
       open: 0,
-      strobe: 220,
+      strobe: 220
     },
     colorWheelChannel: 6,
     goboWheelChannel: 7,
@@ -71,7 +71,7 @@ export default async function seedDatabase() {
     shutterChannel: 7,
     shutterOptionValues: {
       open: 255,
-      strobe: 110,
+      strobe: 110
     },
     panChannel: 1,
     finePanChannel: 2,

@@ -1,10 +1,10 @@
-import { Column, Entity, OneToMany } from "typeorm";
-import LightsFixture, { LightsFixtureCurrentValues } from "./lights-fixture";
-import Colors from "./colors";
-import { RgbColor, rgbColorDefinitions } from "../color-definitions";
+import { Column, Entity, OneToMany } from 'typeorm';
+import LightsFixture, { LightsFixtureCurrentValues } from './lights-fixture';
+import Colors from './colors';
+import { RgbColor, rgbColorDefinitions } from '../color-definitions';
 // eslint-disable-next-line import/no-cycle
-import LightsParShutterOptions from "./lights-par-shutter-options";
-import { ShutterOption } from "./lights-fixture-shutter-options";
+import LightsParShutterOptions from './lights-par-shutter-options';
+import { ShutterOption } from './lights-fixture-shutter-options';
 
 @Entity()
 export default class LightsPar extends LightsFixture {
@@ -69,7 +69,8 @@ export default class LightsPar extends LightsFixture {
   protected getStrobeDMX(): number[] {
     const values: number[] = new Array(16).fill(0);
     values[this.masterDimChannel - 1] = 255;
-    values[this.shutterChannel - 1] = this.shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
+    values[this.shutterChannel - 1] =
+      this.shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
     values[this.color.redChannel - 1] = 255;
     values[this.color.blueChannel - 1] = 255;
     values[this.color.greenChannel - 1] = 255;
@@ -89,7 +90,8 @@ export default class LightsPar extends LightsFixture {
     let values: number[] = new Array(16).fill(0);
 
     values[this.masterDimChannel - 1] = this.channelValues.masterDimChannel;
-    values[this.shutterChannel - 1] = this.shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
+    values[this.shutterChannel - 1] =
+      this.shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
     values[this.color.redChannel - 1] = this.channelValues.redChannel;
     values[this.color.greenChannel - 1] = this.channelValues.greenChannel;
     values[this.color.blueChannel - 1] = this.channelValues.blueChannel;
