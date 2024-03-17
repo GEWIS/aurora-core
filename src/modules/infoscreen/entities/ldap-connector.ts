@@ -9,6 +9,8 @@ export interface Member {
 let activeDirectoryConnector: Client;
 
 export async function activeDirectoryConnect() {
+  if (process.env.LDAP_ENABLED !== 'true') return;
+
   activeDirectoryConnector = new Client({
     connectTimeout: 5000,
     url: process.env.LDAP_URI!,
@@ -21,6 +23,8 @@ export async function activeDirectoryConnect() {
 }
 
 export async function getBoard() {
+  if (process.env.LDAP_ENABLED !== 'true') return [];
+
   return (
     await activeDirectoryConnector.search(process.env.LDAP_BASE_DN!, {
       scope: 'sub',
@@ -31,6 +35,8 @@ export async function getBoard() {
 }
 
 export async function getKeyHolders() {
+  if (process.env.LDAP_ENABLED !== 'true') return [];
+
   return (
     await activeDirectoryConnector.search(process.env.LDAP_BASE_DN!, {
       scope: 'sub',
@@ -41,6 +47,8 @@ export async function getKeyHolders() {
 }
 
 export async function getERO() {
+  if (process.env.LDAP_ENABLED !== 'true') return [];
+
   return (
     await activeDirectoryConnector.search(process.env.LDAP_BASE_DN!, {
       scope: 'sub',
