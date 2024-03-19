@@ -6,6 +6,11 @@ import { StrobeProps } from '../lights/effects/color/strobe';
 import { SecurityGroup } from '../../helpers/security';
 
 interface GroupFixtureOverrideParams {
+  /**
+   * Slice of DMX channel values that should be send to the fixture.
+   * The first value will be put on CH1, the second on CH2, the third on CH3, etc.
+   * Use "null" to indicate the channel should not be overriden.
+   */
   dmxValues: (number | null)[];
 }
 
