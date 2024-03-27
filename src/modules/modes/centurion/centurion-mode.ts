@@ -91,10 +91,6 @@ export default class CenturionMode extends BaseMode {
     logger.info(`Initialized centurion tape "${tape.name}"`);
   }
 
-  public static getInstance() {
-    return this.instance;
-  }
-
   /**
    * Start playing the given mixtape and register all timed effects
    */

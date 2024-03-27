@@ -1,7 +1,6 @@
 import { Body, Delete, Post, Route, Security, SuccessResponse, Tags } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import { In } from 'typeorm';
-import HandlerManager from '../root/handler-manager';
 import ModeManager from './mode-manager';
 import SubscribeEntity from '../root/entities/subscribe-entity';
 import { LightsGroup } from '../lights/entities';
@@ -11,6 +10,7 @@ import tapes from './centurion/tapes';
 import dataSource from '../../database';
 import { SecurityGroup } from '../../helpers/security';
 import { HttpStatusCode } from '../../helpers/customError';
+import TimeTrailRaceMode from './time-trail-race/time-trail-race-mode';
 
 interface EnableModeParams {
   lightsGroupIds: number[];
@@ -22,16 +22,17 @@ interface CenturionParams extends EnableModeParams {
   centurionName: string;
 }
 
+interface TimeTrailRaceParams extends EnableModeParams {
+  sessionName: string;
+}
+
 @Route('modes')
 @Tags('Modes')
 export class ModeController extends Controller {
-  private handlerManager: HandlerManager;
-
   private modeManager: ModeManager;
 
   constructor() {
     super();
-    this.handlerManager = HandlerManager.getInstance();
     this.modeManager = ModeManager.getInstance();
   }
 
@@ -88,5 +89,29 @@ export class ModeController extends Controller {
   @SuccessResponse(HttpStatusCode.Ok)
   public disableCenturion() {
     this.modeManager.disableMode(CenturionMode, 'centurion');
+  }
+
+  /**
+   * Enable Time Trail Race (spoelbakkenrace) mode for the given devices
+   */
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Post('time-trail-race')
+  @SuccessResponse(HttpStatusCode.NoContent)
+  public async enableTimeTrailRace(@Body() params: TimeTrailRaceParams): Promise<string> {
+    const { lights, screens, audios } = await this.mapBodyToEntities(params);
+
+    const timeTrailRaceMode = new TimeTrailRaceMode(lights, screens, audios);
+    timeTrailRaceMode.initialize(params.sessionName);
+    this.modeManager.enableMode(TimeTrailRaceMode, timeTrailRaceMode, 'time-trail-racing');
+
+    this.setStatus(204);
+    return '';
+  }
+
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Delete('time-trail-race')
+  @SuccessResponse(HttpStatusCode.Ok)
+  public disableTimeTrailRacing() {
+    this.modeManager.disableMode(TimeTrailRaceMode, 'time-trail-racing');
   }
 }

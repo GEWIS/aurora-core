@@ -22,6 +22,7 @@ import StageEffectsHandler from '../handlers/screen/stage-effects-handler';
 import { SocketioNamespaces } from '../../socketio-namespaces';
 import logger from '../../logger';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
+import TimeTrailRaceScreenHandler from '../handlers/screen/time-trail-race-screen-handler';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -99,6 +100,7 @@ export default class HandlerManager {
       new CenturionScreenHandler(io.of(SocketioNamespaces.SCREEN)),
       new PosterScreenHandler(io.of(SocketioNamespaces.SCREEN)),
       new StageEffectsHandler(io.of(SocketioNamespaces.SCREEN)),
+      new TimeTrailRaceScreenHandler(io.of(SocketioNamespaces.SCREEN)),
     ] as BaseScreenHandler[]);
   }
 
