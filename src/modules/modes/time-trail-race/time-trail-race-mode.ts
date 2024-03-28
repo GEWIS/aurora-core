@@ -5,34 +5,21 @@ import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
 import TimeTrailRaceScreenHandler from '../../handlers/screen/time-trail-race-screen-handler';
 import { LightsGroup } from '../../lights/entities';
 import { Audio, Screen } from '../../root/entities';
+import { TimeTrailRaceState } from './time-trail-race-state';
+import { BackofficeSyncEmitter } from '../../events/backoffice-sync-emitter';
+import { PlayerParams, RegisterPlayerParams, ScoreboardItem } from './time-trail-race-entities';
+import {
+  RaceFinishedEvent,
+  RaceInitializedEvent,
+  RacePlayerReadyEvent,
+  RacePlayerRegisteredEvent,
+  RaceScoreboardEvent,
+  RaceStartedEvent,
+} from './time-trail-race-events';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
 const SCREEN_HANDLER = 'TimeTrailRaceScreenHandler';
-
-export enum TimeTrailRaceState {
-  INITIALIZED,
-  PLAYER_REGISTERED,
-  PLAYER_READY,
-  STARTED,
-  FINISHED,
-  SCOREBOARD,
-}
-
-export interface RegisterPlayerParams {
-  name: string;
-  alcoholFree: boolean;
-  bac: boolean;
-}
-
-interface PlayerParams {
-  uuid: string;
-}
-
-export interface ScoreboardItem extends PlayerParams {
-  /** Finish time (in ms) */
-  timeMs: number;
-}
 
 export default class TimeTrailRaceMode extends BaseMode {
   private lightsHandler: SetEffectsHandler;
@@ -40,6 +27,8 @@ export default class TimeTrailRaceMode extends BaseMode {
   private audioHandler: SimpleAudioHandler;
 
   private screenHandler: TimeTrailRaceScreenHandler;
+
+  private backofficeSyncEmitter: BackofficeSyncEmitter;
 
   private sessionName: string;
 
@@ -85,9 +74,16 @@ export default class TimeTrailRaceMode extends BaseMode {
     return this._state;
   }
 
-  public initialize(sessionName: string) {
+  public initialize(backofficeSyncEmitter: BackofficeSyncEmitter, sessionName: string) {
+    this.backofficeSyncEmitter = backofficeSyncEmitter;
     this.sessionName = sessionName;
     this._state = TimeTrailRaceState.INITIALIZED;
+
+    const event: RaceInitializedEvent = {
+      sessionName,
+    };
+    this.screenHandler.initialized(event);
+    this.backofficeSyncEmitter.emit('race-initialize', event);
   }
 
   /**
@@ -108,6 +104,15 @@ export default class TimeTrailRaceMode extends BaseMode {
     };
     this._state = TimeTrailRaceState.PLAYER_REGISTERED;
 
+    const event: RacePlayerRegisteredEvent = {
+      state: this._state,
+      sessionName: this.sessionName,
+      playerName: params.name,
+      scoreboard: this.scoreboard,
+    };
+    this.screenHandler.playerRegistered(event);
+    this.backofficeSyncEmitter.emit('race-player-registered', event);
+
     return true;
   }
 
@@ -120,6 +125,14 @@ export default class TimeTrailRaceMode extends BaseMode {
     }
 
     this._state = TimeTrailRaceState.PLAYER_READY;
+
+    const event: RacePlayerReadyEvent = {
+      state: this._state,
+      sessionName: this.sessionName,
+      name: this.playerParams.name,
+    };
+    this.screenHandler.playerReady(event);
+    this.backofficeSyncEmitter.emit('race-player-ready', event);
 
     return true;
   }
@@ -134,6 +147,16 @@ export default class TimeTrailRaceMode extends BaseMode {
 
     this.startTime = new Date();
     this._state = TimeTrailRaceState.STARTED;
+
+    const event: RaceStartedEvent = {
+      state: this._state,
+      sessionName: this.sessionName,
+      startTime: this.startTime,
+      name: this.playerParams.name,
+    };
+    this.screenHandler.started(event);
+    this.backofficeSyncEmitter.emit('race-start', event);
+    this.audioHandler.play('');
 
     return true;
   }
@@ -157,6 +180,16 @@ export default class TimeTrailRaceMode extends BaseMode {
 
     this._state = TimeTrailRaceState.FINISHED;
 
+    const event: RaceFinishedEvent = {
+      state: this._state,
+      sessionName: this.sessionName,
+      name: this.playerParams.name,
+      timeMs: finishTime,
+    };
+    this.screenHandler.finished(event);
+    this.backofficeSyncEmitter.emit('race-finish', event);
+    this.audioHandler.stop();
+
     return true;
   }
 
@@ -169,6 +202,15 @@ export default class TimeTrailRaceMode extends BaseMode {
     }
 
     this._state = TimeTrailRaceState.SCOREBOARD;
+    const event: RaceScoreboardEvent = {
+      state: this._state,
+      sessionName: this.sessionName,
+      name: this.lastScore?.name || '',
+      timeMs: this.lastScore?.timeMs || 0,
+      scoreboard: this.scoreboard,
+    };
+    this.screenHandler.showScoreboard(event);
+    this.backofficeSyncEmitter.emit('race-scoreboard', event);
 
     return true;
   }

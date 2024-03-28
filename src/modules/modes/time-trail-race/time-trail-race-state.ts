@@ -1,0 +1,8 @@
+export enum TimeTrailRaceState {
+  INITIALIZED,
+  PLAYER_REGISTERED,
+  PLAYER_READY,
+  STARTED,
+  FINISHED,
+  SCOREBOARD,
+}

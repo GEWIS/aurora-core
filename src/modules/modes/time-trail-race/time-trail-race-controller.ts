@@ -1,8 +1,9 @@
 import { Controller } from '@tsoa/runtime';
 import { Body, Get, Post, Response, Route, Security, Tags } from 'tsoa';
-import TimeTrailRaceMode, { RegisterPlayerParams } from './time-trail-race-mode';
+import TimeTrailRaceMode from './time-trail-race-mode';
 import ModeManager from '../mode-manager';
 import { SecurityGroup } from '../../../helpers/security';
+import { RegisterPlayerParams } from './time-trail-race-entities';
 
 @Route('modes/time-trail-race')
 @Tags('Modes')

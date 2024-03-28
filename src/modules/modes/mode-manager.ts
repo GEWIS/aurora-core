@@ -49,4 +49,8 @@ export default class ModeManager {
   public get musicEmitter() {
     return this._musicEmitter;
   }
+
+  public get backofficeSyncEmitter() {
+    return this._backofficeSyncEmitter;
+  }
 }

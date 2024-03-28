@@ -101,7 +101,7 @@ export class ModeController extends Controller {
     const { lights, screens, audios } = await this.mapBodyToEntities(params);
 
     const timeTrailRaceMode = new TimeTrailRaceMode(lights, screens, audios);
-    timeTrailRaceMode.initialize(params.sessionName);
+    timeTrailRaceMode.initialize(this.modeManager.backofficeSyncEmitter, params.sessionName);
     this.modeManager.enableMode(TimeTrailRaceMode, timeTrailRaceMode, 'time-trail-racing');
 
     this.setStatus(204);
