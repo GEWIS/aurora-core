@@ -21,6 +21,8 @@ const LIGHTS_HANDLER = 'SetEffectsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
 const SCREEN_HANDLER = 'TimeTrailRaceScreenHandler';
 
+const MUSIC_FILE = '/static/audio/benny-hill-theme.mp3';
+
 export default class TimeTrailRaceMode extends BaseMode {
   private lightsHandler: SetEffectsHandler;
 
@@ -156,7 +158,7 @@ export default class TimeTrailRaceMode extends BaseMode {
     };
     this.screenHandler.started(event);
     this.backofficeSyncEmitter.emit('race-start', event);
-    this.audioHandler.play('');
+    this.audioHandler.play(MUSIC_FILE);
 
     return true;
   }
