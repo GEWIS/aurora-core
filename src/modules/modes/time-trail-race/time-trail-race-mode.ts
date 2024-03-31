@@ -16,6 +16,7 @@ import {
   RaceScoreboardEvent,
   RaceStartedEvent,
 } from './time-trail-race-events';
+import { InvalidStateError } from './time-trail-race-invalid-state-error';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
@@ -32,7 +33,7 @@ export default class TimeTrailRaceMode extends BaseMode {
 
   private backofficeSyncEmitter: BackofficeSyncEmitter;
 
-  private sessionName: string;
+  private _sessionName: string;
 
   private _state: TimeTrailRaceState;
 
@@ -76,9 +77,13 @@ export default class TimeTrailRaceMode extends BaseMode {
     return this._state;
   }
 
+  public get sessionName() {
+    return this._sessionName;
+  }
+
   public initialize(backofficeSyncEmitter: BackofficeSyncEmitter, sessionName: string) {
     this.backofficeSyncEmitter = backofficeSyncEmitter;
-    this.sessionName = sessionName;
+    this._sessionName = sessionName;
     this._state = TimeTrailRaceState.INITIALIZED;
 
     const event: RaceInitializedEvent = {
@@ -86,6 +91,8 @@ export default class TimeTrailRaceMode extends BaseMode {
     };
     this.screenHandler.initialized(event);
     this.backofficeSyncEmitter.emit('race-initialize', event);
+
+    return event;
   }
 
   /**
@@ -97,7 +104,7 @@ export default class TimeTrailRaceMode extends BaseMode {
       this._state !== TimeTrailRaceState.INITIALIZED &&
       this._state !== TimeTrailRaceState.SCOREBOARD
     ) {
-      return false;
+      throw new InvalidStateError('Time Trail Race not in INITIALIZED or SCOREBOARD state');
     }
 
     this.playerParams = {
@@ -108,14 +115,14 @@ export default class TimeTrailRaceMode extends BaseMode {
 
     const event: RacePlayerRegisteredEvent = {
       state: this._state,
-      sessionName: this.sessionName,
-      playerName: params.name,
+      sessionName: this._sessionName,
+      player: this.playerParams,
       scoreboard: this.scoreboard,
     };
     this.screenHandler.playerRegistered(event);
     this.backofficeSyncEmitter.emit('race-player-registered', event);
 
-    return true;
+    return event;
   }
 
   /**
@@ -123,20 +130,20 @@ export default class TimeTrailRaceMode extends BaseMode {
    */
   public ready() {
     if (this._state !== TimeTrailRaceState.PLAYER_REGISTERED) {
-      return false;
+      throw new InvalidStateError('Time Trail Race not in PLAYER_REGISTERED state');
     }
 
     this._state = TimeTrailRaceState.PLAYER_READY;
 
     const event: RacePlayerReadyEvent = {
       state: this._state,
-      sessionName: this.sessionName,
-      name: this.playerParams.name,
+      sessionName: this._sessionName,
+      player: this.playerParams,
     };
     this.screenHandler.playerReady(event);
     this.backofficeSyncEmitter.emit('race-player-ready', event);
 
-    return true;
+    return event;
   }
 
   /**
@@ -144,7 +151,7 @@ export default class TimeTrailRaceMode extends BaseMode {
    */
   public start() {
     if (this._state !== TimeTrailRaceState.PLAYER_READY) {
-      return false;
+      throw new InvalidStateError('Time Trail Race not in PLAYER_READY state');
     }
 
     this.startTime = new Date();
@@ -152,15 +159,15 @@ export default class TimeTrailRaceMode extends BaseMode {
 
     const event: RaceStartedEvent = {
       state: this._state,
-      sessionName: this.sessionName,
+      sessionName: this._sessionName,
       startTime: this.startTime,
-      name: this.playerParams.name,
+      player: this.playerParams,
     };
     this.screenHandler.started(event);
     this.backofficeSyncEmitter.emit('race-start', event);
     this.audioHandler.play(MUSIC_FILE);
 
-    return true;
+    return event;
   }
 
   /**
@@ -169,7 +176,7 @@ export default class TimeTrailRaceMode extends BaseMode {
    */
   public finish() {
     if (this._state !== TimeTrailRaceState.STARTED || !this.startTime) {
-      return false;
+      throw new InvalidStateError('Time Trail Race not in STARTED state');
     }
 
     const finishTime = new Date().getTime() - this.startTime.getTime();
@@ -184,36 +191,35 @@ export default class TimeTrailRaceMode extends BaseMode {
 
     const event: RaceFinishedEvent = {
       state: this._state,
-      sessionName: this.sessionName,
-      name: this.playerParams.name,
-      timeMs: finishTime,
+      sessionName: this._sessionName,
+      player: this.lastScore,
+      scoreboard: this.scoreboard,
     };
     this.screenHandler.finished(event);
     this.backofficeSyncEmitter.emit('race-finish', event);
     this.audioHandler.stop();
 
-    return true;
+    return event;
   }
 
   /**
    * Player's score is revealed and new player can be registered
    */
   public revealScore() {
-    if (this._state !== TimeTrailRaceState.FINISHED) {
-      return false;
+    if (this._state !== TimeTrailRaceState.FINISHED || !this.lastScore) {
+      throw new InvalidStateError('Time Trail Race not in FINISHED state');
     }
 
     this._state = TimeTrailRaceState.SCOREBOARD;
     const event: RaceScoreboardEvent = {
       state: this._state,
-      sessionName: this.sessionName,
-      name: this.lastScore?.name || '',
-      timeMs: this.lastScore?.timeMs || 0,
+      sessionName: this._sessionName,
+      player: this.lastScore,
       scoreboard: this.scoreboard,
     };
     this.screenHandler.showScoreboard(event);
     this.backofficeSyncEmitter.emit('race-scoreboard', event);
 
-    return true;
+    return event;
   }
 }
