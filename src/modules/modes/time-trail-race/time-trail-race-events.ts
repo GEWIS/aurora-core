@@ -6,7 +6,9 @@ type RaceBaseEvent = {
   sessionName: string;
 };
 
-export type RaceInitializedEvent = RaceBaseEvent & {};
+export type RaceInitializedEvent = RaceBaseEvent & {
+  state: TimeTrailRaceState.INITIALIZED;
+};
 
 export type RacePlayerRegisteredEvent = RaceBaseEvent & {
   state: TimeTrailRaceState.PLAYER_REGISTERED;

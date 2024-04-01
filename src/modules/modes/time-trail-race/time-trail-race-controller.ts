@@ -17,7 +17,12 @@ export class TimeTrailRaceController extends Controller {
     this.modeManager = ModeManager.getInstance();
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD,
+    SecurityGroup.SCREEN_SUBSCRIBER,
+  ])
   @Get('')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
   public getRaceState() {

@@ -87,6 +87,7 @@ export default class TimeTrailRaceMode extends BaseMode {
     this._state = TimeTrailRaceState.INITIALIZED;
 
     const event: RaceInitializedEvent = {
+      state: this._state,
       sessionName,
     };
     this.screenHandler.initialized(event);
