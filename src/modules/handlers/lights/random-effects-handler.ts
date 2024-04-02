@@ -1,7 +1,7 @@
 import { LightsGroup } from '../../lights/entities';
 import { BeatEvent } from '../../events/music-emitter-events';
-import { BeatFadeOut } from '../../lights/effects/color';
-import { getTwoComplementaryRgbColors } from '../../lights/color-definitions';
+import { BeatFadeOut, StaticColor } from '../../lights/effects/color';
+import { getTwoComplementaryRgbColors, RgbColor } from '../../lights/color-definitions';
 import EffectsHandler from './effects-handler';
 import { SearchLight } from '../../lights/effects/movement';
 
@@ -30,11 +30,18 @@ export default class RandomEffectsHandler extends EffectsHandler {
       effect.destroy();
     }
 
-    // We currently have only one effect, so that makes our choice easy
-    this.groupColorEffects.set(
-      entity,
-      new BeatFadeOut(entity, { colors: colorNames, enableFade: false }, this.trackFeatures),
-    );
+    if (entity.movingHeadWheels.length === 0) {
+      this.groupColorEffects.set(
+        entity,
+        new BeatFadeOut(
+          entity,
+          { colors: colorNames, enableFade: false, nrBlacks: 1 },
+          this.trackFeatures,
+        ),
+      );
+    } else {
+      this.groupColorEffects.set(entity, new StaticColor(entity, { color: RgbColor.WHITE }));
+    }
     this.groupMovementEffects.set(entity, new SearchLight(entity, {}));
   }
 

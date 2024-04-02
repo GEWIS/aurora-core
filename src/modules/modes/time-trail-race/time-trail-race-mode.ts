@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 import BaseMode from '../base-mode';
-import SetEffectsHandler from '../../handlers/lights/set-effects-handler';
 import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
 import TimeTrailRaceScreenHandler from '../../handlers/screen/time-trail-race-screen-handler';
 import { LightsGroup } from '../../lights/entities';
@@ -17,19 +16,24 @@ import {
   RaceStartedEvent,
 } from './time-trail-race-events';
 import { InvalidStateError } from './time-trail-race-invalid-state-error';
+import TimeTrailRaceLightsHandler from '../../handlers/lights/time-trail-race-lights-handler';
+import { ArtificialBeatGenerator } from '../../beats/artificial-beat-generator';
+import logger from '../../../logger';
 
-const LIGHTS_HANDLER = 'SetEffectsHandler';
+const LIGHTS_HANDLER = 'TimeTrailRaceLightsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
 const SCREEN_HANDLER = 'TimeTrailRaceScreenHandler';
 
 const MUSIC_FILE = '/static/audio/benny-hill-theme.mp3';
 
 export default class TimeTrailRaceMode extends BaseMode {
-  private lightsHandler: SetEffectsHandler;
+  private lightsHandler: TimeTrailRaceLightsHandler;
 
   private audioHandler: SimpleAudioHandler;
 
   private screenHandler: TimeTrailRaceScreenHandler;
+
+  private artificialBeatGenerator: ArtificialBeatGenerator;
 
   private backofficeSyncEmitter: BackofficeSyncEmitter;
 
@@ -64,13 +68,15 @@ export default class TimeTrailRaceMode extends BaseMode {
 
     this.lightsHandler = this.handlerManager
       .getHandlers(LightsGroup)
-      .find((h) => h.constructor.name === LIGHTS_HANDLER) as SetEffectsHandler;
+      .find((h) => h.constructor.name === LIGHTS_HANDLER) as TimeTrailRaceLightsHandler;
     this.audioHandler = this.handlerManager
       .getHandlers(Audio)
       .find((h) => h.constructor.name === AUDIO_HANDLER) as SimpleAudioHandler;
     this.screenHandler = this.handlerManager
       .getHandlers(Screen)
       .find((h) => h.constructor.name === SCREEN_HANDLER) as TimeTrailRaceScreenHandler;
+
+    this.artificialBeatGenerator = ArtificialBeatGenerator.getInstance();
   }
 
   public get state() {
@@ -92,6 +98,10 @@ export default class TimeTrailRaceMode extends BaseMode {
     };
     this.screenHandler.initialized(event);
     this.backofficeSyncEmitter.emit('race-initialize', event);
+
+    this.lightsHandler.setLightsToParty();
+
+    logger.trace(`Time Trail Race initialized (${sessionName})`);
 
     return event;
   }
@@ -123,6 +133,8 @@ export default class TimeTrailRaceMode extends BaseMode {
     this.screenHandler.playerRegistered(event);
     this.backofficeSyncEmitter.emit('race-player-registered', event);
 
+    logger.trace(`Time Trail Race player "${params.name}" registered`);
+
     return event;
   }
 
@@ -143,6 +155,10 @@ export default class TimeTrailRaceMode extends BaseMode {
     };
     this.screenHandler.playerReady(event);
     this.backofficeSyncEmitter.emit('race-player-ready', event);
+
+    this.lightsHandler.setLightsToWhite();
+
+    logger.trace('Time Trail Race player ready');
 
     return event;
   }
@@ -167,6 +183,11 @@ export default class TimeTrailRaceMode extends BaseMode {
     this.screenHandler.started(event);
     this.backofficeSyncEmitter.emit('race-start', event);
     this.audioHandler.play(MUSIC_FILE);
+
+    this.lightsHandler.setLightsToParty();
+    this.artificialBeatGenerator.start(125);
+
+    logger.trace(`Time trail race player started at ${this.startTime.toLocaleTimeString()}`);
 
     return event;
   }
@@ -200,6 +221,11 @@ export default class TimeTrailRaceMode extends BaseMode {
     this.backofficeSyncEmitter.emit('race-finish', event);
     this.audioHandler.stop();
 
+    this.lightsHandler.setLightsToWhite();
+    this.artificialBeatGenerator.stop();
+
+    logger.trace(`Time Trail Race player finished with ${finishTime.toLocaleString()}ms`);
+
     return event;
   }
 
@@ -220,6 +246,10 @@ export default class TimeTrailRaceMode extends BaseMode {
     };
     this.screenHandler.showScoreboard(event);
     this.backofficeSyncEmitter.emit('race-scoreboard', event);
+
+    this.lightsHandler.setLightsToParty();
+
+    logger.trace('Time Trail Race score revealed');
 
     return event;
   }

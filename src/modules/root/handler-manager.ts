@@ -23,6 +23,7 @@ import { SocketioNamespaces } from '../../socketio-namespaces';
 import logger from '../../logger';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 import TimeTrailRaceScreenHandler from '../handlers/screen/time-trail-race-screen-handler';
+import TimeTrailRaceLightsHandler from '../handlers/lights/time-trail-race-lights-handler';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -88,6 +89,7 @@ export default class HandlerManager {
       new DevelopEffectsHandler(),
       new ScenesHandler(),
       new EffectSequenceHandler(musicEmitter),
+      new TimeTrailRaceLightsHandler(),
     ];
 
     // Register all handlers
