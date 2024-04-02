@@ -43,7 +43,7 @@ export default class TimeTrailRaceMode extends BaseMode {
 
   private lastScore: ScoreboardItem | undefined;
 
-  private scoreboard: ScoreboardItem[] = [];
+  public scoreboard: ScoreboardItem[] = [];
 
   destroy(): void {
     throw new Error('Method not implemented.');

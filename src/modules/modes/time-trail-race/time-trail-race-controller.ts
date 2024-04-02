@@ -34,6 +34,7 @@ export class TimeTrailRaceController extends Controller {
     return {
       state: mode.state,
       sessionName: mode.sessionName,
+      scoreboard: mode.scoreboard,
     };
   }
 
