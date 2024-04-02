@@ -15,6 +15,7 @@ export default class SpotifyTrackHandler {
 
   private playStateUpdateTime: Date = new Date();
 
+  /** Currently playing state. Can be defined if not playing anything */
   private playState: PlaybackState | undefined;
 
   private currentlyPlayingFeatures: AudioFeatures | undefined;
@@ -58,6 +59,34 @@ export default class SpotifyTrackHandler {
       startTime: new Date(this.playStateUpdateTime.getTime() - state.progress_ms),
       trackURI: item.uri,
     };
+  }
+
+  /**
+   * Try to pause Spotify playback
+   */
+  public pausePlayback() {
+    if (!this.api.client || !this.playState || !this.playState.device || !this.playState.device.id)
+      return;
+
+    try {
+      this.api.client?.player.pausePlayback(this.playState.device.id);
+    } catch (e) {
+      logger.fatal(e);
+    }
+  }
+
+  /**
+   * Try to resume Spotify playback on the same device as used before
+   */
+  public resumePlayback() {
+    if (!this.api.client || !this.playState || !this.playState.device || !this.playState.device.id)
+      return;
+
+    try {
+      this.api.client?.player.startResumePlayback(this.playState.device.id);
+    } catch (e) {
+      logger.fatal(e);
+    }
   }
 
   /**
@@ -145,44 +174,48 @@ export default class SpotifyTrackHandler {
   private async syncLoop() {
     if (!this.api.client) return;
 
-    const state = await this.api.client.player.getCurrentlyPlayingTrack();
-    this.playStateUpdateTime = new Date();
+    try {
+      const state = await this.api.client.player.getCurrentlyPlayingTrack();
+      this.playStateUpdateTime = new Date();
 
-    // If Spotify started playing a track, starts playing a new track or resumes playing audio...
-    if (
-      state &&
-      state.currently_playing_type === 'track' &&
-      (!this.playState ||
-        this.playState.item?.id !== state.item?.id ||
-        (!this.playState.is_playing && state.is_playing))
-    ) {
-      this.currentlyPlayingFeatures = await this.api.client.tracks.audioFeatures(state.item.id);
-      this.currentlyPlayingAnalysis = await this.api.client.tracks.audioAnalysis(state.item.id);
+      // If Spotify started playing a track, starts playing a new track or resumes playing audio...
+      if (
+        state &&
+        state.currently_playing_type === 'track' &&
+        (!this.playState ||
+          this.playState.item?.id !== state.item?.id ||
+          (!this.playState.is_playing && state.is_playing))
+      ) {
+        this.currentlyPlayingFeatures = await this.api.client.tracks.audioFeatures(state.item.id);
+        this.currentlyPlayingAnalysis = await this.api.client.tracks.audioAnalysis(state.item.id);
 
-      this.emitTrackFeatures(this.currentlyPlayingFeatures);
-      this.setNextTrackEvent(state);
+        this.emitTrackFeatures(this.currentlyPlayingFeatures);
+        this.setNextTrackEvent(state);
 
-      const item = state.item as Track;
-      this.musicEmitter.emit('change_track', [
-        this.asTrackChangeEvent(item, state),
-      ] as TrackChangeEvent[]);
+        const item = state.item as Track;
+        this.musicEmitter.emit('change_track', [
+          this.asTrackChangeEvent(item, state),
+        ] as TrackChangeEvent[]);
 
-      logger.info(
-        `Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name} (${item.uri})`,
-      );
+        logger.info(
+          `Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name} (${item.uri})`,
+        );
+      }
+
+      if ((!state || !state.is_playing) && this.playState && this.playState.is_playing) {
+        this.stopBeatEvents();
+        this.currentlyPlayingFeatures = undefined;
+        this.currentlyPlayingAnalysis = undefined;
+        this.musicEmitter.emitSpotify('stop');
+        logger.info('Spotify paused/stopped');
+      }
+
+      this.playState = state;
+
+      this.setBeatEvents(this.currentlyPlayingAnalysis);
+    } catch (e) {
+      logger.fatal(e);
     }
-
-    if ((!state || !state.is_playing) && this.playState && this.playState.is_playing) {
-      this.stopBeatEvents();
-      this.currentlyPlayingFeatures = undefined;
-      this.currentlyPlayingAnalysis = undefined;
-      this.musicEmitter.emitSpotify('stop');
-      logger.info('Spotify paused/stopped');
-    }
-
-    this.playState = state;
-
-    this.setBeatEvents(this.currentlyPlayingAnalysis);
   }
 
   /**

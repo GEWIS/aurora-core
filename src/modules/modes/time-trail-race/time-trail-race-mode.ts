@@ -19,6 +19,7 @@ import { InvalidStateError } from './time-trail-race-invalid-state-error';
 import TimeTrailRaceLightsHandler from '../../handlers/lights/time-trail-race-lights-handler';
 import { ArtificialBeatGenerator } from '../../beats/artificial-beat-generator';
 import logger from '../../../logger';
+import { SpotifyTrackHandler } from '../../spotify';
 
 const LIGHTS_HANDLER = 'TimeTrailRaceLightsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
@@ -36,6 +37,8 @@ export default class TimeTrailRaceMode extends BaseMode {
   private artificialBeatGenerator: ArtificialBeatGenerator;
 
   private backofficeSyncEmitter: BackofficeSyncEmitter;
+
+  private spotify: SpotifyTrackHandler;
 
   private _sessionName: string;
 
@@ -77,6 +80,7 @@ export default class TimeTrailRaceMode extends BaseMode {
       .find((h) => h.constructor.name === SCREEN_HANDLER) as TimeTrailRaceScreenHandler;
 
     this.artificialBeatGenerator = ArtificialBeatGenerator.getInstance();
+    this.spotify = SpotifyTrackHandler.getInstance();
   }
 
   public get state() {
@@ -157,6 +161,7 @@ export default class TimeTrailRaceMode extends BaseMode {
     this.backofficeSyncEmitter.emit('race-player-ready', event);
 
     this.lightsHandler.setLightsToWhite();
+    this.spotify.pausePlayback();
 
     logger.trace('Time Trail Race player ready');
 
@@ -248,6 +253,7 @@ export default class TimeTrailRaceMode extends BaseMode {
     this.backofficeSyncEmitter.emit('race-scoreboard', event);
 
     this.lightsHandler.setLightsToParty();
+    this.spotify.resumePlayback();
 
     logger.trace('Time Trail Race score revealed');
 
