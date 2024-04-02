@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { ApiException, HttpStatusCode } from '../../helpers/customError';
+import { HttpApiException, HttpStatusCode } from '../../helpers/customError';
 import { User } from './user';
 
 export async function expressAuthentication(
@@ -9,7 +9,7 @@ export async function expressAuthentication(
 ): Promise<User> {
   if (securityName === 'local') {
     if (!request.isAuthenticated() || request.user === undefined) {
-      throw new ApiException(HttpStatusCode.Unauthorized, 'You are not logged in.');
+      throw new HttpApiException(HttpStatusCode.Unauthorized, 'You are not logged in.');
     }
     const user = request.user as User;
 
@@ -22,7 +22,7 @@ export async function expressAuthentication(
       return request.user as User;
     }
 
-    throw new ApiException(HttpStatusCode.Forbidden);
+    throw new HttpApiException(HttpStatusCode.Forbidden);
   }
-  throw new ApiException(HttpStatusCode.InternalServerError, 'Unknown security scheme.');
+  throw new HttpApiException(HttpStatusCode.InternalServerError, 'Unknown security scheme.');
 }

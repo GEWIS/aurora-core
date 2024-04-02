@@ -2,7 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Request as ExRequest, Response as ExResponse } from 'express';
 import passport from 'passport';
 import { Strategy as CustomStrategy } from 'passport-custom';
-import { ApiException, HttpStatusCode } from '../../../helpers/customError';
+import { HttpApiException, HttpStatusCode } from '../../../helpers/customError';
 import logger from '../../../logger';
 import { parseRoles } from '../../../helpers/security';
 
@@ -32,7 +32,7 @@ passport.use(
   'oidc',
   new CustomStrategy(async (req, callback) => {
     if (!req.body.state || !req.body.session_state || !req.body.code) {
-      throw new ApiException(
+      throw new HttpApiException(
         HttpStatusCode.BadRequest,
         'Missing OIDC state, session state or code.',
       );

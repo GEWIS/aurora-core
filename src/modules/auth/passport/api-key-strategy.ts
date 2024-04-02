@@ -2,7 +2,7 @@ import passport from 'passport';
 import { Strategy as CustomStrategy } from 'passport-custom';
 import { Request as ExRequest, Response as ExResponse } from 'express';
 import { HttpStatusCode } from 'axios';
-import { ApiException } from '../../../helpers/customError';
+import { HttpApiException } from '../../../helpers/customError';
 import database from '../../../database';
 import { ApiKey } from '../entities';
 import { SecurityGroup } from '../../../helpers/security';
@@ -12,7 +12,7 @@ passport.use(
   'apikey',
   new CustomStrategy(async (req, callback) => {
     if (!req.body || !req.body.key) {
-      throw new ApiException(HttpStatusCode.BadRequest, 'Missing API Key');
+      throw new HttpApiException(HttpStatusCode.BadRequest, 'Missing API Key');
     }
 
     const identity = await database.getRepository(ApiKey).findOne({
@@ -20,7 +20,7 @@ passport.use(
       relations: { audio: true, lightsController: true, screen: true },
     });
     if (!identity) {
-      callback(new ApiException(HttpStatusCode.NotFound, 'Key not found'), undefined);
+      callback(new HttpApiException(HttpStatusCode.NotFound, 'Key not found'), undefined);
       return;
     }
 

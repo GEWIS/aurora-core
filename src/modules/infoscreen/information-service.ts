@@ -3,7 +3,7 @@ import Information from './entities/information';
 import dataSource from '../../database';
 import { RoomStatus } from './entities/enums/roomStatus';
 import { AlcoholTime } from './entities/enums/alcoholTime';
-import { ApiException, HttpStatusCode } from '../../helpers/customError';
+import { HttpApiException, HttpStatusCode } from '../../helpers/customError';
 import { getBoard, getERO, getKeyHolders, Member } from './entities/ldap-connector';
 
 export interface InformationParams {
@@ -25,7 +25,7 @@ export default class InformationService {
   public async getInformation(): Promise<Information> {
     const information = await this.repo.find();
     if (information.length > 1)
-      throw new ApiException(
+      throw new HttpApiException(
         HttpStatusCode.InternalServerError,
         'Clashing information in the database.',
       );
@@ -37,13 +37,13 @@ export default class InformationService {
     const information = await this.getInformation();
     if (params.roomStatus === RoomStatus.OPEN) {
       if (!params.alcoholTime) {
-        throw new ApiException(
+        throw new HttpApiException(
           HttpStatusCode.Forbidden,
           'There must be an alcohol time if the room is open.',
         );
       }
       if (!params.firstResponsible) {
-        throw new ApiException(
+        throw new HttpApiException(
           HttpStatusCode.Forbidden,
           'There must be a room responsible if the room is open.',
         );
@@ -51,11 +51,11 @@ export default class InformationService {
     }
 
     if (params.firstResponsible && params.firstResponsible === params.secondResponsible) {
-      throw new ApiException(HttpStatusCode.Forbidden, 'Room responsibles must be distinct.');
+      throw new HttpApiException(HttpStatusCode.Forbidden, 'Room responsibles must be distinct.');
     }
 
     if (params.firstERO && params.firstERO === params.secondERO) {
-      throw new ApiException(HttpStatusCode.Forbidden, 'EROs must be distinct.');
+      throw new HttpApiException(HttpStatusCode.Forbidden, 'EROs must be distinct.');
     }
 
     await this.repo.update(information.id, params);
