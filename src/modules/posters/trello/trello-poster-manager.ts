@@ -235,8 +235,10 @@ export class TrelloPosterManager extends PosterManager {
     const { cards, lists } = board;
     if (!cards || !lists) throw new Error('Could not find cards and/or lists on the given board');
 
-    const list = lists.find((l) => l.name === 'BasePosters');
-    if (!list) throw new Error('Could not find the list called "BasePosters"');
+    const basePosterListName = process.env.TRELLO_BASE_POSTER_LIST_NAME ?? 'BasePosters';
+
+    const list = lists.find((l) => l.name === basePosterListName);
+    if (!list) throw new Error(`Could not find the list called "${basePosterListName}"`);
 
     this._posters = await this.parseLists(list, board);
 

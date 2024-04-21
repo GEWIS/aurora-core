@@ -11,6 +11,7 @@
     "gen-client": "npm run gen-client-backoffice && npm run gen-client-client",
     "gen-client-backoffice": "openapi --input ./build/swagger.json --output ../narrowcasting-backoffice/src/api/",
     "gen-client-client": "nswag openapi2tsclient /input:build/swagger.json /output:../narrowcasting-client/src/api/Client.ts /ServiceHost:.",
+    "gen-client-sudosos": "openapi --input ../sudosos-backend/out/swagger.json --output ./src/modules/sudosos/client --name SudoSOSClient --useOptions",
     "lint": "eslint ./src --ext .js,.jsx,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore --max-warnings=0",
     "lint-fix": "eslint ./src --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore --fix",
     "format": "prettier --ignore-path .gitignore --check ./src/",
