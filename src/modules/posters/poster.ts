@@ -9,6 +9,9 @@ export enum PosterType {
   EXTERNAL = 'extern',
   PHOTO = 'photo',
   VIDEO = 'video',
+  BORREL_LOGO = 'borrel-logo',
+  BORREL_PRICE_LIST = 'borrel-price-list',
+  BORREL_WALL_OF_SHAME = 'borrel-wall-of-shame',
 }
 
 export enum FooterSize {
@@ -23,6 +26,8 @@ export interface BasePoster {
   due?: Date;
   timeout: number;
   footer: FooterSize;
+  /** Whether this poster should only be shown when in BorrelMode */
+  borrelMode: boolean;
 }
 
 export type LocalPosterType =
@@ -30,6 +35,9 @@ export type LocalPosterType =
   | PosterType.INFIMA
   | PosterType.LOGO
   | PosterType.TRAINS
+  | PosterType.BORREL_LOGO
+  | PosterType.BORREL_PRICE_LIST
+  | PosterType.BORREL_WALL_OF_SHAME
   | PosterType.UNKNOWN;
 
 export type LocalPoster = BasePoster & {
