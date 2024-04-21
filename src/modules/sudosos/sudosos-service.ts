@@ -15,7 +15,9 @@ export default class SudoSOSService {
       !!process.env.SUDOSOS_URL &&
       !!process.env.SUDOSOS_USER_ID &&
       !!process.env.SUDOSOS_KEY &&
-      !Number.isNaN(Number(process.env.SUDOSOS_USER_ID))
+      !!process.env.SUDOSOS_BORRELMODE_POS_ID &&
+      !Number.isNaN(Number(process.env.SUDOSOS_USER_ID)) &&
+      !Number.isNaN(Number(process.env.SUDOSOS_BORRELMODE_POS_ID))
     );
   }
 
@@ -116,5 +118,14 @@ export default class SudoSOSService {
       })
       .filter((b) => !!b)
       .map((b) => b!);
+  }
+
+  public async getPriceList() {
+    const client = await this.getClient();
+    const response = await client.pointofsale.getAllPointOfSaleProducts({
+      id: Number(process.env.SUDOSOS_BORRELMODE_POS_ID),
+      take: 100000,
+    });
+    return response.records.filter((p) => p.priceList);
   }
 }

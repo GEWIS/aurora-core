@@ -8,4 +8,9 @@ export class SudoSOSController extends Controller {
   public async getSudoSOSWallOfShame() {
     return new SudoSOSService().getDebtors();
   }
+
+  @Get('price-list')
+  public async getSudoSOSPriceList() {
+    return new SudoSOSService().getPriceList();
+  }
 }
