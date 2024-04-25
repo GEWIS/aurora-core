@@ -135,5 +135,3 @@ build
 
 # Local poster storage
 public/posters
-
-src/api/Client.ts

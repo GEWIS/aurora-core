@@ -1,14 +1,17 @@
-import { DineroObjectResponse, SudoSOSClient, UserResponse } from './client';
+import { Configuration, DineroObjectResponse, UserResponse } from '@sudosos/sudosos-client';
+import { SudoSOSClient } from './sudosos-api-service';
 
 interface SudoSOSDebtorResponse {
   userId: number;
-  name: string;
   balance: DineroObjectResponse;
   fine?: DineroObjectResponse;
+  user: UserResponse;
 }
 
 export default class SudoSOSService {
   private url: string;
+
+  private client: SudoSOSClient;
 
   static apiAvailable(): boolean {
     return (
@@ -33,44 +36,32 @@ export default class SudoSOSService {
    * Get a SudosOS bearer token
    * @private
    */
-  private async getToken(): Promise<string> {
-    const response = await new SudoSOSClient({
-      BASE: process.env.SUDOSOS_URL,
-    }).authenticate.keyAuthentication({
-      requestBody: {
-        userId: Number(process.env.SUDOSOS_USER_ID),
-        key: process.env.SUDOSOS_KEY || '',
-      },
+  async initialize(): Promise<SudoSOSService> {
+    const response = await new SudoSOSClient(this.url).authenticate.keyAuthentication({
+      userId: Number(process.env.SUDOSOS_USER_ID),
+      key: process.env.SUDOSOS_KEY!,
     });
-    return response.token;
-  }
 
-  /**
-   * Get an instance of the SudoSOS client class with a bearer token
-   * @private
-   */
-  private async getClient(): Promise<SudoSOSClient> {
-    const token = await this.getToken();
-    return new SudoSOSClient({
-      TOKEN: token,
-      BASE: process.env.SUDOSOS_URL,
-    });
+    this.client = new SudoSOSClient(
+      this.url,
+      new Configuration({
+        accessToken: response.data.token,
+      }),
+    );
+    return this;
   }
 
   /**
    * Get all users of the given type from SudoSOS
-   * @param client
    * @private
    */
-  private async getUsers(client: SudoSOSClient) {
+  private async getUsers() {
     let users: UserResponse[] = [];
     // eslint-disable-next-line no-constant-condition
     while (true) {
       // eslint-disable-next-line no-await-in-loop,@typescript-eslint/naming-convention
-      const { records, _pagination } = await client.users.getAllUsers({
-        take: 100000,
-        skip: users.length,
-      });
+      const { records, _pagination } = (await this.client.user.getAllUsers(10000, users.length))
+        .data;
       if (records.length === 0) {
         if (_pagination.count !== users.length) {
           throw new Error('Missing some users!!!');
@@ -87,16 +78,22 @@ export default class SudoSOSService {
    * @private
    */
   public async getDebtors(): Promise<SudoSOSDebtorResponse[]> {
-    const client = await this.getClient();
     const userTypes = ['MEMBER', 'LOCAL_USER'];
-    const { records: balances } = await client.balance.getAllBalance({
-      maxBalance: -500,
-      orderBy: 'amount',
-      orderDirection: 'ASC',
-      take: 50,
-      userTypes: userTypes as any,
-    });
-    const users = await this.getUsers(client);
+    const balances = (
+      await this.client.balance.getAllBalance(
+        undefined,
+        undefined,
+        -500,
+        undefined,
+        undefined,
+        undefined,
+        userTypes as any,
+        'amount',
+        'ASC',
+        50,
+      )
+    ).data;
+    const users = await this.getUsers();
 
     const userMap = new Map<number, UserResponse>();
     users.forEach((user) => {
@@ -111,9 +108,9 @@ export default class SudoSOSService {
         }
         return {
           userId: b.id,
-          name: `${user.firstName} ${user.lastName}`,
           balance: b.amount,
           fine: b.fine,
+          user,
         };
       })
       .filter((b) => !!b)
@@ -121,11 +118,10 @@ export default class SudoSOSService {
   }
 
   public async getPriceList() {
-    const client = await this.getClient();
-    const response = await client.pointofsale.getAllPointOfSaleProducts({
-      id: Number(process.env.SUDOSOS_BORRELMODE_POS_ID),
-      take: 100000,
-    });
-    return response.records.filter((p) => p.priceList);
+    const response = await this.client.pos.getAllPointOfSaleProducts(
+      Number(process.env.SUDOSOS_BORRELMODE_POS_ID),
+      100000,
+    );
+    return response.data.records.filter((p) => p.priceList);
   }
 }

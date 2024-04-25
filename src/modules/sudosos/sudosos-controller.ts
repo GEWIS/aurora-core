@@ -6,11 +6,11 @@ import SudoSOSService from './sudosos-service';
 export class SudoSOSController extends Controller {
   @Get('wall-of-shame')
   public async getSudoSOSWallOfShame() {
-    return new SudoSOSService().getDebtors();
+    return (await new SudoSOSService().initialize()).getDebtors();
   }
 
   @Get('price-list')
   public async getSudoSOSPriceList() {
-    return new SudoSOSService().getPriceList();
+    return (await new SudoSOSService().initialize()).getPriceList();
   }
 }
