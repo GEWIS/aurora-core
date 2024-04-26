@@ -1,4 +1,9 @@
-import { Configuration, DineroObjectResponse, UserResponse } from '@sudosos/sudosos-client';
+import {
+  BalanceResponse,
+  Configuration,
+  DineroObjectResponse,
+  UserResponse,
+} from '@sudosos/sudosos-client';
 import { SudoSOSClient } from './sudosos-api-service';
 
 interface SudoSOSDebtorResponse {
@@ -84,7 +89,7 @@ export default class SudoSOSService {
    */
   public async getDebtors(): Promise<SudoSOSDebtorResponse[]> {
     const userTypes = ['MEMBER', 'LOCAL_USER'];
-    const balances = (
+    const response = (
       await this.client.balance.getAllBalance(
         undefined,
         undefined,
@@ -98,6 +103,8 @@ export default class SudoSOSService {
         50,
       )
     ).data;
+    // @ts-ignore
+    const balances: BalanceResponse[] = response.records;
     const users = await this.getUsers();
 
     const userMap = new Map<number, UserResponse>();
@@ -106,11 +113,8 @@ export default class SudoSOSService {
     });
 
     const bac = process.env.SUDOSOS_BAC_GROUP_ID
-      ? (
-          await client.users.getOrganMembers({
-            id: Number(process.env.SUDOSOS_BAC_GROUP_ID),
-          })
-        ).records
+      ? (await this.client.user.getOrganMembers(Number(process.env.SUDOSOS_BAC_GROUP_ID))).data
+          .records
       : undefined;
 
     return balances
