@@ -15,11 +15,9 @@ export default async function seedDatabase() {
   await Promise.all([rootAudioService.createAudio({ name: 'PCGEWISHOK' })]);
 
   const rootScreenService = new RootScreenService();
-  await Promise.all([
-    rootScreenService.createScreen({ name: 'PCGEWISB-links' }),
-    rootScreenService.createScreen({ name: 'PCGEWISB-rechts' }),
-    rootScreenService.createScreen({ name: 'PCGEWISINFO' }),
-  ]);
+  await rootScreenService.createScreen({ name: 'PCGEWISB-links' });
+  await rootScreenService.createScreen({ name: 'PCGEWISB-rechts' });
+  await rootScreenService.createScreen({ name: 'PCGEWISINFO' });
 
   const rootLightsService = new RootLightsService();
   const controller = await rootLightsService.createController({ name: 'GEWIS-BAR' });
