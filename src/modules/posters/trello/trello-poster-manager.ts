@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { PosterManager } from '../poster-manager';
 import {
   BasePoster,
@@ -120,6 +121,7 @@ export class TrelloPosterManager extends PosterManager {
     const footers = labels.filter((l) => !['HIDE_BORDER', 'BorrelMode'].includes(l));
 
     return {
+      id: card.id ?? randomUUID(),
       name: card.name || 'Poster',
       timeout,
       // If there is a due date present, set the due date

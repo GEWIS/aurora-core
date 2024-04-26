@@ -3,9 +3,14 @@ import { SudoSOSClient } from './sudosos-api-service';
 
 interface SudoSOSDebtorResponse {
   userId: number;
+  firstName: string;
+  nickName?: string;
+  lastName?: string;
   balance: DineroObjectResponse;
   fine?: DineroObjectResponse;
-  user: UserResponse;
+  isBac: boolean;
+  /** If the user has a fine for more than 4 weeks */
+  isLongstanding: boolean;
 }
 
 export default class SudoSOSService {
@@ -100,17 +105,34 @@ export default class SudoSOSService {
       userMap.set(user.id, user);
     });
 
+    const bac = process.env.SUDOSOS_BAC_GROUP_ID
+      ? (
+          await client.users.getOrganMembers({
+            id: Number(process.env.SUDOSOS_BAC_GROUP_ID),
+          })
+        ).records
+      : undefined;
+
     return balances
       .map((b): SudoSOSDebtorResponse | null => {
         const user = userMap.get(b.id);
         if (!user) {
           return null;
         }
+
+        const fineDate = b.fineSince ? new Date(b.fineSince) : undefined;
+        const fineTime = fineDate ? new Date().getTime() - fineDate.getTime() : undefined;
+        const isLongstanding = fineTime ? fineTime > 1000 * 60 * 60 * 24 * 28 : false;
+
         return {
           userId: b.id,
+          firstName: user.firstName,
+          nickName: user.nickname,
+          lastName: user.lastName,
           balance: b.amount,
           fine: b.fine,
-          user,
+          isBac: bac?.some((m) => m.id === b.id) ?? false,
+          isLongstanding,
         };
       })
       .filter((b) => !!b)

@@ -21,6 +21,7 @@ export enum FooterSize {
 }
 
 export interface BasePoster {
+  id: string;
   name: string;
   label: string;
   due?: Date;

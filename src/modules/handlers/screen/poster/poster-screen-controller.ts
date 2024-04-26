@@ -1,5 +1,5 @@
 import { Controller } from '@tsoa/runtime';
-import { Body, Get, Post, Route, Security, Tags } from 'tsoa';
+import { Body, Get, Post, Put, Query, Route, Security, Tags } from 'tsoa';
 import { PosterScreenHandler } from './poster-screen-handler';
 // eslint-disable-next-line import/no-cycle -- TODO fix cyclic dependency
 import HandlerManager from '../../../root/handler-manager';
@@ -9,6 +9,10 @@ import { SecurityGroup } from '../../../../helpers/security';
 import logger from '../../../../logger';
 import NsTrainsService, { TrainResponse } from './ns-trains-service';
 import GEWISPosterService, { GEWISPhotoAlbumParams } from './gewis-poster-service';
+
+interface SetBorrelModeParams {
+  enabled: boolean;
+}
 
 @Route('screen/poster')
 @Tags('Poster screen')
@@ -29,7 +33,7 @@ export class PosterScreenController extends Controller {
     SecurityGroup.SCREEN_SUBSCRIBER,
   ])
   @Get('')
-  public async getPosters(): Promise<Poster[]> {
+  public async getPosters(@Query() alwaysReturnBorrelPosters?: boolean): Promise<Poster[]> {
     if (!this.screenHandler.posterManager.posters) {
       try {
         await this.screenHandler.posterManager.fetchPosters();
@@ -37,7 +41,10 @@ export class PosterScreenController extends Controller {
         logger.error(e);
       }
     }
-    return this.screenHandler.posterManager.posters ?? [];
+    const posters = this.screenHandler.posterManager.posters ?? [];
+    if (alwaysReturnBorrelPosters) return posters;
+    if (this.screenHandler.borrelMode) return posters;
+    return posters.filter((p) => !p.borrelMode);
   }
 
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BOARD])
@@ -45,6 +52,12 @@ export class PosterScreenController extends Controller {
   public async forceUpdatePosters(): Promise<void> {
     await this.screenHandler.posterManager.fetchPosters();
     this.screenHandler.forceUpdate();
+  }
+
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BOARD])
+  @Put('borrel-mode')
+  public async setPosterBorrelMode(@Body() { enabled }: SetBorrelModeParams): Promise<void> {
+    this.screenHandler.setBorrelModeEnabled(enabled);
   }
 
   @Security('local', [SecurityGroup.SCREEN_SUBSCRIBER])
