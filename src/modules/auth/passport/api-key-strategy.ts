@@ -12,7 +12,7 @@ passport.use(
   'apikey',
   new CustomStrategy(async (req, callback) => {
     if (!req.body || !req.body.key) {
-      throw new HttpApiException(HttpStatusCode.BadRequest, 'Missing API Key');
+      callback(new HttpApiException(HttpStatusCode.BadRequest, 'Missing API Key'), undefined);
     }
 
     const identity = await database.getRepository(ApiKey).findOne({

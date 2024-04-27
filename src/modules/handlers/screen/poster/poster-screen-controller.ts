@@ -10,7 +10,7 @@ import logger from '../../../../logger';
 import NsTrainsService, { TrainResponse } from './ns-trains-service';
 import GEWISPosterService, { GEWISPhotoAlbumParams } from './gewis-poster-service';
 
-interface SetBorrelModeParams {
+interface BorrelModeParams {
   enabled: boolean;
 }
 
@@ -54,9 +54,25 @@ export class PosterScreenController extends Controller {
     this.screenHandler.forceUpdate();
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BOARD])
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD,
+  ])
+  @Get('borrel-mode')
+  public async getPosterBorrelMode(): Promise<BorrelModeParams> {
+    return { enabled: this.screenHandler.borrelMode };
+  }
+
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD,
+  ])
   @Put('borrel-mode')
-  public async setPosterBorrelMode(@Body() { enabled }: SetBorrelModeParams): Promise<void> {
+  public async setPosterBorrelMode(@Body() { enabled }: BorrelModeParams): Promise<void> {
     this.screenHandler.setBorrelModeEnabled(enabled);
   }
 
