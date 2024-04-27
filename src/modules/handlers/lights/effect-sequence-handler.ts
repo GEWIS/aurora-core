@@ -4,9 +4,9 @@ import { LightsGroup } from '../../lights/entities';
 import { LightsPredefinedEffect } from '../../lights/entities/sequences/lights-predefined-effect';
 import LightsEffect from '../../lights/effects/lights-effect';
 import dataSource from '../../../database';
-import { LIGHTS_EFFECTS } from '../../lights/effects';
 import { MusicEmitter } from '../../events';
 import logger from '../../../logger';
+import { databaseEffectToObject } from './database-effects-helper';
 
 interface LightsGroupEffectBase {
   startMs: number;
@@ -93,15 +93,9 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
       effectToActivate.lightsGroupIds.includes(e.id),
     );
 
-    const effects = LIGHTS_EFFECTS.map((EFFECT) => {
-      if (EFFECT.name === effectToActivate.effectName) {
-        return lightsGroups.map((g) => new EFFECT(g, effectToActivate.effectProps));
-      }
-      return undefined;
-    })
-      .filter((e) => e !== undefined)
-      .map((e) => e!)
-      .flat();
+    const effects = lightsGroups.map((g) =>
+      databaseEffectToObject(g, effectToActivate.effectName, effectToActivate.effectProps),
+    );
 
     const activeEffects: ActiveLightsGroupEffect[] = effects.map((effect) => ({
       effect,

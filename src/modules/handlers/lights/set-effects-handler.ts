@@ -17,6 +17,7 @@ export default class SetEffectsHandler extends EffectsHandler {
     effects: LightsEffectBuilder[],
     effectsMap: GroupEffectsMap,
   ) {
+    this.destroyEffect(effectsMap.get(lightsGroup));
     effectsMap.set(
       lightsGroup,
       effects.map((e) => e(lightsGroup, this.trackFeatures)),
@@ -30,6 +31,7 @@ export default class SetEffectsHandler extends EffectsHandler {
    */
   private removeEffect(lightsGroup: LightsGroup, effectsMap: GroupEffectsMap) {
     lightsGroup.blackout();
+    this.destroyEffect(effectsMap.get(lightsGroup));
     effectsMap.set(lightsGroup, null);
   }
 

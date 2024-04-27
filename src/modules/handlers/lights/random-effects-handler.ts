@@ -23,12 +23,7 @@ export default class RandomEffectsHandler extends EffectsHandler {
     const { colorNames } = getTwoComplementaryRgbColors();
 
     // Destroy the existing effect(s)
-    const effect = this.groupColorEffects.get(entity);
-    if (effect && Array.isArray(effect)) {
-      effect.forEach((e) => e.destroy());
-    } else if (effect) {
-      effect.destroy();
-    }
+    this.clearEffect(entity);
 
     if (entity.movingHeadWheels.length === 0) {
       this.groupColorEffects.set(

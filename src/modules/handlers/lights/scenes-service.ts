@@ -1,34 +1,32 @@
 import { Repository } from 'typeorm';
-import {
-  LightsScene,
-  LightsSceneMovingHeadRgb,
-  LightsSceneMovingHeadWheel,
-  LightsScenePars,
-} from '../../lights/entities/scenes';
+import { LightsScene, LightsSceneEffect } from '../../lights/entities/scenes';
 import dataSource from '../../../database';
+import { BaseLightsGroupResponse } from '../../root/root-lights-service';
 
-export interface LightsSceneFixtureResponse {
-  fixtureId: number;
-  dmxValues: number[];
+export interface LightsSceneEffectResponse {
+  effectName: string;
+  lightsGroups: BaseLightsGroupResponse[];
 }
 
 export interface LightsSceneResponse {
   name: string;
-  pars: LightsSceneFixtureResponse[];
-  movingHeadRgbs: LightsSceneFixtureResponse[];
-  movingHeadWheels: LightsSceneFixtureResponse[];
+  favorite: boolean;
+  effects: LightsSceneEffectResponse[];
 }
 
-export interface SceneFixtureParams {
-  id: number;
-  dmxValues: number[];
+export interface LightsSceneEffectParams {
+  effectName: string;
+  lightsGroups: number[];
 }
 
 export interface CreateSceneParams {
   name: string;
-  pars: SceneFixtureParams[];
-  movingHeadRgbs: SceneFixtureParams[];
-  movingHeadWheels: SceneFixtureParams[];
+  favorite: boolean;
+  effects: LightsSceneEffectParams[];
+}
+
+export interface GetLightsSceneOptions {
+  favorite?: boolean;
 }
 
 export default class ScenesService {
@@ -39,80 +37,71 @@ export default class ScenesService {
   }
 
   public static toSceneResponse(scene: LightsScene): LightsSceneResponse {
+    const effectsMap: Map<string, BaseLightsGroupResponse[]> = new Map();
+    scene.effects.forEach((e) => {
+      if (effectsMap.has(e.effectName)) {
+        effectsMap.get(e.effectName)?.push({
+          id: e.group.id,
+          createdAt: e.group.createdAt,
+          updatedAt: e.group.updatedAt,
+          name: e.group.name,
+        });
+      } else {
+        effectsMap.set(e.effectName, [
+          {
+            id: e.group.id,
+            createdAt: e.group.createdAt,
+            updatedAt: e.group.updatedAt,
+            name: e.group.name,
+          },
+        ]);
+      }
+    });
+
+    const effects: LightsSceneEffectResponse[] = [];
+    effectsMap.forEach((lightsGroups, effectName) => {
+      effects.push({ effectName, lightsGroups });
+    });
+
     return {
       name: scene.name,
-      pars: scene.pars.map((p) => ({
-        fixtureId: p.groupParId,
-        dmxValues: p.dmxValues,
-      })),
-      movingHeadRgbs: scene.movingHeadRgbs.map((m) => ({
-        fixtureId: m.groupMovingHeadRgbId,
-        dmxValues: m.dmxValues,
-      })),
-      movingHeadWheels: scene.movingHeadWheels.map((m) => ({
-        fixtureId: m.groupMovingHeadWheelId,
-        dmxValues: m.dmxValues,
-      })),
+      favorite: scene.favorite,
+      effects,
     };
   }
 
-  public async getScenes(): Promise<LightsScene[]> {
-    return this.repository.find();
+  public async getScenes(options?: GetLightsSceneOptions): Promise<LightsScene[]> {
+    return this.repository.find({
+      where: { favorite: options?.favorite },
+    });
   }
 
   public async getSingleScene(id: number): Promise<LightsScene | null> {
     return this.repository.findOne({
       where: { id },
-      relations: {
-        pars: { par: true },
-        movingHeadRgbs: { movingHeadRgb: true },
-        movingHeadWheels: { movingHeadWheel: true },
-      },
     });
   }
 
   public async createScene(params: CreateSceneParams): Promise<LightsScene> {
     const lightsScene = await dataSource.transaction(async (manager) => {
       const sceneRepo = manager.getRepository(LightsScene);
-      const parsRepo = manager.getRepository(LightsScenePars);
-      const movingHeadRgbsRepo = manager.getRepository(LightsSceneMovingHeadRgb);
-      const movingHeadWheelsRepo = manager.getRepository(LightsSceneMovingHeadWheel);
+      const sceneEffectRepo = manager.getRepository(LightsSceneEffect);
       const scene: LightsScene = await sceneRepo.save({
         name: params.name,
+        favorite: params.favorite,
       });
 
       await Promise.all(
-        params.pars.map(
-          async ({ id, dmxValues }): Promise<LightsScenePars> =>
-            parsRepo.save({
-              scene,
-              sceneId: scene.id,
-              groupParId: id,
-              dmxValues,
-            }),
-        ),
-      );
-      await Promise.all(
-        params.movingHeadRgbs.map(
-          async ({ id, dmxValues }): Promise<LightsSceneMovingHeadRgb> =>
-            movingHeadRgbsRepo.save({
-              scene,
-              sceneId: scene.id,
-              groupParId: id,
-              dmxValues,
-            }),
-        ),
-      );
-      await Promise.all(
-        params.movingHeadWheels.map(
-          async ({ id, dmxValues }): Promise<LightsSceneMovingHeadWheel> =>
-            movingHeadWheelsRepo.save({
-              scene,
-              sceneId: scene.id,
-              groupParId: id,
-              dmxValues,
-            }),
-        ),
+        params.effects
+          .map(({ effectName, lightsGroups }) =>
+            lightsGroups.map((groupId) =>
+              sceneEffectRepo.save({
+                effectName,
+                groupId,
+              }),
+            ),
+          )
+          .flat(),
       );
 
       return scene;

@@ -1,44 +1,53 @@
-import BaseLightsHandler from '../base-lights-handler';
-import { LightsGroup } from '../../lights/entities';
 import { LightsScene } from '../../lights/entities/scenes';
+import EffectsHandler from './effects-handler';
+import { LIGHTS_EFFECTS_COLOR } from '../../lights/effects/color';
+import { databaseEffectToObject } from './database-effects-helper';
+import { LIGHTS_EFFECTS_MOVEMENT } from '../../lights/effects/movement';
+import { LightsGroup } from '../../lights/entities';
 
-export class ScenesHandler extends BaseLightsHandler {
-  beat(): void {}
+export class ScenesHandler extends EffectsHandler {
+  applyScene(scene: LightsScene): void {
+    this.clearScene();
 
-  tick(): LightsGroup[] {
-    return this.entities;
+    const groupMap = new Map<number, LightsGroup>();
+    const groupEffectsMap = new Map<number, { effectName: string; effectProps: string }[]>();
+    scene.effects.forEach(({ group, effectProps, effectName }) => {
+      if (groupEffectsMap.has(group.id)) {
+        groupEffectsMap.get(group.id)?.push({ effectName, effectProps });
+      } else {
+        groupEffectsMap.set(group.id, [{ effectName, effectProps }]);
+      }
+
+      // Make sure we have exactly one copy of each group object.
+      // Duplicate group copies behave as different objects.
+      if (!groupMap.has(group.id)) groupMap.set(group.id, group);
+    });
+
+    groupEffectsMap.forEach((effects, groupId) => {
+      const group = groupMap.get(groupId)!;
+
+      this.groupColorEffects.set(
+        group,
+        effects
+          .filter(({ effectName }) => LIGHTS_EFFECTS_COLOR.includes(effectName as any))
+          .map(({ effectName, effectProps }) =>
+            databaseEffectToObject(group, effectName, effectProps),
+          ),
+      );
+      this.groupMovementEffects.set(
+        group,
+        effects
+          .filter(({ effectName }) => LIGHTS_EFFECTS_MOVEMENT.includes(effectName as any))
+          .map(({ effectName, effectProps }) =>
+            databaseEffectToObject(group, effectName, effectProps),
+          ),
+      );
+    });
   }
 
-  applyScene(scene: LightsScene): void {
-    this.entities.forEach((lightsGroup) => {
-      lightsGroup.pars.forEach((par) => {
-        const sceneForFixture = scene.pars.find((p) => p.groupParId === par.id);
-        if (sceneForFixture) {
-          par.fixture.setOverrideDmx(sceneForFixture.dmxValues);
-        } else {
-          par.fixture.clearOverrideDmx();
-        }
-      });
-      lightsGroup.movingHeadRgbs.forEach((movingHeadRgb) => {
-        const sceneForFixture = scene.movingHeadRgbs.find(
-          (p) => p.groupMovingHeadRgbId === movingHeadRgb.id,
-        );
-        if (sceneForFixture) {
-          movingHeadRgb.fixture.setOverrideDmx(sceneForFixture.dmxValues);
-        } else {
-          movingHeadRgb.fixture.clearOverrideDmx();
-        }
-      });
-      lightsGroup.movingHeadWheels.forEach((movingHeadWheels) => {
-        const sceneForFixture = scene.movingHeadWheels.find(
-          (p) => p.groupMovingHeadWheelId === movingHeadWheels.id,
-        );
-        if (sceneForFixture) {
-          movingHeadWheels.fixture.setOverrideDmx(sceneForFixture.dmxValues);
-        } else {
-          movingHeadWheels.fixture.clearOverrideDmx();
-        }
-      });
+  clearScene() {
+    this.entities.forEach((e) => {
+      this.clearEffect(e);
     });
   }
 }

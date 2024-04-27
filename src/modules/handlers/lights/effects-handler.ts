@@ -23,10 +23,41 @@ export default abstract class EffectsHandler extends BaseLightsHandler {
     this.groupMovementEffects.set(entity, null);
   }
 
+  /**
+   * Call the destroy method on a (set of) effects, if it exists
+   * @param effect
+   * @private
+   */
+  public destroyEffect(effect: LightsEffect | LightsEffect[] | null | undefined) {
+    if (effect == null) return;
+    if (Array.isArray(effect)) {
+      effect.forEach((e) => e.destroy());
+    } else {
+      effect.destroy();
+    }
+  }
+
+  /**
+   * Given an entity, destroy and clear all effects assigned to this entity
+   * @param entityCopy
+   * @private
+   */
+  public clearEffect(entityCopy: LightsGroup) {
+    const entity: LightsGroup | undefined = this.entities.find((e) => e.id === entityCopy.id);
+    if (!entity) return;
+
+    this.destroyEffect(this.groupColorEffects.get(entity));
+    this.groupColorEffects.set(entity, null);
+    this.destroyEffect(this.groupMovementEffects.get(entity));
+    this.groupMovementEffects.set(entity, null);
+  }
+
   // We should also remove the entity from the effects mapping
   public removeEntity(entityCopy: LightsGroup) {
     const entity: LightsGroup | undefined = this.entities.find((e) => e.id === entityCopy.id);
     if (!entity) return;
+
+    this.clearEffect(entity);
 
     this.groupColorEffects.delete(entity);
     this.groupMovementEffects.delete(entity);

@@ -1,5 +1,5 @@
-import { Controller } from '@tsoa/runtime';
-import { Body, Delete, Get, Post, Route, Security, Tags } from 'tsoa';
+import { Controller, TsoaResponse } from '@tsoa/runtime';
+import { Body, Delete, Get, Post, Query, Res, Route, Security, Tags } from 'tsoa';
 import ScenesService, { CreateSceneParams, LightsSceneResponse } from './scenes-service';
 import RootLightsService from '../../root/root-lights-service';
 import HandlerManager from '../../root/handler-manager';
@@ -10,6 +10,10 @@ import { SecurityGroup } from '../../../helpers/security';
 @Route('handler/lights/scenes')
 @Tags('Handlers')
 export class ScenesController extends Controller {
+  /**
+   * Get a list of all scenes
+   * @param favorite Whether to return only scenes that are (not) marked as favorite
+   */
   @Security('local', [
     SecurityGroup.ADMIN,
     SecurityGroup.AVICO,
@@ -17,8 +21,8 @@ export class ScenesController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Get('')
-  public async getAllScenes(): Promise<LightsSceneResponse[]> {
-    const scenes = await new ScenesService().getScenes();
+  public async getAllScenes(@Query() favorite?: boolean): Promise<LightsSceneResponse[]> {
+    const scenes = await new ScenesService().getScenes({ favorite });
     return scenes.map((s) => ScenesService.toSceneResponse(s));
   }
 
@@ -41,45 +45,31 @@ export class ScenesController extends Controller {
   /**
    * Create a new scene
    * @param params
+   * @param invalidSceneResponse
    */
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO])
   @Post('')
-  public async createScene(@Body() params: CreateSceneParams) {
+  public async createScene(
+    @Body() params: CreateSceneParams,
+    @Res() invalidSceneResponse: TsoaResponse<400, { reason: string }>,
+  ) {
     const lightsService = new RootLightsService();
 
-    const dbPars = await Promise.all(
-      params.pars.map(async ({ id }) => lightsService.getLightsGroupPar(id)),
+    const lightGroupIds = params.effects
+      .map((e) => e.lightsGroups)
+      .flat()
+      .sort();
+    const dbGroups = await Promise.all(
+      lightGroupIds.map(async (id) => ({
+        id,
+        group: await lightsService.getSingleLightsGroup(id),
+      })),
     );
-    const missingPars = params.pars.filter((f, index) => dbPars[index] == null);
-
-    const dbMovingHeadRgbs = await Promise.all(
-      params.movingHeadRgbs.map(async ({ id }) => lightsService.getLightsGroupMovingHeadRgb(id)),
-    );
-    const missingMovingHeadRgbs = params.movingHeadRgbs.filter(
-      (f, index) => dbMovingHeadRgbs[index] == null,
-    );
-
-    const dbMovingHeadWheels = await Promise.all(
-      params.movingHeadWheels.map(async ({ id }) =>
-        lightsService.getLightsGroupMovingHeadWheel(id),
-      ),
-    );
-    const missingMovingHeadWheels = params.movingHeadWheels.filter(
-      (p, index) => dbMovingHeadWheels[index] == null,
-    );
-
-    if (
-      missingPars.length > 0 ||
-      missingMovingHeadRgbs.length > 0 ||
-      missingMovingHeadWheels.length > 0
-    ) {
-      this.setStatus(400);
-      return {
-        message: 'Some fixtures do not exist',
-        missingPars,
-        missingMovingHeadRgbs,
-        missingMovingHeadWheels,
-      };
+    const missingGroups = dbGroups.filter(({ group }) => group == null);
+    if (missingGroups.length > 0) {
+      return invalidSceneResponse(400, {
+        reason: `LightsGroups with IDs ${missingGroups.join(',')} do not exist.`,
+      });
     }
 
     const scene = await new ScenesService().createScene(params);
@@ -123,5 +113,24 @@ export class ScenesController extends Controller {
     if (!handler) throw new Error('ScenesHandler not found');
 
     handler.applyScene(scene);
+  }
+
+  /**
+   * Clear the scene that is applied to the ScenesHandler
+   */
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD,
+  ])
+  @Delete('clear')
+  public async clearScene() {
+    const handler: ScenesHandler | undefined = HandlerManager.getInstance()
+      .getHandlers(LightsGroup)
+      .find((h) => h.constructor.name === ScenesHandler.name) as ScenesHandler | undefined;
+    if (!handler) throw new Error('ScenesHandler not found');
+
+    handler.clearScene();
   }
 }
