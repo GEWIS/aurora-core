@@ -3,7 +3,7 @@ import RootScreenService from '../modules/root/root-screen-service';
 import RootLightsService from '../modules/root/root-lights-service';
 import dataSource from '../database';
 import { LightsGroup, LightsMovingHeadWheel } from '../modules/lights/entities';
-import { RgbColor } from '../modules/lights/color-definitions';
+import { RgbColor, WheelColor } from '../modules/lights/color-definitions';
 import { SparkleCreateParams } from '../modules/lights/effects/color/sparkle';
 import { StaticColorCreateParams } from '../modules/lights/effects/color/static-color';
 import { LightsPredefinedEffect } from '../modules/lights/entities/sequences/lights-predefined-effect';
@@ -11,6 +11,8 @@ import { LightsEffectsCreateParams } from '../modules/lights/effects';
 import { WaveCreateParams } from '../modules/lights/effects/color/wave';
 import { LightsScene, LightsSceneEffect } from '../modules/lights/entities/scenes';
 import { SearchLightCreateParams } from '../modules/lights/effects/movement/search-light';
+import LightsWheelColorChannelValue from '../modules/lights/entities/lights-wheel-color-channel-value';
+import LightsWheelGoboChannelValue from '../modules/lights/entities/lights-wheel-gobo-channel-value';
 
 export default async function seedDatabase() {
   const rootAudioService = new RootAudioService();
@@ -130,6 +132,7 @@ export default async function seedDatabase() {
       { fixtureId: eurolite_LED_TMH_S30.id, firstChannel: 177 },
     ],
   });
+  if (!gewisMHRoom) throw new Error('GEWIS MHs not created');
   const royMHs = await rootLightsService.createLightGroup(controller.id, {
     name: 'Roy MH',
     pars: [],
@@ -139,6 +142,39 @@ export default async function seedDatabase() {
     ],
     movingHeadWheels: [],
   });
+
+  const colorRepo = dataSource.getRepository(LightsWheelColorChannelValue);
+  await Promise.all([
+    colorRepo.save({ id: 1, name: WheelColor.WHITE, value: 1, movingHead: eurolite_LED_TMH_S30 }),
+    colorRepo.save({ id: 2, name: WheelColor.RED, value: 11, movingHead: eurolite_LED_TMH_S30 }),
+    colorRepo.save({ id: 3, name: WheelColor.GREEN, value: 21, movingHead: eurolite_LED_TMH_S30 }),
+    colorRepo.save({ id: 4, name: WheelColor.BLUE, value: 31, movingHead: eurolite_LED_TMH_S30 }),
+    colorRepo.save({ id: 5, name: WheelColor.YELLOW, value: 41, movingHead: eurolite_LED_TMH_S30 }),
+    colorRepo.save({
+      id: 6,
+      name: WheelColor.LIGHTBLUE,
+      value: 51,
+      movingHead: eurolite_LED_TMH_S30,
+    }),
+    colorRepo.save({ id: 7, name: WheelColor.ORANGE, value: 61, movingHead: eurolite_LED_TMH_S30 }),
+    colorRepo.save({
+      id: 8,
+      name: WheelColor.ROSERED,
+      value: 71,
+      movingHead: eurolite_LED_TMH_S30,
+    }),
+  ]);
+  const goboRepo = dataSource.getRepository(LightsWheelGoboChannelValue);
+  await Promise.all([
+    goboRepo.save({ id: 1, name: 'Open', value: 0, movingHead: eurolite_LED_TMH_S30 }),
+    goboRepo.save({ id: 2, name: 'Blender', value: 11, movingHead: eurolite_LED_TMH_S30 }),
+    goboRepo.save({ id: 3, name: 'BAC', value: 21, movingHead: eurolite_LED_TMH_S30 }),
+    goboRepo.save({ id: 4, name: 'Swirl', value: 31, movingHead: eurolite_LED_TMH_S30 }),
+    goboRepo.save({ id: 5, name: 'Bolletjes', value: 41, movingHead: eurolite_LED_TMH_S30 }),
+    goboRepo.save({ id: 6, name: 'GEWIS', value: 51, movingHead: eurolite_LED_TMH_S30 }),
+    goboRepo.save({ id: 7, name: 'Swoosh', value: 61, movingHead: eurolite_LED_TMH_S30 }),
+    goboRepo.save({ id: 8, name: 'HalvePizza', value: 71, movingHead: eurolite_LED_TMH_S30 }),
+  ]);
 
   return Promise.all(
     [gewisRoom, gewisBar, gewisLounge, gewisMHRoom, royMHs].map(

@@ -6,7 +6,8 @@ import LightsMovingHeadWheel from './lights-moving-head-wheel';
 import LightsGroupPars from './lights-group-pars';
 import LightsGroupMovingHeadRgbs from './lights-group-moving-head-rgbs';
 import LightsGroupMovingHeadWheels from './lights-group-moving-head-wheels';
-import LightsWheelChannelValue from './lights-wheel-channel-value';
+import LightsWheelColorChannelValue from './lights-wheel-color-channel-value';
+import LightsWheelGoboChannelValue from './lights-wheel-gobo-channel-value';
 import { LightsScene, LightsSceneEffect } from './scenes';
 import { LightsPredefinedEffect } from './sequences/lights-predefined-effect';
 import LightsParShutterOptions from './lights-par-shutter-options';
@@ -29,10 +30,11 @@ export const Entities = [
   LightsMovingHeadRgbShutterOptions,
   LightsMovingHeadWheel,
   LightsMovingHeadWheelShutterOptions,
+  LightsWheelColorChannelValue,
+  LightsWheelGoboChannelValue,
   LightsGroupPars,
   LightsGroupMovingHeadRgbs,
   LightsGroupMovingHeadWheels,
-  LightsWheelChannelValue,
   LightsScene,
   LightsSceneEffect,
   LightsPredefinedEffect,

@@ -15,7 +15,7 @@ export class ScenesHandler extends EffectsHandler {
 
     const groupMap = new Map<number, LightsGroup>();
     const groupEffectsMap = new Map<number, { effectName: string; effectProps: string }[]>();
-    scene.effects.forEach(({ groupCopy, effectProps, effectName }) => {
+    scene.effects.forEach(({ group: groupCopy, effectProps, effectName }) => {
       // Make sure we have exactly one copy of each group object.
       // Duplicate group copies behave as different objects.
       const group = this.entities.find((e) => e.id === groupCopy.id);

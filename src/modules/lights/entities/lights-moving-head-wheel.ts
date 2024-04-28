@@ -2,12 +2,13 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import LightsMovingHead from './lights-moving-head';
 import Movement from './movement';
 import { LightsFixtureCurrentValues } from './lights-fixture';
-// eslint-disable-next-line import/no-cycle -- cross reference
-import LightsWheelChannelValue from './lights-wheel-channel-value';
-import { RgbColor, rgbColorDefinitions, WheelColor } from '../color-definitions';
+import { RgbColor, rgbColorDefinitions } from '../color-definitions';
 // eslint-disable-next-line import/no-cycle
 import LightsMovingHeadWheelShutterOptions from './lights-moving-head-wheel-shutter-options';
 import { ShutterOption } from './lights-fixture-shutter-options';
+// eslint-disable-next-line import/no-cycle
+import LightsWheelColorChannelValue from './lights-wheel-color-channel-value';
+import LightsWheelGoboChannelValue from './lights-wheel-gobo-channel-value';
 
 interface LightsMovingHeadWheelCurrentValues extends Movement, LightsFixtureCurrentValues {
   colorWheelChannel: number;
@@ -29,11 +30,11 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
   @Column({ type: 'tinyint', nullable: true, unsigned: true })
   public goboRotateChannel: number | null;
 
-  @OneToMany(() => LightsWheelChannelValue, (c) => c.movingHead, { eager: true })
-  public colorWheelChannelValues: LightsWheelChannelValue<WheelColor>[];
+  @OneToMany(() => LightsWheelColorChannelValue, (c) => c.movingHead, { eager: true })
+  public colorWheelChannelValues: LightsWheelColorChannelValue[];
 
-  @OneToMany(() => LightsWheelChannelValue, (c) => c.movingHead, { eager: true })
-  public goboWheelChannelValues: LightsWheelChannelValue<string>[];
+  @OneToMany(() => LightsWheelGoboChannelValue, (c) => c.movingHead, { eager: true })
+  public goboWheelChannelValues: LightsWheelGoboChannelValue[];
 
   private currentValues: LightsMovingHeadWheelCurrentValues = {
     masterDimChannel: 0,
@@ -52,6 +53,13 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     const channelValueObj = this.colorWheelChannelValues.find((v) => v.name === wheelColor);
     this.setCurrentValues({
       colorWheelChannel: channelValueObj?.value ?? 0,
+    });
+  }
+
+  setGobo(gobo: string) {
+    const channelValueObj = this.goboWheelChannelValues.find((v) => v.name === gobo);
+    this.setCurrentValues({
+      goboWheelChannel: channelValueObj?.value ?? 0,
     });
   }
 
