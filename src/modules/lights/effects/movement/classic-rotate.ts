@@ -9,7 +9,7 @@ export type ClassicRotateCreateParams = BaseLightsEffectCreateParams & {
   props: ClassicRotateProps;
 };
 
-const DEFAULT_CYCLE_TIME = 12000;
+const DEFAULT_CYCLE_TIME = 10000;
 const DEFAULT_OFFSET_FACTOR = 0;
 
 export default class ClassicRotate extends BaseRotate<ClassicRotateProps> {
@@ -45,7 +45,6 @@ export default class ClassicRotate extends BaseRotate<ClassicRotateProps> {
   ) {
     const pan = this.triangleFunction(progression + offset) * 128 + 128;
     const tilt = this.triangleFunction(progression * 4 + offset) * 128 + 128;
-    console.log(pan);
     movingHead.setPosition(pan, tilt);
   }
 }
