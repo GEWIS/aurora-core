@@ -48,7 +48,9 @@ export interface MovingHeadRgbResponse extends MovingHeadResponse, ColorResponse
 
 export interface MovingHeadWheelResponse
   extends LightsFixtureResponse,
-    Pick<LightsMovingHeadWheel, 'colorWheelChannel' | 'goboWheelChannel' | 'goboRotateChannel'> {}
+    Pick<LightsMovingHeadWheel, 'colorWheelChannel' | 'goboWheelChannel' | 'goboRotateChannel'> {
+  gobos: string[];
+}
 
 export interface BaseLightsGroupResponse
   extends Pick<LightsGroup, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
@@ -198,6 +200,7 @@ export default class RootLightsService {
       colorWheelChannel: m.colorWheelChannel,
       goboWheelChannel: m.goboWheelChannel,
       goboRotateChannel: m.goboRotateChannel ? m.goboRotateChannel + firstChannel - 1 : null,
+      gobos: m.goboWheelChannelValues.map((v) => v.name),
     };
   }
 

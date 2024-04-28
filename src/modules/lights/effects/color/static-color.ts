@@ -11,6 +11,11 @@ export interface StaticColorProps {
   color: RgbColor;
 
   /**
+   * Name of the gobo that should be used
+   */
+  gobo?: string;
+
+  /**
    * Beat
    */
   beatToggle?: boolean;
@@ -41,6 +46,9 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
       if (!this.props.beatToggle) {
         f.fixture.setMasterDimmer(Math.round((this.props.relativeBrightness ?? 1) * 255));
       }
+    });
+    this.lightsGroup.movingHeadWheels.forEach((f) => {
+      if (this.props.gobo) f.fixture.setGobo(this.props.gobo);
     });
 
     this.beat();

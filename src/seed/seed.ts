@@ -169,11 +169,17 @@ export default async function seedDatabase() {
     goboRepo.save({ id: 1, name: 'Open', value: 0, movingHead: eurolite_LED_TMH_S30 }),
     goboRepo.save({ id: 2, name: 'Blender', value: 11, movingHead: eurolite_LED_TMH_S30 }),
     goboRepo.save({ id: 3, name: 'BAC', value: 21, movingHead: eurolite_LED_TMH_S30 }),
-    goboRepo.save({ id: 4, name: 'Swirl', value: 31, movingHead: eurolite_LED_TMH_S30 }),
-    goboRepo.save({ id: 5, name: 'Bolletjes', value: 41, movingHead: eurolite_LED_TMH_S30 }),
-    goboRepo.save({ id: 6, name: 'GEWIS', value: 51, movingHead: eurolite_LED_TMH_S30 }),
-    goboRepo.save({ id: 7, name: 'Swoosh', value: 61, movingHead: eurolite_LED_TMH_S30 }),
-    goboRepo.save({ id: 8, name: 'HalvePizza', value: 71, movingHead: eurolite_LED_TMH_S30 }),
+    goboRepo.save({
+      id: 4,
+      name: 'BAC (light shake)',
+      value: 101,
+      movingHead: eurolite_LED_TMH_S30,
+    }),
+    goboRepo.save({ id: 5, name: 'Swirl', value: 31, movingHead: eurolite_LED_TMH_S30 }),
+    goboRepo.save({ id: 6, name: 'Bolletjes', value: 41, movingHead: eurolite_LED_TMH_S30 }),
+    goboRepo.save({ id: 7, name: 'GEWIS', value: 51, movingHead: eurolite_LED_TMH_S30 }),
+    goboRepo.save({ id: 8, name: 'Swoosh', value: 61, movingHead: eurolite_LED_TMH_S30 }),
+    goboRepo.save({ id: 9, name: 'HalvePizza', value: 71, movingHead: eurolite_LED_TMH_S30 }),
   ]);
 
   return Promise.all(
@@ -223,6 +229,7 @@ export async function seedBorrelLights(
     type: 'StaticColor',
     props: {
       color: RgbColor.BLINDINGWHITE,
+      gobo: 'BAC',
     },
   };
 
