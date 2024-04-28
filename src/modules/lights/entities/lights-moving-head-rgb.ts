@@ -44,6 +44,24 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
     this.setCurrentValues(rgbColorDefinitions[color].definition);
   }
 
+  /**
+   * @param pan value between [0, 255). Any decimals are applied to the finePan
+   * @param tilt value between [0, 255). Any decimals are applied to the finePan
+   */
+  setPosition(pan: number, tilt: number) {
+    const panChannel = Math.floor(pan);
+    const tiltChannel = Math.floor(tilt);
+    const finePanChannel = Math.floor((pan - panChannel) * 255);
+    const fineTiltChannel = Math.floor((tilt - tiltChannel) * 255);
+
+    this.setCurrentValues({
+      panChannel,
+      finePanChannel,
+      tiltChannel,
+      fineTiltChannel,
+    });
+  }
+
   setMasterDimmer(masterDimChannel: number) {
     if (this.currentValues.masterDimChannel === masterDimChannel) return;
     this.setCurrentValues({
