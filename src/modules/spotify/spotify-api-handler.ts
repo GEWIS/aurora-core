@@ -29,6 +29,7 @@ export default class SpotifyApiHandler {
     if (user) {
       try {
         await this.loadSpotifyUser(user);
+        logger.info('Spotify initialized!');
       } catch (e) {
         logger.error(`Could not load Spotify user: ${e}`);
       }

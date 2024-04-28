@@ -15,9 +15,13 @@ import { SocketioNamespaces } from './socketio-namespaces';
 import SocketConnectionManager from './modules/root/socket-connection-manager';
 import { BackofficeSyncEmitter } from './modules/events/backoffice-sync-emitter';
 import { activeDirectoryConnect } from './modules/infoscreen/entities/ldap-connector';
+import ServerSettingsStore from './modules/root/server-settings-store';
 
 async function createApp(): Promise<void> {
   await dataSource.initialize();
+
+  await ServerSettingsStore.getInstance().initialize();
+
   const app = await createHttp();
   const httpServer = createServer(app);
   const io = createWebsocket(httpServer);
@@ -57,7 +61,6 @@ async function createApp(): Promise<void> {
     logger.info('Initialize Spotify...');
     await SpotifyApiHandler.getInstance().init();
     await SpotifyTrackHandler.getInstance().init(musicEmitter);
-    logger.info('Spotify initialized!');
   }
 
   initBackofficeSynchronizer(io.of('/backoffice'), {
