@@ -180,7 +180,7 @@ export async function seedBorrelLights(
     type: 'SearchLight',
     props: {
       radiusFactor: 0.5,
-      cycleTime: 10000,
+      cycleTime: 15000,
     },
   };
   const movingHeadColor: StaticColorCreateParams = {
