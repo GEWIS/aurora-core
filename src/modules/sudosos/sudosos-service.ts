@@ -5,6 +5,7 @@ import {
   UserResponse,
 } from '@sudosos/sudosos-client';
 import { SudoSOSClient } from './sudosos-api-service';
+import ServerSettingsStore from '../root/server-settings-store';
 
 interface SudoSOSDebtorResponse {
   userId: number;
@@ -28,9 +29,7 @@ export default class SudoSOSService {
       !!process.env.SUDOSOS_URL &&
       !!process.env.SUDOSOS_USER_ID &&
       !!process.env.SUDOSOS_KEY &&
-      !!process.env.SUDOSOS_BORRELMODE_POS_ID &&
-      !Number.isNaN(Number(process.env.SUDOSOS_USER_ID)) &&
-      !Number.isNaN(Number(process.env.SUDOSOS_BORRELMODE_POS_ID))
+      !Number.isNaN(Number(process.env.SUDOSOS_USER_ID))
     );
   }
 
@@ -112,10 +111,12 @@ export default class SudoSOSService {
       userMap.set(user.id, user);
     });
 
-    const bac = process.env.SUDOSOS_BAC_GROUP_ID
-      ? (await this.client.user.getOrganMembers(Number(process.env.SUDOSOS_BAC_GROUP_ID))).data
-          .records
-      : undefined;
+    const bacGroupId = ServerSettingsStore.getInstance().getSetting('SudoSOSBACGroupID');
+
+    const bac =
+      bacGroupId > 0
+        ? (await this.client.user.getOrganMembers(bacGroupId)).data.records
+        : undefined;
 
     return balances
       .map((b): SudoSOSDebtorResponse | null => {
@@ -144,10 +145,8 @@ export default class SudoSOSService {
   }
 
   public async getPriceList() {
-    const response = await this.client.pos.getAllPointOfSaleProducts(
-      Number(process.env.SUDOSOS_BORRELMODE_POS_ID),
-      100000,
-    );
+    const posID = ServerSettingsStore.getInstance().getSetting('SudoSOSBorrelmodePOSID');
+    const response = await this.client.pos.getAllPointOfSaleProducts(posID, 100000);
     return response.data.records.filter((p) => p.priceList);
   }
 }
