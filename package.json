@@ -16,7 +16,7 @@
     "format": "prettier --ignore-path .gitignore --check ./src/",
     "format-fix": "prettier --ignore-path .gitignore --write ./src",
     "seed": "ts-node src/seed/index.ts",
-    "prepare": "husky"
+    "prepare-husky": "husky"
   },
   "keywords": [],
   "author": "",
