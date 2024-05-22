@@ -9,7 +9,7 @@ export default class ModeManager {
 
   private _backofficeSyncEmitter: BackofficeSyncEmitter;
 
-  private modes: Map<typeof BaseMode, BaseMode | undefined> = new Map();
+  private modes: Map<typeof BaseMode, BaseMode<any, any, any> | undefined> = new Map();
 
   private initialized = false;
 
@@ -27,7 +27,11 @@ export default class ModeManager {
     this.initialized = true;
   }
 
-  public enableMode(modeClass: typeof BaseMode, mode: BaseMode, name: string) {
+  public enableMode(
+    modeClass: typeof BaseMode<any, any, any>,
+    mode: BaseMode<any, any, any>,
+    name: string,
+  ) {
     // If an instance of this mode already exist, destroy it before creating a new one
     if (this.modes.has(modeClass)) this.disableMode(modeClass);
 
@@ -35,11 +39,11 @@ export default class ModeManager {
     this._backofficeSyncEmitter.emit(`mode_${name}_update`);
   }
 
-  public getMode(modeClass: typeof BaseMode) {
+  public getMode(modeClass: typeof BaseMode<any, any, any>) {
     return this.modes.get(modeClass);
   }
 
-  public disableMode(modeClass: typeof BaseMode, name?: string) {
+  public disableMode(modeClass: typeof BaseMode<any, any, any>, name?: string) {
     const instance = this.modes.get(modeClass);
     if (instance) instance.destroy();
     if (name) this._backofficeSyncEmitter.emit(`mode_${name}_update`);

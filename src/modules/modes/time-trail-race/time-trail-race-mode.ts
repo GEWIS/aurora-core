@@ -22,18 +22,16 @@ import logger from '../../../logger';
 import { SpotifyTrackHandler } from '../../spotify';
 
 const LIGHTS_HANDLER = 'TimeTrailRaceLightsHandler';
-const AUDIO_HANDLER = 'SimpleAudioHandler';
 const SCREEN_HANDLER = 'TimeTrailRaceScreenHandler';
+const AUDIO_HANDLER = 'SimpleAudioHandler';
 
 const MUSIC_FILE = '/static/audio/benny-hill-theme.mp3';
 
-export default class TimeTrailRaceMode extends BaseMode {
-  private lightsHandler: TimeTrailRaceLightsHandler;
-
-  private audioHandler: SimpleAudioHandler;
-
-  private screenHandler: TimeTrailRaceScreenHandler;
-
+export default class TimeTrailRaceMode extends BaseMode<
+  TimeTrailRaceLightsHandler,
+  TimeTrailRaceScreenHandler,
+  SimpleAudioHandler
+> {
   private artificialBeatGenerator: ArtificialBeatGenerator;
 
   private backofficeSyncEmitter: BackofficeSyncEmitter;
@@ -53,31 +51,12 @@ export default class TimeTrailRaceMode extends BaseMode {
   public scoreboard: ScoreboardItem[] = [];
 
   destroy(): void {
-    throw new Error('Method not implemented.');
+    this.artificialBeatGenerator.stop();
+    super.destroy();
   }
 
   constructor(lights: LightsGroup[], screens: Screen[], audios: Audio[]) {
-    super(lights, screens, audios);
-
-    lights.forEach((lightsGroup) => {
-      this.handlerManager.registerHandler(lightsGroup, LIGHTS_HANDLER);
-    });
-    audios.forEach((audio) => {
-      this.handlerManager.registerHandler(audio, AUDIO_HANDLER);
-    });
-    screens.forEach((screen) => {
-      this.handlerManager.registerHandler(screen, SCREEN_HANDLER);
-    });
-
-    this.lightsHandler = this.handlerManager
-      .getHandlers(LightsGroup)
-      .find((h) => h.constructor.name === LIGHTS_HANDLER) as TimeTrailRaceLightsHandler;
-    this.audioHandler = this.handlerManager
-      .getHandlers(Audio)
-      .find((h) => h.constructor.name === AUDIO_HANDLER) as SimpleAudioHandler;
-    this.screenHandler = this.handlerManager
-      .getHandlers(Screen)
-      .find((h) => h.constructor.name === SCREEN_HANDLER) as TimeTrailRaceScreenHandler;
+    super(lights, screens, audios, LIGHTS_HANDLER, SCREEN_HANDLER, AUDIO_HANDLER);
 
     this.artificialBeatGenerator = ArtificialBeatGenerator.getInstance();
     this.spotify = SpotifyTrackHandler.getInstance();

@@ -139,6 +139,17 @@ export default class HandlerManager {
   }
 
   /**
+   * Get the handler this entity is assigned to. Undefined if not assigned to any handler.
+   * @param entity
+   */
+  public getHandler<T extends SubscribeEntity>(entity: T): string | undefined {
+    const handlers = this.getHandlers(entity.constructor as typeof SubscribeEntity);
+    const match = handlers.find((h) => h.hasEntity(entity));
+    if (!match) return undefined;
+    return match.constructor.name;
+  }
+
+  /**
    * Register the given entity with a new handler. Before doing so, deregister with the old handler
    * If newHandler equals '' (empty string), do not register with any handler.
    * @param entity

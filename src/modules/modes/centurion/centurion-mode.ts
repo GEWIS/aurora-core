@@ -21,13 +21,11 @@ const AUDIO_HANDLER = 'SimpleAudioHandler';
 const SCREEN_HANDLER = 'CenturionScreenHandler';
 const STROBE_TIME = 1500; // Milliseconds
 
-export default class CenturionMode extends BaseMode {
-  private lightsHandler: SetEffectsHandler;
-
-  private audioHandler: SimpleAudioHandler;
-
-  private screenHandler: CenturionScreenHandler;
-
+export default class CenturionMode extends BaseMode<
+  SetEffectsHandler,
+  CenturionScreenHandler,
+  SimpleAudioHandler
+> {
   public tape: MixTape;
 
   private musicEmitter: MusicEmitter;
@@ -41,8 +39,6 @@ export default class CenturionMode extends BaseMode {
 
   public startTime: Date = new Date();
 
-  private static instance: CenturionMode | undefined;
-
   private beatGenerator: ArtificialBeatGenerator;
 
   private initialized = false;
@@ -53,30 +49,9 @@ export default class CenturionMode extends BaseMode {
   }
 
   constructor(lights: LightsGroup[], screens: Screen[], audios: Audio[]) {
-    super(lights, screens, audios);
-
-    lights.forEach((lightsGroup) => {
-      this.handlerManager.registerHandler(lightsGroup, LIGHTS_HANDLER);
-    });
-    audios.forEach((audio) => {
-      this.handlerManager.registerHandler(audio, AUDIO_HANDLER);
-    });
-    screens.forEach((screen) => {
-      this.handlerManager.registerHandler(screen, SCREEN_HANDLER);
-    });
-
-    this.lightsHandler = this.handlerManager
-      .getHandlers(LightsGroup)
-      .find((h) => h.constructor.name === LIGHTS_HANDLER) as SetEffectsHandler;
-    this.audioHandler = this.handlerManager
-      .getHandlers(Audio)
-      .find((h) => h.constructor.name === AUDIO_HANDLER) as SimpleAudioHandler;
-    this.screenHandler = this.handlerManager
-      .getHandlers(Screen)
-      .find((h) => h.constructor.name === SCREEN_HANDLER) as CenturionScreenHandler;
+    super(lights, screens, audios, LIGHTS_HANDLER, SCREEN_HANDLER, AUDIO_HANDLER);
 
     this.audioHandler.addSyncAudioTimingHandler(this.syncFeedEvents.bind(this));
-
     this.beatGenerator = ArtificialBeatGenerator.getInstance();
   }
 
@@ -300,11 +275,6 @@ export default class CenturionMode extends BaseMode {
   public destroy() {
     this.stop();
     this.audioHandler.removeSyncAudioTimingHandler(this.syncFeedEvents.bind(this));
-    this.lights.forEach((lightsGroup) => {
-      this.handlerManager.registerHandler(lightsGroup, '');
-    });
-    this.audios.forEach((audio) => {
-      this.handlerManager.registerHandler(audio, '');
-    });
+    super.destroy();
   }
 }
