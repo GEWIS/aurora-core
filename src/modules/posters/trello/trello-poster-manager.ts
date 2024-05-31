@@ -68,8 +68,9 @@ export class TrelloPosterManager extends PosterManager {
 
         switch (listType) {
           case 'img':
+            return this.parseMediaPoster(card, checklists, PosterType.IMAGE);
           case 'video':
-            return this.parseMediaPoster(card, checklists);
+            return this.parseMediaPoster(card, checklists, PosterType.VIDEO);
           case 'extern':
             return this.parseExternalPoster(card, checklists);
           case 'photo':
@@ -138,12 +139,14 @@ export class TrelloPosterManager extends PosterManager {
    * Given an image or video card, parse it and store its attachments for fetching later
    * @param card
    * @param checklists
+   * @param type
    * @param borrelMode
    * @private
    */
   private async parseMediaPoster(
     card: Card,
     checklists: Checklist[],
+    type: PosterType.IMAGE | PosterType.VIDEO,
     borrelMode = false,
   ): Promise<MediaPoster | ErrorPoster> {
     const poster = this.parseBasePoster(card, checklists, borrelMode);
@@ -165,7 +168,7 @@ export class TrelloPosterManager extends PosterManager {
 
     return {
       ...poster,
-      type: PosterType.IMAGE,
+      type,
       source,
     };
   }
