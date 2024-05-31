@@ -71,6 +71,7 @@ export default class ServerSettingsStore<T extends keyof ISettings = keyof ISett
     });
 
     this.settings = Object.fromEntries(map) as any as ISettings;
+    this.initialized = true;
   }
 
   /**
