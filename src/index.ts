@@ -25,9 +25,11 @@ async function createApp(): Promise<void> {
     const audioFromPath = path.join(__dirname, '../public/audio');
     const audioToPath = path.join(process.env.STATIC_FILES_LOCATION, '/audio');
 
-    fs.mkdirSync(audioToPath);
+    if (!fs.existsSync(audioToPath)) {
+      fs.mkdirSync(audioToPath);
+    }
     // Empty the directory before filling it with new files
-    fs.readdirSync(audioToPath).forEach((f) => fs.rmSync(f));
+    fs.readdirSync(audioToPath).forEach((f) => fs.rmSync(path.join(audioToPath, f)));
     fs.cpSync(audioFromPath, audioToPath, { recursive: true });
   }
 
