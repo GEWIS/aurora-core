@@ -30,9 +30,10 @@ services:
       - aurora
     volumes:
       - posters:/app/public/posters
-      - audio:/app/public/audio
+      - audio:/app/public_copy/audio
     environment:
       - PORT=3000
+      - STATIC_FILES_LOCATION=/app/public_copy # fix for issue where a Docker volume overwrites the contents of a folder instead of merging them
       # See the .env.example file in the core repository to find all environment variables
 
 volumes:
