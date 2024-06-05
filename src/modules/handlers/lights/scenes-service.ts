@@ -2,6 +2,8 @@ import { Repository } from 'typeorm';
 import { LightsScene, LightsSceneEffect } from '../../lights/entities/scenes';
 import dataSource from '../../../database';
 import { BaseLightsGroupResponse } from '../../root/root-lights-service';
+import { LightsEffectsColorCreateParams } from '../../lights/effects/color';
+import { LightsEffectsMovementCreateParams } from '../../lights/effects/movement';
 
 export interface LightsSceneEffectResponse {
   effectName: string;
@@ -9,15 +11,15 @@ export interface LightsSceneEffectResponse {
 }
 
 export interface LightsSceneResponse {
+  id: number;
   name: string;
   favorite: boolean;
   effects: LightsSceneEffectResponse[];
 }
 
-export interface LightsSceneEffectParams {
-  effectName: string;
+export type LightsSceneEffectParams = {
   lightsGroups: number[];
-}
+} & (LightsEffectsColorCreateParams | LightsEffectsMovementCreateParams);
 
 export interface CreateSceneParams {
   name: string;
@@ -64,6 +66,7 @@ export default class ScenesService {
     });
 
     return {
+      id: scene.id,
       name: scene.name,
       favorite: scene.favorite,
       effects,
@@ -93,10 +96,11 @@ export default class ScenesService {
 
       await Promise.all(
         params.effects
-          .map(({ effectName, lightsGroups }) =>
+          .map(({ type: effectName, lightsGroups, props: effectProps }) =>
             lightsGroups.map((groupId) =>
               sceneEffectRepo.save({
                 effectName,
+                effectProps: JSON.stringify(effectProps),
                 groupId,
               }),
             ),
