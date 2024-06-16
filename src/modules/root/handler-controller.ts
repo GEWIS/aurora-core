@@ -7,6 +7,7 @@ import { LightsGroup } from '../lights/entities';
 import RootLightsService, { LightsGroupResponse } from './root-lights-service';
 import RootScreenService, { ScreenResponse } from './root-screen-service';
 import { SecurityGroup } from '../../helpers/security';
+import HandlerService from './handler-service';
 
 interface HandlerResponse<T> {
   entities: T[];
@@ -118,5 +119,16 @@ export class HandlerController extends Controller {
     if (!found) {
       this.setStatus(400);
     }
+  }
+
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.BAC,
+    SecurityGroup.AVICO,
+    SecurityGroup.BOARD,
+  ])
+  @Post('all/reset-to-defaults')
+  public async resetAllHandlersToDefaults() {
+    await new HandlerService().resetToDefaults();
   }
 }

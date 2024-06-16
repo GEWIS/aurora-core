@@ -18,6 +18,7 @@ import SocketConnectionManager from './modules/root/socket-connection-manager';
 import { BackofficeSyncEmitter } from './modules/events/backoffice-sync-emitter';
 import { activeDirectoryConnect } from './modules/infoscreen/entities/ldap-connector';
 import ServerSettingsStore from './modules/root/server-settings-store';
+import registerCronJobs from './cron';
 
 async function createApp(): Promise<void> {
   // Fix for production issue where a Docker volume overwrites the contents of a folder instead of merging them
@@ -82,6 +83,8 @@ async function createApp(): Promise<void> {
     musicEmitter,
     backofficeEmitter: backofficeSyncEmitter,
   });
+
+  registerCronJobs();
 
   const port = process.env.PORT || 3000;
   httpServer.listen(port, () => logger.info(`Listening at http://localhost:${port}`));

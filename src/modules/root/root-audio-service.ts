@@ -6,7 +6,7 @@ import AuthService from '../auth/auth-service';
 export interface AudioResponse
   extends Pick<Audio, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
 
-export interface AudioCreateParams extends Pick<Audio, 'name'> {}
+export interface AudioCreateParams extends Pick<Audio, 'name' | 'defaultHandler'> {}
 
 export default class RootAudioService {
   private repository: Repository<Audio>;
@@ -36,6 +36,7 @@ export default class RootAudioService {
   public async createAudio(params: AudioCreateParams): Promise<Audio> {
     const audio = await this.repository.save({
       name: params.name,
+      defaultHandler: params.defaultHandler,
     });
     await new AuthService().createApiKey({ audio });
     return audio;

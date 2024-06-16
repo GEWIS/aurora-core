@@ -6,6 +6,9 @@ export default class SubscribeEntity extends BaseEntity {
   @Column({ nullable: true })
   public currentHandler?: string;
 
+  @Column({ default: '' })
+  public defaultHandler: string;
+
   @Column()
   public name: string;
 

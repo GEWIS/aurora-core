@@ -57,4 +57,14 @@ export default class ModeManager {
   public get backofficeSyncEmitter() {
     return this._backofficeSyncEmitter;
   }
+
+  /**
+   * Stops all modes
+   */
+  public reset() {
+    this.modes.forEach((mode, modeClass) => {
+      mode?.destroy();
+      this.modes.delete(modeClass);
+    });
+  }
 }

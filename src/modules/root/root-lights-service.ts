@@ -113,7 +113,7 @@ export interface LightsInGroup {
   firstChannel: number;
 }
 
-export interface LightsGroupCreateParams extends Pick<LightsGroup, 'name'> {
+export interface LightsGroupCreateParams extends Pick<LightsGroup, 'name' | 'defaultHandler'> {
   pars: LightsInGroup[];
   movingHeadRgbs: LightsInGroup[];
   movingHeadWheels: LightsInGroup[];
@@ -265,6 +265,7 @@ export default class RootLightsService {
     return dataSource.transaction(async (manager) => {
       const group = (await manager.save(LightsGroup, {
         name: params.name,
+        defaultHandler: params.defaultHandler,
         controller,
       })) as LightsGroup;
 

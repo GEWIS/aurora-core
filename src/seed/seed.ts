@@ -13,15 +13,31 @@ import { LightsScene, LightsSceneEffect } from '../modules/lights/entities/scene
 import { SearchLightCreateParams } from '../modules/lights/effects/movement/search-light';
 import LightsWheelColorChannelValue from '../modules/lights/entities/lights-wheel-color-channel-value';
 import LightsWheelGoboChannelValue from '../modules/lights/entities/lights-wheel-gobo-channel-value';
+import { PosterScreenHandler } from '../modules/handlers/screen/poster';
+import SimpleAudioHandler from '../modules/handlers/audio/simple-audio-handler';
 
 export default async function seedDatabase() {
   const rootAudioService = new RootAudioService();
-  await Promise.all([rootAudioService.createAudio({ name: 'PCGEWISHOK' })]);
+  await Promise.all([
+    rootAudioService.createAudio({
+      name: 'PCGEWISHOK',
+      defaultHandler: SimpleAudioHandler.constructor.name,
+    }),
+  ]);
 
   const rootScreenService = new RootScreenService();
-  await rootScreenService.createScreen({ name: 'PCGEWISB-links' });
-  await rootScreenService.createScreen({ name: 'PCGEWISB-rechts' });
-  await rootScreenService.createScreen({ name: 'PCGEWISINFO' });
+  await rootScreenService.createScreen({
+    name: 'PCGEWISB-links',
+    defaultHandler: PosterScreenHandler.constructor.name,
+  });
+  await rootScreenService.createScreen({
+    name: 'PCGEWISB-rechts',
+    defaultHandler: PosterScreenHandler.constructor.name,
+  });
+  await rootScreenService.createScreen({
+    name: 'PCGEWISINFO',
+    defaultHandler: PosterScreenHandler.constructor.name,
+  });
 
   const rootLightsService = new RootLightsService();
   const controller = await rootLightsService.createController({ name: 'GEWIS-BAR' });
@@ -89,6 +105,7 @@ export default async function seedDatabase() {
 
   const gewisRoom = await rootLightsService.createLightGroup(controller.id, {
     name: 'Ruimte',
+    defaultHandler: '',
     pars: [
       { fixtureId: eurolite_LED_7C_7.id, firstChannel: 1 },
       { fixtureId: eurolite_LED_7C_7.id, firstChannel: 17 },
@@ -108,6 +125,7 @@ export default async function seedDatabase() {
   });
   const gewisBar = await rootLightsService.createLightGroup(controller.id, {
     name: 'Bar',
+    defaultHandler: '',
     pars: [
       { fixtureId: eurolite_LED_7C_7.id, firstChannel: 97 },
       { fixtureId: eurolite_LED_7C_7.id, firstChannel: 113 },
@@ -119,12 +137,14 @@ export default async function seedDatabase() {
   });
   const gewisLounge = await rootLightsService.createLightGroup(controller.id, {
     name: 'Lounge',
+    defaultHandler: '',
     pars: [{ fixtureId: eurolite_LED_7C_7.id, firstChannel: 129 }],
     movingHeadRgbs: [],
     movingHeadWheels: [],
   });
   const gewisMHRoom = await rootLightsService.createLightGroup(controller.id, {
     name: 'Ruimte MH',
+    defaultHandler: '',
     pars: [],
     movingHeadRgbs: [],
     movingHeadWheels: [
@@ -135,6 +155,7 @@ export default async function seedDatabase() {
   if (!gewisMHRoom) throw new Error('GEWIS MHs not created');
   const royMHs = await rootLightsService.createLightGroup(controller.id, {
     name: 'Roy MH',
+    defaultHandler: '',
     pars: [],
     movingHeadRgbs: [
       { fixtureId: ayra_ERO_506.id, firstChannel: 353 },

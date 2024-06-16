@@ -6,7 +6,7 @@ import AuthService from '../auth/auth-service';
 export interface ScreenResponse
   extends Pick<Screen, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
 
-export interface ScreenCreateParams extends Pick<Screen, 'name'> {}
+export interface ScreenCreateParams extends Pick<Screen, 'name' | 'defaultHandler'> {}
 
 export default class RootScreenService {
   private repository: Repository<Screen>;
