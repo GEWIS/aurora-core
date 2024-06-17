@@ -4,7 +4,7 @@ import { PosterScreenHandler } from './poster-screen-handler';
 // eslint-disable-next-line import/no-cycle -- TODO fix cyclic dependency
 import HandlerManager from '../../../root/handler-manager';
 import { Screen } from '../../../root/entities';
-import { Poster } from '../../../posters/poster';
+import { Poster } from './poster';
 import { SecurityGroup } from '../../../../helpers/security';
 import logger from '../../../../logger';
 import NsTrainsService, { TrainResponse } from './ns-trains-service';

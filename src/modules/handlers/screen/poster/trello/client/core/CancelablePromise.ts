@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import logger from '../../../../../logger';
+import logger from '../../../../../../../logger';
 
 export class CancelError extends Error {
   constructor(message: string) {

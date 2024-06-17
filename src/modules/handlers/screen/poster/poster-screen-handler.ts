@@ -1,8 +1,8 @@
 import { Namespace } from 'socket.io';
 import BaseScreenHandler from '../../base-screen-handler';
 import { TrackChangeEvent } from '../../../events/music-emitter-events';
-import { PosterManager } from '../../../posters/poster-manager';
-import { TrelloPosterManager } from '../../../posters/trello/trello-poster-manager';
+import { PosterManager } from './poster-manager';
+import { TrelloPosterManager } from './trello/trello-poster-manager';
 
 export class PosterScreenHandler extends BaseScreenHandler {
   public posterManager: PosterManager;

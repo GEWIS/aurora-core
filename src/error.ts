@@ -3,7 +3,7 @@ import { ValidateError } from 'tsoa';
 import { AxiosError } from 'axios';
 import { HttpApiException, HttpStatusCode } from './helpers/customError';
 import logger from './logger';
-import { ApiError as TrelloAPIError } from './modules/posters/trello/client';
+import { ApiError as TrelloAPIError } from './modules/handlers/screen/poster/trello/client';
 
 export function setupErrorHandler(app: Express) {
   app.use((req: ExRequest, res: ExResponse) => {

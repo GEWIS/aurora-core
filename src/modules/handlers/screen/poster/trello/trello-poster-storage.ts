@@ -7,7 +7,7 @@ export class TrelloPosterStorage {
   private readonly location: string;
 
   constructor(private urlLocation: string = '/posters') {
-    this.location = path.join(__dirname, '../../../../public', urlLocation);
+    this.location = path.join(__dirname, '../../../../../../public', urlLocation);
     if (!fs.existsSync(this.location)) {
       fs.mkdirSync(this.location);
     }
