@@ -14,6 +14,11 @@ interface BorrelModeParams {
   enabled: boolean;
 }
 
+interface PosterResponse {
+  posters: Poster[];
+  borrelMode: boolean;
+}
+
 @Route('screen/poster')
 @Tags('Poster screen')
 export class PosterScreenController extends Controller {
@@ -33,7 +38,7 @@ export class PosterScreenController extends Controller {
     SecurityGroup.SCREEN_SUBSCRIBER,
   ])
   @Get('')
-  public async getPosters(@Query() alwaysReturnBorrelPosters?: boolean): Promise<Poster[]> {
+  public async getPosters(@Query() alwaysReturnBorrelPosters?: boolean): Promise<PosterResponse> {
     if (!this.screenHandler.posterManager.posters) {
       try {
         await this.screenHandler.posterManager.fetchPosters();
@@ -42,9 +47,16 @@ export class PosterScreenController extends Controller {
       }
     }
     const posters = this.screenHandler.posterManager.posters ?? [];
-    if (alwaysReturnBorrelPosters) return posters;
-    if (this.screenHandler.borrelMode) return posters;
-    return posters.filter((p) => !p.borrelMode);
+    if (alwaysReturnBorrelPosters || this.screenHandler.borrelMode) {
+      return {
+        posters,
+        borrelMode: this.screenHandler.borrelMode,
+      };
+    }
+    return {
+      posters: posters.filter((p) => !p.borrelMode),
+      borrelMode: false,
+    };
   }
 
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BOARD])
