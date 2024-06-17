@@ -19,8 +19,8 @@ interface PosterResponse {
   borrelMode: boolean;
 }
 
-@Route('screen/poster')
-@Tags('Poster screen')
+@Route('handler/screen/poster')
+@Tags('Handlers')
 export class PosterScreenController extends Controller {
   private screenHandler: PosterScreenHandler;
 
