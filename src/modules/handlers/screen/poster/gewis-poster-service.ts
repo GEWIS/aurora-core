@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import { HttpApiException } from '../../../../helpers/customError';
 
 export interface GEWISPhotoAlbumParams {
   albumIds: number[];
@@ -20,14 +21,21 @@ export default class GEWISPosterService {
     const chosenAlbumIndex = Math.floor(Math.random() * params.albumIds.length);
     const albumId = params.albumIds[chosenAlbumIndex];
 
-    const returnObj = (await axios.get(`https://gewis.nl/api/photo/album/${albumId}`, config)).data;
+    try {
+      const returnObj = (await axios.get(`https://gewis.nl/api/photo/album/${albumId}`, config))
+        .data;
+      const nrOfPhotos = returnObj.photos.length;
+      const photo = returnObj.photos[Math.floor(Math.random() * nrOfPhotos)];
 
-    const nrOfPhotos = returnObj.photos.length;
-    const photo = returnObj.photos[Math.floor(Math.random() * nrOfPhotos)];
-
-    return {
-      label: returnObj.album.name,
-      url: `https://gewis.nl/data/${photo.path}`,
-    };
+      return {
+        label: returnObj.album.name,
+        url: `https://gewis.nl/data/${photo.path}`,
+      };
+    } catch (e) {
+      if (e instanceof AxiosError && e.response?.status && e.response.status < 500) {
+        throw new HttpApiException(e.response.status, e.response.statusText);
+      }
+      throw e;
+    }
   }
 }
