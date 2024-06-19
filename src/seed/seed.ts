@@ -79,6 +79,7 @@ export default async function seedDatabase() {
     movingSpeedChannel: 5,
     colorWheelChannelValues: [],
     goboWheelChannelValues: [],
+    goboRotateChannelValues: [],
   });
   eurolite_LED_TMH_S30.resetChannelAndValue = [12, 255];
   await dataSource.getRepository(LightsMovingHeadWheel).save(eurolite_LED_TMH_S30);

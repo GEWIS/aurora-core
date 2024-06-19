@@ -50,6 +50,7 @@ export interface MovingHeadWheelResponse
   extends LightsFixtureResponse,
     Pick<LightsMovingHeadWheel, 'colorWheelChannel' | 'goboWheelChannel' | 'goboRotateChannel'> {
   gobos: string[];
+  goboRotates: string[];
 }
 
 export interface BaseLightsGroupResponse
@@ -106,6 +107,10 @@ export interface LightsMovingHeadWheelCreateParams extends LightsMovingHeadParam
     value: number;
   }[];
   goboRotateChannel?: number;
+  goboRotateChannelValues: {
+    name: string;
+    value: number;
+  }[];
 }
 
 export interface LightsInGroup {
@@ -201,6 +206,7 @@ export default class RootLightsService {
       goboWheelChannel: m.goboWheelChannel,
       goboRotateChannel: m.goboRotateChannel ? m.goboRotateChannel + firstChannel - 1 : null,
       gobos: m.goboWheelChannelValues.map((v) => v.name),
+      goboRotates: m.goboRotateChannelValues.map((v) => v.name),
     };
   }
 
