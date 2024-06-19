@@ -22,22 +22,22 @@ export default async function seedDatabase() {
   await Promise.all([
     rootAudioService.createAudio({
       name: 'PCGEWISHOK',
-      defaultHandler: SimpleAudioHandler.constructor.name,
+      defaultHandler: SimpleAudioHandler.name,
     }),
   ]);
 
   const rootScreenService = new RootScreenService();
   await rootScreenService.createScreen({
     name: 'PCGEWISB-links',
-    defaultHandler: PosterScreenHandler.constructor.name,
+    defaultHandler: PosterScreenHandler.name,
   });
   await rootScreenService.createScreen({
     name: 'PCGEWISB-rechts',
-    defaultHandler: PosterScreenHandler.constructor.name,
+    defaultHandler: PosterScreenHandler.name,
   });
   await rootScreenService.createScreen({
     name: 'PCGEWISINFO',
-    defaultHandler: PosterScreenHandler.constructor.name,
+    defaultHandler: PosterScreenHandler.name,
   });
 
   const rootLightsService = new RootLightsService();
