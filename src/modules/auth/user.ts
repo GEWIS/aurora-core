@@ -3,6 +3,7 @@ import { LightsGroup } from '../lights/entities';
 import SubscribeEntity from '../root/entities/subscribe-entity';
 
 export interface User {
+  id: string;
   name: string;
   roles: string[];
 

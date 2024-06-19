@@ -25,6 +25,7 @@ export interface AuthStoreToken {
       roles: string[];
     };
   };
+  preferred_username: string;
   given_name: string;
 }
 
@@ -67,6 +68,7 @@ passport.use(
         req.res?.sendStatus(403);
       } else {
         callback(null, {
+          id: tokenDetails.preferred_username,
           name: tokenDetails.given_name,
           roles: securityRoles,
         });
