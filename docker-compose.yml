@@ -2,7 +2,7 @@ version: '2'
 services:
   backoffice:
     build: ../narrowcasting-backoffice
-    image: default.docker-registry.gewis.nl/aurora-backoffice:latest
+    image: abc.docker-registry.gewis.nl/nc/aurora/backoffice:latest
     restart: 'unless-stopped'
     ports:
       - '8080:80'
@@ -13,7 +13,7 @@ services:
       - audio:/usr/src/app/data/audio
   client:
     build: ../narrowcasting-client
-    image: default.docker-registry.gewis.nl/aurora-client:latest
+    image: abc.docker-registry.gewis.nl/nc/aurora/client:latest
     restart: 'unless-stopped'
     networks:
       - aurora
@@ -24,7 +24,7 @@ services:
       - audio:/usr/src/app/data/audio
   core:
     build: .
-    image: default.docker-registry.gewis.nl/aurora-core:latest
+    image: abc.docker-registry.gewis.nl/nc/aurora/core:latest
     restart: 'unless-stopped'
     networks:
       - aurora
