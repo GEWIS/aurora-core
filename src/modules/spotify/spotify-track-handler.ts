@@ -27,7 +27,7 @@ export default class SpotifyTrackHandler {
     timeout: NodeJS.Timeout;
   }[];
 
-  private musicEmitter: MusicEmitter;
+  public musicEmitter: MusicEmitter;
 
   private ping = false;
 
@@ -87,23 +87,6 @@ export default class SpotifyTrackHandler {
     } catch (e) {
       logger.fatal(e);
     }
-  }
-
-  /**
-   * Get the currently playing track as a track change event payload
-   */
-  public get currentlyPlayingTrack(): TrackChangeEvent | null {
-    if (
-      !this.playState ||
-      !this.playState.is_playing ||
-      this.playState.currently_playing_type !== 'track'
-    ) {
-      return null;
-    }
-
-    const track = this.playState.item as Track;
-
-    return this.asTrackChangeEvent(track, this.playState);
   }
 
   /**
@@ -193,7 +176,7 @@ export default class SpotifyTrackHandler {
         this.setNextTrackEvent(state);
 
         const item = state.item as Track;
-        this.musicEmitter.emit('change_track', [
+        this.musicEmitter.emitSpotify('change_track', [
           this.asTrackChangeEvent(item, state),
         ] as TrackChangeEvent[]);
 

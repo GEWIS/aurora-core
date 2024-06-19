@@ -136,11 +136,11 @@ export class SpotifyController extends Controller {
   }
 
   /**
-   * Get the currently playing track on Spotify. Null if nothing is playing.
+   * Get the currently playing track (on Spotify or locally playing). Null if nothing is playing.
    */
   @Security('local', ['*'])
   @Get('currently-playing')
   public getSpotifyCurrentlyPlaying() {
-    return SpotifyTrackHandler.getInstance().currentlyPlayingTrack;
+    return SpotifyTrackHandler.getInstance().musicEmitter.getCurrentlyPlayingTrack;
   }
 }
