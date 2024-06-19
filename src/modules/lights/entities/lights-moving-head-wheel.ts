@@ -9,6 +9,7 @@ import { ShutterOption } from './lights-fixture-shutter-options';
 // eslint-disable-next-line import/no-cycle
 import LightsWheelColorChannelValue from './lights-wheel-color-channel-value';
 import LightsWheelGoboChannelValue from './lights-wheel-gobo-channel-value';
+import LightsWheelRotateChannelValue from './lights-wheel-rotate-channel-value';
 
 interface LightsMovingHeadWheelCurrentValues extends Movement, LightsFixtureCurrentValues {
   colorWheelChannel: number;
@@ -36,6 +37,9 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
   @OneToMany(() => LightsWheelGoboChannelValue, (c) => c.movingHead, { eager: true })
   public goboWheelChannelValues: LightsWheelGoboChannelValue[];
 
+  @OneToMany(() => LightsWheelRotateChannelValue, (c) => c.movingHead, { eager: true })
+  public goboRotateChannelValues: LightsWheelRotateChannelValue[];
+
   private currentValues: LightsMovingHeadWheelCurrentValues = {
     masterDimChannel: 0,
     panChannel: 0,
@@ -56,10 +60,17 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     });
   }
 
-  setGobo(gobo: string) {
+  setGobo(gobo?: string) {
     const channelValueObj = this.goboWheelChannelValues.find((v) => v.name === gobo);
     this.setCurrentValues({
       goboWheelChannel: channelValueObj?.value ?? 0,
+    });
+  }
+
+  setGoboRotate(rotate?: string) {
+    const channelValueObj = this.goboRotateChannelValues.find((v) => v.name === rotate);
+    this.setCurrentValues({
+      goboRotateChannel: channelValueObj?.value ?? 0,
     });
   }
 

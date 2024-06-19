@@ -16,6 +16,11 @@ export interface StaticColorProps {
   gobo?: string;
 
   /**
+   * Name of the gobo rotate that should be used
+   */
+  goboRotate?: string;
+
+  /**
    * Beat
    */
   beatToggle?: boolean;
@@ -48,7 +53,8 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
       }
     });
     this.lightsGroup.movingHeadWheels.forEach((f) => {
-      if (this.props.gobo) f.fixture.setGobo(this.props.gobo);
+      f.fixture.setGobo(this.props.gobo);
+      f.fixture.setGoboRotate(this.props.goboRotate);
     });
 
     this.beat();

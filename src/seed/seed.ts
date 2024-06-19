@@ -15,6 +15,7 @@ import LightsWheelColorChannelValue from '../modules/lights/entities/lights-whee
 import LightsWheelGoboChannelValue from '../modules/lights/entities/lights-wheel-gobo-channel-value';
 import { PosterScreenHandler } from '../modules/handlers/screen/poster';
 import SimpleAudioHandler from '../modules/handlers/audio/simple-audio-handler';
+import LightsWheelRotateChannelValue from '../modules/lights/entities/lights-wheel-rotate-channel-value';
 
 export default async function seedDatabase() {
   const rootAudioService = new RootAudioService();
@@ -201,6 +202,58 @@ export default async function seedDatabase() {
     goboRepo.save({ id: 7, name: 'GEWIS', value: 51, movingHead: eurolite_LED_TMH_S30 }),
     goboRepo.save({ id: 8, name: 'Swoosh', value: 61, movingHead: eurolite_LED_TMH_S30 }),
     goboRepo.save({ id: 9, name: 'HalvePizza', value: 71, movingHead: eurolite_LED_TMH_S30 }),
+  ]);
+  const goboRotateRepo = dataSource.getRepository(LightsWheelRotateChannelValue);
+  await Promise.all([
+    goboRotateRepo.save({ id: 1, name: 'None', value: 0, movingHead: eurolite_LED_TMH_S30 }),
+    goboRotateRepo.save({
+      id: 2,
+      name: 'Superfast counter-clockwise',
+      value: 5,
+      movingHead: eurolite_LED_TMH_S30,
+    }),
+    goboRotateRepo.save({
+      id: 3,
+      name: 'Fast counter-clockwise',
+      value: 45,
+      movingHead: eurolite_LED_TMH_S30,
+    }),
+    goboRotateRepo.save({
+      id: 4,
+      name: 'Counter-clockwise',
+      value: 85,
+      movingHead: eurolite_LED_TMH_S30,
+    }),
+    goboRotateRepo.save({
+      id: 5,
+      name: 'Slow counter-clockwise',
+      value: 126,
+      movingHead: eurolite_LED_TMH_S30,
+    }),
+    goboRotateRepo.save({
+      id: 6,
+      name: 'Superfast clockwise',
+      value: 255,
+      movingHead: eurolite_LED_TMH_S30,
+    }),
+    goboRotateRepo.save({
+      id: 7,
+      name: 'Fast clockwise',
+      value: 193,
+      movingHead: eurolite_LED_TMH_S30,
+    }),
+    goboRotateRepo.save({
+      id: 8,
+      name: 'Clockwise',
+      value: 171,
+      movingHead: eurolite_LED_TMH_S30,
+    }),
+    goboRotateRepo.save({
+      id: 9,
+      name: 'Slow clockwise',
+      value: 130,
+      movingHead: eurolite_LED_TMH_S30,
+    }),
   ]);
 
   return Promise.all(
