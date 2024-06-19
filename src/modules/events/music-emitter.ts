@@ -7,7 +7,7 @@ import { TrackChangeEvent } from './music-emitter-events';
 export class MusicEmitter extends EventEmitter {
   private audioHandlers: BaseAudioHandler[] = [];
 
-  private currentlyPlaying: TrackChangeEvent | null;
+  private currentlyPlaying: TrackChangeEvent[] | null;
 
   public artificialBeatGeneratorEnabled = false;
 
