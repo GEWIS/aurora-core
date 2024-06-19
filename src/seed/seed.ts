@@ -195,7 +195,7 @@ export default async function seedDatabase() {
     goboRepo.save({
       id: 4,
       name: 'BAC (light shake)',
-      value: 101,
+      value: 90,
       movingHead: eurolite_LED_TMH_S30,
     }),
     goboRepo.save({ id: 5, name: 'Swirl', value: 31, movingHead: eurolite_LED_TMH_S30 }),
@@ -210,25 +210,25 @@ export default async function seedDatabase() {
     goboRotateRepo.save({
       id: 2,
       name: 'Superfast counter-clockwise',
-      value: 5,
+      value: 126,
       movingHead: eurolite_LED_TMH_S30,
     }),
     goboRotateRepo.save({
       id: 3,
       name: 'Fast counter-clockwise',
-      value: 45,
+      value: 85,
       movingHead: eurolite_LED_TMH_S30,
     }),
     goboRotateRepo.save({
       id: 4,
       name: 'Counter-clockwise',
-      value: 85,
+      value: 45,
       movingHead: eurolite_LED_TMH_S30,
     }),
     goboRotateRepo.save({
       id: 5,
       name: 'Slow counter-clockwise',
-      value: 126,
+      value: 5,
       movingHead: eurolite_LED_TMH_S30,
     }),
     goboRotateRepo.save({
