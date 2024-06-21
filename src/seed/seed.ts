@@ -16,6 +16,7 @@ import LightsWheelGoboChannelValue from '../modules/lights/entities/lights-wheel
 import { PosterScreenHandler } from '../modules/handlers/screen/poster';
 import SimpleAudioHandler from '../modules/handlers/audio/simple-audio-handler';
 import LightsWheelRotateChannelValue from '../modules/lights/entities/lights-wheel-rotate-channel-value';
+import { FixedPositionCreateParams } from '../modules/lights/effects/movement/fixed-position';
 
 export default async function seedDatabase() {
   const rootAudioService = new RootAudioService();
@@ -288,8 +289,13 @@ export async function seedBorrelLights(
   const sceneRepo = dataSource.getRepository(LightsScene);
   const sceneEffectRepo = dataSource.getRepository(LightsSceneEffect);
 
-  const scene = await sceneRepo.save({
+  const borrelScene = await sceneRepo.save({
     name: 'BAC Borrel',
+    favorite: true,
+  });
+
+  const borrelStaticScene = await sceneRepo.save({
+    name: 'BAC Borrel (static)',
     favorite: true,
   });
 
@@ -300,29 +306,44 @@ export async function seedBorrelLights(
       cycleTime: 15000,
     },
   };
-  const movingHeadColor: StaticColorCreateParams = {
+  const movingHeadStatic: FixedPositionCreateParams = {
+    type: 'FixedPosition',
+    props: {
+      pan: 111,
+      tilt: 18,
+    },
+  };
+  const movingHeadBac: StaticColorCreateParams = {
     type: 'StaticColor',
     props: {
       color: RgbColor.BLINDINGWHITE,
       gobo: 'BAC',
     },
   };
+  const movingHeadBacTilting: StaticColorCreateParams = {
+    type: 'StaticColor',
+    props: {
+      color: RgbColor.BLINDINGWHITE,
+      gobo: 'BAC (light shake)',
+      goboRotate: 'Slow counter-clockwise',
+    },
+  };
 
   // Static pars for the room, lounge and bar
   await sceneEffectRepo.save({
-    scene,
+    scene: borrelScene,
     effectName: borrelRuimte.type,
     effectProps: JSON.stringify(borrelRuimte.props),
     group: room,
   });
   await sceneEffectRepo.save({
-    scene,
+    scene: borrelScene,
     effectName: borrelRuimte.type,
     effectProps: JSON.stringify(borrelRuimte.props),
     group: lounge,
   });
   await sceneEffectRepo.save({
-    scene,
+    scene: borrelScene,
     effectName: borrelBar.type,
     effectProps: JSON.stringify(borrelBar.props),
     group: bar,
@@ -330,19 +351,53 @@ export async function seedBorrelLights(
 
   // Moving heads
   await sceneEffectRepo.save({
-    scene,
+    scene: borrelScene,
     effectName: movingHeadRotate.type,
     effectProps: JSON.stringify(movingHeadRotate.props),
     group: movingHeadsGEWIS,
   });
   await sceneEffectRepo.save({
-    scene,
-    effectName: movingHeadColor.type,
-    effectProps: JSON.stringify(movingHeadColor.props),
+    scene: borrelScene,
+    effectName: movingHeadBac.type,
+    effectProps: JSON.stringify(movingHeadBac.props),
     group: movingHeadsGEWIS,
   });
 
-  return scene;
+  // Static pars for the room, lounge and bar
+  await sceneEffectRepo.save({
+    scene: borrelStaticScene,
+    effectName: borrelRuimte.type,
+    effectProps: JSON.stringify(borrelRuimte.props),
+    group: room,
+  });
+  await sceneEffectRepo.save({
+    scene: borrelStaticScene,
+    effectName: borrelRuimte.type,
+    effectProps: JSON.stringify(borrelRuimte.props),
+    group: lounge,
+  });
+  await sceneEffectRepo.save({
+    scene: borrelStaticScene,
+    effectName: borrelBar.type,
+    effectProps: JSON.stringify(borrelBar.props),
+    group: bar,
+  });
+
+  // Moving heads
+  await sceneEffectRepo.save({
+    scene: borrelStaticScene,
+    effectName: movingHeadStatic.type,
+    effectProps: JSON.stringify(movingHeadStatic.props),
+    group: movingHeadsGEWIS,
+  });
+  await sceneEffectRepo.save({
+    scene: borrelStaticScene,
+    effectName: movingHeadBacTilting.type,
+    effectProps: JSON.stringify(movingHeadBacTilting.props),
+    group: movingHeadsGEWIS,
+  });
+
+  return [borrelScene, borrelStaticScene];
 }
 
 export async function seedOpeningSequence(
