@@ -52,6 +52,21 @@ export class ModeController extends Controller {
   }
 
   /**
+   * Disable all modes, if one is active
+   */
+  @Security('local', [
+    SecurityGroup.ADMIN,
+    SecurityGroup.AVICO,
+    SecurityGroup.BAC,
+    SecurityGroup.BOARD,
+  ])
+  @Delete('')
+  @SuccessResponse(HttpStatusCode.Ok)
+  public disableAllModes() {
+    this.modeManager.reset();
+  }
+
+  /**
    * Enable Centurion mode for the given devices
    */
   @Security('local', [

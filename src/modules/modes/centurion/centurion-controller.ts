@@ -1,10 +1,11 @@
-import { Body, Get, Post, Res, Response, Route, Security, SuccessResponse, Tags } from 'tsoa';
-import { Controller, TsoaResponse } from '@tsoa/runtime';
+import { Body, Get, Post, Response, Route, Security, SuccessResponse, Tags } from 'tsoa';
+import { Controller } from '@tsoa/runtime';
 import ModeManager from '../mode-manager';
 import CenturionMode from './centurion-mode';
 import { SecurityGroup } from '../../../helpers/security';
 import MixTape, { HornData, SongData } from './tapes/mix-tape';
 import tapes from './tapes';
+import ModeDisabledError from '../mode-disabled-error';
 
 interface SkipCenturionRequest {
   /**
@@ -51,11 +52,11 @@ export class CenturionController extends Controller {
 
   @Security('local', ['*'])
   @Get('')
-  @Response<string>(411, 'Centurion not enabled')
-  public getCenturion(@Res() notEnabledResponse: TsoaResponse<404, string>): CenturionResponse {
+  @Response<ModeDisabledError>(404, 'Centurion not enabled')
+  public getCenturion(): CenturionResponse {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
-      return notEnabledResponse(404, 'Centurion not enabled');
+      throw new ModeDisabledError('Centurion not enabled');
     }
 
     return {
@@ -76,16 +77,16 @@ export class CenturionController extends Controller {
   ])
   @Post('start')
   @SuccessResponse(204, 'Start commands sent')
-  @Response<string>(411, 'Centurion not enabled')
+  @Response<ModeDisabledError>(404, 'Centurion not enabled')
+  @Response<string>(428, 'Centurion not yet fully initialized. Please wait and try again later')
   public startCenturion() {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
-      this.setStatus(411);
-      return 'Centurion not enabled';
+      throw new ModeDisabledError('Centurion not enabled');
     }
 
     if (!mode.start()) {
-      this.setStatus(411);
+      this.setStatus(428);
       return 'Centurion not yet fully initialized. Please wait and try again later';
     }
 
@@ -102,12 +103,11 @@ export class CenturionController extends Controller {
   @Post('skip')
   @SuccessResponse(204, 'Skip commands sent')
   @Response<string>(400, 'Invalid timestamp provided')
-  @Response<string>(411, 'Centurion nog enabled')
+  @Response<ModeDisabledError>(404, 'Centurion not enabled')
   public skipCenturion(@Body() { seconds }: SkipCenturionRequest) {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
-      this.setStatus(411);
-      return 'Centurion not enabled';
+      throw new ModeDisabledError('Centurion not enabled');
     }
 
     mode.skip(seconds);
@@ -127,12 +127,11 @@ export class CenturionController extends Controller {
   ])
   @Post('stop')
   @SuccessResponse(204, 'Start commands sent')
-  @Response<string>(411, 'Centurion not enabled')
+  @Response<ModeDisabledError>(404, 'Centurion not enabled')
   public stopCenturion() {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
-      this.setStatus(411);
-      return 'Centurion not enabled';
+      throw new ModeDisabledError('Centurion not enabled');
     }
 
     mode.stop();

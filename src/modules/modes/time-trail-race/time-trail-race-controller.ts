@@ -24,11 +24,11 @@ export class TimeTrailRaceController extends Controller {
     SecurityGroup.SCREEN_SUBSCRIBER,
   ])
   @Get('')
-  @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
+  @Response<string>(404, 'Time Trail Race not enabled')
   public getRaceState() {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
     if (mode === undefined) {
-      throw new ModeDisabledError();
+      throw new ModeDisabledError('Time Trail Race not enabled');
     }
 
     return {
@@ -41,11 +41,11 @@ export class TimeTrailRaceController extends Controller {
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('register-player')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
-  @Response<InvalidStateError>(411, 'Time Trail Race not in INITIALIZED or SCOREBOARD state')
+  @Response<InvalidStateError>(428, 'Time Trail Race not in INITIALIZED or SCOREBOARD state')
   public raceRegisterPlayer(@Body() params: RegisterPlayerParams) {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
     if (mode === undefined) {
-      throw new ModeDisabledError();
+      throw new ModeDisabledError('Time Trail Race not enabled');
     }
 
     return mode.registerPlayer(params);
@@ -54,11 +54,11 @@ export class TimeTrailRaceController extends Controller {
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('ready')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
-  @Response<InvalidStateError>(411, 'Time Trail Race not in PLAYER_REGISTERED state')
+  @Response<InvalidStateError>(428, 'Time Trail Race not in PLAYER_REGISTERED state')
   public raceReady() {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
     if (mode === undefined) {
-      throw new ModeDisabledError();
+      throw new ModeDisabledError('Time Trail Race not enabled');
     }
 
     return mode.ready();
@@ -67,11 +67,11 @@ export class TimeTrailRaceController extends Controller {
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('start')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
-  @Response<InvalidStateError>(411, 'Time Trail Race not in PLAYER_READY state')
+  @Response<InvalidStateError>(428, 'Time Trail Race not in PLAYER_READY state')
   public raceStart() {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
     if (mode === undefined) {
-      throw new ModeDisabledError();
+      throw new ModeDisabledError('Time Trail Race not enabled');
     }
 
     return mode.start();
@@ -80,11 +80,11 @@ export class TimeTrailRaceController extends Controller {
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('finish')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
-  @Response<InvalidStateError>(411, 'Time Trail Race not in STARTED state')
+  @Response<InvalidStateError>(428, 'Time Trail Race not in STARTED state')
   public raceFinish() {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
     if (mode === undefined) {
-      throw new ModeDisabledError();
+      throw new ModeDisabledError('Time Trail Race not enabled');
     }
 
     return mode.finish();
@@ -93,11 +93,11 @@ export class TimeTrailRaceController extends Controller {
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('reveal-score')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
-  @Response<InvalidStateError>(411, 'Time Trail Race not in FINISHED state')
+  @Response<InvalidStateError>(428, 'Time Trail Race not in FINISHED state')
   public raceRevealScore() {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
     if (mode === undefined) {
-      throw new ModeDisabledError();
+      throw new ModeDisabledError('Time Trail Race not enabled');
     }
 
     return mode.revealScore();
