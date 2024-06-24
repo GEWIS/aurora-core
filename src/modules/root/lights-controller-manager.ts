@@ -12,15 +12,32 @@ import HandlerManager from './handler-manager';
 import { TrackPropertiesEvent } from '../events/music-emitter-events';
 import { SocketioNamespaces } from '../../socketio-namespaces';
 
+const DMX_VALUES_LENGTH = 512;
+
 export default class LightsControllerManager {
+  /**
+   * Mapping of lights controller IDs to their corresponding objects.
+   * Used to always use the same (in-memory) lights controller object instance when working with it,
+   * as light groups also contain an instance (and a different one in memory for each group)
+   * @private
+   */
   private lightsControllers: Map<number, LightsController> = new Map();
 
+  /**
+   * Mapping from the lights controller ID to its previously sent DMX values
+   * @private
+   */
   private lightsControllersValues: Map<number, number[]> = new Map();
 
+  /**
+   * Timestamp of the previous tick.
+   * used to verify whether a light has changed its state and thus a new DMX packet should be created
+   * @private
+   */
   private previousTick = new Date();
 
   private constructNewValuesArray(): number[] {
-    return new Array(512).fill(0);
+    return new Array(DMX_VALUES_LENGTH).fill(0);
   }
 
   constructor(
@@ -152,6 +169,13 @@ export default class LightsControllerManager {
       });
 
       newControllerValues.set(g.controller.id, newValues);
+    });
+
+    // If a controller has no active light groups, send only zeroes
+    Array.from(this.lightsControllers.keys()).forEach((controllerId) => {
+      if (!newControllerValues.has(controllerId)) {
+        newControllerValues.set(controllerId, this.constructNewValuesArray());
+      }
     });
 
     this.lightsControllersValues = newControllerValues;
