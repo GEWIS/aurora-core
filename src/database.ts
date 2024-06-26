@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { Entities as BaseEntities } from './modules/root/entities';
 import { Entities as AuthEntities } from './modules/auth/entities';
+import { Entities as AuditEntities } from './modules/audit/entities';
 import { Entities as SpotifyEntities } from './modules/spotify/entities';
 import { Entities as LightsEntities } from './modules/lights/entities';
 import { Entities as InfoScreenEntities } from './modules/infoscreen/entities';
@@ -22,6 +23,7 @@ const dataSource = new DataSource({
   entities: [
     ...BaseEntities,
     ...AuthEntities,
+    ...AuditEntities,
     ...SpotifyEntities,
     ...LightsEntities,
     ...InfoScreenEntities,

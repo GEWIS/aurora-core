@@ -7,6 +7,7 @@ import createHttp from './http';
 import dataSource from './database';
 import HandlerManager from './modules/root/handler-manager';
 import createWebsocket from './socketio';
+import './modules/audit/audit-logger';
 import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
 import { MusicEmitter } from './modules/events';
 import LightsControllerManager from './modules/root/lights-controller-manager';
