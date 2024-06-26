@@ -2,7 +2,7 @@ import logger from '../../logger';
 import { User } from '../auth';
 import AuditService from './audit-service';
 
-logger.audit<User> = (user: User, msg?: string, ...args: any[]): void => {
+export function logAudit(user: User, msg?: string, ...args: any[]): void {
   logger.trace(user, msg, args);
   if (!msg) return;
 
@@ -13,4 +13,6 @@ logger.audit<User> = (user: User, msg?: string, ...args: any[]): void => {
   new AuditService()
     .addLog({ userId: user.id, userName: user.name, action: msg })
     .catch((e) => logger.error(e));
-};
+}
+
+logger.audit<User> = logAudit;
