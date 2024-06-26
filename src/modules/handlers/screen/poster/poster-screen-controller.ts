@@ -1,5 +1,6 @@
 import { Controller } from '@tsoa/runtime';
-import { Body, Get, Post, Put, Query, Route, Security, Tags } from 'tsoa';
+import { Body, Get, Post, Put, Query, Request, Route, Security, Tags } from 'tsoa';
+import { Request as ExpressRequest } from 'express';
 import { PosterScreenHandler } from './poster-screen-handler';
 // eslint-disable-next-line import/no-cycle -- TODO fix cyclic dependency
 import HandlerManager from '../../../root/handler-manager';
@@ -61,7 +62,8 @@ export class PosterScreenController extends Controller {
 
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BOARD])
   @Post('force-update')
-  public async forceUpdatePosters(): Promise<void> {
+  public async forceUpdatePosters(@Request() req: ExpressRequest): Promise<void> {
+    logger.audit(req.user, 'Force fetch posters from source.');
     await this.screenHandler.posterManager.fetchPosters();
     this.screenHandler.forceUpdate();
   }
@@ -84,7 +86,11 @@ export class PosterScreenController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Put('borrel-mode')
-  public async setPosterBorrelMode(@Body() { enabled }: BorrelModeParams): Promise<void> {
+  public async setPosterBorrelMode(
+    @Request() req: ExpressRequest,
+    @Body() { enabled }: BorrelModeParams,
+  ): Promise<void> {
+    logger.audit(req.user, `Set poster screen borrel mode to "${enabled ? 'true' : 'false'}".`);
     this.screenHandler.setBorrelModeEnabled(enabled);
   }
 

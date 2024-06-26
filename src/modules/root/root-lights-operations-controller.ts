@@ -1,9 +1,11 @@
-import { Body, Post, Route, Security, Tags } from 'tsoa';
+import { Body, Post, Request, Route, Security, Tags } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
+import { Request as ExpressRequest } from 'express';
 import HandlerManager from './handler-manager';
 import { LightsGroup } from '../lights/entities';
 import { StrobeProps } from '../lights/effects/color/strobe';
 import { SecurityGroup } from '../../helpers/security';
+import logger from '../../logger';
 
 interface GroupFixtureOverrideParams {
   /**
@@ -35,12 +37,18 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/{id}/strobe/enable')
-  public async enableStrobeOnLightsGroup(id: number, @Body() params: StrobeProps = {}) {
+  public async enableStrobeOnLightsGroup(
+    @Request() req: ExpressRequest,
+    id: number,
+    @Body() params: StrobeProps = {},
+  ) {
     const lightsGroup = this.getGroups().find((g) => g.id === id);
     if (!lightsGroup) {
       this.setStatus(404);
       return;
     }
+
+    logger.audit(req.user, `Enable lights strobe for group "${lightsGroup.name}" (id: ${id}).`);
 
     lightsGroup.enableStrobe(params?.durationMs);
   }
@@ -55,12 +63,14 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/{id}/strobe/disable')
-  public async disableStrobeOnLightsGroup(id: number) {
+  public async disableStrobeOnLightsGroup(@Request() req: ExpressRequest, id: number) {
     const lightsGroup = this.getGroups().find((g) => g.id === id);
     if (!lightsGroup) {
       this.setStatus(404);
       return;
     }
+
+    logger.audit(req.user, `Disable lights strobe for group "${lightsGroup.name}" (id: ${id}).`);
 
     lightsGroup.disableStrobe();
   }
@@ -68,7 +78,6 @@ export class RootLightsOperationsController extends Controller {
   /**
    * Store the next state of all fixtures in the given LightsGroup and do not change them anymore
    * (i.e. freeze the fixture in its current state)
-   * @param id
    */
   @Security('local', [
     SecurityGroup.ADMIN,
@@ -77,19 +86,20 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/{id}/freeze')
-  public async freezeLightsGroup(id: number) {
+  public async freezeLightsGroup(@Request() req: ExpressRequest, id: number) {
     const group = this.getGroups().find((g) => g.id === id);
     if (group === undefined) {
       this.setStatus(404);
       return;
     }
 
+    logger.audit(req.user, `Freeze lights group "${group.name}" (id: ${id}).`);
+
     group.fixtures.forEach((f) => f.fixture.freezeDmx());
   }
 
   /**
    * Unfreeze the DMX values
-   * @param id
    */
   @Security('local', [
     SecurityGroup.ADMIN,
@@ -98,12 +108,14 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/{id}/unfreeze')
-  public async unfreezeLightsGroup(id: number) {
+  public async unfreezeLightsGroup(@Request() req: ExpressRequest, id: number) {
     const group = this.getGroups().find((g) => g.id === id);
     if (group === undefined) {
       this.setStatus(404);
       return;
     }
+
+    logger.audit(req.user, `Unfreeze lights group "${group.name}" (id: ${id}).`);
 
     group.fixtures.forEach((f) => f.fixture.unfreezeDmx());
   }
@@ -115,7 +127,11 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/par/{id}/override')
-  public async setGroupParOverride(id: number, @Body() params: GroupFixtureOverrideParams) {
+  public async setGroupParOverride(
+    @Request() req: ExpressRequest,
+    id: number,
+    @Body() params: GroupFixtureOverrideParams,
+  ) {
     const pars = this.getGroups()
       .map((g) => g.pars)
       .flat();
@@ -125,12 +141,13 @@ export class RootLightsOperationsController extends Controller {
       return;
     }
 
+    logger.audit(req.user, `Override DMX for lights par "${chosenPar.fixture.name}" (id: ${id}).`);
+
     chosenPar.fixture.setOverrideDmx(params.dmxValues);
   }
 
   /**
    * Perform the fixture's internal reset operation if possible. Do nothing otherwise
-   * @param id
    */
   @Security('local', [
     SecurityGroup.ADMIN,
@@ -139,7 +156,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/par/{id}/reset')
-  public async resetGroupPar(id: number) {
+  public async resetGroupPar(@Request() req: ExpressRequest, id: number) {
     const pars = this.getGroups()
       .map((g) => g.pars)
       .flat();
@@ -148,6 +165,8 @@ export class RootLightsOperationsController extends Controller {
       this.setStatus(404);
       return;
     }
+
+    logger.audit(req.user, `Reset lights par "${chosenPar.fixture.name}" (id: ${id}).`);
 
     const success = chosenPar.fixture.reset();
     if (!success) {
@@ -158,7 +177,6 @@ export class RootLightsOperationsController extends Controller {
   /**
    * Store the next state of the fixture and do not change anymore
    * (i.e. freeze the fixture in its current state)
-   * @param id
    */
   @Security('local', [
     SecurityGroup.ADMIN,
@@ -167,7 +185,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/par/{id}/freeze')
-  public async freezeGroupPar(id: number) {
+  public async freezeGroupPar(@Request() req: ExpressRequest, id: number) {
     const pars = this.getGroups()
       .map((g) => g.pars)
       .flat();
@@ -177,12 +195,13 @@ export class RootLightsOperationsController extends Controller {
       return;
     }
 
+    logger.audit(req.user, `Freeze lights par "${chosenPar.fixture.name}" (id: ${id}).`);
+
     chosenPar.fixture.freezeDmx();
   }
 
   /**
    * Unfreeze the DMX values
-   * @param id
    */
   @Security('local', [
     SecurityGroup.ADMIN,
@@ -191,7 +210,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/par/{id}/unfreeze')
-  public async unfreezeGroupPar(id: number) {
+  public async unfreezeGroupPar(@Request() req: ExpressRequest, id: number) {
     const pars = this.getGroups()
       .map((g) => g.pars)
       .flat();
@@ -200,6 +219,8 @@ export class RootLightsOperationsController extends Controller {
       this.setStatus(404);
       return;
     }
+
+    logger.audit(req.user, `Unfreeze lights par "${chosenPar.fixture.name}" (id: ${id}).`);
 
     chosenPar.fixture.unfreezeDmx();
   }
@@ -212,6 +233,7 @@ export class RootLightsOperationsController extends Controller {
   ])
   @Post('group/moving-head-rgb/{id}/override')
   public async setGroupMovingHeadRgbOverride(
+    @Request() req: ExpressRequest,
     id: number,
     @Body() params: GroupFixtureOverrideParams,
   ) {
@@ -224,12 +246,16 @@ export class RootLightsOperationsController extends Controller {
       return;
     }
 
+    logger.audit(
+      req.user,
+      `Override DMX for moving head RGB "${chosenMovingHead.fixture.name}" (id: ${id}).`,
+    );
+
     chosenMovingHead.fixture.setOverrideDmx(params.dmxValues);
   }
 
   /**
    * Perform the fixture's internal reset operation if possible. Do nothing otherwise
-   * @param id
    */
   @Security('local', [
     SecurityGroup.ADMIN,
@@ -238,7 +264,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-rgb/{id}/reset')
-  public async resetGroupMovingHeadRgb(id: number) {
+  public async resetGroupMovingHeadRgb(@Request() req: ExpressRequest, id: number) {
     const movingHeadRgbs = this.getGroups()
       .map((g) => g.movingHeadRgbs)
       .flat();
@@ -247,6 +273,8 @@ export class RootLightsOperationsController extends Controller {
       this.setStatus(404);
       return;
     }
+
+    logger.audit(req.user, `Reset moving head RGB "${chosenMovingHead.fixture.name}" (id: ${id}).`);
 
     const success = chosenMovingHead.fixture.reset();
     if (!success) {
@@ -257,7 +285,6 @@ export class RootLightsOperationsController extends Controller {
   /**
    * Store the next state of the fixture and do not change anymore
    * (i.e. freeze the fixture in its current state)
-   * @param id
    */
   @Security('local', [
     SecurityGroup.ADMIN,
@@ -266,7 +293,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-rgb/{id}/freeze')
-  public async freezeGroupMovingHeadRgb(id: number) {
+  public async freezeGroupMovingHeadRgb(@Request() req: ExpressRequest, id: number) {
     const movingHead = this.getGroups()
       .map((g) => g.movingHeadRgbs)
       .flat();
@@ -276,12 +303,16 @@ export class RootLightsOperationsController extends Controller {
       return;
     }
 
+    logger.audit(
+      req.user,
+      `Freeze moving head RGB "${chosenMovingHead.fixture.name}" (id: ${id}).`,
+    );
+
     chosenMovingHead.fixture.freezeDmx();
   }
 
   /**
    * Unfreeze the DMX values
-   * @param id
    */
   @Security('local', [
     SecurityGroup.ADMIN,
@@ -290,17 +321,22 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-rgb/{id}/unfreeze')
-  public async unfreezeMovingHeadRgb(id: number) {
+  public async unfreezeMovingHeadRgb(@Request() req: ExpressRequest, id: number) {
     const pars = this.getGroups()
       .map((g) => g.movingHeadRgbs)
       .flat();
-    const chosenPar = pars.find((p) => p.id === id);
-    if (chosenPar === undefined) {
+    const chosenMovingHead = pars.find((p) => p.id === id);
+    if (chosenMovingHead === undefined) {
       this.setStatus(404);
       return;
     }
 
-    chosenPar.fixture.unfreezeDmx();
+    logger.audit(
+      req.user,
+      `Unfreeze moving head RGB "${chosenMovingHead.fixture.name}" (id: ${id}).`,
+    );
+
+    chosenMovingHead.fixture.unfreezeDmx();
   }
 
   @Security('local', [
@@ -311,6 +347,7 @@ export class RootLightsOperationsController extends Controller {
   ])
   @Post('group/moving-head-wheel/{id}/override')
   public async setGroupMovingHeadWheelOverride(
+    @Request() req: ExpressRequest,
     id: number,
     @Body() params: GroupFixtureOverrideParams,
   ) {
@@ -323,12 +360,16 @@ export class RootLightsOperationsController extends Controller {
       return;
     }
 
+    logger.audit(
+      req.user,
+      `Override DMX for moving head wheel "${chosenMovingHead.fixture.name}" (id: ${id}).`,
+    );
+
     chosenMovingHead.fixture.setOverrideDmx(params.dmxValues);
   }
 
   /**
    * Perform the fixture's internal reset operation if possible. Do nothing otherwise
-   * @param id
    */
   @Security('local', [
     SecurityGroup.ADMIN,
@@ -337,7 +378,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-wheel/{id}/reset')
-  public async resetGroupMovingHeadWheel(id: number) {
+  public async resetGroupMovingHeadWheel(@Request() req: ExpressRequest, id: number) {
     const movingHeadWheels = this.getGroups()
       .map((g) => g.movingHeadWheels)
       .flat();
@@ -346,6 +387,11 @@ export class RootLightsOperationsController extends Controller {
       this.setStatus(404);
       return;
     }
+
+    logger.audit(
+      req.user,
+      `Reset moving head wheel "${chosenMovingHead.fixture.name}" (id: ${id}).`,
+    );
 
     const success = chosenMovingHead.fixture.reset();
     if (!success) {
@@ -356,7 +402,6 @@ export class RootLightsOperationsController extends Controller {
   /**
    * Store the next state of the fixture and do not change anymore
    * (i.e. freeze the fixture in its current state)
-   * @param id
    */
   @Security('local', [
     SecurityGroup.ADMIN,
@@ -365,7 +410,7 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-wheel/{id}/freeze')
-  public async freezeGroupMovingHeadWheel(id: number) {
+  public async freezeGroupMovingHeadWheel(@Request() req: ExpressRequest, id: number) {
     const movingHead = this.getGroups()
       .map((g) => g.movingHeadRgbs)
       .flat();
@@ -375,12 +420,16 @@ export class RootLightsOperationsController extends Controller {
       return;
     }
 
+    logger.audit(
+      req.user,
+      `Freeze moving head wheel "${chosenMovingHead.fixture.name}" (id: ${id}).`,
+    );
+
     chosenMovingHead.fixture.freezeDmx();
   }
 
   /**
    * Unfreeze the DMX values
-   * @param id
    */
   @Security('local', [
     SecurityGroup.ADMIN,
@@ -389,16 +438,21 @@ export class RootLightsOperationsController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('group/moving-head-wheel/{id}/unfreeze')
-  public async unfreezeMovingHeadWheel(id: number) {
+  public async unfreezeMovingHeadWheel(@Request() req: ExpressRequest, id: number) {
     const pars = this.getGroups()
       .map((g) => g.movingHeadWheels)
       .flat();
-    const chosenPar = pars.find((p) => p.id === id);
-    if (chosenPar === undefined) {
+    const chosenMovingHead = pars.find((p) => p.id === id);
+    if (chosenMovingHead === undefined) {
       this.setStatus(404);
       return;
     }
 
-    chosenPar.fixture.unfreezeDmx();
+    logger.audit(
+      req.user,
+      `Unfreeze moving head wheel "${chosenMovingHead.fixture.name}" (id: ${id}).`,
+    );
+
+    chosenMovingHead.fixture.unfreezeDmx();
   }
 }

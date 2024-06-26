@@ -1,11 +1,13 @@
 import { Controller } from '@tsoa/runtime';
-import { Body, Post, Route, Security, Tags } from 'tsoa';
+import { Body, Post, Request, Route, Security, Tags } from 'tsoa';
+import { Request as ExpressRequest } from 'express';
 import SetEffectsHandler from './set-effects-handler';
 import HandlerManager from '../../root/handler-manager';
 import { LightsGroup } from '../../lights/entities';
 import { SecurityGroup } from '../../../helpers/security';
 import { LightsEffectsColorCreateParams } from '../../lights/effects/color';
 import { LightsEffectsMovementCreateParams } from '../../lights/effects/movement';
+import logger from '../../../logger';
 
 @Route('handler/lights/set-effects')
 @Tags('Handlers')
@@ -14,6 +16,7 @@ export class SetEffectsController extends Controller {
    * Given a list of color effects to create, add the given effects to the lightsgroup with the
    * given ID. Remove all color effects if an empty array is given
    * @param id
+   * @param req
    * @param effects
    */
   @Security('local', [
@@ -25,6 +28,7 @@ export class SetEffectsController extends Controller {
   @Post('{id}/color')
   public async applyLightsEffectColor(
     id: number,
+    @Request() req: ExpressRequest,
     @Body() effects: LightsEffectsColorCreateParams[],
   ) {
     const handler: SetEffectsHandler | undefined = HandlerManager.getInstance()
@@ -33,6 +37,12 @@ export class SetEffectsController extends Controller {
     if (!handler) throw new Error('SetEffectsHandler not found');
 
     const lightsGroup = handler.entities.find((e) => e.id === id);
+
+    const effectNames = effects.map((e) => `"${e.type}"`);
+    logger.audit(
+      req.user,
+      `Apply color effects ${effectNames} to lights group "${lightsGroup?.name}" (id: ${id}).`,
+    );
 
     if (lightsGroup === undefined) {
       this.setStatus(404);
@@ -48,6 +58,7 @@ export class SetEffectsController extends Controller {
    * Given a list of movement effects to create, add the given effects to the lightsgroup with the
    * given ID. Remove all movement effects if an empty array is given
    * @param id
+   * @param req
    * @param effects
    */
   @Security('local', [
@@ -59,6 +70,7 @@ export class SetEffectsController extends Controller {
   @Post('{id}/movement')
   public async applyLightsEffectMovement(
     id: number,
+    @Request() req: ExpressRequest,
     @Body() effects: LightsEffectsMovementCreateParams[],
   ) {
     const handler: SetEffectsHandler | undefined = HandlerManager.getInstance()
@@ -67,6 +79,12 @@ export class SetEffectsController extends Controller {
     if (!handler) throw new Error('SetEffectsHandler not found');
 
     const lightsGroup = handler.entities.find((e) => e.id === id);
+
+    const effectNames = effects.map((e) => `"${e.type}"`);
+    logger.audit(
+      req.user,
+      `Apply movement effects ${effectNames} to lights group "${lightsGroup?.name}" (id: ${id}).`,
+    );
 
     if (lightsGroup === undefined) {
       this.setStatus(404);

@@ -1,5 +1,6 @@
 import { Controller, Path } from '@tsoa/runtime';
-import { Body, Get, Post, Route, Security, Tags } from 'tsoa';
+import { Body, Get, Post, Request, Route, Security, Tags } from 'tsoa';
+import { Request as ExpressRequest } from 'express';
 import HandlerManager from './handler-manager';
 import { Audio, Screen } from './entities';
 import RootAudioService, { AudioResponse } from './root-audio-service';
@@ -8,6 +9,7 @@ import RootLightsService, { LightsGroupResponse } from './root-lights-service';
 import RootScreenService, { ScreenResponse } from './root-screen-service';
 import { SecurityGroup } from '../../helpers/security';
 import HandlerService from './handler-service';
+import logger from '../../logger';
 
 interface HandlerResponse<T> {
   entities: T[];
@@ -46,12 +48,18 @@ export class HandlerController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('audio/{id}')
-  public async setAudioHandler(@Path() id: number, @Body() params: NewHandlerParams) {
+  public async setAudioHandler(
+    @Request() req: ExpressRequest,
+    @Path() id: number,
+    @Body() params: NewHandlerParams,
+  ) {
     const audio = await new RootAudioService().getSingleAudio(id);
     if (audio == null) {
       this.setStatus(404);
       return;
     }
+
+    logger.audit(req.user, `Change "${audio.name}" (id: ${id}) audio handler to "${params.name}".`);
 
     const found = this.handlersManager.registerHandler(audio, params.name);
     if (!found) {
@@ -78,12 +86,21 @@ export class HandlerController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('lights/{id}')
-  public async setLightsHandler(@Path() id: number, @Body() params: NewHandlerParams) {
+  public async setLightsHandler(
+    @Request() req: ExpressRequest,
+    @Path() id: number,
+    @Body() params: NewHandlerParams,
+  ) {
     const group = await new RootLightsService().getSingleLightsGroup(id);
     if (group == null) {
       this.setStatus(404);
       return;
     }
+
+    logger.audit(
+      req.user,
+      `Change "${group.name}" (id: ${id}) lights group handler to "${params.name}".`,
+    );
 
     const found = this.handlersManager.registerHandler(group, params.name);
     if (!found) {
@@ -108,12 +125,21 @@ export class HandlerController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('screen/{id}')
-  public async setScreenHandler(@Path() id: number, @Body() params: NewHandlerParams) {
+  public async setScreenHandler(
+    @Request() req: ExpressRequest,
+    @Path() id: number,
+    @Body() params: NewHandlerParams,
+  ) {
     const screen = await new RootScreenService().getSingleScreen(id);
     if (screen == null) {
       this.setStatus(404);
       return;
     }
+
+    logger.audit(
+      req.user,
+      `Change "${screen.name}" (id: ${id}) screen handler to "${params.name}".`,
+    );
 
     const found = this.handlersManager.registerHandler(screen, params.name);
     if (!found) {
@@ -128,7 +154,8 @@ export class HandlerController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('all/reset-to-defaults')
-  public async resetAllHandlersToDefaults() {
+  public async resetAllHandlersToDefaults(@Request() req: ExpressRequest) {
+    logger.audit(req.user, `Reset all handlers to default state.`);
     await new HandlerService().resetToDefaults();
   }
 }

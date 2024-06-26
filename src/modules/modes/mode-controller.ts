@@ -1,6 +1,7 @@
-import { Body, Delete, Post, Route, Security, SuccessResponse, Tags } from 'tsoa';
+import { Body, Delete, Post, Request, Route, Security, SuccessResponse, Tags } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import { In } from 'typeorm';
+import { Request as ExpressRequest } from 'express';
 import ModeManager from './mode-manager';
 import SubscribeEntity from '../root/entities/subscribe-entity';
 import { LightsGroup } from '../lights/entities';
@@ -11,6 +12,7 @@ import dataSource from '../../database';
 import { SecurityGroup } from '../../helpers/security';
 import { HttpStatusCode } from '../../helpers/customError';
 import TimeTrailRaceMode from './time-trail-race/time-trail-race-mode';
+import logger from '../../logger';
 
 interface EnableModeParams {
   lightsGroupIds: number[];
@@ -62,7 +64,8 @@ export class ModeController extends Controller {
   ])
   @Delete('')
   @SuccessResponse(HttpStatusCode.Ok)
-  public disableAllModes() {
+  public disableAllModes(@Request() req: ExpressRequest) {
+    logger.audit(req.user, 'Disable all modes.');
     this.modeManager.reset();
   }
 
@@ -77,7 +80,12 @@ export class ModeController extends Controller {
   ])
   @Post('centurion')
   @SuccessResponse(HttpStatusCode.NoContent)
-  public async enableCenturion(@Body() params: CenturionParams): Promise<string> {
+  public async enableCenturion(
+    @Request() req: ExpressRequest,
+    @Body() params: CenturionParams,
+  ): Promise<string> {
+    logger.audit(req.user, `Enable Centurion mode with tape "${params.centurionName}".`);
+
     const { lights, screens, audios } = await this.mapBodyToEntities(params);
 
     const centurionMode = new CenturionMode(lights, screens, audios);
@@ -102,7 +110,8 @@ export class ModeController extends Controller {
   ])
   @Delete('centurion')
   @SuccessResponse(HttpStatusCode.Ok)
-  public disableCenturion() {
+  public disableCenturion(@Request() req: ExpressRequest) {
+    logger.audit(req.user, 'Disable Centurion mode.');
     this.modeManager.disableMode(CenturionMode, 'centurion');
   }
 
@@ -112,7 +121,12 @@ export class ModeController extends Controller {
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('time-trail-race')
   @SuccessResponse(HttpStatusCode.NoContent)
-  public async enableTimeTrailRace(@Body() params: TimeTrailRaceParams): Promise<string> {
+  public async enableTimeTrailRace(
+    @Request() req: ExpressRequest,
+    @Body() params: TimeTrailRaceParams,
+  ): Promise<string> {
+    logger.audit(req.user, `Enable Spoelbakkenrace mode for "${params.sessionName}".`);
+
     const { lights, screens, audios } = await this.mapBodyToEntities(params);
 
     const timeTrailRaceMode = new TimeTrailRaceMode(lights, screens, audios);
@@ -126,7 +140,8 @@ export class ModeController extends Controller {
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Delete('time-trail-race')
   @SuccessResponse(HttpStatusCode.Ok)
-  public disableTimeTrailRacing() {
+  public disableTimeTrailRacing(@Request() req: ExpressRequest) {
+    logger.audit(req.user, 'Disable Spoelbakkenrace mode.');
     this.modeManager.disableMode(TimeTrailRaceMode, 'time-trail-racing');
   }
 }

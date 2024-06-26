@@ -9,6 +9,7 @@ passport.use(
     // req.login()
 
     callback(null, {
+      id: req.body.id ?? 'dev',
       name: req.body.name ?? 'dev',
       roles: req.body.roles ?? [SecurityGroup.ADMIN],
     });

@@ -1,11 +1,13 @@
-import { Body, Get, Post, Response, Route, Security, SuccessResponse, Tags } from 'tsoa';
+import { Body, Get, Post, Request, Response, Route, Security, SuccessResponse, Tags } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
+import { Request as ExpressRequest } from 'express';
 import ModeManager from '../mode-manager';
 import CenturionMode from './centurion-mode';
 import { SecurityGroup } from '../../../helpers/security';
 import MixTape, { HornData, SongData } from './tapes/mix-tape';
 import tapes from './tapes';
 import ModeDisabledError from '../mode-disabled-error';
+import logger from '../../../logger';
 
 interface SkipCenturionRequest {
   /**
@@ -79,11 +81,13 @@ export class CenturionController extends Controller {
   @SuccessResponse(204, 'Start commands sent')
   @Response<ModeDisabledError>(404, 'Centurion not enabled')
   @Response<string>(428, 'Centurion not yet fully initialized. Please wait and try again later')
-  public startCenturion() {
+  public startCenturion(@Request() req: ExpressRequest) {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
       throw new ModeDisabledError('Centurion not enabled');
     }
+
+    logger.audit(req.user, 'Start Centurion.');
 
     if (!mode.start()) {
       this.setStatus(428);
@@ -104,11 +108,13 @@ export class CenturionController extends Controller {
   @SuccessResponse(204, 'Skip commands sent')
   @Response<string>(400, 'Invalid timestamp provided')
   @Response<ModeDisabledError>(404, 'Centurion not enabled')
-  public skipCenturion(@Body() { seconds }: SkipCenturionRequest) {
+  public skipCenturion(@Request() req: ExpressRequest, @Body() { seconds }: SkipCenturionRequest) {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
       throw new ModeDisabledError('Centurion not enabled');
     }
+
+    logger.audit(req.user, `Skip Centurion to "${seconds}" seconds.`);
 
     mode.skip(seconds);
 
@@ -128,11 +134,13 @@ export class CenturionController extends Controller {
   @Post('stop')
   @SuccessResponse(204, 'Start commands sent')
   @Response<ModeDisabledError>(404, 'Centurion not enabled')
-  public stopCenturion() {
+  public stopCenturion(@Request() req: ExpressRequest) {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
       throw new ModeDisabledError('Centurion not enabled');
     }
+
+    logger.audit(req.user, 'Stop Centurion.');
 
     mode.stop();
     this.setStatus(204);
