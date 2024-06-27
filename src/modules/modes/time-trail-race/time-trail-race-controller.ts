@@ -125,4 +125,18 @@ export class TimeTrailRaceController extends Controller {
 
     return mode.revealScore();
   }
+
+  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Post('reset-player')
+  @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
+  public raceResetPlayer(@Request() req: ExpressRequest) {
+    const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
+    if (mode === undefined) {
+      throw new ModeDisabledError('Time Trail Race not enabled');
+    }
+
+    logger.audit(req.user, `Reset player for Spoelbakkenrace "${mode.sessionName}".`);
+
+    return mode.resetToStartState();
+  }
 }

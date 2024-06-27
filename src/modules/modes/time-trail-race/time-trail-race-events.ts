@@ -36,5 +36,5 @@ export type RaceFinishedEvent = RaceBaseEvent & {
 export type RaceScoreboardEvent = RaceBaseEvent & {
   state: TimeTrailRaceState.SCOREBOARD;
   scoreboard: ScoreboardItem[];
-  player: ScoreboardItem;
+  player?: ScoreboardItem;
 };

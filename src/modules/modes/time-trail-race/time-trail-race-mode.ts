@@ -214,13 +214,9 @@ export default class TimeTrailRaceMode extends BaseMode<
   }
 
   /**
-   * Player's score is revealed and new player can be registered
+   * State is reset to scoreboard state and current player is removed
    */
-  public revealScore() {
-    if (this._state !== TimeTrailRaceState.FINISHED || !this.lastScore) {
-      throw new InvalidStateError('Time Trail Race not in FINISHED state');
-    }
-
+  public resetToStartState() {
     this._state = TimeTrailRaceState.SCOREBOARD;
     const event: RaceScoreboardEvent = {
       state: this._state,
@@ -234,8 +230,19 @@ export default class TimeTrailRaceMode extends BaseMode<
     this.lightsHandler.setLightsToParty();
     this.spotify.resumePlayback();
 
-    logger.trace('Time Trail Race score revealed');
+    return event;
+  }
 
+  /**
+   * Player's score is revealed and new player can be registered
+   */
+  public revealScore() {
+    if (this._state !== TimeTrailRaceState.FINISHED || !this.lastScore) {
+      throw new InvalidStateError('Time Trail Race not in FINISHED state');
+    }
+
+    const event = this.resetToStartState();
+    logger.trace('Time Trail Race score revealed');
     return event;
   }
 }
