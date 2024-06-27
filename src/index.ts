@@ -9,17 +9,16 @@ import HandlerManager from './modules/root/handler-manager';
 import createWebsocket from './socketio';
 import './modules/audit/audit-logger';
 import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
-import { MusicEmitter } from './modules/events';
 import LightsControllerManager from './modules/root/lights-controller-manager';
 import ModeManager from './modules/modes/mode-manager';
 import { ArtificialBeatGenerator } from './modules/beats/artificial-beat-generator';
 import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
 import { SocketioNamespaces } from './socketio-namespaces';
 import SocketConnectionManager from './modules/root/socket-connection-manager';
-import { BackofficeSyncEmitter } from './modules/events/backoffice-sync-emitter';
 import { activeDirectoryConnect } from './modules/infoscreen/entities/ldap-connector';
 import ServerSettingsStore from './modules/root/server-settings-store';
 import registerCronJobs from './cron';
+import EmitterStore from './modules/events/emitter-store';
 
 async function createApp(): Promise<void> {
   // Fix for production issue where a Docker volume overwrites the contents of a folder instead of merging them
@@ -43,8 +42,7 @@ async function createApp(): Promise<void> {
   const httpServer = createServer(app);
   const io = createWebsocket(httpServer);
 
-  const musicEmitter = new MusicEmitter();
-  const backofficeSyncEmitter = new BackofficeSyncEmitter();
+  const { musicEmitter, backofficeSyncEmitter } = EmitterStore.getInstance();
 
   const handlerManager = HandlerManager.getInstance(io, musicEmitter, backofficeSyncEmitter);
   await handlerManager.init();

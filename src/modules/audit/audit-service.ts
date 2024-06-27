@@ -1,6 +1,8 @@
 import { Repository } from 'typeorm';
 import AuditLogEntry from './entities/audit-log-entry';
 import dataSource from '../../database';
+import EmitterStore from '../events/emitter-store';
+import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 
 export interface GetAuditLogEntryParams {
   /**
@@ -54,8 +56,12 @@ interface PaginatedAuditLogEntryResponse {
 export default class AuditService {
   private repo: Repository<AuditLogEntry>;
 
+  private backofficeEmitter: BackofficeSyncEmitter;
+
   constructor() {
     this.repo = dataSource.getRepository(AuditLogEntry);
+
+    this.backofficeEmitter = EmitterStore.getInstance().backofficeSyncEmitter;
   }
 
   private toAuditLogEntryResponse(entry: AuditLogEntry): AuditLogEntryResponse {
@@ -93,7 +99,7 @@ export default class AuditService {
 
     if (take) {
       return {
-        records,
+        records: records.map(this.toAuditLogEntryResponse),
         pagination: {
           take,
           skip: skip || 0,
@@ -103,7 +109,7 @@ export default class AuditService {
     }
 
     return {
-      records,
+      records: records.map(this.toAuditLogEntryResponse),
       pagination: {
         take: records.length,
         skip: 0,
@@ -117,6 +123,7 @@ export default class AuditService {
    * @param params
    */
   public async addLog(params: CreateAuditLogEntryParams) {
-    await this.repo.save(params);
+    const log = await this.repo.save(params);
+    this.backofficeEmitter.emit('audit_log_create', this.toAuditLogEntryResponse(log));
   }
 }
