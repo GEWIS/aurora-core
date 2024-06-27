@@ -54,11 +54,11 @@ export class CenturionController extends Controller {
 
   @Security('local', ['*'])
   @Get('')
-  @Response<ModeDisabledError>(404, 'Centurion not enabled')
-  public getCenturion(): CenturionResponse {
+  public getCenturion(): CenturionResponse | null {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
-      throw new ModeDisabledError('Centurion not enabled');
+      this.setStatus(204);
+      return null;
     }
 
     return {

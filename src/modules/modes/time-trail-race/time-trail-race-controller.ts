@@ -26,11 +26,10 @@ export class TimeTrailRaceController extends Controller {
     SecurityGroup.SCREEN_SUBSCRIBER,
   ])
   @Get('')
-  @Response<string>(404, 'Time Trail Race not enabled')
   public getRaceState() {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
     if (mode === undefined) {
-      throw new ModeDisabledError('Time Trail Race not enabled');
+      return null;
     }
 
     return {
