@@ -29,7 +29,9 @@ export interface LightsFixtureResponse
   extends Pick<
     LightsFixture,
     'id' | 'createdAt' | 'updatedAt' | 'name' | 'masterDimChannel' | 'shutterChannel'
-  > {}
+  > {
+  canReset: boolean;
+}
 
 // do not remove; tsoa cannot deal with multiple utility types.
 // https://github.com/lukeautry/tsoa/issues/1238
@@ -53,14 +55,22 @@ export interface MovingHeadWheelResponse
   goboRotates: string[];
 }
 
+export interface FixtureInGroupResponse<
+  T extends ParResponse | MovingHeadWheelResponse | MovingHeadRgbResponse,
+> {
+  fixture: T;
+  id: number;
+  firstChannel: number;
+}
+
 export interface BaseLightsGroupResponse
   extends Pick<LightsGroup, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
 
 export interface LightsGroupResponse extends BaseLightsGroupResponse {
   controller: LightsControllerResponse;
-  pars: ParResponse[];
-  movingHeadRgbs: MovingHeadRgbResponse[];
-  movingHeadWheels: MovingHeadWheelResponse[];
+  pars: FixtureInGroupResponse<ParResponse>[];
+  movingHeadRgbs: FixtureInGroupResponse<MovingHeadRgbResponse>[];
+  movingHeadWheels: FixtureInGroupResponse<MovingHeadWheelResponse>[];
 }
 
 export interface ColorParams {
@@ -166,6 +176,7 @@ export default class RootLightsService {
       name: f.name,
       masterDimChannel: f.masterDimChannel + firstChannel - 1,
       shutterChannel: f.shutterChannel + firstChannel - 1,
+      canReset: !!f.resetChannelAndValue,
     };
   }
 
@@ -217,13 +228,21 @@ export default class RootLightsService {
       updatedAt: g.updatedAt,
       name: g.name,
       controller: this.toLightsControllerResponse(g.controller),
-      pars: g.pars.map((p) => this.toParResponse(p.fixture, p.firstChannel)),
-      movingHeadRgbs: g.movingHeadRgbs.map((m) =>
-        this.toMovingHeadRgbResponse(m.fixture, m.firstChannel),
-      ),
-      movingHeadWheels: g.movingHeadWheels.map((m) =>
-        this.toMovingHeadWheelResponse(m.fixture, m.firstChannel),
-      ),
+      pars: g.pars.map((p) => ({
+        fixture: this.toParResponse(p.fixture, p.firstChannel),
+        id: p.id,
+        firstChannel: p.firstChannel,
+      })),
+      movingHeadRgbs: g.movingHeadRgbs.map((m) => ({
+        fixture: this.toMovingHeadRgbResponse(m.fixture, m.firstChannel),
+        id: m.id,
+        firstChannel: m.firstChannel,
+      })),
+      movingHeadWheels: g.movingHeadWheels.map((m) => ({
+        fixture: this.toMovingHeadWheelResponse(m.fixture, m.firstChannel),
+        id: m.id,
+        firstChannel: m.firstChannel,
+      })),
     };
   }
 
