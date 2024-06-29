@@ -8,11 +8,12 @@ COPY ./ ./
 RUN npm run build
 
 # Target image that will be run
-FROM node:20 as target
+FROM node:20-alpine as target
 ENV NODE_ENV production
 
 WORKDIR /app
 COPY ./package.json ./package-lock.json ./
+RUN apk add --no-cache git
 RUN npm ci
 COPY --from=build --chown=node /app/dist /app
 COPY ./public ./public
