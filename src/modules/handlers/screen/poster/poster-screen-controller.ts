@@ -10,6 +10,7 @@ import { SecurityGroup } from '../../../../helpers/security';
 import logger from '../../../../logger';
 import NsTrainsService, { TrainResponse } from './ns-trains-service';
 import GEWISPosterService, { GEWISPhotoAlbumParams } from './gewis-poster-service';
+import OlympicsService from './olympics-service';
 
 interface BorrelModeParams {
   enabled: boolean;
@@ -104,5 +105,11 @@ export class PosterScreenController extends Controller {
   @Post('photo')
   public async getPhoto(@Body() params: GEWISPhotoAlbumParams) {
     return new GEWISPosterService().getPhoto(params);
+  }
+
+  @Security('local', [SecurityGroup.SCREEN_SUBSCRIBER])
+  @Get('olympics/medal-table')
+  public async getMedalTable() {
+    return new OlympicsService().getMedalTable();
   }
 }

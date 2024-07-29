@@ -12,6 +12,7 @@ export enum PosterType {
   BORREL_LOGO = 'borrel-logo',
   BORREL_PRICE_LIST = 'borrel-price-list',
   BORREL_WALL_OF_SHAME = 'borrel-wall-of-shame',
+  OLYMPICS = 'olympics',
 }
 
 export enum FooterSize {
