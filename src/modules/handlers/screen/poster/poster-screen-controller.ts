@@ -109,7 +109,13 @@ export class PosterScreenController extends Controller {
 
   @Security('local', [SecurityGroup.SCREEN_SUBSCRIBER])
   @Get('olympics/medal-table')
-  public async getMedalTable() {
+  public async getOlympicsMedalTable() {
     return new OlympicsService().getMedalTable();
+  }
+
+  @Security('local', [SecurityGroup.SCREEN_SUBSCRIBER])
+  @Get('olympics/country-medals')
+  public async getDutchOlympicMedals() {
+    return new OlympicsService().getDutchMedals();
   }
 }
