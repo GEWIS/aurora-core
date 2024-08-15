@@ -173,7 +173,12 @@ export default class OlympicsService {
       ...s.GoldMedalList.map((m) => parseMedalApiResponse(s.Sport, m, 'gold')),
       ...s.SilverMedalList.map((m) => parseMedalApiResponse(s.Sport, m, 'silver')),
       ...s.BronzeMedalList.map((m) => parseMedalApiResponse(s.Sport, m, 'bronze')),
-    ]).flat();
+    ])
+      .flat()
+      // Shuffle array
+      .map((value) => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
 
     return {
       countryName: body.NOCMedals.NOC.c_Name,
