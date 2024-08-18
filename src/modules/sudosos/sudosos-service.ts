@@ -99,6 +99,7 @@ export default class SudoSOSService {
         userTypes as any,
         'amount',
         'ASC',
+        undefined,
         50,
       )
     ).data;
@@ -146,7 +147,7 @@ export default class SudoSOSService {
 
   public async getPriceList() {
     const posID = ServerSettingsStore.getInstance().getSetting('SudoSOSBorrelmodePOSID');
-    const response = await this.client.pos.getAllPointOfSaleProducts(posID, 100000);
-    return response.data.records.filter((p) => p.priceList);
+    const response = await this.client.pos.getAllPointOfSaleProducts(posID);
+    return response.data.filter((p) => p.priceList);
   }
 }
