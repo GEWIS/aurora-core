@@ -56,12 +56,16 @@ export default class LightsControllerManager {
     setInterval(this.tick.bind(this), Number(process.env.LIGHTS_TICK_INTERVAL) ?? 29);
   }
 
-  private getOldValues(controller: LightsController): number[] {
-    let result = this.lightsControllersValues.get(controller.id);
+  /**
+   * Get the previous send DMX packet
+   * @param controllerId
+   * @private
+   */
+  private getOldValues(controllerId: number): number[] {
+    let result = this.lightsControllersValues.get(controllerId);
     if (result === undefined) {
       result = this.constructNewValuesArray();
-      this.lightsControllersValues.set(controller.id, result);
-      this.lightsControllers.set(controller.id, controller);
+      this.lightsControllersValues.set(controllerId, result);
     }
     return result;
   }
@@ -111,8 +115,8 @@ export default class LightsControllerManager {
    *
    * @private
    */
-  private sendDMXValuesToController() {
-    this.lightsControllersValues.forEach((packet, id) => {
+  private sendDMXValuesToController(controllerValues: Map<number, number[]>) {
+    controllerValues.forEach((packet, id) => {
       const controller = this.lightsControllers.get(id);
       if (!controller) return;
       const socketId = controller.getSocketId(this.websocket.name as SocketioNamespaces);
@@ -141,7 +145,9 @@ export default class LightsControllerManager {
     const newControllerValues = new Map<number, number[]>();
 
     lightGroups.flat().forEach((g) => {
-      const oldValues = this.getOldValues(g.controller);
+      // Update the reference to the controller
+      this.lightsControllers.set(g.controller.id, g.controller);
+      const oldValues = this.getOldValues(g.controller.id);
       let newValues = newControllerValues.get(g.controller.id) ?? this.constructNewValuesArray();
 
       g.pars.forEach((p) => {
@@ -172,14 +178,19 @@ export default class LightsControllerManager {
     });
 
     // If a controller has no active light groups, send only zeroes
+    const controllersToRemove: number[] = [];
     Array.from(this.lightsControllers.keys()).forEach((controllerId) => {
       if (!newControllerValues.has(controllerId)) {
         newControllerValues.set(controllerId, this.constructNewValuesArray());
+        controllersToRemove.push(controllerId);
       }
     });
 
-    this.lightsControllersValues = newControllerValues;
+    this.sendDMXValuesToController(newControllerValues);
     this.previousTick = new Date();
-    this.sendDMXValuesToController();
+    this.lightsControllersValues = newControllerValues;
+
+    // If a controller has no active light groups, remove it after sending the packet
+    controllersToRemove.forEach((controllerId) => this.lightsControllers.delete(controllerId));
   }
 }

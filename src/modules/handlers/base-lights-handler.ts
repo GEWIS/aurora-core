@@ -15,7 +15,7 @@ export default abstract class BaseLightsHandler extends BaseHandler<LightsGroup>
 
   /**
    * Second event loop to calculate the current DMX values.
-   * Always runs at a frequency of 40Hz.
+   * Always runs at a predefined frequency, defined in `LIGHTS_TICK_INTERVAL` (in Hz).
    */
   abstract tick(): LightsGroup[];
 
