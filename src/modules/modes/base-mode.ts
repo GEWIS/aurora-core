@@ -22,20 +22,20 @@ export default abstract class BaseMode<
    * Assign the given entities to the given handlers
    */
   protected constructor(
-    protected lights: LightsGroup[],
-    protected screens: Screen[],
-    protected audios: Audio[],
+    private _lights: LightsGroup[],
+    private _screens: Screen[],
+    private _audios: Audio[],
     protected readonly lightsHandlerName: string,
     protected readonly screenHandlerName: string,
     protected readonly audioHandlerName: string,
   ) {
-    lights.forEach((lightsGroup) => {
+    _lights.forEach((lightsGroup) => {
       this.handlerManager.registerHandler(lightsGroup, lightsHandlerName);
     });
-    screens.forEach((screen) => {
+    _screens.forEach((screen) => {
       this.handlerManager.registerHandler(screen, screenHandlerName);
     });
-    audios.forEach((audio) => {
+    _audios.forEach((audio) => {
       this.handlerManager.registerHandler(audio, audioHandlerName);
     });
 
@@ -62,17 +62,32 @@ export default abstract class BaseMode<
    * Unregister all listeners from the handler corresponding to this mode.
    */
   destroy(): void {
-    this.lights.forEach((lightsGroup) => {
+    this._lights.forEach((lightsGroup) => {
       if (this.handlerManager.getHandler(lightsGroup) !== this.lightsHandlerName) return;
       this.handlerManager.registerHandler(lightsGroup, '');
     });
-    this.screens.forEach((screen) => {
+    this._screens.forEach((screen) => {
       if (this.handlerManager.getHandler(screen) !== this.screenHandlerName) return;
       this.handlerManager.registerHandler(screen, '');
     });
-    this.audios.forEach((audio) => {
+    this._audios.forEach((audio) => {
       if (this.handlerManager.getHandler(audio) !== this.audioHandlerName) return;
       this.handlerManager.registerHandler(audio, '');
     });
+  }
+
+  // Getter function, as we might add more entities to the lightsHandler later
+  get lights(): LightsGroup[] {
+    return this.lightsHandler.entities;
+  }
+
+  // Getter function, as we might add more entities to the screenHandler later
+  get screens(): Screen[] {
+    return this.screenHandler.entities;
+  }
+
+  // Getter function, as we might add more entities to the audioHandler later
+  get audios(): Audio[] {
+    return this.audioHandler.entities;
   }
 }
