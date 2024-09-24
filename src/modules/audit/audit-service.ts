@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { LessThanOrEqual, Repository } from 'typeorm';
 import AuditLogEntry from './entities/audit-log-entry';
 import dataSource from '../../database';
 import EmitterStore from '../events/emitter-store';
@@ -125,5 +125,22 @@ export default class AuditService {
   public async addLog(params: CreateAuditLogEntryParams) {
     const log = await this.repo.save(params);
     this.backofficeEmitter.emit('audit_log_create', this.toAuditLogEntryResponse(log));
+  }
+
+  /**
+   * Delete all audit logs that have passed their maximum age.
+   * This age is defined as environment variable `AUDIT_LOGS_MAX_AGE_DAYS`.
+   */
+  public async removeExpiredAuditLogs() {
+    const maxAgeDays = Number(process.env.AUDIT_LOGS_MAX_AGE_DAYS);
+    if (Number.isNaN(maxAgeDays)) {
+      throw new Error(
+        `"AUDIT_LOGS_MAX_AGE_DAYS" is not an integer variable, "${process.env.AUDIT_LOGS_MAX_AGE_DAYS}" instead`,
+      );
+    }
+
+    const ageDate = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * maxAgeDays);
+    const expired = await this.repo.find({ where: { createdAt: LessThanOrEqual(ageDate) } });
+    await this.repo.remove(expired);
   }
 }

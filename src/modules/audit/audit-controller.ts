@@ -7,7 +7,7 @@ import AuditService, { GetAuditLogEntryParams } from './audit-service';
 export class AuditController extends Controller {
   @Get()
   @Security('local', ['*'])
-  public getAuditLogs(@Queries() params: GetAuditLogEntryParams) {
+  public async getAuditLogs(@Queries() params: GetAuditLogEntryParams) {
     const queryParams = {
       ...params,
       take: params.take ?? 50,
