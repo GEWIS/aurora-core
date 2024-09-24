@@ -70,6 +70,22 @@ export default class LightsControllerManager {
     return result;
   }
 
+  /**
+   * Returns whether the given packet has not been sent to the DMX controller before
+   * @param controllerId ID of the controller to send the packet to
+   * @param packet The new packet
+   * @private
+   */
+  private isNewPacket(controllerId: number, packet: number[]): boolean {
+    const oldPacket = this.getOldValues(controllerId);
+    if (packet.length !== oldPacket.length) return true;
+
+    for (let i = 0; i < packet.length; i += 1) {
+      if (packet[i] !== oldPacket[i]) return true;
+    }
+    return false;
+  }
+
   private get lightsHandlers() {
     return this.handlerManager.getHandlers(LightsGroup) as BaseLightsHandler[];
   }
@@ -118,7 +134,12 @@ export default class LightsControllerManager {
   private sendDMXValuesToController(controllerValues: Map<number, number[]>) {
     controllerValues.forEach((packet, id) => {
       const controller = this.lightsControllers.get(id);
+      // Sanity check
       if (!controller) return;
+
+      // Optimization, as we do not need to send the same packets over the network
+      if (!this.isNewPacket(id, packet)) return;
+
       const socketId = controller.getSocketId(this.websocket.name as SocketioNamespaces);
       this.websocket.sockets.get(socketId || '')?.emit('dmx_packet', packet);
     });
@@ -142,15 +163,22 @@ export default class LightsControllerManager {
   private tick() {
     const lightGroups = this.lightsHandlers.map((h) => h.tick());
 
+    // Create a new mapping from DMX controller ID to DMX packet
     const newControllerValues = new Map<number, number[]>();
 
     lightGroups.flat().forEach((g) => {
       // Update the reference to the controller
       this.lightsControllers.set(g.controller.id, g.controller);
+
+      // Get the old packet, so we can reuse its computed DMX values in case a fixture
+      // has not updated itself
       const oldValues = this.getOldValues(g.controller.id);
+      // Get the new values, either a packet we have already worked on, or a brand new one
+      // consisting of only zeroes.
       let newValues = newControllerValues.get(g.controller.id) ?? this.constructNewValuesArray();
 
       g.pars.forEach((p) => {
+        // Only update fixture in packet if it is in a new state (and thus needs to be updated)
         if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
           newValues = this.calculateNewDmxValues(p, newValues);
         } else {
@@ -159,6 +187,7 @@ export default class LightsControllerManager {
       });
 
       g.movingHeadRgbs.forEach((p) => {
+        // Only update fixture in packet if it is in a new state (and thus needs to be updated)
         if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
           newValues = this.calculateNewDmxValues(p, newValues);
         } else {
@@ -167,6 +196,7 @@ export default class LightsControllerManager {
       });
 
       g.movingHeadWheels.forEach((p) => {
+        // Only update fixture in packet if it is in a new state (and thus needs to be updated)
         if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
           newValues = this.calculateNewDmxValues(p, newValues);
         } else {
@@ -174,19 +204,23 @@ export default class LightsControllerManager {
         }
       });
 
+      // Save the packet in its current state. If other light groups use the same controller,
+      // they will fetch this packet again and update it
       newControllerValues.set(g.controller.id, newValues);
     });
 
-    // If a controller has no active light groups, send only zeroes
     const controllersToRemove: number[] = [];
     Array.from(this.lightsControllers.keys()).forEach((controllerId) => {
       if (!newControllerValues.has(controllerId)) {
+        // If a controller has no active light groups, send only zeroes as a final packet
         newControllerValues.set(controllerId, this.constructNewValuesArray());
+        // But after sending the packet, we should remove this controller reference
         controllersToRemove.push(controllerId);
       }
     });
 
     this.sendDMXValuesToController(newControllerValues);
+    // Update the internal state of the lights controller manager
     this.previousTick = new Date();
     this.lightsControllersValues = newControllerValues;
 
