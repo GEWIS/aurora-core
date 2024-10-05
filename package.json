@@ -9,6 +9,7 @@
     "start": "node dist/src/index.js",
     "tsoa": "tsoa spec-and-routes",
     "gen-client": "npm run gen-client-backoffice && npm run gen-client-client",
+    "gen-client-backoffice-new": "openapi-generator-cli generate -i ./build/swagger.json -g typescript-axios -o ../narrowcasting-backoffice/src/api/ --openapi-normalizer REFACTOR_ALLOF_WITH_PROPERTIES_ONLY=true --skip-validate-spec",
     "gen-client-backoffice": "openapi-ts --input ./build/swagger.json --output ../narrowcasting-backoffice/src/api/",
     "gen-client-client": "openapi-ts --input ./build/swagger.json --output ../narrowcasting-client/src/api/",
     "lint": "eslint ./src --ext .js,.jsx,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore --max-warnings=0",
@@ -23,6 +24,7 @@
   "license": "ISC",
   "dependencies": {
     "@fostertheweb/spotify-web-sdk": "^1.2.3",
+    "@openapitools/openapi-generator-cli": "^2.13.13",
     "@sudosos/sudosos-client": "github:GEWIS/sudosos-client",
     "@tsoa/runtime": "^5.0.0",
     "async-lock": "^1.4.1",
@@ -32,8 +34,10 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "eslint-plugin-import": "^2.31.0",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "global": "^4.4.0",
     "jwt-decode": "^4.0.0",
     "ldapts": "^7.0.11",
     "mysql2": "^3.9.7",
@@ -78,6 +82,6 @@
     "openapi-typescript-codegen": "0.25.0",
     "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.6.2"
   }
 }

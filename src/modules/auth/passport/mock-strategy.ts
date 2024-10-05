@@ -17,5 +17,6 @@ passport.use(
 );
 
 export const mockLogin = (req: ExRequest, res: ExResponse) => {
+  console.log('mocking');
   res.send(req.user).status(200).send();
 };
