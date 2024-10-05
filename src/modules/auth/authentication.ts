@@ -8,7 +8,9 @@ export async function expressAuthentication(
   scopes: string[] = [],
 ): Promise<User> {
   if (securityName === 'local') {
+    console.log(request.isAuthenticated());
     if (!request.isAuthenticated() || request.user === undefined) {
+      console.log('!');
       throw new HttpApiException(HttpStatusCode.Unauthorized, 'You are not logged in.');
     }
     const user = request.user as User;

@@ -1,10 +1,16 @@
+import pino from 'pino';
 import logger from '../../logger';
-import { User } from '../auth';
 import AuditService from './audit-service';
+import { User } from '../auth';
+import LogFn = pino.LogFn;
 
-export function logAudit(user: User, msg?: string, ...args: any[]): void {
-  logger.trace(user, msg, args);
+export function logAudit(user: User | undefined, msg?: string, ...args: any[]): void {
+  if (!user) {
+    logger.trace(msg!, args);
+    return;
+  }
   if (!msg) return;
+  logger.trace<User>(user, msg, args);
 
   if (!user.id || !user.name) {
     logger.error(user, 'Invalid user provided, no id/name present.');
@@ -15,4 +21,4 @@ export function logAudit(user: User, msg?: string, ...args: any[]): void {
     .catch((e) => logger.error(e));
 }
 
-logger.audit<User> = logAudit;
+logger.audit = logAudit as LogFn;
