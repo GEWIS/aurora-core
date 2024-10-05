@@ -1,6 +1,6 @@
-import pino from 'pino';
+import pino, { Logger } from 'pino';
 
-const logger = pino({
+const logger: Logger<'audit'> = pino({
   transport: {
     target: 'pino-pretty',
     options: {

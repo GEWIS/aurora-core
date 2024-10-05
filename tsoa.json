@@ -24,22 +24,8 @@
     "spec": {
       "components": {
         "schemas": {
-          "User": {
-            "dataType": "refObject",
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "roles": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            }
-          },
           "OidcParameters": {
-            "dataType": "refObject",
+            "type": "object",
             "properties": {
               "state": {
                 "type": "string"
@@ -54,7 +40,7 @@
             "additionalProperties": false
           },
           "ApiKeyParameters": {
-            "dataType": "refObject",
+            "type": "object",
             "required": ["key"],
             "properties": {
               "key": {
