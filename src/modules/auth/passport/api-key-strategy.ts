@@ -6,7 +6,7 @@ import { HttpApiException } from '../../../helpers/customError';
 import database from '../../../database';
 import { ApiKey } from '../entities';
 import { SecurityGroup } from '../../../helpers/security';
-import { User } from '../user';
+import { AuthUser } from '../authUser';
 
 passport.use(
   'apikey',
@@ -50,7 +50,7 @@ passport.use(
       audioId: identity.audio?.id,
       screenId: identity.screen?.id,
       lightsControllerId: identity.lightsController?.id,
-    } as User);
+    } as AuthUser);
   }),
 );
 

@@ -1,5 +1,6 @@
 import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
 import { LightsGroup } from '../../entities';
+import { MovementEffects } from './movement-effetcs';
 
 export interface FixedPositionProps {
   /**
@@ -18,7 +19,7 @@ export interface FixedPositionProps {
 }
 
 export type FixedPositionCreateParams = BaseLightsEffectCreateParams & {
-  type: 'FixedPosition';
+  type: MovementEffects.FixedPosition;
   props: FixedPositionProps;
 };
 

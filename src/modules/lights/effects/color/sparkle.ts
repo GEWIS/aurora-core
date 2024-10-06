@@ -2,6 +2,7 @@ import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from 
 import { RgbColor } from '../../color-definitions';
 import { LightsGroup } from '../../entities';
 import { TrackPropertiesEvent } from '../../../events/music-emitter-events';
+import { ColorEffects } from './color-effects';
 
 export interface SparkleProps {
   /**
@@ -32,7 +33,7 @@ export interface SparkleProps {
 }
 
 export type SparkleCreateParams = BaseLightsEffectCreateParams & {
-  type: 'Sparkle';
+  type: ColorEffects.Sparkle;
   props: SparkleProps;
 };
 

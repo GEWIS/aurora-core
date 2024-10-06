@@ -79,8 +79,8 @@ export class CenturionController extends Controller {
   ])
   @Post('start')
   @SuccessResponse(204, 'Start commands sent')
-  @Response<ModeDisabledError>(404, 'Centurion not enabled')
   @Response<string>(428, 'Centurion not yet fully initialized. Please wait and try again later')
+  @Response<ModeDisabledError>(404, 'Centurion not enabled')
   public startCenturion(@Request() req: ExpressRequest) {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
@@ -108,15 +108,15 @@ export class CenturionController extends Controller {
   @SuccessResponse(204, 'Skip commands sent')
   @Response<string>(400, 'Invalid timestamp provided')
   @Response<ModeDisabledError>(404, 'Centurion not enabled')
-  public skipCenturion(@Request() req: ExpressRequest, @Body() { seconds }: SkipCenturionRequest) {
+  public skipCenturion(@Request() req: ExpressRequest, @Body() body: SkipCenturionRequest) {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
       throw new ModeDisabledError('Centurion not enabled');
     }
 
-    logger.audit(req.user, `Skip Centurion to "${seconds}" seconds.`);
+    logger.audit(req.user, `Skip Centurion to "${body.seconds}" seconds.`);
 
-    mode.skip(seconds);
+    mode.skip(body.seconds);
 
     this.setStatus(204);
     return '';

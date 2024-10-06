@@ -1,11 +1,12 @@
 import { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../../entities';
 import BaseRotate, { BaseRotateProps } from './base-rotate';
+import { MovementEffects } from './movement-effetcs';
 
 export interface TableRotateProps extends BaseRotateProps {}
 
 export type TableRotateCreateParams = BaseLightsEffectCreateParams & {
-  type: 'TableRotate';
+  type: MovementEffects.TableRotate;
   props: TableRotateProps;
 };
 

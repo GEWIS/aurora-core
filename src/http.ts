@@ -1,5 +1,5 @@
 import bodyParser from 'body-parser';
-import express, { Response as ExResponse, Request as ExRequest } from 'express';
+import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -70,9 +70,7 @@ export default async function createHttp() {
   app.post('/api/auth/oidc', passport.authenticate('oidc'), oidcResponse);
   app.post('/api/auth/key', passport.authenticate('apikey'), apiKeyResponse);
 
-  app.use('/api-docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) =>
-    res.send(swaggerUi.generateHTML(apiDocs)),
-  );
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDocs));
 
   if (process.env.NODE_ENV === 'development') {
     app.post('/api/auth/mock', passport.authenticate('mock'), mockLogin);

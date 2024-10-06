@@ -14,49 +14,46 @@ export function setupErrorHandler(app: Express) {
     });
   });
 
-  app.use(
-    (err: unknown, req: ExRequest, res: ExResponse, next: NextFunction): ExResponse | void => {
-      if (err instanceof ValidateError) {
-        logger.warn(`Caught '${HttpStatusCode.BadRequest} - Bad Request' for ${req.path}.`);
-        return res.status(HttpStatusCode.BadRequest).json({
-          message: 'Bad Request',
-          details: err?.fields,
-        });
-      }
+  app.use((err: unknown, req: ExRequest, res: ExResponse, next: NextFunction) => {
+    if (err instanceof ValidateError) {
+      logger.warn(`Caught '${HttpStatusCode.BadRequest} - Bad Request' for ${req.path}.`);
+      res.status(HttpStatusCode.BadRequest).json({
+        message: 'Bad Request',
+        details: err?.fields,
+      });
+    }
 
-      if (err instanceof HttpApiException) {
-        logger.warn(`Caught '${err.statusCode} - ${err.name}' for ${req.path}.`);
-        return res.status(err.statusCode).json({
-          message: err.name,
-          details: err.message,
-        });
-      }
+    if (err instanceof HttpApiException) {
+      logger.warn(`Caught '${err.statusCode} - ${err.name}' for ${req.path}.`);
+      res.status(err.statusCode).json({
+        message: err.name,
+        details: err.message,
+      });
+    }
 
-      if (err instanceof TrelloAPIError) {
-        logger.error(`Caught '${err.message} - ${err.name}' for ${req.path}.`);
-        return res.status(500).json('Internal server error.');
-      }
+    if (err instanceof TrelloAPIError) {
+      logger.error(`Caught '${err.message} - ${err.name}' for ${req.path}.`);
+      res.status(500).json('Internal server error.');
+    }
 
-      if (err instanceof AxiosError) {
-        logger.error(`Caught '${err.message} - ${err.name}' for ${req.path}.`);
-        return res.status(500).json('Internal server error.');
-      }
+    if (err instanceof AxiosError) {
+      logger.error(`Caught '${err.message} - ${err.name}' for ${req.path}.`);
+      res.status(500).json('Internal server error.');
+    }
 
-      if (err instanceof ModeDisabledError) {
-        return res.status(404).json(err.message);
-      }
+    if (err instanceof ModeDisabledError) {
+      res.status(404).json(err.message);
+    }
 
-      if (err instanceof InvalidStateError) {
-        return res.status(428).json(err.message);
-      }
+    if (err instanceof InvalidStateError) {
+      res.status(428).json(err.message);
+    }
 
-      if (err) {
-        logger.error(err);
-        return res.status(500).json('Internal server error.');
-      }
+    if (err) {
+      logger.error(err);
+      res.status(500).json('Internal server error.');
+    }
 
-      next();
-      return undefined;
-    },
-  );
+    next();
+  });
 }
