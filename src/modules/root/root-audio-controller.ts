@@ -3,7 +3,6 @@ import { TsoaResponse } from '@tsoa/runtime';
 import { Request as ExpressRequest } from 'express';
 import RootAudioService, { AudioCreateParams, AudioResponse } from './root-audio-service';
 import { SecurityGroup } from '../../helpers/security';
-import { AuthUser } from '../auth';
 import HandlerManager from './handler-manager';
 import { Audio } from './entities';
 import logger from '../../logger';
@@ -37,7 +36,7 @@ export class RootAudioController extends Controller {
     @Body() params: SetAudioPlayingParams,
     @Res() forbiddenResponse: TsoaResponse<403, string>,
   ): Promise<void> {
-    if ((req.user as AuthUser).audioId !== id) {
+    if (req.user!.audioId !== id) {
       forbiddenResponse(403, 'You can only set the playing state of yourself.');
       return;
     }

@@ -7,7 +7,7 @@ import passport from 'passport';
 import { pinoHttp } from 'pino-http';
 import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
-import { SessionMiddleware } from './modules/auth';
+import { AuthUser, SessionMiddleware } from './modules/auth';
 import { oidcResponse } from './modules/auth/passport/oidc-strategy';
 import { mockLogin } from './modules/auth/passport/mock-strategy';
 import { setupErrorHandler } from './error';
@@ -27,6 +27,12 @@ export function customOrigin(
     callback(null, origins);
   } else {
     callback(new Error('No origins defined'), requestOrigin);
+  }
+}
+
+declare global {
+  namespace Express {
+    interface User extends AuthUser {}
   }
 }
 
