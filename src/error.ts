@@ -24,6 +24,11 @@ export function setupErrorHandler(app: Express) {
     }
 
     if (err instanceof HttpApiException) {
+      // Ignore unauthorized errors
+      if (err.statusCode === HttpStatusCode.Unauthorized) {
+        return;
+      }
+
       logger.warn(`Caught '${err.statusCode} - ${err.name}' for ${req.path}.`);
       res.status(err.statusCode).json({
         message: err.name,
