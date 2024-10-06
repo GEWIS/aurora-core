@@ -13,6 +13,6 @@ export class UserController extends Controller {
   @Response<HttpApiException>(HttpStatusCode.NotFound, 'User not found')
   @SuccessResponse(HttpStatusCode.Ok)
   public async getInformation(@Request() req: express.Request): Promise<AuthUser> {
-    return req.user as AuthUser;
+    return req.user!;
   }
 }
