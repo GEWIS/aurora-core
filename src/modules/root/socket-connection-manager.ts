@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 import { Repository } from 'typeorm';
 import AsyncLock from 'async-lock';
 import HandlerManager from './handler-manager';
-import { User } from '../auth';
+import { AuthUser } from '../auth';
 import dataSource from '../../database';
 import { Audio, LightsController, Screen } from './entities';
 import BaseLightsHandler from '../handlers/base-lights-handler';
@@ -101,7 +101,7 @@ export default class SocketConnectionManager {
    * @param socketId
    * @private
    */
-  private async updateSocketId(user: User, namespace: SocketioNamespaces, socketId?: string) {
+  private async updateSocketId(user: AuthUser, namespace: SocketioNamespaces, socketId?: string) {
     if (!SECURE_NAMESPACES.includes(namespace)) {
       // Public, unauthenticated namespace, so we do not have to do anything.
       if (socketId !== undefined) {

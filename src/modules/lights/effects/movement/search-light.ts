@@ -1,6 +1,7 @@
 import { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../../entities';
 import BaseRotate, { BaseRotateProps } from './base-rotate';
+import { MovementEffects } from './movement-effetcs';
 
 export interface SearchLightProps extends BaseRotateProps {
   /**
@@ -12,7 +13,7 @@ export interface SearchLightProps extends BaseRotateProps {
 }
 
 export type SearchLightCreateParams = BaseLightsEffectCreateParams & {
-  type: 'SearchLight';
+  type: MovementEffects.SearchLight;
   props: SearchLightProps;
 };
 

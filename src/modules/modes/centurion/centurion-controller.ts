@@ -1,11 +1,6 @@
 import { Body, Get, Post, Request, Response, Route, Security, SuccessResponse, Tags } from 'tsoa';
-import { Controller, Middlewares } from '@tsoa/runtime';
-import {
-  NextFunction,
-  Request as ExRequest,
-  Request as ExpressRequest,
-  Response as ExResponse,
-} from 'express';
+import { Controller } from '@tsoa/runtime';
+import { Request as ExpressRequest } from 'express';
 import ModeManager from '../mode-manager';
 import CenturionMode from './centurion-mode';
 import { SecurityGroup } from '../../../helpers/security';
@@ -115,9 +110,9 @@ export class CenturionController extends Controller {
   ])
   @Post('start')
   @SuccessResponse(204, 'Start commands sent')
-  @Response<ModeDisabledError>(404, 'Centurion not enabled')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   @Response<string>(428, 'Centurion not yet fully initialized. Please wait and try again later')
+  @Response<ModeDisabledError>(404, 'Centurion not enabled')
   public startCenturion(@Request() req: ExpressRequest) {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
@@ -147,15 +142,14 @@ export class CenturionController extends Controller {
   @Response<ModeDisabledError>(404, 'Centurion not enabled')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   public skipCenturion(@Request() req: ExpressRequest, @Body() body: SkipCenturionRequest) {
-    const { seconds } = body;
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
       throw new ModeDisabledError('Centurion not enabled');
     }
 
-    logger.audit(req.user, `Skip Centurion to "${seconds}" seconds.`);
+    logger.audit(req.user, `Skip Centurion to "${body.seconds}" seconds.`);
 
-    mode.skip(seconds);
+    mode.skip(body.seconds);
 
     this.setStatus(204);
     return '';

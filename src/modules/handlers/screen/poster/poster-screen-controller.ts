@@ -89,10 +89,13 @@ export class PosterScreenController extends Controller {
   @Put('borrel-mode')
   public async setPosterBorrelMode(
     @Request() req: ExpressRequest,
-    @Body() { enabled }: BorrelModeParams,
+    @Body() body: BorrelModeParams,
   ): Promise<void> {
-    logger.audit(req.user, `Set poster screen borrel mode to "${enabled ? 'true' : 'false'}".`);
-    this.screenHandler.setBorrelModeEnabled(enabled);
+    logger.audit(
+      req.user,
+      `Set poster screen borrel mode to "${body.enabled ? 'true' : 'false'}".`,
+    );
+    this.screenHandler.setBorrelModeEnabled(body.enabled);
   }
 
   @Security('local', [SecurityGroup.SCREEN_SUBSCRIBER])

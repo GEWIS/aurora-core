@@ -17,6 +17,8 @@ import { PosterScreenHandler } from '../modules/handlers/screen/poster';
 import SimpleAudioHandler from '../modules/handlers/audio/simple-audio-handler';
 import LightsWheelRotateChannelValue from '../modules/lights/entities/lights-wheel-rotate-channel-value';
 import { FixedPositionCreateParams } from '../modules/lights/effects/movement/fixed-position';
+import { ColorEffects } from '../modules/lights/effects/color/color-effects';
+import { MovementEffects } from '../modules/lights/effects/movement/movement-effetcs';
 
 export default async function seedDatabase() {
   const rootAudioService = new RootAudioService();
@@ -266,14 +268,14 @@ export default async function seedDatabase() {
 }
 
 const borrelRuimte: StaticColorCreateParams = {
-  type: 'StaticColor',
+  type: ColorEffects.StaticColor,
   props: {
     color: RgbColor.RED,
     relativeBrightness: 0.8,
   },
 };
 const borrelBar: StaticColorCreateParams = {
-  type: 'StaticColor',
+  type: ColorEffects.StaticColor,
   props: {
     color: RgbColor.GREEN,
     relativeBrightness: 0.8,
@@ -300,28 +302,28 @@ export async function seedBorrelLights(
   });
 
   const movingHeadRotate: SearchLightCreateParams = {
-    type: 'SearchLight',
+    type: MovementEffects.SearchLight,
     props: {
       radiusFactor: 0.5,
       cycleTime: 15000,
     },
   };
   const movingHeadStatic: FixedPositionCreateParams = {
-    type: 'FixedPosition',
+    type: MovementEffects.FixedPosition,
     props: {
       pan: 111,
       tilt: 18,
     },
   };
   const movingHeadBac: StaticColorCreateParams = {
-    type: 'StaticColor',
+    type: ColorEffects.StaticColor,
     props: {
       color: RgbColor.BLINDINGWHITE,
       gobo: 'BAC',
     },
   };
   const movingHeadBacTilting: StaticColorCreateParams = {
-    type: 'StaticColor',
+    type: ColorEffects.StaticColor,
     props: {
       color: RgbColor.BLINDINGWHITE,
       gobo: 'BAC (light shake)',
@@ -426,7 +428,7 @@ export async function seedOpeningSequence(
   };
 
   const allOfTheLights: SparkleCreateParams = {
-    type: 'Sparkle',
+    type: ColorEffects.Sparkle,
     props: {
       colors: [RgbColor.BLUE],
       ratio: 0.2,
@@ -436,7 +438,7 @@ export async function seedOpeningSequence(
   };
 
   const movingHeadsWhite: StaticColorCreateParams = {
-    type: 'StaticColor',
+    type: ColorEffects.StaticColor,
     props: { color: RgbColor.WHITE },
   };
 
@@ -484,9 +486,12 @@ export async function seedOpeningSequence(
   await registerDim(14000, 27500, 250);
 
   // Keep SearchLight animation on till the moving-head only blackout.
-  await addStep({ type: 'SearchLight', props: { radiusFactor: 1.5 } }, 28000, 189000, [
-    movingHeadsGEWIS,
-  ]);
+  await addStep(
+    { type: MovementEffects.SearchLight, props: { radiusFactor: 1.5 } },
+    28000,
+    189000,
+    [movingHeadsGEWIS],
+  );
 
   // Refrein 1
   await addStep(movingHeadsWhite, 28000, 32000, [movingHeadsGEWIS]);
@@ -514,14 +519,20 @@ export async function seedOpeningSequence(
 
   // Couplet
   await addStep(
-    { type: 'BeatFadeOut', props: { colors: [RgbColor.PURPLE, RgbColor.GREEN], nrBlacks: 1 } },
+    {
+      type: ColorEffects.BeatFadeOut,
+      props: { colors: [RgbColor.PURPLE, RgbColor.GREEN], nrBlacks: 1 },
+    },
     55000,
     5500,
     spots,
   );
   // BLACKOUT (at 1 minute exactly for 2,5 seconds)
   await addStep(
-    { type: 'BeatFadeOut', props: { colors: [RgbColor.PURPLE, RgbColor.GREEN], nrBlacks: 1 } },
+    {
+      type: ColorEffects.BeatFadeOut,
+      props: { colors: [RgbColor.PURPLE, RgbColor.GREEN], nrBlacks: 1 },
+    },
     62500,
     19000,
     spots,
@@ -529,19 +540,22 @@ export async function seedOpeningSequence(
   await addStep(movingHeadsWhite, 63000, 155000, [movingHeadsGEWIS]);
 
   await addStep(allOfTheLights, 81500, 2000, spots);
-  await addStep({ type: 'Wave', props: { color: RgbColor.PINK } }, 83500, 4500, spots);
+  await addStep({ type: ColorEffects.Wave, props: { color: RgbColor.PINK } }, 83500, 4500, spots);
   await addStep(allOfTheLights, 88000, 2000, spots);
-  await addStep({ type: 'Wave', props: { color: RgbColor.PINK } }, 90000, 4800, spots);
+  await addStep({ type: ColorEffects.Wave, props: { color: RgbColor.PINK } }, 90000, 4800, spots);
   await addStep(allOfTheLights, 94800, 1600, spots);
   await addStep(
-    { type: 'Sparkle', props: { colors: [RgbColor.GREEN, RgbColor.BROWN] } },
+    { type: ColorEffects.Sparkle, props: { colors: [RgbColor.GREEN, RgbColor.BROWN] } },
     96000,
     12400,
     spots,
   );
   await addStep(allOfTheLights, 108400, 1600, spots);
   await addStep(
-    { type: 'BeatFadeOut', props: { colors: [RgbColor.ORANGE, RgbColor.LIGHTBLUE], nrBlacks: 1 } },
+    {
+      type: ColorEffects.BeatFadeOut,
+      props: { colors: [RgbColor.ORANGE, RgbColor.LIGHTBLUE], nrBlacks: 1 },
+    },
     110000,
     25800,
     spots,
@@ -549,13 +563,23 @@ export async function seedOpeningSequence(
 
   // Refrein
   await addStep(allOfTheLights, 135800, 1200, spots);
-  await addStep({ type: 'Wave', props: { color: RgbColor.YELLOW } }, 138000, 4000, spots);
+  await addStep(
+    { type: ColorEffects.Wave, props: { color: RgbColor.YELLOW } },
+    138000,
+    4000,
+    spots,
+  );
   await addStep(allOfTheLights, 142000, 2000, spots);
-  await addStep({ type: 'Wave', props: { color: RgbColor.YELLOW } }, 144000, 4000, spots);
+  await addStep(
+    { type: ColorEffects.Wave, props: { color: RgbColor.YELLOW } },
+    144000,
+    4000,
+    spots,
+  );
   await addStep(allOfTheLights, 148000, 2000, spots);
 
   await addStep(
-    { type: 'Sparkle', props: { colors: [RgbColor.BLUE, RgbColor.LIME] } },
+    { type: ColorEffects.Sparkle, props: { colors: [RgbColor.BLUE, RgbColor.LIME] } },
     150000,
     12500,
     spots,
@@ -563,7 +587,7 @@ export async function seedOpeningSequence(
   await addStep(allOfTheLights, 162500, 1000, spots);
   await addStep(
     {
-      type: 'Sparkle',
+      type: ColorEffects.Sparkle,
       props: {
         colors: [RgbColor.GOLD],
         dimDuration: 2000,
@@ -576,14 +600,14 @@ export async function seedOpeningSequence(
     spots,
   );
   await addStep(
-    { type: 'Wave', props: { color: RgbColor.YELLOW, cycleTime: 425 } },
+    { type: ColorEffects.Wave, props: { color: RgbColor.YELLOW, cycleTime: 425 } },
     190500,
     27500,
     spots,
   );
 
   await addStep(movingHeadsWhite, 218000, 26000, [movingHeadsGEWIS]);
-  await addStep({ type: 'SearchLight', props: { cycleTime: 10000 } }, 218000, 26000, [
+  await addStep({ type: MovementEffects.SearchLight, props: { cycleTime: 10000 } }, 218000, 26000, [
     movingHeadsGEWIS,
   ]);
 
@@ -593,25 +617,38 @@ export async function seedOpeningSequence(
     244000,
     250,
     false,
-    { type: 'StaticColor', props: { color: RgbColor.UV } },
-    { type: 'StaticColor', props: { color: RgbColor.UV } },
+    { type: ColorEffects.StaticColor, props: { color: RgbColor.UV } },
+    { type: ColorEffects.StaticColor, props: { color: RgbColor.UV } },
   );
 
-  await addStep({ type: 'SingleFlood', props: { dimMilliseconds: 5000 } }, 244000, 7000, spots);
-  await addStep({ type: 'SingleFlood', props: { dimMilliseconds: 5000 } }, 251000, 7000, spots);
+  await addStep(
+    { type: ColorEffects.SingleFlood, props: { dimMilliseconds: 5000 } },
+    244000,
+    7000,
+    spots,
+  );
+  await addStep(
+    { type: ColorEffects.SingleFlood, props: { dimMilliseconds: 5000 } },
+    251000,
+    7000,
+    spots,
+  );
   await addStep(allOfTheLights, 258000, 1000, spots);
-  await addStep({ type: 'Strobe', props: { durationMs: 3000 } }, 259000, 3000, spots);
+  await addStep({ type: ColorEffects.Strobe, props: { durationMs: 3000 } }, 259000, 3000, spots);
 
   await addStep(
-    { type: 'BeatFadeOut', props: { colors: [RgbColor.RED, RgbColor.CYAN] } },
+    { type: ColorEffects.BeatFadeOut, props: { colors: [RgbColor.RED, RgbColor.CYAN] } },
     262000,
     23000,
     spots,
   );
   await addStep(movingHeadsWhite, 262000, 23000, [movingHeadsGEWIS]);
-  await addStep({ type: 'RandomPosition', props: { beatsToMove: 1 } }, 262000, 23000, [
-    movingHeadsGEWIS,
-  ]);
+  await addStep(
+    { type: MovementEffects.RandomPosition, props: { beatsToMove: 1 } },
+    262000,
+    23000,
+    [movingHeadsGEWIS],
+  );
 
   await addStep(borrelRuimte, 285000, 15000, [room]);
   await addStep(borrelBar, 285000, 15000, [bar]);
