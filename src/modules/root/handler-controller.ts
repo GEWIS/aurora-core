@@ -7,9 +7,10 @@ import RootAudioService, { AudioResponse } from './root-audio-service';
 import { LightsGroup } from '../lights/entities';
 import RootLightsService, { LightsGroupResponse } from './root-lights-service';
 import RootScreenService, { ScreenResponse } from './root-screen-service';
-import { SecurityGroup } from '../../helpers/security';
+import { SecurityNames } from '../../helpers/security';
 import HandlerService from './handler-service';
 import logger from '../../logger';
+import { securityGroups } from '../../helpers/security-groups';
 
 interface HandlerResponse<T> {
   entities: T[];
@@ -31,7 +32,7 @@ export class HandlerController extends Controller {
     this.handlersManager = HandlerManager.getInstance();
   }
 
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.handler.base)
   @Get('audio')
   public getAudioHandlers(): HandlerResponse<AudioResponse>[] {
     return this.handlersManager.getHandlers(Audio).map((h) => ({
@@ -41,12 +42,7 @@ export class HandlerController extends Controller {
     }));
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.handler.privileged)
   @Post('audio/{id}')
   public async setAudioHandler(
     @Request() req: ExpressRequest,
@@ -67,7 +63,7 @@ export class HandlerController extends Controller {
     }
   }
 
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.handler.base)
   @Get('lights')
   public getLightsHandlers(): HandlerResponse<LightsGroupResponse>[] {
     return this.handlersManager.getHandlers(LightsGroup).map((h) => ({
@@ -79,12 +75,7 @@ export class HandlerController extends Controller {
     }));
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.handler.privileged)
   @Post('lights/{id}')
   public async setLightsHandler(
     @Request() req: ExpressRequest,
@@ -108,7 +99,7 @@ export class HandlerController extends Controller {
     }
   }
 
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.handler.base)
   @Get('screen')
   public getScreenHandlers(): HandlerResponse<ScreenResponse>[] {
     return this.handlersManager.getHandlers(Screen).map((h) => ({
@@ -118,12 +109,7 @@ export class HandlerController extends Controller {
     }));
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.handler.privileged)
   @Post('screen/{id}')
   public async setScreenHandler(
     @Request() req: ExpressRequest,
@@ -147,12 +133,7 @@ export class HandlerController extends Controller {
     }
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.BAC,
-    SecurityGroup.AVICO,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.handler.privileged)
   @Post('all/reset-to-defaults')
   public async resetAllHandlersToDefaults(@Request() req: ExpressRequest) {
     logger.audit(req.user, `Reset all handlers to default state.`);

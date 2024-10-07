@@ -2,10 +2,11 @@ import { Body, Controller, Get, Post, Res, Route, Security, Tags, Request } from
 import { TsoaResponse } from '@tsoa/runtime';
 import { Request as ExpressRequest } from 'express';
 import RootAudioService, { AudioCreateParams, AudioResponse } from './root-audio-service';
-import { SecurityGroup } from '../../helpers/security';
+import { SecurityNames } from '../../helpers/security';
 import HandlerManager from './handler-manager';
 import { Audio } from './entities';
 import logger from '../../logger';
+import { securityGroups } from '../../helpers/security-groups';
 
 interface SetAudioPlayingParams {
   playing: boolean;
@@ -14,21 +15,21 @@ interface SetAudioPlayingParams {
 @Route('audio')
 @Tags('Audios')
 export class RootAudioController extends Controller {
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.audio.base)
   @Get()
   public async getAudios(): Promise<AudioResponse[]> {
     const audios = await new RootAudioService().getAllAudios();
     return audios.map((a) => RootAudioService.toAudioResponse(a));
   }
 
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.audio.privileged)
   @Post()
   public async createAudio(@Body() params: AudioCreateParams): Promise<AudioResponse> {
     const audio = await new RootAudioService().createAudio(params);
     return RootAudioService.toAudioResponse(audio);
   }
 
-  @Security('local', [SecurityGroup.AUDIO_SUBSCRIBER])
+  @Security(SecurityNames.LOCAL, securityGroups.audio.subscriber)
   @Post('{id}/playing')
   public async setAudioPlaying(
     id: number,

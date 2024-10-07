@@ -1,5 +1,5 @@
 import passport from 'passport';
-import { AuthUser } from '../authUser';
+import { AuthUser } from '../auth-user';
 
 passport.serializeUser((user, done) => {
   done(null, JSON.stringify(user));
