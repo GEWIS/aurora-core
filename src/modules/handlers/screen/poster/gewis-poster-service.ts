@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { HttpApiException } from '../../../../helpers/customError';
+import { HttpApiException } from '../../../../helpers/custom-error';
 
 export interface GEWISPhotoAlbumParams {
   albumIds: number[];

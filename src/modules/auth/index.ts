@@ -1,4 +1,4 @@
 import './passport';
 
 export { default as SessionMiddleware } from './session-middleware';
-export { AuthUser } from './authUser';
+export { AuthUser } from './auth-user';

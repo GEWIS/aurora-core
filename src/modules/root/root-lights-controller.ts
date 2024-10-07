@@ -19,7 +19,8 @@ import {
   rgbColors,
   RgbColorSpecification,
 } from '../lights/color-definitions';
-import { SecurityGroup } from '../../helpers/security';
+import { SecurityNames } from '../../helpers/security';
+import { securityGroups } from '../../helpers/security-groups';
 
 interface LightsColorResponse {
   color: RgbColor;
@@ -29,14 +30,14 @@ interface LightsColorResponse {
 @Route('lights')
 @Tags('Lights')
 export class RootLightsController extends Controller {
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.light.base)
   @Get('controller')
   public async getLightsControllers(): Promise<LightsControllerResponse[]> {
     const controllers = await new RootLightsService().getAllControllers();
     return controllers.map((c) => RootLightsService.toLightsControllerResponse(c));
   }
 
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.light.base)
   @Get('controller/{id}')
   public async getSingleLightsController(
     id: number,
@@ -49,7 +50,7 @@ export class RootLightsController extends Controller {
     return RootLightsService.toLightsControllerResponse(controller);
   }
 
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.light.privileged)
   @Post('controller')
   public async createLightsController(
     @Body() params: LightsControllerCreateParams,
@@ -57,14 +58,14 @@ export class RootLightsController extends Controller {
     return new RootLightsService().createController(params);
   }
 
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.light.base)
   @Get('group')
   public async getLightsGroups(): Promise<LightsGroupResponse[]> {
     const groups = await new RootLightsService().getAllLightsGroups();
     return groups.map((g) => RootLightsService.toLightsGroupResponse(g));
   }
 
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.light.base)
   @Get('group/{id}')
   public async getSingleLightsGroup(id: number): Promise<LightsGroupResponse | undefined> {
     const group = await new RootLightsService().getSingleLightsGroup(id);
@@ -75,7 +76,7 @@ export class RootLightsController extends Controller {
     return RootLightsService.toLightsGroupResponse(group);
   }
 
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.light.privileged)
   @Post('controller/{controllerId}/group')
   public async createLightsGroup(
     controllerId: number,
@@ -89,28 +90,28 @@ export class RootLightsController extends Controller {
     return RootLightsService.toLightsGroupResponse(group);
   }
 
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.light.privileged)
   @Get('fixture/par')
   public async getAllLightsPars(): Promise<ParResponse[]> {
     const pars = await new RootLightsService().getAllLightsPars();
     return pars.map((p) => RootLightsService.toParResponse(p));
   }
 
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.light.privileged)
   @Post('fixture/par')
   public async createLightsPar(@Body() params: LightsParCreateParams): Promise<ParResponse> {
     const par = await new RootLightsService().createLightsPar(params);
     return RootLightsService.toParResponse(par);
   }
 
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.light.privileged)
   @Get('fixture/moving-head/rgb')
   public async getAllLightsMovingHeadsRgb(): Promise<MovingHeadRgbResponse[]> {
     const movingHeads = await new RootLightsService().getAllMovingHeadRgbs();
     return movingHeads.map((m) => RootLightsService.toMovingHeadRgbResponse(m));
   }
 
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.light.privileged)
   @Post('fixture/moving-head/rgb')
   public async createLightsMovingHeadRgb(
     @Body() params: LightsMovingHeadRgbCreateParams,
@@ -119,14 +120,14 @@ export class RootLightsController extends Controller {
     return RootLightsService.toMovingHeadRgbResponse(movingHead);
   }
 
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.light.privileged)
   @Get('fixture/moving-head/wheel')
   public async getAllLightsMovingHeadsWheel(): Promise<MovingHeadWheelResponse[]> {
     const movingHeads = await new RootLightsService().getAllMovingHeadWheels();
     return movingHeads.map((m) => RootLightsService.toMovingHeadWheelResponse(m));
   }
 
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.light.privileged)
   @Post('fixture/moving-head/wheel')
   public async createLightsMovingHeadWheel(
     @Body() params: LightsMovingHeadWheelCreateParams,
@@ -135,13 +136,13 @@ export class RootLightsController extends Controller {
     return RootLightsService.toMovingHeadWheelResponse(movingHead);
   }
 
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.light.base)
   @Get('effects')
   public getAllLightsEffects() {
     return LIGHTS_EFFECTS.map((e) => e.name);
   }
 
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.light.base)
   @Get('colors')
   public getAllLightsColors(): LightsColorResponse[] {
     return rgbColors.map(
