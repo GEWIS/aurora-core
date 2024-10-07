@@ -6,8 +6,9 @@ import RootLightsService from '../../root/root-lights-service';
 import HandlerManager from '../../root/handler-manager';
 import { LightsGroup } from '../../lights/entities';
 import { ScenesHandler } from './scenes-handler';
-import { SecurityGroup } from '../../../helpers/security';
+import { SecurityNames } from '../../../helpers/security';
 import logger from '../../../logger';
+import { securityGroups } from '../../../helpers/security-groups';
 
 @Route('handler/lights/scenes')
 @Tags('Handlers')
@@ -16,24 +17,14 @@ export class ScenesController extends Controller {
    * Get a list of all scenes
    * @param favorite Whether to return only scenes that are (not) marked as favorite
    */
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.scenes.base)
   @Get('')
   public async getAllScenes(@Query() favorite?: boolean): Promise<LightsSceneResponse[]> {
     const scenes = await new ScenesService().getScenes({ favorite });
     return scenes.map((s) => ScenesService.toSceneResponse(s));
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.scenes.base)
   @Get('{id}')
   public async getSingleScene(id: number): Promise<LightsSceneResponse | undefined> {
     const scene = await new ScenesService().getSingleScene(id);
@@ -50,7 +41,7 @@ export class ScenesController extends Controller {
    * @param params
    * @param invalidSceneResponse
    */
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO])
+  @Security(SecurityNames.LOCAL, securityGroups.scenes.privileged)
   @Post('')
   public async createScene(
     @Request() req: ExpressRequest,
@@ -82,7 +73,7 @@ export class ScenesController extends Controller {
     return ScenesService.toSceneResponse(scene);
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO])
+  @Security(SecurityNames.LOCAL, securityGroups.scenes.privileged)
   @Delete('{id}')
   public async deleteScene(@Request() req: ExpressRequest, id: number) {
     const service = new ScenesService();
@@ -102,12 +93,7 @@ export class ScenesController extends Controller {
    * @param req
    * @param id
    */
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.scenes.base)
   @Post('{id}/apply')
   public async applyScene(@Request() req: ExpressRequest, id: number) {
     const service = new ScenesService();
@@ -131,12 +117,7 @@ export class ScenesController extends Controller {
   /**
    * Clear the scene that is applied to the ScenesHandler
    */
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.scenes.base)
   @Delete('clear')
   public async clearScene(@Request() req: ExpressRequest) {
     const handler: ScenesHandler | undefined = HandlerManager.getInstance()

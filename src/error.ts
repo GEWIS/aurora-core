@@ -1,7 +1,7 @@
 import { Response as ExResponse, Request as ExRequest, NextFunction, Express } from 'express';
 import { ValidateError } from 'tsoa';
 import { AxiosError } from 'axios';
-import { HttpApiException, HttpStatusCode } from './helpers/customError';
+import { HttpApiException, HttpStatusCode } from './helpers/custom-error';
 import logger from './logger';
 import { ApiError as TrelloAPIError } from './modules/handlers/screen/poster/trello/client';
 import ModeDisabledError from './modules/modes/mode-disabled-error';

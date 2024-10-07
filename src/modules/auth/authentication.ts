@@ -1,6 +1,7 @@
 import * as express from 'express';
-import { HttpApiException, HttpStatusCode } from '../../helpers/customError';
-import { AuthUser } from './authUser';
+import { HttpApiException, HttpStatusCode } from '../../helpers/custom-error';
+import { AuthUser } from './auth-user';
+import { SecurityGroup } from '../../helpers/security';
 
 /**
  * Express middleware to authenticate the user
@@ -23,7 +24,7 @@ export async function expressAuthentication(
       return request.user;
     }
     // Should have one overlapping role/scope
-    if (scopes.some((scope) => request.user!.roles.includes(scope))) {
+    if (scopes.some((scope) => request.user!.roles.includes(scope as SecurityGroup))) {
       return request.user;
     }
 

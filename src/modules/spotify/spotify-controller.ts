@@ -5,8 +5,9 @@ import * as querystring from 'querystring';
 import * as crypto from 'crypto';
 import SpotifyApiHandler from './spotify-api-handler';
 import { SpotifyUser } from './entities';
-import { SecurityGroup } from '../../helpers/security';
+import { SecurityNames } from '../../helpers/security';
 import SpotifyTrackHandler from './spotify-track-handler';
+import { securityGroups } from '../../helpers/security-groups';
 
 interface SpotifyUserResponse {
   id: number;
@@ -36,7 +37,7 @@ export class SpotifyController extends Controller {
    * Performs a redirect to the Spotify website
    * @param req
    */
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.spotify.privileged)
   @Get('login')
   public async spotifyLogin(@Request() req: ExpressRequest) {
     const response = req.res;
@@ -56,7 +57,7 @@ export class SpotifyController extends Controller {
     );
   }
 
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.spotify.privileged)
   @Get('callback')
   public async spotifyLoginCallback(
     @Request() req: ExpressRequest,
@@ -88,7 +89,7 @@ export class SpotifyController extends Controller {
   /**
    * Get the currently active Spotify user.
    */
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.spotify.base)
   @Get('user')
   @Response('200', 'Active user')
   @Response('204', 'No user active')
@@ -100,7 +101,7 @@ export class SpotifyController extends Controller {
   /**
    * Get all existing Spotify users
    */
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.spotify.privileged)
   @Get('users')
   public async getAllSpotifyUsers() {
     return (await SpotifyUser.find()).map(this.toResponse.bind(this));
@@ -110,7 +111,7 @@ export class SpotifyController extends Controller {
    * Delete an existing Spotify user
    * @param id
    */
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.spotify.privileged)
   @Delete('users/{id}')
   public async deleteSpotifyUser(id: number) {
     const user = await SpotifyUser.findOne({ where: { id } });
@@ -127,7 +128,7 @@ export class SpotifyController extends Controller {
   /**
    * Get the Spotify profile from the currently active user
    */
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.spotify.base)
   @Get('profile')
   @Response('200', 'Active user')
   @Response('204', 'No user active')
@@ -138,7 +139,7 @@ export class SpotifyController extends Controller {
   /**
    * Get the currently playing track (on Spotify or locally playing). Null if nothing is playing.
    */
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.spotify.base)
   @Get('currently-playing')
   public getSpotifyCurrentlyPlaying() {
     return SpotifyTrackHandler.getInstance().musicEmitter.getCurrentlyPlayingTrack;
