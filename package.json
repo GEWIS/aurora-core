@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"nodemon\" \"nodemon -x npx tsoa spec-and-routes\"",
     "build": "tsoa spec-and-routes && tsc",
-    "start": "node build/src/index.js",
+    "start": "node dist/src/index.js",
     "tsoa": "tsoa spec-and-routes",
     "gen-client": "npm run gen-client-backoffice && npm run gen-client-client",
     "gen-client-backoffice": "openapi-ts --input ./build/swagger.json --output ../narrowcasting-backoffice/src/api/",

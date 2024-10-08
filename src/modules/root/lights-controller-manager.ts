@@ -52,7 +52,7 @@ export default class LightsControllerManager {
 
     musicEmitter.on('features', this.setTrackFeatures.bind(this));
 
-    // Tick rate (currently 40Hz)
+    // Tick rate (currently 35Hz)
     setInterval(this.tick.bind(this), Number(process.env.LIGHTS_TICK_INTERVAL) ?? 29);
   }
 
