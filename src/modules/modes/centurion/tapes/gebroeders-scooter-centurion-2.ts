@@ -78,13 +78,6 @@ const centurion2: MixTape = {
       },
     },
     {
-      timestamp: 309.0,
-      type: 'horn',
-      data: {
-        counter: 3,
-      },
-    },
-    {
       timestamp: 361.3,
       type: 'song',
       data: {
@@ -1353,7 +1346,592 @@ const centurion2: MixTape = {
         counter: 69,
       },
     },
-    // TODO: afmaken vanaf de laatste toeter
+    {
+      timestamp: 4335.0,
+      type: 'song',
+      data: {
+        artist: 'DJ Arnoud & DJ Jasper',
+        title: 'De Soldaat - Party Mix',
+        bpm: 137,
+      },
+    },
+    {
+      timestamp: 4356.6,
+      type: 'song',
+      data: {
+        artist: 'André Hazes Jr.',
+        title: 'Leef',
+        bpm: 137,
+      },
+    },
+    {
+      timestamp: 4384.4,
+      type: 'horn',
+      data: {
+        counter: 70,
+      },
+    },
+    {
+      timestamp: 4385.0,
+      type: 'song',
+      data: {
+        artist: 'Jeroen van der Boom',
+        title: 'Jij Bent Zo',
+        bpm: 137,
+      },
+    },
+    {
+      timestamp: 4422.8,
+      type: 'song',
+      data: [
+        {
+          artist: 'Crazy Frog',
+          title: 'Axel F',
+          bpm: 140,
+        },
+        {
+          artist: 'Big Shaq',
+          title: "Man's Not Hot",
+          bpm: 140,
+        },
+      ],
+    },
+    {
+      timestamp: 4450.5,
+      type: 'horn',
+      data: {
+        counter: 71,
+      },
+    },
+    {
+      timestamp: 4464.2,
+      type: 'song',
+      data: {
+        artist: 'Scoop',
+        title: 'Drop It',
+        bpm: 140,
+      },
+    },
+    {
+      timestamp: 4492.0,
+      type: 'song',
+      data: {
+        artist: 'Vengaboys',
+        title: 'We Like To Party! (The Vengabus)',
+        bpm: 140,
+      },
+    },
+    {
+      timestamp: 4504.0,
+      type: 'horn',
+      data: {
+        counter: 72,
+      },
+    },
+    {
+      timestamp: 4533.0,
+      type: 'song',
+      data: {
+        artist: 'Special D.',
+        title: 'Home Alone',
+        bpm: 140,
+      },
+    },
+    {
+      timestamp: 4450.7,
+      type: 'horn',
+      data: {
+        counter: 73,
+      },
+    },
+    {
+      timestamp: 4588.0,
+      type: 'song',
+      data: {
+        artist: 'Tim Toupet',
+        title: 'Ich bin ein Döner',
+        bpm: 140,
+      },
+    },
+    {
+      timestamp: 4615.5,
+      type: 'horn',
+      data: {
+        counter: 74,
+      },
+    },
+    {
+      timestamp: 4616.0,
+      type: 'song',
+      data: {
+        artist: 'Markus Becker',
+        title: 'Helikopter',
+        bpm: 140,
+      },
+    },
+    {
+      timestamp: 4649.7,
+      type: 'song',
+      data: {
+        artist: 'Jörg & Dragan (Die Autohändler)',
+        title: 'Sonne, Berge, Bier',
+        bpm: 140,
+      },
+    },
+    {
+      timestamp: 4677.3,
+      type: 'horn',
+      data: {
+        counter: 75,
+      },
+    },
+    {
+      timestamp: 4649.7,
+      type: 'song',
+      data: {
+        artist: 'Peter Wackel',
+        title: 'Die Nacht von Freitag auf Montag',
+        bpm: 140,
+      },
+    },
+    {
+      timestamp: 4711.2,
+      type: 'song',
+      data: {
+        artist: 'Almklausi feat. Specktakel',
+        title: 'Mama Laudaaa',
+        bpm: 140,
+      },
+    },
+    {
+      timestamp: 4738.8,
+      type: 'horn',
+      data: {
+        counter: 76,
+      },
+    },
+    {
+      timestamp: 4740.0,
+      type: 'song',
+      data: {
+        artist: 'Edina Menzel',
+        title: 'Let It Go',
+        bpm: 140,
+      },
+    },
+    {
+      timestamp: 4796.2,
+      type: 'horn',
+      data: {
+        counter: 77,
+      },
+    },
+    {
+      timestamp: 4797.0,
+      type: 'song',
+      data: {
+        artist: 'Vlammen - Totally Summer Anthem',
+        title: 'Mr. Polska',
+        bpm: 150,
+      },
+    },
+    {
+      timestamp: 4847.1,
+      type: 'song',
+      data: {
+        artist: 'The Soca Boys feat. Van B. King',
+        title: 'Follow The Leader',
+        bpm: 150,
+      },
+    },
+    {
+      timestamp: 4858.5,
+      type: 'horn',
+      data: {
+        counter: 78,
+      },
+    },
+    {
+      timestamp: 4885.6,
+      type: 'song',
+      data: {
+        artist: 'FeestDJRuud',
+        title: 'Gas Op Die Lollie',
+        bpm: 150,
+      },
+    },
+    {
+      timestamp: 4911.2,
+      type: 'song',
+      data: {
+        artist: 'Snollebollekes feat. Coen & Sander',
+        title: 'Feest Waarvan Ik Morgen Niks Meer Weet',
+        bpm: 150,
+      },
+    },
+    {
+      timestamp: 4922.5,
+      type: 'horn',
+      data: {
+        counter: 79,
+      },
+    },
+    {
+      timestamp: 4967.0,
+      type: 'song',
+      data: {
+        artist: 'Captain Jack',
+        title: 'Captain Jack',
+        bpm: 150,
+      },
+    },
+    {
+      timestamp: 4979.6,
+      type: 'horn',
+      data: {
+        counter: 80,
+      },
+    },
+    {
+      timestamp: 4995.7,
+      type: 'song',
+      data: {
+        artist: 'Macklemore & Ryan Lewis feat. Ray Dalton',
+        title: "Can't Hold Us",
+        bpm: 153,
+      },
+    },
+    {
+      timestamp: 5046.5,
+      type: 'horn',
+      data: {
+        counter: 81,
+      },
+    },
+    {
+      timestamp: 5047.0,
+      type: 'song',
+      data: {
+        artist: 'PartyfrieX feat. Schorre Chef & MC Vals',
+        title: 'Ik Moet Zuipen!',
+        bpm: 153,
+      },
+    },
+    {
+      timestamp: 5111.1,
+      type: 'horn',
+      data: {
+        counter: 82,
+      },
+    },
+    {
+      timestamp: 5112.9,
+      type: 'song',
+      data: {
+        artist: 'Starkoo',
+        title: 'Zo Ver Weg',
+        bpm: 153,
+      },
+    },
+    {
+      timestamp: 5158.9,
+      type: 'horn',
+      data: {
+        counter: 83,
+      },
+    },
+    {
+      timestamp: 5181.6,
+      type: 'song',
+      data: {
+        artist: 'Barry Badpak',
+        title: 'Als Een Toeter',
+        bpm: 153,
+      },
+    },
+    {
+      timestamp: 5217.5,
+      type: 'horn',
+      data: {
+        counter: 84,
+      },
+    },
+    {
+      timestamp: 5219.0,
+      type: 'song',
+      data: {
+        artist: 'Stefan en Sean feat. Bram Krikke',
+        title: 'Zeventien (DJ Ruud & Boevenbende Remix)',
+        bpm: 153,
+      },
+    },
+    {
+      timestamp: 5280.5,
+      type: 'horn',
+      data: {
+        counter: 85,
+      },
+    },
+    {
+      timestamp: 5282.5,
+      type: 'song',
+      data: {
+        artist: 'The Opposites feat. Yellow Claw',
+        title: 'Thunder',
+        bpm: 153,
+      },
+    },
+    {
+      timestamp: 5320.0,
+      type: 'song',
+      data: {
+        artist: 'Buren Van De Brandweer',
+        title: 'Pilsies Voor De Vat',
+        bpm: 153,
+      },
+    },
+    {
+      timestamp: 5345.4,
+      type: 'horn',
+      data: {
+        counter: 86,
+      },
+    },
+    {
+      timestamp: 5370.6,
+      type: 'song',
+      data: {
+        artist: 'Snollebollekes',
+        title: 'Links Rechts',
+        bpm: 153,
+      },
+    },
+    {
+      timestamp: 5408.6,
+      type: 'horn',
+      data: {
+        counter: 87,
+      },
+    },
+    {
+      timestamp: 5437.0,
+      type: 'song',
+      data: {
+        artist: 'Mickie Krause',
+        title: 'Nur noch Schuhe an!',
+        bpm: 153,
+      },
+    },
+    {
+      timestamp: 5460.6,
+      type: 'horn',
+      data: {
+        counter: 88,
+      },
+    },
+    {
+      timestamp: 5500.2,
+      type: 'song',
+      data: {
+        artist: 'Ina Colada',
+        title: 'Wodka mit irgendwas',
+        bpm: 153,
+      },
+    },
+    {
+      timestamp: 5525.3,
+      type: 'horn',
+      data: {
+        counter: 89,
+      },
+    },
+    {
+      timestamp: 5500.2,
+      type: 'song',
+      data: {
+        artist: 'Da Tweekaz',
+        title: 'Jägermeister',
+        bpm: 152,
+      },
+    },
+    {
+      timestamp: 5587.1,
+      type: 'horn',
+      data: {
+        counter: 90,
+      },
+    },
+    {
+      timestamp: 5588.0,
+      type: 'song',
+      data: {
+        artist: 'Zany & DV8',
+        title: 'Vreet Spirit',
+        bpm: 153,
+      },
+    },
+    {
+      timestamp: 5651.8,
+      type: 'horn',
+      data: {
+        counter: 91,
+      },
+    },
+    {
+      timestamp: 5652.0,
+      type: 'song',
+      data: {
+        artist: 'Jebroer feat. Paul Elstak',
+        title: 'Kind Van De Duivel',
+        bpm: 153,
+      },
+    },
+    {
+      timestamp: 5677.1,
+      type: 'song',
+      data: {
+        artist: 'Paul Elstak',
+        title: 'The Promised Land',
+        bpm: 163,
+      },
+    },
+    {
+      timestamp: 5701.5,
+      type: 'horn',
+      data: {
+        counter: 92,
+      },
+    },
+    {
+      timestamp: 5725.3,
+      type: 'song',
+      data: {
+        artist: 'Dune',
+        title: 'Hardcore Vibes',
+        bpm: 163,
+      },
+    },
+    {
+      timestamp: 5764.2,
+      type: 'horn',
+      data: {
+        counter: 93,
+      },
+    },
+    {
+      timestamp: 5776.2,
+      type: 'song',
+      data: {
+        artist: 'a-ha',
+        title: 'Take on Me',
+        bpm: 163,
+      },
+    },
+    {
+      timestamp: 5822.3,
+      type: 'horn',
+      data: {
+        counter: 94,
+      },
+    },
+    {
+      timestamp: 5845.3,
+      type: 'song',
+      data: {
+        artist: 'Technohead',
+        title: 'I Wanna Be a Hippy',
+        bpm: 173,
+      },
+    },
+    {
+      timestamp: 5878.9,
+      type: 'song',
+      data: {
+        artist: 'Gabber Piet',
+        title: 'Hakke & Zage',
+        bpm: 173,
+      },
+    },
+    {
+      timestamp: 5888.4,
+      type: 'horn',
+      data: {
+        counter: 95,
+      },
+    },
+    {
+      timestamp: 5878.9,
+      type: 'song',
+      data: {
+        artist: 'Hakkuhbar',
+        title: 'Super Gabber',
+        bpm: 175,
+      },
+    },
+    {
+      timestamp: 5911.9,
+      type: 'song',
+      data: {
+        artist: '???',
+        title: '???',
+        bpm: 180,
+      },
+    },
+    {
+      timestamp: 5942.6,
+      type: 'horn',
+      data: {
+        counter: 96,
+      },
+    },
+    {
+      timestamp: 5969.4,
+      type: 'song',
+      data: {
+        artist: 'Krezip',
+        title: 'I Would Stay',
+        bpm: 100,
+      },
+    },
+    {
+      timestamp: 6004.2,
+      type: 'song',
+      data: {
+        artist: 'Scooter',
+        title: 'Bit A Bad Boy',
+        bpm: 153,
+      },
+    },
+    {
+      timestamp: 6017.0,
+      type: 'horn',
+      data: {
+        counter: 97,
+      },
+    },
+    {
+      timestamp: 6057.0,
+      type: 'song',
+      data: {
+        artist: 'Andre Hazes',
+        title: 'Bloed, Zweet en Tranen',
+        bpm: 69,
+      },
+    },
+    {
+      timestamp: 6071.2,
+      type: 'horn',
+      data: {
+        counter: 98,
+      },
+    },
+    {
+      timestamp: 6127.6,
+      type: 'horn',
+      data: {
+        counter: 99,
+      },
+    },
   ],
 };
 
