@@ -1,10 +1,11 @@
 import { Server as SocketIoServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import passport from 'passport';
 import { DefaultEventsMap, EventsMap } from 'socket.io/dist/typed-events';
 import { SessionMiddleware, User } from './modules/auth';
 import { customOrigin, enableCors } from './http';
+import { SECURE_NAMESPACES } from './socketio-namespaces';
 
 const devEnv = process.env.NODE_ENV === 'development';
 
@@ -64,16 +65,18 @@ export default function createWebsocket(httpServer: HttpServer) {
   // Code taken from https://socket.io/how-to/use-with-passport
   io.engine.use(onlyForHandshake(SessionMiddleware.getInstance().get()));
   io.engine.use(onlyForHandshake(passport.session()));
-  io.engine.use(
-    onlyForHandshake((req: Request, res: Response, next: NextFunction) => {
-      if (req.user) {
-        next();
+
+  SECURE_NAMESPACES.forEach((namespace) => {
+    // Only allow authenticated users to access secure namespaces
+    io.of(namespace).use((socket, next) => {
+      const { user } = socket.request as unknown as Express.Request;
+      if (!user) {
+        next(new Error('Access denied'));
       } else {
-        res.writeHead(401);
-        res.end();
+        next();
       }
-    }),
-  );
+    });
+  });
 
   return io;
 }
