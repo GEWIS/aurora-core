@@ -63,7 +63,7 @@ export class SpotifyController extends Controller {
     @Query() state: string,
     @Query() code?: string,
     @Query() error?: string,
-  ) {
+  ): Promise<any> {
     const { spotifyOAuthState } = req.signedCookies;
     if (state !== spotifyOAuthState) {
       this.setStatus(422);
@@ -131,7 +131,7 @@ export class SpotifyController extends Controller {
   @Get('profile')
   @Response('200', 'Active user')
   @Response('204', 'No user active')
-  public getSpotifyProfile() {
+  public getSpotifyProfile(): any {
     return SpotifyApiHandler.getInstance().client?.currentUser.profile();
   }
 

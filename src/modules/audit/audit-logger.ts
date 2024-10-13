@@ -15,4 +15,5 @@ export function logAudit(user: User, msg?: string, ...args: any[]): void {
     .catch((e) => logger.error(e));
 }
 
+// @ts-ignore
 logger.audit<User> = logAudit;

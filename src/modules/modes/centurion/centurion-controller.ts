@@ -108,7 +108,8 @@ export class CenturionController extends Controller {
   @SuccessResponse(204, 'Skip commands sent')
   @Response<string>(400, 'Invalid timestamp provided')
   @Response<ModeDisabledError>(404, 'Centurion not enabled')
-  public skipCenturion(@Request() req: ExpressRequest, @Body() { seconds }: SkipCenturionRequest) {
+  public skipCenturion(@Request() req: ExpressRequest, @Body() body: SkipCenturionRequest) {
+    const { seconds } = body;
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
       throw new ModeDisabledError('Centurion not enabled');
