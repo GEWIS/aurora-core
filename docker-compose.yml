@@ -1,7 +1,7 @@
 version: '2'
 services:
   backoffice:
-    build: ../narrowcasting-backoffice
+    build: ../aurora-backoffice
     image: abc.docker-registry.gewis.nl/nc/aurora/backoffice:latest
     restart: 'unless-stopped'
     ports:
@@ -12,7 +12,7 @@ services:
       - posters:/usr/src/app/data/posters
       - audio:/usr/src/app/data/audio
   client:
-    build: ../narrowcasting-client
+    build: ../aurora-client
     image: abc.docker-registry.gewis.nl/nc/aurora/client:latest
     restart: 'unless-stopped'
     networks:
