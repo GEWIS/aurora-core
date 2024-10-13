@@ -27,6 +27,7 @@ const centurion2: MixTape = {
       data: {
         artist: 'Lou bega',
         title: 'Mambo no. 5',
+        bpm: 90,
       },
     },
     {
@@ -69,7 +70,8 @@ const centurion2: MixTape = {
       },
     },
     {
-      timestamp: 259.0,
+      // TODO: fix
+      timestamp: 309.5,
       type: 'song',
       data: {
         artist: 'Nielson',
@@ -1322,7 +1324,7 @@ const centurion2: MixTape = {
       },
     },
     {
-      timestamp: 4235.5,
+      timestamp: 4264.0,
       type: 'song',
       data: {
         artist: 'Kinderen voor Kinderen',
@@ -1438,7 +1440,7 @@ const centurion2: MixTape = {
       },
     },
     {
-      timestamp: 4450.7,
+      timestamp: 4560.7,
       type: 'horn',
       data: {
         counter: 73,
@@ -1661,7 +1663,7 @@ const centurion2: MixTape = {
       type: 'song',
       data: {
         artist: 'Stefan en Sean feat. Bram Krikke',
-        title: 'Zeventien (DJ Ruud & Boevenbende Remix)',
+        title: 'Potentie (DJ Ruud & Boevenbende Remix)',
         bpm: 153,
       },
     },
@@ -1819,7 +1821,7 @@ const centurion2: MixTape = {
       },
     },
     {
-      timestamp: 5776.2,
+      timestamp: 5878.7,
       type: 'song',
       data: {
         artist: 'a-ha',

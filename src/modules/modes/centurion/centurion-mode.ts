@@ -122,8 +122,6 @@ export default class CenturionMode extends BaseMode<
       songs = song;
     }
 
-    this.beatGenerator.start(songs[0].bpm ?? 130);
-
     this.musicEmitter.emitAudio(
       'change_track',
       songs.map((s) => ({
@@ -156,6 +154,21 @@ export default class CenturionMode extends BaseMode<
         return previous <= factor && previous + effect.probability > factor;
       })?.effect || BeatFadeOut.build({ colors, enableFade: false })
     );
+  }
+
+  /**
+   * Change the beatgenerator BPM to the speed defined in the song, if it exists
+   * @param songData
+   * @private
+   */
+  private setBpm(songData: SongData | SongData[]) {
+    let bpm: number | undefined;
+    if (Array.isArray(songData)) {
+      bpm = songData.find((s) => s.bpm !== undefined)?.bpm;
+    } else {
+      bpm = songData.bpm;
+    }
+    if (bpm) this.beatGenerator.start(bpm);
   }
 
   /**
@@ -194,6 +207,7 @@ export default class CenturionMode extends BaseMode<
         }
       });
       this.screenHandler.changeColors(colorNames);
+      this.setBpm(event.data);
       this.emitSong(event.data);
     } else if (event.type === 'effect') {
       this.lights.forEach((l) => {
