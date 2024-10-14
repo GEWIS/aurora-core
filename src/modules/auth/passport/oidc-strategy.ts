@@ -39,8 +39,18 @@ passport.use(
       );
     }
 
+    const oidcConfigRes = await fetch(process.env.OIDC_CONFIG);
+    let oidcConfig;
+
+    try {
+        oidcConfig = await oidcConfigRes.json();
+    } catch (e) {
+        logger.error(e);
+        req.res?.sendStatus(500);
+    }
+
     const oidcResponse = await fetch(
-      'https://auth.gewis.nl/realms/GEWISWG/protocol/openid-connect/token',
+        oidcConfig.authorization_endpoint,
       {
         method: 'POST',
         body: new URLSearchParams({
