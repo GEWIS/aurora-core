@@ -40,7 +40,7 @@ passport.use(
       );
     }
 
-    const oidcConfigRes = await fetch(process.env.OIDC_CONFIG);
+    const oidcConfigRes = await fetch(process.env.OIDC_CONFIG!);
     let oidcConfig;
 
     try {
@@ -83,9 +83,15 @@ passport.use(
               oidcRoles = tokenDetails.roles
               break;
           }
+          default: {
+              throw new HttpApiException(
+                  HttpStatusCode.InternalServerError,
+                  'Invalid OIDC provider configured.',
+              );
+          }
       }
 
-      const securityRoles = parseRoles(oidcRoles);
+      const securityRoles = parseRoles(oidcRoles!);
 
       if (securityRoles.length === 0) {
         req.res?.sendStatus(403);
