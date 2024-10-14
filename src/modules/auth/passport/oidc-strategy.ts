@@ -5,6 +5,7 @@ import { Strategy as CustomStrategy } from 'passport-custom';
 import { HttpApiException, HttpStatusCode } from '../../../helpers/customError';
 import logger from '../../../logger';
 import { parseRoles } from '../../../helpers/security';
+import AuthService from '../auth-service';
 
 export interface AuthStoreToken {
   exp: number;
@@ -40,18 +41,17 @@ passport.use(
       );
     }
 
-    const oidcConfigRes = await fetch(process.env.OIDC_CONFIG!);
     let oidcConfig;
 
     try {
-        oidcConfig = await oidcConfigRes.json();
+        oidcConfig = await new AuthService().getOIDCConfig();
     } catch (e) {
         logger.error(e);
         req.res?.sendStatus(500);
     }
 
     const oidcResponse = await fetch(
-        oidcConfig.authorization_endpoint,
+        oidcConfig!.token_endpoint,
       {
         method: 'POST',
         body: new URLSearchParams({
@@ -69,6 +69,7 @@ passport.use(
 
     try {
       const oidcData = await oidcResponse.json();
+
       const tokenDetails = jwtDecode<AuthStoreToken>(oidcData!.id_token);
       let oidcRoles;
 

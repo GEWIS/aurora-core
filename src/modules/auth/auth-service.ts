@@ -4,6 +4,11 @@ import { ApiKey } from './entities';
 import dataSource from '../../database';
 import { Audio, LightsController, Screen } from '../root/entities';
 
+export interface OidcConfig {
+  authorization_endpoint: string;
+  token_endpoint: string;
+}
+
 export interface GenerateApiKeyParams {
   audio?: Audio | null;
   screen?: Screen | null;
@@ -42,5 +47,10 @@ export default class AuthService {
     return this.apiKeyRepository.findOne({
       where: { lightsController: { id: lightsController.id } },
     });
+  }
+
+  public async getOIDCConfig(): Promise<OidcConfig> {
+    const oidcConfigRes = await fetch(process.env.OIDC_CONFIG!);
+    return await oidcConfigRes.json();
   }
 }
