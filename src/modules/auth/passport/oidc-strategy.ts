@@ -55,9 +55,9 @@ passport.use(
         method: 'POST',
         body: new URLSearchParams({
           grant_type: 'authorization_code',
-          client_id: process.env.KEYCLOAK_CLIENT_ID!,
-          client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
-          redirect_uri: process.env.KEYCLOAK_REDIRECT_URI!,
+          client_id: process.env.OIDC_CLIENT_ID!,
+          client_secret: process.env.OIDC_CLIENT_SECRET!,
+          redirect_uri: process.env.OIDC_REDIRECT_URI!,
           code: req.body.code,
         }),
         headers: {
@@ -70,7 +70,7 @@ passport.use(
       const oidcData = await oidcResponse.json();
       const tokenDetails = jwtDecode<AuthStoreToken>(oidcData!.id_token);
       const oidcRoles = tokenDetails.resource_access
-        ? tokenDetails.resource_access[process.env.KEYCLOAK_CLIENT_ID || ''].roles
+        ? tokenDetails.resource_access[process.env.OIDC_CLIENT_ID || ''].roles
         : [];
       const securityRoles = parseRoles(oidcRoles);
 
