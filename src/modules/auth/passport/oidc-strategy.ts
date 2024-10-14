@@ -25,6 +25,7 @@ export interface AuthStoreToken {
       roles: string[];
     };
   };
+  roles?: string[]
   preferred_username: string;
   given_name: string;
 }
@@ -69,9 +70,21 @@ passport.use(
     try {
       const oidcData = await oidcResponse.json();
       const tokenDetails = jwtDecode<AuthStoreToken>(oidcData!.id_token);
-      const oidcRoles = tokenDetails.resource_access
-        ? tokenDetails.resource_access[process.env.OIDC_CLIENT_ID || ''].roles
-        : [];
+      let oidcRoles;
+
+      switch (process.env.OIDC_PROVIDER) {
+          case 'KEYCLOAK': {
+              oidcRoles = tokenDetails.resource_access
+                  ? tokenDetails.resource_access[process.env.OIDC_CLIENT_ID || ''].roles
+                  : [];
+              break;
+          }
+          case 'ENTRA_ID': {
+              oidcRoles = tokenDetails.roles
+              break;
+          }
+      }
+
       const securityRoles = parseRoles(oidcRoles);
 
       if (securityRoles.length === 0) {
