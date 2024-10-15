@@ -81,7 +81,7 @@ passport.use(
               break;
           }
           case 'ENTRA_ID': {
-              oidcRoles = tokenDetails.roles
+              oidcRoles = tokenDetails.roles || [];
               break;
           }
           default: {
@@ -92,7 +92,7 @@ passport.use(
           }
       }
 
-      const securityRoles = parseRoles(oidcRoles!);
+      const securityRoles = parseRoles(oidcRoles);
 
       if (securityRoles.length === 0) {
         req.res?.sendStatus(403);
