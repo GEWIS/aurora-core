@@ -5,7 +5,7 @@ import { Strategy as CustomStrategy } from 'passport-custom';
 import { HttpApiException, HttpStatusCode } from '../../../helpers/customError';
 import logger from '../../../logger';
 import { parseRoles } from '../../../helpers/security';
-import AuthService from '../auth-service';
+import AuthService, { OidcConfig } from '../auth-service';
 
 export interface AuthStoreToken {
   exp: number;
@@ -31,6 +31,11 @@ export interface AuthStoreToken {
   given_name: string;
 }
 
+enum OidcProviders {
+    KEYCLOAK = 'KEYCLOAK',
+    ENTRA_ID = 'ENTRA_ID'
+}
+
 passport.use(
   'oidc',
   new CustomStrategy(async (req, callback) => {
@@ -41,13 +46,34 @@ passport.use(
       );
     }
 
-    let oidcConfig;
+    if (
+        !process.env.OIDC_PROVIDER ||
+        !process.env.OIDC_CONFIG ||
+        !process.env.OIDC_CLIENT_ID ||
+        !process.env.OIDC_CLIENT_SECRET ||
+        !process.env.OIDC_REDIRECT_URI
+    ) {
+        logger.error('Not all OIDC environment variables are properly defined');
+        callback('Internal server error');
+    }
+
+    if (Object.values(OidcProviders).includes(process.env.OIDC_PROVIDER as OidcProviders)) {
+        logger.error('The environment variable OIDC_PROVIDER is not a valid OIDC provider. Options are ' + Object.values(OidcProviders).join('; '));
+        callback('Internal server error');
+    }
+
+    let oidcConfig: OidcConfig;
 
     try {
         oidcConfig = await new AuthService().getOIDCConfig();
     } catch (e) {
         logger.error(e);
-        req.res?.sendStatus(500);
+        callback('Internal server error');
+    }
+
+    if(!oidcConfig!) {
+        logger.error('Failed to fetch the OIDC configuration endpoint.');
+        callback('Internal server error');
     }
 
     const oidcResponse = await fetch(
@@ -73,30 +99,24 @@ passport.use(
 
       const tokenDetails = jwtDecode<AuthStoreToken>(oidcData!.id_token);
       let oidcRoles;
-      console.log(tokenDetails)
+
       switch (process.env.OIDC_PROVIDER) {
-          case 'KEYCLOAK': {
+          case OidcProviders.KEYCLOAK: {
               oidcRoles = tokenDetails.resource_access
                   ? tokenDetails.resource_access[process.env.OIDC_CLIENT_ID || ''].roles
                   : [];
               break;
           }
-          case 'ENTRA_ID': {
+          case OidcProviders.ENTRA_ID: {
               oidcRoles = tokenDetails.roles || [];
               break;
           }
-          default: {
-              throw new HttpApiException(
-                  HttpStatusCode.InternalServerError,
-                  'Invalid OIDC provider configured.',
-              );
-          }
       }
 
-      const securityRoles = parseRoles(oidcRoles);
+      const securityRoles = parseRoles(oidcRoles!);
 
       if (securityRoles.length === 0) {
-        req.res?.sendStatus(403);
+        callback(null, false)
       } else {
         callback(null, {
           id: tokenDetails.preferred_username,
@@ -106,7 +126,7 @@ passport.use(
       }
     } catch (e) {
       logger.error(e);
-      req.res?.sendStatus(500);
+      callback('Internal server error');
     }
   }),
 );

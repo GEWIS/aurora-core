@@ -51,6 +51,6 @@ export default class AuthService {
 
   public async getOIDCConfig(): Promise<OidcConfig> {
     const oidcConfigRes = await fetch(process.env.OIDC_CONFIG!);
-    return await oidcConfigRes.json();
+    return oidcConfigRes.json();
   }
 }
