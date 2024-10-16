@@ -60,6 +60,7 @@ passport.use(
           client_secret: process.env.OIDC_CLIENT_SECRET!,
           redirect_uri: process.env.OIDC_REDIRECT_URI!,
           code: req.body.code,
+          scope: 'openid profile user.read'
         }),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -72,7 +73,7 @@ passport.use(
 
       const tokenDetails = jwtDecode<AuthStoreToken>(oidcData!.id_token);
       let oidcRoles;
-
+      console.log(tokenDetails)
       switch (process.env.OIDC_PROVIDER) {
           case 'KEYCLOAK': {
               oidcRoles = tokenDetails.resource_access
