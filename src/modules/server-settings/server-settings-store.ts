@@ -33,7 +33,14 @@ export default class ServerSettingsStore<T extends keyof ISettings = keyof ISett
     return this.instance;
   }
 
-  private isInitialized() {
+  /**
+   * Whether the store is initialized
+   */
+  public isInitialized() {
+    return this.initialized;
+  }
+
+  private throwIfNotInitialized() {
     if (!this.initialized) throw new Error('ServerSettingsStore has not been initialized.');
   }
 
@@ -79,7 +86,7 @@ export default class ServerSettingsStore<T extends keyof ISettings = keyof ISett
    * @param key
    */
   public getSetting(key: T): ISettings[T] {
-    this.isInitialized();
+    this.throwIfNotInitialized();
     return this.settings[key];
   }
 
@@ -89,7 +96,7 @@ export default class ServerSettingsStore<T extends keyof ISettings = keyof ISett
    * @param value
    */
   public async setSetting(key: T, value: ISettings[T]) {
-    this.isInitialized();
+    this.throwIfNotInitialized();
     const setting = await this.repo.findOne({ where: { key } });
     setting!.value = value;
     return this.repo.save(setting!);
