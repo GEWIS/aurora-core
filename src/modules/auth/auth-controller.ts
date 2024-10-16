@@ -1,7 +1,7 @@
 import { Controller } from '@tsoa/runtime';
 import { Get, Route, Tags } from 'tsoa';
 import AuthService from "./auth-service";
-import {HttpApiException, HttpStatusCode} from "../../helpers/customError";
+import { HttpApiException, HttpStatusCode } from "../../helpers/customError";
 
 interface OidcConfig {
   clientId: string;
