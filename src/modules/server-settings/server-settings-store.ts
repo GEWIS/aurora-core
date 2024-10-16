@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import ServerSetting, { ISettings, SettingsDefaults } from './entities/server-setting';
+import ServerSetting, { ISettings, SettingsDefaults } from './server-setting';
 import dataSource from '../../database';
 
 /**

@@ -1,6 +1,6 @@
 import { Column, Entity } from 'typeorm';
-import BaseEntity from './base-entity';
-import { SudoSOSSettings, SudoSOSSettingsDefault } from '../../sudosos/sudosos-settings';
+import BaseEntity from '../root/entities/base-entity';
+import { SudoSOSSettings, SudoSOSSettingsDefault } from '../sudosos/sudosos-settings';
 
 export interface ISettings extends SudoSOSSettings {}
 

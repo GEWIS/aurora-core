@@ -5,7 +5,7 @@ import {
   UserResponse,
 } from '@sudosos/sudosos-client';
 import { SudoSOSClient } from './sudosos-api-service';
-import ServerSettingsStore from '../root/server-settings-store';
+import { ServerSettingsStore } from '../server-settings';
 
 interface SudoSOSDebtorResponse {
   userId: number;

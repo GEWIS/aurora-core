@@ -1,4 +1,5 @@
 import { DataSource } from 'typeorm';
+import ServerSetting from './modules/server-settings/server-setting';
 import { Entities as BaseEntities } from './modules/root/entities';
 import { Entities as AuthEntities } from './modules/auth/entities';
 import { Entities as AuditEntities } from './modules/audit/entities';
@@ -21,6 +22,7 @@ const dataSource = new DataSource({
     },
   },
   entities: [
+    ServerSetting,
     ...BaseEntities,
     ...AuthEntities,
     ...AuditEntities,
