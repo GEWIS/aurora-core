@@ -28,7 +28,7 @@ export class AuthController extends Controller {
     return {
       clientId: process.env.OIDC_CLIENT_ID || '',
       redirectUri: process.env.OIDC_REDIRECT_URI || '',
-      authUrl: oidcConfig!.authorization_endpoint || '',
+      authUrl: oidcConfig.authorization_endpoint || '',
     };
   }
 }
