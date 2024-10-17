@@ -5,6 +5,7 @@
     "target": "esnext",
     "module": "commonjs",
     "outDir": "dist",
+    "types": ["node"],
 
     /* Strict Type-Checking Options */
     "strict": true,
