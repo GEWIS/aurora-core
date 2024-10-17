@@ -53,7 +53,3 @@ passport.use(
     } as AuthUser);
   }),
 );
-
-export const apiKeyResponse = (req: ExRequest, res: ExResponse): void => {
-  res.status(200).send(req.user);
-};
