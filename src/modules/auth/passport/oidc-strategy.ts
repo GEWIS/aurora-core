@@ -85,9 +85,9 @@ passport.use(
         method: 'POST',
         body: new URLSearchParams({
           grant_type: 'authorization_code',
-          client_id: process.env.OIDC_CLIENT_ID!,
-          client_secret: process.env.OIDC_CLIENT_SECRET!,
-          redirect_uri: process.env.OIDC_REDIRECT_URI!,
+          client_id: process.env.OIDC_CLIENT_ID,
+          client_secret: process.env.OIDC_CLIENT_SECRET,
+          redirect_uri: process.env.OIDC_REDIRECT_URI,
           code: req.body.code,
           scope: 'openid profile user.read'
         }),
@@ -101,7 +101,7 @@ passport.use(
       const oidcData = await oidcResponse.json();
 
       const tokenDetails = jwtDecode<AuthStoreToken>(oidcData!.id_token);
-      let oidcRoles;
+      let oidcRoles: string[] | undefined;
 
       switch (process.env.OIDC_PROVIDER) {
           case OidcProviders.KEYCLOAK: {
