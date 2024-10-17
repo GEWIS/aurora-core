@@ -136,7 +136,3 @@ passport.use(
     }
   }),
 );
-
-export const oidcResponse = (req: ExRequest, res: ExResponse): void => {
-  res.send(req.user).status(200).send();
-};

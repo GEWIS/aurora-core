@@ -8,10 +8,8 @@ import { pinoHttp } from 'pino-http';
 import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
 import { AuthUser, SessionMiddleware } from './modules/auth';
-import { oidcResponse } from './modules/auth/passport/oidc-strategy';
-import { mockLogin } from './modules/auth/passport/mock-strategy';
 import { setupErrorHandler } from './error';
-import { apiKeyResponse } from './modules/auth/passport/api-key-strategy';
+import { authResponse } from './modules/auth/passport';
 
 const origins = process.env.CORS_ORIGINS?.split(', ');
 export const enableCors = origins !== undefined && origins.length > 0;
@@ -73,13 +71,13 @@ export default async function createHttp() {
 
   RegisterRoutes(app);
 
-  app.post('/api/auth/oidc', passport.authenticate('oidc'), oidcResponse);
-  app.post('/api/auth/key', passport.authenticate('apikey'), apiKeyResponse);
+  app.post('/api/auth/oidc', passport.authenticate('oidc'), authResponse);
+  app.post('/api/auth/key', passport.authenticate('apikey'), authResponse);
 
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDocs));
 
   if (process.env.NODE_ENV === 'development') {
-    app.post('/api/auth/mock', passport.authenticate('mock'), mockLogin);
+    app.post('/api/auth/mock', passport.authenticate('mock'), authResponse);
     app.use('/static', express.static('public'));
   }
 
