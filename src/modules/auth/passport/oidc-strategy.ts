@@ -40,10 +40,9 @@ passport.use(
   'oidc',
   new CustomStrategy(async (req, callback) => {
     if (!req.body.state || !req.body.session_state || !req.body.code) {
-      throw new HttpApiException(
-        HttpStatusCode.BadRequest,
-        'Missing OIDC state, session state or code.',
-      );
+      logger.error('Missing OIDC state, session state or code.');
+      callback(new HttpApiException(HttpStatusCode.InternalServerError));
+      return;
     }
 
     if (
@@ -54,12 +53,14 @@ passport.use(
         !process.env.OIDC_REDIRECT_URI
     ) {
         logger.error('Not all OIDC environment variables are properly defined');
-        callback('Internal server error');
+        callback(new HttpApiException(HttpStatusCode.InternalServerError));
+        return;
     }
 
     if (Object.values(OidcProviders).includes(process.env.OIDC_PROVIDER as OidcProviders)) {
         logger.error('The environment variable OIDC_PROVIDER is not a valid OIDC provider. Options are ' + Object.values(OidcProviders).join('; '));
-        callback('Internal server error');
+        callback(new HttpApiException(HttpStatusCode.InternalServerError));
+        return;
     }
 
     let oidcConfig: OidcConfig;
@@ -68,16 +69,18 @@ passport.use(
         oidcConfig = await new AuthService().getOIDCConfig();
     } catch (e) {
         logger.error(e);
-        callback('Internal server error');
+        callback(new HttpApiException(HttpStatusCode.InternalServerError));
+        return;
     }
 
-    if(!oidcConfig!) {
+    if(!oidcConfig) {
         logger.error('Failed to fetch the OIDC configuration endpoint.');
-        callback('Internal server error');
+        callback(new HttpApiException(HttpStatusCode.InternalServerError));
+        return;
     }
 
     const oidcResponse = await fetch(
-        oidcConfig!.token_endpoint,
+        oidcConfig.token_endpoint,
       {
         method: 'POST',
         body: new URLSearchParams({
@@ -116,17 +119,20 @@ passport.use(
       const securityRoles = parseRoles(oidcRoles!);
 
       if (securityRoles.length === 0) {
-        callback(null, false)
+        callback(null, false);
+        return;
       } else {
         callback(null, {
           id: tokenDetails.preferred_username,
           name: tokenDetails.given_name,
           roles: securityRoles,
         });
+        return;
       }
     } catch (e) {
       logger.error(e);
-      callback('Internal server error');
+      callback(new HttpApiException(HttpStatusCode.InternalServerError));
+      return;
     }
   }),
 );
