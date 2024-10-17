@@ -7,6 +7,7 @@ import {
   LightsGroupPars,
 } from '../../entities';
 import { RgbColor } from '../../color-definitions';
+import { ColorEffects } from './color-effects';
 
 export interface BeatFadeOutProps {
   /**
@@ -37,7 +38,7 @@ export interface BeatFadeOutProps {
 }
 
 export type BeatFadeOutCreateParams = BaseLightsEffectCreateParams & {
-  type: 'BeatFadeOut';
+  type: ColorEffects.BeatFadeOut;
   props: BeatFadeOutProps;
 };
 

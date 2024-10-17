@@ -3,14 +3,14 @@ import { Server as HttpServer } from 'http';
 import { NextFunction, Response } from 'express';
 import passport from 'passport';
 import { DefaultEventsMap, EventsMap } from 'socket.io/dist/typed-events';
-import { SessionMiddleware, User } from './modules/auth';
+import { SessionMiddleware, AuthUser } from './modules/auth';
 import { customOrigin, enableCors } from './http';
 import { SECURE_NAMESPACES } from './socketio-namespaces';
 
 const devEnv = process.env.NODE_ENV === 'development';
 
 interface SocketData {
-  user: User;
+  user: AuthUser;
 }
 
 /**

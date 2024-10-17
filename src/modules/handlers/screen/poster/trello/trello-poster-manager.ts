@@ -231,7 +231,7 @@ export class TrelloPosterManager extends PosterManager {
     const regexMarkdown = /(?=\[(!\[.+?]\(.+?\)|.+?)]\((https:\/\/[^)]+)\))/gi;
     const match = [...(card.desc ?? '').matchAll(regexMarkdown)].map((m) => m[1])[0]?.trim();
 
-    const url = isUrl(match) ? match : card.desc ?? '';
+    const url = isUrl(match) ? match : (card.desc ?? '');
 
     if (!card.desc || !isUrl(url)) {
       return {

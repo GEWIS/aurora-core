@@ -9,10 +9,11 @@ import { Audio, Screen } from '../root/entities';
 import CenturionMode from './centurion/centurion-mode';
 import tapes from './centurion/tapes';
 import dataSource from '../../database';
-import { SecurityGroup } from '../../helpers/security';
-import { HttpStatusCode } from '../../helpers/customError';
+import { SecurityNames } from '../../helpers/security';
+import { HttpStatusCode } from '../../helpers/custom-error';
 import TimeTrailRaceMode from './time-trail-race/time-trail-race-mode';
 import logger from '../../logger';
+import { securityGroups } from '../../helpers/security-groups';
 
 interface EnableModeParams {
   lightsGroupIds: number[];
@@ -56,12 +57,7 @@ export class ModeController extends Controller {
   /**
    * Disable all modes, if one is active
    */
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.mode.base)
   @Delete('')
   @SuccessResponse(HttpStatusCode.Ok)
   public disableAllModes(@Request() req: ExpressRequest) {
@@ -72,12 +68,7 @@ export class ModeController extends Controller {
   /**
    * Enable Centurion mode for the given devices
    */
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.centurion.privileged)
   @Post('centurion')
   @SuccessResponse(HttpStatusCode.NoContent)
   public async enableCenturion(
@@ -102,12 +93,7 @@ export class ModeController extends Controller {
     return '';
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.centurion.privileged)
   @Delete('centurion')
   @SuccessResponse(HttpStatusCode.Ok)
   public disableCenturion(@Request() req: ExpressRequest) {
@@ -118,7 +104,7 @@ export class ModeController extends Controller {
   /**
    * Enable Time Trail Race (spoelbakkenrace) mode for the given devices
    */
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security(SecurityNames.LOCAL, securityGroups.timetrail.base)
   @Post('time-trail-race')
   @SuccessResponse(HttpStatusCode.NoContent)
   public async enableTimeTrailRace(
@@ -137,7 +123,7 @@ export class ModeController extends Controller {
     return '';
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security(SecurityNames.LOCAL, securityGroups.timetrail.base)
   @Delete('time-trail-race')
   @SuccessResponse(HttpStatusCode.Ok)
   public disableTimeTrailRacing(@Request() req: ExpressRequest) {

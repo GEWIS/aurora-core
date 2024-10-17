@@ -5,18 +5,14 @@ import {
   ArtificialBeatGenerator,
   ArtificialBeatGeneratorParams,
 } from './artificial-beat-generator';
-import { SecurityGroup } from '../../helpers/security';
+import { SecurityNames } from '../../helpers/security';
 import logger from '../../logger';
+import { securityGroups } from '../../helpers/security-groups';
 
 @Tags('Artificial Beat Generator')
 @Route('beat-generator')
 export class ArtificialBeatController extends Controller {
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.beats.base)
   @Get('')
   public getArtificalBeatGenerator(): ArtificialBeatGeneratorParams | null {
     const generator = ArtificialBeatGenerator.getInstance();
@@ -26,12 +22,7 @@ export class ArtificialBeatController extends Controller {
     };
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.beats.base)
   @Post('')
   public startArtificialBeatGenerator(
     @Request() req: ExpressRequest,
@@ -43,12 +34,7 @@ export class ArtificialBeatController extends Controller {
     generator.start(params.bpm);
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.beats.base)
   @Delete('')
   public stopArtificialBeatGenerator(@Request() req: ExpressRequest) {
     logger.audit(req.user, 'Stop Artificial Beat Generator.');

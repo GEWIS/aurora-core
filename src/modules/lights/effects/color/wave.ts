@@ -1,6 +1,7 @@
 import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
 import { LightsGroup } from '../../entities';
 import { RgbColor } from '../../color-definitions';
+import { ColorEffects } from './color-effects';
 
 export interface WaveProps {
   /**
@@ -24,7 +25,7 @@ export interface WaveProps {
 }
 
 export type WaveCreateParams = BaseLightsEffectCreateParams & {
-  type: 'Wave';
+  type: ColorEffects.Wave;
   props: WaveProps;
 };
 

@@ -11,62 +11,62 @@ import { FlatCompat } from "@eslint/eslintrc";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all
 });
 
 export default [...compat.extends("prettier"), {
-    plugins: {
-        "@typescript-eslint": typescriptEslint,
-        import: fixupPluginRules(_import),
+  plugins: {
+    "@typescript-eslint": typescriptEslint,
+    import: fixupPluginRules(_import),
+  },
+
+  files: ['**/*.ts', '**/*.js'],
+
+  linterOptions: {
+    reportUnusedDisableDirectives: "off",
+  },
+
+  languageOptions: {
+    globals: {
+      ...globals.node,
+      ...globals.mocha,
     },
 
-    files: ['**/*.ts', '**/*.js'],
+    parser: tsParser,
+    ecmaVersion: "latest",
+    sourceType: "module",
 
-    linterOptions: {
-        reportUnusedDisableDirectives: "off",
+    parserOptions: {
+      project: "./tsconfig.json",
+    },
+  },
+
+  settings: {
+    "import/extensions": [".js", ".ts"],
+
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts"],
     },
 
-    languageOptions: {
-        globals: {
-            ...globals.node,
-            ...globals.mocha,
-        },
-
-        parser: tsParser,
-        ecmaVersion: "latest",
-        sourceType: "module",
-
-        parserOptions: {
-            project: "./tsconfig.json",
-        },
+    "import/resolver": {
+      node: {
+        extensions: [".js", ".ts"],
+      },
     },
+  },
 
-    settings: {
-        "import/extensions": [".js", ".ts"],
+  rules: {
+    "linebreak-style": ["error", "unix"],
+    "import/prefer-default-export": "off",
+    "class-methods-use-this": "off",
+    "no-unused-expressions": "off",
+    "no-underscore-dangle": "off",
 
-        "import/parsers": {
-            "@typescript-eslint/parser": [".ts"],
-        },
-
-        "import/resolver": {
-            node: {
-                extensions: [".js", ".ts"],
-            },
-        },
-    },
-
-    rules: {
-        "linebreak-style": ["error", "unix"],
-        "import/prefer-default-export": "off",
-        "class-methods-use-this": "off",
-        "no-unused-expressions": "off",
-        "no-underscore-dangle": "off",
-
-        "import/extensions": ["off", "ignorePackages", {
-            js: "never",
-            ts: "never",
-        }],
-    },
+    "import/extensions": ["off", "ignorePackages", {
+      js: "never",
+      ts: "never",
+    }],
+  },
 }];

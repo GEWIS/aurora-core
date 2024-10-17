@@ -3,11 +3,12 @@ import { Controller } from '@tsoa/runtime';
 import { Request as ExpressRequest } from 'express';
 import ModeManager from '../mode-manager';
 import CenturionMode from './centurion-mode';
-import { SecurityGroup } from '../../../helpers/security';
+import { SecurityNames } from '../../../helpers/security';
 import MixTape, { HornData, SongData } from './tapes/mix-tape';
 import tapes from './tapes';
 import ModeDisabledError from '../mode-disabled-error';
 import logger from '../../../logger';
+import { securityGroups } from '../../../helpers/security-groups';
 
 interface SkipCenturionRequest {
   /**
@@ -52,7 +53,7 @@ export class CenturionController extends Controller {
     this.modeManager = ModeManager.getInstance();
   }
 
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.centurion.base)
   @Get('')
   public getCenturion(): CenturionResponse | null {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
@@ -71,16 +72,11 @@ export class CenturionController extends Controller {
   /**
    * Start a centurion
    */
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.centurion.privileged)
   @Post('start')
   @SuccessResponse(204, 'Start commands sent')
-  @Response<ModeDisabledError>(404, 'Centurion not enabled')
   @Response<string>(428, 'Centurion not yet fully initialized. Please wait and try again later')
+  @Response<ModeDisabledError>(404, 'Centurion not enabled')
   public startCenturion(@Request() req: ExpressRequest) {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
@@ -98,26 +94,20 @@ export class CenturionController extends Controller {
     return '';
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.centurion.privileged)
   @Post('skip')
   @SuccessResponse(204, 'Skip commands sent')
   @Response<string>(400, 'Invalid timestamp provided')
   @Response<ModeDisabledError>(404, 'Centurion not enabled')
   public skipCenturion(@Request() req: ExpressRequest, @Body() body: SkipCenturionRequest) {
-    const { seconds } = body;
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
       throw new ModeDisabledError('Centurion not enabled');
     }
 
-    logger.audit(req.user, `Skip Centurion to "${seconds}" seconds.`);
+    logger.audit(req.user, `Skip Centurion to "${body.seconds}" seconds.`);
 
-    mode.skip(seconds);
+    mode.skip(body.seconds);
 
     this.setStatus(204);
     return '';
@@ -126,12 +116,7 @@ export class CenturionController extends Controller {
   /**
    * Stop a centurion
    */
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.centurion.privileged)
   @Post('stop')
   @SuccessResponse(204, 'Start commands sent')
   @Response<ModeDisabledError>(404, 'Centurion not enabled')
@@ -148,12 +133,7 @@ export class CenturionController extends Controller {
     return '';
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.centurion.base)
   @Get('tapes')
   public getCenturionTapes(): MixTapeResponse[] {
     return tapes.map((t) => ({
