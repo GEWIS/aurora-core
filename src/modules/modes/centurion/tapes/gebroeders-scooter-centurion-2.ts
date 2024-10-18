@@ -2,7 +2,8 @@ import MixTape from './mix-tape';
 import SearchLight from '../../../lights/effects/movement/search-light';
 
 const centurion2: MixTape = {
-  name: 'Gebroeders Scooter - Centurion 2.0',
+  name: 'Centurion 2.0',
+  artist: 'Gebroeders Scooter',
   songFile: 'https://avico.gewis.nl/centurion/gebroeders-scooter-centurion-2.mp3',
   coverUrl: 'https://i1.sndcdn.com/artworks-NnmwEpeM7d9X8Ptc-50Ev5w-t500x500.jpg',
   duration: 6165,

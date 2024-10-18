@@ -39,6 +39,8 @@ export type FeedEvent = {
 } & (Horn | Song | Effect | Other);
 
 export default interface MixTape {
+  /** Artist name, needs not to be unique */
+  artist: string;
   /** Unique name of the tape */
   name: string;
   /** Relative of absolute HTTP path to the audio file */
