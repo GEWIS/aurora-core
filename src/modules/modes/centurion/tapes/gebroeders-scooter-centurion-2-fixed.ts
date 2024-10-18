@@ -11,7 +11,7 @@ const missingHorn: FeedEvent = {
 
 const centurion2Fixed: MixTape = {
   ...centurion2Original,
-  name: 'Gebroeders Scooter - Centurion 2.0 (Fixed)',
+  name: 'Centurion 2.0 (Fixed)',
   songFile: 'https://avico.gewis.nl/centurion/gebroeders-scooter-centurion-2-fixed.mp3',
   feed: centurion2Original.feed
     .map((e) => {

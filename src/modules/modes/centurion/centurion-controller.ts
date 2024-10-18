@@ -45,7 +45,7 @@ interface SongEvent {
   data: SongData | SongData[];
 }
 
-interface MixTapeResponse extends Pick<MixTape, 'name' | 'coverUrl'> {
+interface MixTapeResponse extends Pick<MixTape, 'name' | 'artist' | 'coverUrl'> {
   events: (HornEvent | SongEvent)[];
   /** Amount of horns */
   horns: number;
@@ -172,6 +172,7 @@ export class CenturionController extends Controller {
   public getCenturionTapes(): MixTapeResponse[] {
     return tapes.map((t) => ({
       name: t.name,
+      artist: t.artist,
       coverUrl: t.coverUrl,
       events: t.feed
         .filter((e) => ['horn', 'song'].includes(e.type))

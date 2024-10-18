@@ -1,7 +1,8 @@
 import MixTape from './mix-tape';
 
 const centurion: MixTape = {
-  name: 'Gebroeders Scooter - Totale Escalatie 9darisch',
+  name: 'Totale Escalatie 9darisch',
+  artist: 'Gebroeders Scooter',
   songFile: 'https://avico.gewis.nl/centurion/gebroeders-scooter-totale-escalatie-9darisch.mp3',
   coverUrl: 'https://i1.sndcdn.com/artworks-000618061984-9llnn0-t500x500.jpg',
   duration: 3613,

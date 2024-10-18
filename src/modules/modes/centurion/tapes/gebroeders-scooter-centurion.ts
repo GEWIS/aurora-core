@@ -4,7 +4,8 @@ import { Fire, SingleFlood, StaticColor } from '../../../lights/effects/color';
 import { RgbColor } from '../../../lights/color-definitions';
 
 const centurion: MixTape = {
-  name: 'Gebroeders Scooter - Centurion',
+  name: 'Centurion',
+  artist: 'Gebroeders Scooter',
   songFile: 'https://avico.gewis.nl/centurion/gebroeders-scooter-centurion.mp3',
   coverUrl: 'https://i1.sndcdn.com/artworks-000660440143-nxgkca-t500x500.jpg',
   duration: 6075,
