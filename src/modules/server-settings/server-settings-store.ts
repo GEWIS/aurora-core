@@ -40,7 +40,10 @@ export default class ServerSettingsStore<T extends keyof ISettings = keyof ISett
     return this.initialized;
   }
 
-  private throwIfNotInitialized() {
+  /**
+   * Throw an error if store is not initialized
+   */
+  public throwIfNotInitialized() {
     if (!this.initialized) throw new Error('ServerSettingsStore has not been initialized.');
   }
 
