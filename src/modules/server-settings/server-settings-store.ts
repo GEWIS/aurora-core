@@ -1,6 +1,11 @@
 import { Repository } from 'typeorm';
-import ServerSetting, { ISettings, SettingsDefaults } from './entities/server-setting';
+import ServerSetting, { ISettings, SettingsDefaults } from './server-setting';
 import dataSource from '../../database';
+
+export type FeatureFlagResponse = {
+  key: string;
+  value: boolean;
+}[];
 
 /**
  * Store of global server settings, which are key-value pairs stored in the database.
@@ -10,6 +15,8 @@ import dataSource from '../../database';
  */
 export default class ServerSettingsStore<T extends keyof ISettings = keyof ISettings> {
   private static instance: ServerSettingsStore;
+
+  private static featureFlags = new Set<keyof ISettings>();
 
   private initialized = false;
 
@@ -33,7 +40,17 @@ export default class ServerSettingsStore<T extends keyof ISettings = keyof ISett
     return this.instance;
   }
 
-  private isInitialized() {
+  /**
+   * Whether the store is initialized
+   */
+  public isInitialized() {
+    return this.initialized;
+  }
+
+  /**
+   * Throw an error if store is not initialized
+   */
+  public throwIfNotInitialized() {
     if (!this.initialized) throw new Error('ServerSettingsStore has not been initialized.');
   }
 
@@ -75,11 +92,27 @@ export default class ServerSettingsStore<T extends keyof ISettings = keyof ISett
   }
 
   /**
+   * Return whether the given key is a server setting
+   * @param key
+   */
+  public hasSetting(key: string): boolean {
+    return Object.keys(this.settings).includes(key);
+  }
+
+  /**
+   * Get all server settings.
+   */
+  public getSettings(): ISettings {
+    this.throwIfNotInitialized();
+    return this.settings;
+  }
+
+  /**
    * Get a server setting
    * @param key
    */
   public getSetting(key: T): ISettings[T] {
-    this.isInitialized();
+    this.throwIfNotInitialized();
     return this.settings[key];
   }
 
@@ -89,9 +122,32 @@ export default class ServerSettingsStore<T extends keyof ISettings = keyof ISett
    * @param value
    */
   public async setSetting(key: T, value: ISettings[T]) {
-    this.isInitialized();
+    this.throwIfNotInitialized();
     const setting = await this.repo.findOne({ where: { key } });
     setting!.value = value;
     return this.repo.save(setting!);
+  }
+
+  /**
+   * Mark a setting as a feature flag, such that the backoffice can request
+   * which feature flags exists and whether they are enabled/disabled
+   * @param key
+   */
+  public static registerFeatureFlag(key: keyof ISettings) {
+    this.featureFlags.add(key);
+  }
+
+  /**
+   * Get a list of all feature flags and whether they are enabled or disabled
+   */
+  public getFeatureFlags(): FeatureFlagResponse {
+    const response: FeatureFlagResponse = [];
+    ServerSettingsStore.featureFlags.forEach((key) => {
+      response.push({
+        key,
+        value: !!this.getSetting(key as T),
+      });
+    });
+    return response;
   }
 }

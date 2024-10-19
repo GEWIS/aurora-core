@@ -16,7 +16,7 @@ import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
 import { SocketioNamespaces } from './socketio-namespaces';
 import SocketConnectionManager from './modules/root/socket-connection-manager';
 import { activeDirectoryConnect } from './modules/infoscreen/entities/ldap-connector';
-import ServerSettingsStore from './modules/root/server-settings-store';
+import { ServerSettingsStore } from './modules/server-settings';
 import registerCronJobs from './cron';
 import EmitterStore from './modules/events/emitter-store';
 

@@ -5,7 +5,8 @@ import {
   UserResponse,
 } from '@sudosos/sudosos-client';
 import { SudoSOSClient } from './sudosos-api-service';
-import ServerSettingsStore from '../root/server-settings-store';
+import { ServerSettingsStore, FeatureEnabled } from '../server-settings';
+import { SudoSOSSettings } from './sudosos-settings';
 
 interface SudoSOSDebtorResponse {
   userId: number;
@@ -19,6 +20,7 @@ interface SudoSOSDebtorResponse {
   isLongstanding: boolean;
 }
 
+@FeatureEnabled('SudoSOSEnabled')
 export default class SudoSOSService {
   private url: string;
 
@@ -112,7 +114,9 @@ export default class SudoSOSService {
       userMap.set(user.id, user);
     });
 
-    const bacGroupId = ServerSettingsStore.getInstance().getSetting('SudoSOSBACGroupID');
+    const bacGroupId = ServerSettingsStore.getInstance().getSetting(
+      'SudoSOSBACGroupID',
+    ) as SudoSOSSettings['SudoSOSBACGroupID'];
 
     const bac =
       bacGroupId > 0
@@ -146,7 +150,9 @@ export default class SudoSOSService {
   }
 
   public async getPriceList() {
-    const posID = ServerSettingsStore.getInstance().getSetting('SudoSOSBorrelmodePOSID');
+    const posID = ServerSettingsStore.getInstance().getSetting(
+      'SudoSOSBorrelmodePOSID',
+    ) as SudoSOSSettings['SudoSOSBorrelmodePOSID'];
     const response = await this.client.pos.getAllPointOfSaleProducts(posID);
     return response.data.filter((p) => p.priceList);
   }
