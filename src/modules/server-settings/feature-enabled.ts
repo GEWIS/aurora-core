@@ -15,6 +15,9 @@ type FunctionDecoratorParams<T> = [
 type DecoratorParams = ClassDecoratorParams<any> | FunctionDecoratorParams<any>;
 
 export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator & MethodDecorator {
+  // Register this setting as a (used) feature flag
+  ServerSettingsStore.registerFeatureFlag(setting);
+
   return (...args: DecoratorParams): any => {
     // The decorator is assigned to a controller or a controller method
     if (
