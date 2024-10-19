@@ -5,9 +5,8 @@ import {
   UserResponse,
 } from '@sudosos/sudosos-client';
 import { SudoSOSClient } from './sudosos-api-service';
-import { ServerSettingsStore } from '../server-settings';
+import { ServerSettingsStore, FeatureEnabled } from '../server-settings';
 import { SudoSOSSettings } from './sudosos-settings';
-import ServiceEnabled from '../server-settings/service-enabled';
 
 interface SudoSOSDebtorResponse {
   userId: number;
@@ -21,7 +20,7 @@ interface SudoSOSDebtorResponse {
   isLongstanding: boolean;
 }
 
-@ServiceEnabled('SudoSOSEnabled')
+@FeatureEnabled('SudoSOSEnabled')
 export default class SudoSOSService {
   private url: string;
 
