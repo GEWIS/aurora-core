@@ -18,31 +18,34 @@ export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator
   // Register this setting as a (used) feature flag
   ServerSettingsStore.registerFeatureFlag(setting);
 
-  return (...args: DecoratorParams): any => {
-    // The decorator is assigned to a controller or a controller method
-    if (
-      (args.length === 1 && args[0].prototype instanceof Controller) ||
-      (args.length === 3 && args[0] instanceof Controller)
-    ) {
-      // TSOA Middleware, which already distinguishes between method and class decorators
-      // by itself. Therefore, we do not have to do anything :)
-      return Middlewares((req: ExRequest, res: ExResponse, next: NextFunction) => {
-        const store = ServerSettingsStore.getInstance();
+  const featureFlagMiddleware = (req: ExRequest, res: ExResponse, next: NextFunction) => {
+    const store = ServerSettingsStore.getInstance();
 
-        if (!store.isInitialized()) {
-          logger.error('Server Settings Store is not initialized');
-          res.status(500).send('Internal server error.');
-          return;
-        }
+    if (!store.isInitialized()) {
+      logger.error('Server Settings Store is not initialized');
+      res.status(500).send('Internal server error.');
+      return;
+    }
 
-        const value = store.getSetting(setting);
-        if (!value) {
-          res.status(409).send(`Endpoint is disabled by setting "${setting}".`);
-          return;
-        }
+    const value = store.getSetting(setting);
+    if (!value) {
+      res.status(409).send(`Endpoint is disabled by setting "${setting}".`);
+      return;
+    }
 
-        next();
-      });
+    next();
+    // @ts-ignore
+  };
+
+  return <TFunction extends Function>(...args: DecoratorParams): void | TFunction => {
+    // The decorator is assigned to a controller
+    if (args.length === 1 && args[0].prototype instanceof Controller) {
+      return Middlewares(featureFlagMiddleware)(args[0]) as void | TFunction;
+    }
+
+    // The decorator is assigned to a controller method
+    if (args.length === 3 && args[0] instanceof Controller) {
+      return Middlewares(featureFlagMiddleware)(args[0], args[1], args[2]) as void | TFunction;
     }
 
     // Decorator is assigned to a regular class
@@ -62,7 +65,7 @@ export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator
 
           super(constructorArgs);
         }
-      };
+      } as any as TFunction;
     }
 
     // Decorator is a method
@@ -80,6 +83,6 @@ export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator
       }
       return originalMethod.apply(this, methodArgs);
     };
-    return descriptor;
+    return descriptor as TFunction;
   };
 }
