@@ -161,7 +161,7 @@ export default class HandlerManager {
       handler.removeEntity(entity);
     });
 
-    const socketId = entity.socketIds ? entity.socketIds[SocketioNamespaces.BASE] ?? '' : '';
+    const socketId = entity.socketIds ? (entity.socketIds[SocketioNamespaces.BASE] ?? '') : '';
     const socket = this.io.sockets.sockets.get(socketId);
 
     if (newHandler !== '') {

@@ -26,14 +26,14 @@ export interface AuthStoreToken {
       roles: string[];
     };
   };
-  roles?: string[]
+  roles?: string[];
   preferred_username: string;
   given_name: string;
 }
 
 enum OidcProviders {
-    KEYCLOAK = 'KEYCLOAK',
-    ENTRA_ID = 'ENTRA_ID'
+  KEYCLOAK = 'KEYCLOAK',
+  ENTRA_ID = 'ENTRA_ID',
 }
 
 passport.use(
@@ -46,56 +46,56 @@ passport.use(
     }
 
     if (
-        !process.env.OIDC_PROVIDER ||
-        !process.env.OIDC_CONFIG ||
-        !process.env.OIDC_CLIENT_ID ||
-        !process.env.OIDC_CLIENT_SECRET ||
-        !process.env.OIDC_REDIRECT_URI
+      !process.env.OIDC_PROVIDER ||
+      !process.env.OIDC_CONFIG ||
+      !process.env.OIDC_CLIENT_ID ||
+      !process.env.OIDC_CLIENT_SECRET ||
+      !process.env.OIDC_REDIRECT_URI
     ) {
-        logger.error('Not all OIDC environment variables are properly defined');
-        callback(new HttpApiException(HttpStatusCode.InternalServerError));
-        return;
+      logger.error('Not all OIDC environment variables are properly defined');
+      callback(new HttpApiException(HttpStatusCode.InternalServerError));
+      return;
     }
 
     if (Object.values(OidcProviders).includes(process.env.OIDC_PROVIDER as OidcProviders)) {
-        logger.error('The environment variable OIDC_PROVIDER is not a valid OIDC provider. Options are ' + Object.values(OidcProviders).join('; '));
-        callback(new HttpApiException(HttpStatusCode.InternalServerError));
-        return;
+      logger.error(
+        'The environment variable OIDC_PROVIDER is not a valid OIDC provider. Options are ' +
+          Object.values(OidcProviders).join('; '),
+      );
+      callback(new HttpApiException(HttpStatusCode.InternalServerError));
+      return;
     }
 
     let oidcConfig: OidcConfig;
 
     try {
-        oidcConfig = await new AuthService().getOIDCConfig();
+      oidcConfig = await new AuthService().getOIDCConfig();
     } catch (e) {
-        logger.error(e);
-        callback(new HttpApiException(HttpStatusCode.InternalServerError));
-        return;
+      logger.error(e);
+      callback(new HttpApiException(HttpStatusCode.InternalServerError));
+      return;
     }
 
-    if(!oidcConfig) {
-        logger.error('Failed to fetch the OIDC configuration endpoint.');
-        callback(new HttpApiException(HttpStatusCode.InternalServerError));
-        return;
+    if (!oidcConfig) {
+      logger.error('Failed to fetch the OIDC configuration endpoint.');
+      callback(new HttpApiException(HttpStatusCode.InternalServerError));
+      return;
     }
 
-    const oidcResponse = await fetch(
-        oidcConfig.token_endpoint,
-      {
-        method: 'POST',
-        body: new URLSearchParams({
-          grant_type: 'authorization_code',
-          client_id: process.env.OIDC_CLIENT_ID,
-          client_secret: process.env.OIDC_CLIENT_SECRET,
-          redirect_uri: process.env.OIDC_REDIRECT_URI,
-          code: req.body.code,
-          scope: 'openid profile user.read'
-        }),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
+    const oidcResponse = await fetch(oidcConfig.token_endpoint, {
+      method: 'POST',
+      body: new URLSearchParams({
+        grant_type: 'authorization_code',
+        client_id: process.env.OIDC_CLIENT_ID,
+        client_secret: process.env.OIDC_CLIENT_SECRET,
+        redirect_uri: process.env.OIDC_REDIRECT_URI,
+        code: req.body.code,
+        scope: 'openid profile user.read',
+      }),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-    );
+    });
 
     try {
       const oidcData = await oidcResponse.json();
@@ -104,16 +104,16 @@ passport.use(
       let oidcRoles: string[] | undefined;
 
       switch (process.env.OIDC_PROVIDER) {
-          case OidcProviders.KEYCLOAK: {
-              oidcRoles = tokenDetails.resource_access
-                  ? tokenDetails.resource_access[process.env.OIDC_CLIENT_ID || ''].roles
-                  : [];
-              break;
-          }
-          case OidcProviders.ENTRA_ID: {
-              oidcRoles = tokenDetails.roles || [];
-              break;
-          }
+        case OidcProviders.KEYCLOAK: {
+          oidcRoles = tokenDetails.resource_access
+            ? tokenDetails.resource_access[process.env.OIDC_CLIENT_ID || ''].roles
+            : [];
+          break;
+        }
+        case OidcProviders.ENTRA_ID: {
+          oidcRoles = tokenDetails.roles || [];
+          break;
+        }
       }
 
       const securityRoles = parseRoles(oidcRoles!);

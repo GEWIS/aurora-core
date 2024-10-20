@@ -1,7 +1,7 @@
 import { Controller } from '@tsoa/runtime';
 import { Get, Route, Tags } from 'tsoa';
-import AuthService from "./auth-service";
-import { HttpApiException, HttpStatusCode } from "../../helpers/customError";
+import AuthService from './auth-service';
+import { HttpApiException, HttpStatusCode } from '../../helpers/customError';
 
 interface OidcConfig {
   clientId: string;
@@ -20,8 +20,8 @@ export class AuthController extends Controller {
       oidcConfig = await new AuthService().getOIDCConfig();
     } catch (e) {
       throw new HttpApiException(
-          HttpStatusCode.InternalServerError,
-          'Cannot get OIDC configuration.',
+        HttpStatusCode.InternalServerError,
+        'Cannot get OIDC configuration.',
       );
     }
 
