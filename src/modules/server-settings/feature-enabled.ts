@@ -4,6 +4,8 @@ import { NextFunction, Request as ExRequest, Response as ExResponse } from 'expr
 import { ISettings } from './server-setting';
 import ServerSettingsStore from './server-settings-store';
 import logger from '../../logger';
+import BaseHandler from '../handlers/base-handler';
+import FeatureFlagManager from './feature-flag-manager';
 
 type ClassDecoratorParams<T extends { new (...args: any[]): {} }> = [T];
 type FunctionDecoratorParams<T> = [
@@ -16,11 +18,11 @@ type DecoratorParams = ClassDecoratorParams<any> | FunctionDecoratorParams<any>;
 
 export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator & MethodDecorator {
   // Register this setting as a (used) feature flag
-  ServerSettingsStore.registerFeatureFlag(setting);
+  const store = ServerSettingsStore.getInstance();
+  const featureFlagManager = FeatureFlagManager.getInstance();
+  featureFlagManager.registerFeatureFlag(setting);
 
-  const featureFlagMiddleware = (req: ExRequest, res: ExResponse, next: NextFunction) => {
-    const store = ServerSettingsStore.getInstance();
-
+  const endpointMiddleware = (req: ExRequest, res: ExResponse, next: NextFunction) => {
     if (!store.isInitialized()) {
       logger.error('Server Settings Store is not initialized');
       res.status(500).send('Internal server error.');
@@ -34,18 +36,28 @@ export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator
     }
 
     next();
-    // @ts-ignore
   };
 
-  return <TFunction extends Function>(...args: DecoratorParams): void | TFunction => {
+  return (...args: DecoratorParams): any => {
     // The decorator is assigned to a controller
     if (args.length === 1 && args[0].prototype instanceof Controller) {
-      return Middlewares(featureFlagMiddleware)(args[0]) as void | TFunction;
+      // TSOA Middleware, which already distinguishes between method and class decorators
+      // by itself. Therefore, we do not have to do anything :)
+      return Middlewares(endpointMiddleware)(args[0]);
     }
-
     // The decorator is assigned to a controller method
     if (args.length === 3 && args[0] instanceof Controller) {
-      return Middlewares(featureFlagMiddleware)(args[0], args[1], args[2]) as void | TFunction;
+      return Middlewares(endpointMiddleware);
+    }
+
+    // The decorator is assigned to a handler
+    if (args.length === 1 && args[0].prototype instanceof BaseHandler) {
+      // It is not possible to assign such a value to the class itself, because decorators can only
+      // access class instances (objects). Static attributes for example cannot be changed by
+      // decorators. Therefore, if we want to prevent object creation and not delete a handler after
+      // its creation, we should keep track of these restrictions somewhere else.
+      featureFlagManager.registerHandlerWithFeatureFlag(args[0], setting);
+      return;
     }
 
     // Decorator is assigned to a regular class
@@ -55,7 +67,6 @@ export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator
       // feature flag check before actually creating the object.
       return class extends constr {
         constructor(...constructorArgs: any[]) {
-          const store = ServerSettingsStore.getInstance();
           store.throwIfNotInitialized();
 
           const value = store.getSetting(setting);
@@ -65,7 +76,7 @@ export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator
 
           super(constructorArgs);
         }
-      } as any as TFunction;
+      };
     }
 
     // Decorator is a method
@@ -83,6 +94,6 @@ export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator
       }
       return originalMethod.apply(this, methodArgs);
     };
-    return descriptor as TFunction;
+    return descriptor;
   };
 }

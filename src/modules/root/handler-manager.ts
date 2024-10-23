@@ -24,6 +24,7 @@ import logger from '../../logger';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 import TimeTrailRaceScreenHandler from '../handlers/screen/time-trail-race-screen-handler';
 import TimeTrailRaceLightsHandler from '../handlers/lights/time-trail-race-lights-handler';
+import HandlerFactory from './handler-factory';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -82,28 +83,12 @@ export default class HandlerManager {
     this.musicEmitter.on('beat', this.beat.bind(this));
     this.musicEmitter.on('change_track', this.changeTrack.bind(this));
 
-    // Create all light handlers
-    const lightsHandlers: BaseLightsHandler[] = [
-      new RandomEffectsHandler(),
-      new SetEffectsHandler(),
-      new DevelopEffectsHandler(),
-      new ScenesHandler(),
-      new EffectSequenceHandler(musicEmitter),
-      new TimeTrailRaceLightsHandler(),
-    ];
+    const factory = new HandlerFactory(this.io, this.musicEmitter);
 
     // Register all handlers
-    this._handlers.set(Audio, [
-      new SimpleAudioHandler(io.of(SocketioNamespaces.AUDIO), this.musicEmitter),
-    ] as BaseAudioHandler[]);
-    this._handlers.set(LightsGroup, lightsHandlers);
-    this._handlers.set(Screen, [
-      new CurrentlyPlayingTrackHandler(io.of(SocketioNamespaces.SCREEN)),
-      new CenturionScreenHandler(io.of(SocketioNamespaces.SCREEN)),
-      new PosterScreenHandler(io.of(SocketioNamespaces.SCREEN)),
-      new StageEffectsHandler(io.of(SocketioNamespaces.SCREEN)),
-      new TimeTrailRaceScreenHandler(io.of(SocketioNamespaces.SCREEN)),
-    ] as BaseScreenHandler[]);
+    this._handlers.set(Audio, factory.createAudioHandlers());
+    this._handlers.set(LightsGroup, factory.createLightHandlers());
+    this._handlers.set(Screen, factory.createScreenHandlers());
   }
 
   /**

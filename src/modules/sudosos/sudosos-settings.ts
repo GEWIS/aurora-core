@@ -5,7 +5,7 @@ export interface SudoSOSSettings {
 }
 
 export const SudoSOSSettingsDefault: SudoSOSSettings = {
-  SudoSOSEnabled: false,
+  SudoSOSEnabled: true,
   SudoSOSBorrelmodePOSID: -1,
   SudoSOSBACGroupID: -1,
 };

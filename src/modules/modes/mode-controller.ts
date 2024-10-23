@@ -1,5 +1,5 @@
 import { Body, Delete, Post, Request, Route, Security, SuccessResponse, Tags } from 'tsoa';
-import { Controller } from '@tsoa/runtime';
+import { Controller, Response } from '@tsoa/runtime';
 import { In } from 'typeorm';
 import { Request as ExpressRequest } from 'express';
 import ModeManager from './mode-manager';
@@ -13,6 +13,7 @@ import { SecurityGroup } from '../../helpers/security';
 import { HttpStatusCode } from '../../helpers/customError';
 import TimeTrailRaceMode from './time-trail-race/time-trail-race-mode';
 import logger from '../../logger';
+import { FeatureEnabled } from '../server-settings';
 
 interface EnableModeParams {
   lightsGroupIds: number[];
@@ -79,6 +80,8 @@ export class ModeController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Post('centurion')
+  @FeatureEnabled('CenturionEnabled')
+  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @SuccessResponse(HttpStatusCode.NoContent)
   public async enableCenturion(
     @Request() req: ExpressRequest,
@@ -109,6 +112,8 @@ export class ModeController extends Controller {
     SecurityGroup.BOARD,
   ])
   @Delete('centurion')
+  @FeatureEnabled('CenturionEnabled')
+  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @SuccessResponse(HttpStatusCode.Ok)
   public disableCenturion(@Request() req: ExpressRequest) {
     logger.audit(req.user, 'Disable Centurion mode.');
@@ -120,6 +125,8 @@ export class ModeController extends Controller {
    */
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('time-trail-race')
+  @FeatureEnabled('TimeTrailRaceEnabled')
+  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @SuccessResponse(HttpStatusCode.NoContent)
   public async enableTimeTrailRace(
     @Request() req: ExpressRequest,
@@ -139,6 +146,8 @@ export class ModeController extends Controller {
 
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Delete('time-trail-race')
+  @FeatureEnabled('TimeTrailRaceEnabled')
+  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @SuccessResponse(HttpStatusCode.Ok)
   public disableTimeTrailRacing(@Request() req: ExpressRequest) {
     logger.audit(req.user, 'Disable Spoelbakkenrace mode.');

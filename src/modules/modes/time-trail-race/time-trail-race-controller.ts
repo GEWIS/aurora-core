@@ -8,9 +8,11 @@ import { RegisterPlayerParams } from './time-trail-race-entities';
 import ModeDisabledError from '../mode-disabled-error';
 import { InvalidStateError } from './time-trail-race-invalid-state-error';
 import logger from '../../../logger';
+import { FeatureEnabled } from '../../server-settings';
 
 @Route('modes/time-trail-race')
 @Tags('Modes')
+@FeatureEnabled('TimeTrailRaceEnabled')
 export class TimeTrailRaceController extends Controller {
   private modeManager: ModeManager;
 
@@ -26,6 +28,7 @@ export class TimeTrailRaceController extends Controller {
     SecurityGroup.SCREEN_SUBSCRIBER,
   ])
   @Get('')
+  @Response<string>(409, 'Endpoint is disabled in the server settings')
   public getRaceState() {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
     if (mode === undefined) {
@@ -42,6 +45,7 @@ export class TimeTrailRaceController extends Controller {
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('register-player')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
+  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @Response<InvalidStateError>(428, 'Time Trail Race not in INITIALIZED or SCOREBOARD state')
   public raceRegisterPlayer(@Request() req: ExpressRequest, @Body() params: RegisterPlayerParams) {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
@@ -60,6 +64,7 @@ export class TimeTrailRaceController extends Controller {
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('ready')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
+  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @Response<InvalidStateError>(428, 'Time Trail Race not in PLAYER_REGISTERED state')
   public raceReady(@Request() req: ExpressRequest) {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
@@ -78,6 +83,7 @@ export class TimeTrailRaceController extends Controller {
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('start')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
+  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @Response<InvalidStateError>(428, 'Time Trail Race not in PLAYER_READY state')
   public raceStart(@Request() req: ExpressRequest) {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
@@ -96,6 +102,7 @@ export class TimeTrailRaceController extends Controller {
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('finish')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
+  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @Response<InvalidStateError>(428, 'Time Trail Race not in STARTED state')
   public raceFinish(@Request() req: ExpressRequest) {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
@@ -114,6 +121,7 @@ export class TimeTrailRaceController extends Controller {
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('reveal-score')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
+  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @Response<InvalidStateError>(428, 'Time Trail Race not in FINISHED state')
   public raceRevealScore(@Request() req: ExpressRequest) {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;
@@ -128,6 +136,7 @@ export class TimeTrailRaceController extends Controller {
 
   @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
   @Post('reset-player')
+  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
   public raceResetPlayer(@Request() req: ExpressRequest) {
     const mode = this.modeManager.getMode(TimeTrailRaceMode) as TimeTrailRaceMode | undefined;

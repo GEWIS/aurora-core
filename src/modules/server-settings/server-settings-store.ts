@@ -16,8 +16,6 @@ export type FeatureFlagResponse = {
 export default class ServerSettingsStore<T extends keyof ISettings = keyof ISettings> {
   private static instance: ServerSettingsStore;
 
-  private static featureFlags = new Set<keyof ISettings>();
-
   private initialized = false;
 
   private repo: Repository<ServerSetting>;
@@ -126,28 +124,5 @@ export default class ServerSettingsStore<T extends keyof ISettings = keyof ISett
     const setting = await this.repo.findOne({ where: { key } });
     setting!.value = value;
     return this.repo.save(setting!);
-  }
-
-  /**
-   * Mark a setting as a feature flag, such that the backoffice can request
-   * which feature flags exists and whether they are enabled/disabled
-   * @param key
-   */
-  public static registerFeatureFlag(key: keyof ISettings) {
-    this.featureFlags.add(key);
-  }
-
-  /**
-   * Get a list of all feature flags and whether they are enabled or disabled
-   */
-  public getFeatureFlags(): FeatureFlagResponse {
-    const response: FeatureFlagResponse = [];
-    ServerSettingsStore.featureFlags.forEach((key) => {
-      response.push({
-        key,
-        value: !!this.getSetting(key as T),
-      });
-    });
-    return response;
   }
 }

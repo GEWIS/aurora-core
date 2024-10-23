@@ -3,6 +3,7 @@ import { Body, Get, Post, Res, Route, Security, Tags } from 'tsoa';
 import { SecurityGroup } from '../../helpers/security';
 import ServerSettingsStore from './server-settings-store';
 import { ISettings } from './server-setting';
+import FeatureFlagManager from './feature-flag-manager';
 
 type SetServerSettingRequest = {
   key: string;
@@ -60,6 +61,6 @@ export class ServerSettingsController extends Controller {
   @Security('local', ['*'])
   @Get('feature-flags')
   public getFeatureFlags() {
-    return ServerSettingsStore.getInstance().getFeatureFlags();
+    return FeatureFlagManager.getInstance().getFeatureFlags();
   }
 }
