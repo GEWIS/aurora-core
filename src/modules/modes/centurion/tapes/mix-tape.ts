@@ -17,7 +17,7 @@ export type SongData = {
   bpm?: number;
 };
 
-type Song = {
+export type Song = {
   type: 'song';
   data: SongData | SongData[];
 };

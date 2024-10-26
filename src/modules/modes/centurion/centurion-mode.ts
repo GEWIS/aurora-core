@@ -3,7 +3,7 @@ import { LightsGroup } from '../../lights/entities';
 import { Audio, Screen } from '../../root/entities';
 import SetEffectsHandler from '../../handlers/lights/set-effects-handler';
 import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
-import MixTape, { FeedEvent, SongData } from './tapes/mix-tape';
+import MixTape, { FeedEvent, Horn, Song, SongData } from './tapes/mix-tape';
 import { BeatFadeOut, StaticColor } from '../../lights/effects/color';
 import { SearchLight } from '../../lights/effects/movement';
 import { getTwoComplementaryRgbColors, RgbColor } from '../../lights/color-definitions';
@@ -38,6 +38,12 @@ export default class CenturionMode extends BaseMode<
   private timestamp: number = 0;
 
   public startTime: Date = new Date();
+
+  public lastHornEvent?: Horn & { timestamp: number };
+
+  public lastSongEvent?: Song & { timestamp: number };
+
+  public currentColors?: RgbColor[];
 
   private beatGenerator: ArtificialBeatGenerator;
 
@@ -114,6 +120,11 @@ export default class CenturionMode extends BaseMode<
     this.timestamp = (new Date().getTime() - this.startTime.getTime()) / 1000;
   }
 
+  /**
+   * Broadcast the track we are currently listening to within Aurora
+   * @param song
+   * @private
+   */
   private emitSong(song: SongData | SongData[]) {
     let songs: SongData[];
     if (!Array.isArray(song)) {
@@ -132,6 +143,11 @@ export default class CenturionMode extends BaseMode<
     );
   }
 
+  /**
+   * Get a random effect given a set of colors
+   * @param colors
+   * @private
+   */
   private getRandomEffect(colors: RgbColor[]): LightsEffectBuilder {
     const effects = [
       {
@@ -180,6 +196,7 @@ export default class CenturionMode extends BaseMode<
     logger.debug(event);
 
     if (event.type === 'horn') {
+      this.lastHornEvent = event;
       this.lights.forEach((l) => {
         l.pars.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
         l.movingHeadRgbs.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
@@ -187,7 +204,9 @@ export default class CenturionMode extends BaseMode<
       });
       this.screenHandler.horn(STROBE_TIME, event.data.counter);
     } else if (event.type === 'song') {
+      this.lastSongEvent = event;
       const { colorNames } = getTwoComplementaryRgbColors();
+      this.currentColors = colorNames;
 
       const movingHeadEffectMovement = SearchLight.build({ radiusFactor: 1.5, cycleTime: 3000 });
       const movingHeadEffectColor = StaticColor.build({ color: RgbColor.WHITE });

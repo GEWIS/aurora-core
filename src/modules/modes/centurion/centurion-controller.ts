@@ -15,6 +15,7 @@ import ModeDisabledError from '../mode-disabled-error';
 import logger from '../../../logger';
 import { FeatureEnabled } from '../../server-settings';
 import ServerSettingsStore from '../../server-settings/server-settings-store';
+import { RgbColor } from '../../lights/color-definitions';
 
 interface SkipCenturionRequest {
   /**
@@ -26,6 +27,14 @@ interface SkipCenturionRequest {
 interface CenturionResponse {
   name: string;
   startTime: Date;
+  playing: boolean;
+}
+
+interface CenturionStateResponse {
+  tape?: Pick<MixTape, 'name' | 'coverUrl'>;
+  lastHorn?: HornEvent;
+  lastSong?: SongEvent;
+  colors?: RgbColor[];
   playing: boolean;
 }
 
@@ -73,6 +82,24 @@ export class CenturionController extends Controller {
     return {
       name: mode.tape.name,
       startTime: mode.startTime,
+      playing: mode.playing,
+    };
+  }
+
+  @Security('local', [SecurityGroup.SCREEN_SUBSCRIBER])
+  @Get('state')
+  @Response<string>(409, 'Endpoint is disabled in the server settings')
+  public getCenturionState(): CenturionStateResponse {
+    const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
+    if (mode === undefined) {
+      return { playing: false };
+    }
+
+    return {
+      tape: { name: mode.tape.name, coverUrl: mode.tape.coverUrl },
+      lastHorn: mode.lastHornEvent,
+      lastSong: mode.lastSongEvent,
+      colors: mode.currentColors,
       playing: mode.playing,
     };
   }
