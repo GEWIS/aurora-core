@@ -8,6 +8,11 @@ const DEFAULT_DIM_MILLISECONDS = 500;
 
 export interface SingleFloodProps {
   /**
+   * The flood color, warm white/orange/yellow by default
+   */
+  color?: RgbColor;
+
+  /**
    * In how many milliseconds the lights should turn off with a dim effect
    * @isInt
    * @minimum 0
@@ -50,7 +55,7 @@ export default class SingleFlood extends LightsEffect<SingleFloodProps> {
     const progression = this.getProgression(new Date());
 
     this.lightsGroup.pars.forEach((p) => {
-      p.fixture.setColor(RgbColor.ORANGE);
+      p.fixture.setColor(this.props.color ?? RgbColor.ORANGE);
       p.fixture.setMasterDimmer(255 * progression);
     });
 

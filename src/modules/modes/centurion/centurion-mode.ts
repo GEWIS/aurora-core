@@ -230,7 +230,28 @@ export default class CenturionMode extends BaseMode<
       this.emitSong(event.data);
     } else if (event.type === 'effect') {
       this.lights.forEach((l) => {
-        this.lightsHandler.setColorEffect(l, event.data.effects);
+        if (event.data.reset) {
+          // Reset effect
+          this.lightsHandler.removeColorEffect(l);
+          this.lightsHandler.removeMovementEffect(l);
+        } else if (l.pars.length > 0 && event.data.effects.pars) {
+          // Color effect for pars
+          this.lightsHandler.setColorEffect(l, event.data.effects.pars);
+        } else if (l.movingHeadRgbs.length > 0) {
+          // Color effect for moving head rgb
+          if (event.data.effects.movingHeadRgbColor)
+            this.lightsHandler.setColorEffect(l, event.data.effects.movingHeadRgbColor);
+          // Movement effect for moving head rgb
+          if (event.data.effects.movingHeadRgbMovement)
+            this.lightsHandler.setMovementEffect(l, event.data.effects.movingHeadRgbMovement);
+        } else if (l.movingHeadWheels.length > 0) {
+          // Color effect for moving head wheel
+          if (event.data.effects.movingHeadWheelColor)
+            this.lightsHandler.setColorEffect(l, event.data.effects.movingHeadWheelColor);
+          // Movement effect for moving head wheel
+          if (event.data.effects.movingHeadWheelMovement)
+            this.lightsHandler.setMovementEffect(l, event.data.effects.movingHeadWheelMovement);
+        }
       });
     } else if (event.type === 'other' && event.data === 'stop') {
       this.stop();

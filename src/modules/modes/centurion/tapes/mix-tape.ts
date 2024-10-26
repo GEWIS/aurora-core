@@ -22,11 +22,20 @@ export type Song = {
   data: SongData | SongData[];
 };
 
+export type EffectData = {
+  effects: {
+    pars?: LightsEffectBuilder[];
+    movingHeadRgbColor?: LightsEffectBuilder[];
+    movingHeadRgbMovement?: LightsEffectBuilder[];
+    movingHeadWheelColor?: LightsEffectBuilder[];
+    movingHeadWheelMovement?: LightsEffectBuilder[];
+  };
+  reset?: boolean;
+};
+
 type Effect = {
   type: 'effect';
-  data: {
-    effects: LightsEffectBuilder[];
-  };
+  data: EffectData;
 };
 
 type Other = {

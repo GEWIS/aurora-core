@@ -1,6 +1,7 @@
 import MixTape from './mix-tape';
 import SearchLight from '../../../lights/effects/movement/search-light';
-import { SingleFlood } from '../../../lights/effects/color';
+import { Fire, SingleFlood, StaticColor } from '../../../lights/effects/color';
+import { RgbColor } from '../../../lights/color-definitions';
 
 const centurion: MixTape = {
   name: 'Gebroeders Scooter - Centurion',
@@ -12,28 +13,40 @@ const centurion: MixTape = {
       timestamp: 1,
       type: 'effect',
       data: {
-        effects: [SearchLight.build()],
+        effects: {
+          pars: [Fire.build()],
+          movingHeadWheelColor: [StaticColor.build({ color: RgbColor.BLINDINGWHITE })],
+          movingHeadWheelMovement: [SearchLight.build()],
+        },
       },
     },
     {
       timestamp: 39,
       type: 'effect',
       data: {
-        effects: [SingleFlood.build()],
+        effects: {
+          pars: [SingleFlood.build({ color: RgbColor.BLINDINGWHITE })],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
       },
     },
     {
       timestamp: 40,
       type: 'effect',
       data: {
-        effects: [SingleFlood.build()],
+        effects: {
+          pars: [SingleFlood.build({ color: RgbColor.BLINDINGWHITE })],
+        },
       },
     },
     {
       timestamp: 41,
       type: 'effect',
       data: {
-        effects: [SingleFlood.build()],
+        effects: {
+          pars: [SingleFlood.build({ color: RgbColor.BLINDINGWHITE })],
+        },
       },
     },
     {

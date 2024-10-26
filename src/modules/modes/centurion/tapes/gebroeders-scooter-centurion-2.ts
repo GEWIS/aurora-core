@@ -1,5 +1,7 @@
 import MixTape from './mix-tape';
 import SearchLight from '../../../lights/effects/movement/search-light';
+import { StaticColor } from '../../../lights/effects/color';
+import { RgbColor } from '../../../lights/color-definitions';
 
 const centurion2: MixTape = {
   name: 'Gebroeders Scooter - Centurion 2.0',
@@ -11,7 +13,10 @@ const centurion2: MixTape = {
       timestamp: 1,
       type: 'effect',
       data: {
-        effects: [SearchLight.build()],
+        effects: {
+          movingHeadWheelColor: [StaticColor.build({ color: RgbColor.BLINDINGWHITE })],
+          movingHeadWheelMovement: [SearchLight.build()],
+        },
       },
     },
     {
