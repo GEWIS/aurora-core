@@ -7,7 +7,7 @@ import dataSource from '../../database';
 import { Audio, LightsController, Screen } from './entities';
 import BaseLightsHandler from '../handlers/base-lights-handler';
 import { LightsGroup } from '../lights/entities';
-import { SocketioNamespaces } from '../../socketio-namespaces';
+import { SECURE_NAMESPACES, SocketioNamespaces } from '../../socketio-namespaces';
 import SubscribeEntity from './entities/subscribe-entity';
 import BaseHandler from '../handlers/base-handler';
 import logger from '../../logger';
@@ -102,6 +102,16 @@ export default class SocketConnectionManager {
    * @private
    */
   private async updateSocketId(user: User, namespace: SocketioNamespaces, socketId?: string) {
+    if (!SECURE_NAMESPACES.includes(namespace)) {
+      // Public, unauthenticated namespace, so we do not have to do anything.
+      if (socketId !== undefined) {
+        logger.info(`Connect (${namespace}) with Socket ID ${socketId}`);
+      } else {
+        logger.info(`Disconnect (${namespace})`);
+      }
+      return;
+    }
+
     if (user == null) {
       logger.error('Unknown user tried to connect to socket. Abort.');
       return;
