@@ -36,8 +36,8 @@ export type WaveCreateParams = BaseLightsEffectCreateParams & {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const DEFAULT_NR_WAVES = 1;
-const DEFAULT_CYCLE_TIME = 1000;
+const DEFAULT_NR_WAVES = 2;
+const DEFAULT_CYCLE_TIME = 2000;
 
 export default class Wave extends LightsEffect<WaveProps> {
   private cycleStartTick: Date = new Date();
@@ -55,24 +55,42 @@ export default class Wave extends LightsEffect<WaveProps> {
 
   beat(): void {}
 
+  /**
+   * Get progression of the complete animation (in the range [0, 1])
+   * @param currentTick
+   * @private
+   */
   private getProgression(currentTick: Date) {
     const cycleTime = this.props.cycleTime ?? DEFAULT_CYCLE_TIME;
     return Math.min(1, (currentTick.getTime() - this.cycleStartTick.getTime()) / cycleTime);
   }
 
   /**
-   * Get a fixture's brightness level
-   * @param fixtureIndex
-   * @param progression
+   * Get the relative progression of an individual fixture. The fixture at the start of the chain
+   * will be in range [0, 2]; the fixture at the end in range [-1, 1]; all other fixtures have a
+   * range relatively between those two ranges.
    * @private
    */
-  private getBrightness(fixtureIndex: number, progression: number) {
+  private getRelativeProgression(absoluteProgression: number, fixtureIndex: number) {
     const nrLights = this.lightsGroup.pars.length + this.lightsGroup.movingHeadRgbs.length;
-    const nrWaves = this.props.singleWave ? 1 : (this.props.nrWaves ?? DEFAULT_NR_WAVES);
-    // By default, the animation is a single sine wave over all lights. If we only want to show a
-    // single wave, we should only show half a wave (so we start with all black and end with all
-    // black).
-    return Math.sin((fixtureIndex / (2 * nrLights) + progression - 0.5) * 2 * nrWaves * Math.PI);
+    return fixtureIndex / nrLights - 1 + 2 * absoluteProgression;
+  }
+
+  /**
+   * Get a fixture's brightness level
+   * @private
+   * @param relativeProgression
+   */
+  private getBrightness(relativeProgression: number) {
+    // If we only show a single wave, we want it to be visible. So, by trial and error a size of
+    // 1.5 fits best. This works, because the singleWave prop
+    const nrWaves = this.props.singleWave ? 1.5 : (this.props.nrWaves ?? DEFAULT_NR_WAVES);
+
+    // If we are outside the first half sine wave, we set some bounds.
+    if (this.props.singleWave && relativeProgression < 0) return 0;
+    if (this.props.singleWave && relativeProgression > 1) return 0;
+
+    return Math.sin(relativeProgression * nrWaves * Math.PI);
   }
 
   tick(): LightsGroup {
@@ -84,7 +102,8 @@ export default class Wave extends LightsEffect<WaveProps> {
 
     // Apply the wave effect to the fixture in a group
     const apply = (p: LightsGroupPars | LightsGroupMovingHeadRgbs, i: number) => {
-      const brightness = this.getBrightness(i, progression);
+      const relativeProgression = this.getRelativeProgression(progression, i);
+      const brightness = this.getBrightness(relativeProgression);
       p.fixture.setMasterDimmer(Math.max(0, brightness * 255));
       p.fixture.setColor(this.props.color);
     };
