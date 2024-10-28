@@ -25,9 +25,9 @@ const centurion2Original: MixTape = {
       type: 'effect',
       data: {
         effects: {
-          pars: [StaticColor.build({ color: RgbColor.RED, dimTimeMs: 89.1 - 81.5 })],
+          pars: [StaticColor.build({ color: RgbColor.RED, dimTimeMs: (89.1 - 81.5) * 1000 })],
           movingHeadWheelColor: [
-            StaticColor.build({ color: RgbColor.BLINDINGWHITE, dimTimeMs: 89.1 - 81.5 }),
+            StaticColor.build({ color: RgbColor.BLINDINGWHITE, dimTimeMs: (89.1 - 81.5) * 1000 }),
           ],
           movingHeadWheelMovement: [SearchLight.build()],
         },

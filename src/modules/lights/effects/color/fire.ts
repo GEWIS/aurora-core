@@ -26,9 +26,9 @@ export default class Fire extends LightsEffect<FireProps> {
   tick(): LightsGroup {
     this.lightsGroup.pars.forEach((p) => {
       p.fixture.setCurrentValues({
-        masterDimChannel: 255,
+        masterDimChannel: 128,
         redChannel: 255,
-        greenChannel: 32 + Math.round(Math.random() * 128),
+        greenChannel: 32 + Math.round(Math.random() * 64),
         amberChannel: 128,
       });
     });

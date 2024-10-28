@@ -68,11 +68,11 @@ export default class Wave extends LightsEffect<WaveProps> {
    */
   private getBrightness(fixtureIndex: number, progression: number) {
     const nrLights = this.lightsGroup.pars.length + this.lightsGroup.movingHeadRgbs.length;
-    const nrWaves = this.props.singleWave ? 0.5 : (this.props.nrWaves ?? DEFAULT_NR_WAVES);
+    const nrWaves = this.props.singleWave ? 1 : (this.props.nrWaves ?? DEFAULT_NR_WAVES);
     // By default, the animation is a single sine wave over all lights. If we only want to show a
     // single wave, we should only show half a wave (so we start with all black and end with all
     // black).
-    return Math.sin((-fixtureIndex / nrLights + progression) * 2 * nrWaves * Math.PI);
+    return Math.sin((fixtureIndex / (2 * nrLights) + progression - 0.5) * 2 * nrWaves * Math.PI);
   }
 
   tick(): LightsGroup {

@@ -21,31 +21,31 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 39,
+      timestamp: 38.8,
       type: 'effect',
       data: {
         effects: {
-          pars: [SingleFlood.build({ color: RgbColor.BLINDINGWHITE })],
+          pars: [SingleFlood.build({ color: RgbColor.YELLOW })],
           movingHeadWheelColor: [],
           movingHeadWheelMovement: [],
         },
       },
     },
     {
-      timestamp: 40,
+      timestamp: 39.8,
       type: 'effect',
       data: {
         effects: {
-          pars: [SingleFlood.build({ color: RgbColor.BLINDINGWHITE })],
+          pars: [SingleFlood.build({ color: RgbColor.YELLOW })],
         },
       },
     },
     {
-      timestamp: 41,
+      timestamp: 40.8,
       type: 'effect',
       data: {
         effects: {
-          pars: [SingleFlood.build({ color: RgbColor.BLINDINGWHITE })],
+          pars: [SingleFlood.build({ color: RgbColor.YELLOW })],
         },
       },
     },
