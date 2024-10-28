@@ -11,27 +11,39 @@ export interface StaticColorProps {
   color: RgbColor;
 
   /**
-   * Name of the gobo that should be used
+   * Name of the gobo that should be used (nothing by default)
    */
   gobo?: string;
 
   /**
-   * Name of the gobo rotate that should be used
+   * Name of the gobo rotate that should be used (nothing by default)
    */
   goboRotate?: string;
 
   /**
-   * Beat
+   * Whether to toggle each fixture on/off on the beat of the music (false by default)
    */
   beatToggle?: boolean;
 
   /**
-   * Brightness
+   * Brightness (1 by default)
    * @isInt
    * @minimum 0
    * @maximum 1
    */
   relativeBrightness?: number;
+
+  /**
+   * In how many ms the fixture should light up to the relativeBrightness on effect start.
+   * Disabled if undefined
+   */
+  brightenTimeMs?: number;
+
+  /**
+   * In how many ms the fixture should dim from the relativeBrightness on effect start.
+   * Disabled if undefined or if brightenTimeMs is not undefined
+   */
+  dimTimeMs?: number;
 }
 
 export type StaticColorCreateParams = BaseLightsEffectCreateParams & {
@@ -41,6 +53,8 @@ export type StaticColorCreateParams = BaseLightsEffectCreateParams & {
 
 export default class StaticColor extends LightsEffect<StaticColorProps> {
   private ping = 0;
+
+  private cycleStartTick: Date = new Date();
 
   constructor(lightsGroup: LightsGroup, props: StaticColorProps, features?: TrackPropertiesEvent) {
     super(lightsGroup, features);
@@ -67,20 +81,31 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
   beat(): void {
     if (!this.props.beatToggle) return;
 
-    this.lightsGroup.fixtures.forEach((f, i) => {
-      if ((this.ping + 1) % 2 === i) {
-        f.fixture.setMasterDimmer(Math.round((this.props.relativeBrightness ?? 1) * 255));
-      } else {
-        f.fixture.setMasterDimmer(0);
-      }
-    });
-
     this.ping = (this.ping + 1) % 2;
   }
 
   destroy(): void {}
 
+  private getProgression(durationMs: number) {
+    return Math.min(1, (new Date().getTime() - this.cycleStartTick.getTime()) / durationMs);
+  }
+
   tick(): LightsGroup {
+    let progression = 1;
+    if (this.props.brightenTimeMs) progression = this.getProgression(this.props.brightenTimeMs);
+    if (this.props.dimTimeMs) progression = 1 - this.getProgression(this.props.dimTimeMs);
+
+    this.lightsGroup.fixtures.forEach((f, i) => {
+      // If beatToggle is disabled, or if it is enabled and the fixture should be turned on
+      if (!this.props.beatToggle || i % 2 === this.ping) {
+        f.fixture.setMasterDimmer(
+          Math.round(progression * (this.props.relativeBrightness ?? 1) * 255),
+        );
+      } else {
+        f.fixture.setMasterDimmer(0);
+      }
+    });
+
     return this.lightsGroup;
   }
 }
