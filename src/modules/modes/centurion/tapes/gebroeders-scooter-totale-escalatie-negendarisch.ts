@@ -121,14 +121,6 @@ const centurion: MixTape = {
       type: 'horn',
     },
     {
-      timestamp: 232.6,
-      data: {
-        artist: 'K3',
-        title: 'Heyah Mama',
-      },
-      type: 'song',
-    },
-    {
       timestamp: 341.0,
       data: [
         {
@@ -158,7 +150,7 @@ const centurion: MixTape = {
       type: 'horn',
     },
     {
-      timestamp: 341.0,
+      timestamp: 400.8,
       data: {
         artist: 'Ed Sheeran',
         title: 'Shape of You',
@@ -173,7 +165,7 @@ const centurion: MixTape = {
       type: 'horn',
     },
     {
-      timestamp: 411.6,
+      timestamp: 419.8,
       data: [
         {
           artist: 'Ed Sheeran',
@@ -499,7 +491,7 @@ const centurion: MixTape = {
       type: 'horn',
     },
     {
-      timestamp: 1084.0,
+      timestamp: 1115.0,
       data: {
         artist: 'Sigala and Bryn Christopher',
         title: "Sweet Lovin'",
@@ -1293,14 +1285,6 @@ const centurion: MixTape = {
       type: 'horn',
     },
     {
-      timestamp: 1419.111,
-      data: {
-        artist: '???',
-        title: '???',
-      },
-      type: 'song',
-    },
-    {
       timestamp: 3249.102,
       data: {
         counter: 56,
@@ -1308,7 +1292,7 @@ const centurion: MixTape = {
       type: 'horn',
     },
     {
-      timestamp: 3262.953,
+      timestamp: 3250.0,
       data: {
         artist: 'Jebroer and DJ Paul Elstak',
         title: 'Kind Van De Duivel',

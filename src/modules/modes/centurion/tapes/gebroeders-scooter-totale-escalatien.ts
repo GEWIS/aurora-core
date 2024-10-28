@@ -404,7 +404,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1277.0,
+      timestamp: 1278.0,
       type: 'song',
       data: {
         artist: 'Gwen Stefani, Akon',
@@ -480,18 +480,18 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1494.0,
-      type: 'song',
-      data: {
-        artist: 'Missy Elliott, Ciara, Fat Man Scoop',
-        title: 'Lose Control',
-      },
-    },
-    {
       timestamp: 1493.0,
       type: 'horn',
       data: {
         counter: 23,
+      },
+    },
+    {
+      timestamp: 1495.0,
+      type: 'song',
+      data: {
+        artist: 'Missy Elliott, Ciara, Fat Man Scoop',
+        title: 'Lose Control',
       },
     },
     {
@@ -675,7 +675,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1950.0,
+      timestamp: 2010.0,
       type: 'song',
       data: {
         artist: 'Andre Hazes',
@@ -879,7 +879,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 2484.0,
+      timestamp: 2543.6,
       type: 'song',
       data: {
         artist: 'Paul de Laat',
@@ -1124,7 +1124,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3124.0,
+      timestamp: 3181.6,
       type: 'song',
       data: {
         artist: 'Jebroer, Jayh, Skinto, Stepherd',

@@ -1529,7 +1529,7 @@ const centurion2Original: MixTape = {
       },
     },
     {
-      timestamp: 4649.7,
+      timestamp: 4678.0,
       type: 'song',
       data: {
         artist: 'Peter Wackel',
@@ -1789,7 +1789,7 @@ const centurion2Original: MixTape = {
       },
     },
     {
-      timestamp: 5500.2,
+      timestamp: 5526.0,
       type: 'song',
       data: {
         artist: 'Da Tweekaz',
@@ -1862,7 +1862,7 @@ const centurion2Original: MixTape = {
       },
     },
     {
-      timestamp: 5878.7,
+      timestamp: 5787.7,
       type: 'song',
       data: {
         artist: 'a-ha',
@@ -1903,7 +1903,7 @@ const centurion2Original: MixTape = {
       },
     },
     {
-      timestamp: 5878.9,
+      timestamp: 5890.0,
       type: 'song',
       data: {
         artist: 'Hakkuhbar',
@@ -1915,8 +1915,8 @@ const centurion2Original: MixTape = {
       timestamp: 5911.9,
       type: 'song',
       data: {
-        artist: '???',
-        title: '???',
+        artist: 'The Opposites feat. Sef & Mc Marboo',
+        title: 'Ey Ey Ey',
         bpm: 180,
       },
     },
