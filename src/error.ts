@@ -21,40 +21,20 @@ export function setupErrorHandler(app: Express) {
         message: 'Bad Request',
         details: err?.fields,
       });
-    }
-
-    if (err instanceof HttpApiException) {
+    } else if (err instanceof HttpApiException) {
       // Ignore unauthorized errors
-      if (err.statusCode === HttpStatusCode.Unauthorized) {
-        return;
+      if (err.statusCode !== HttpStatusCode.Unauthorized) {
+        logger.warn(`Caught '${err.statusCode} - ${err.name}' for ${req.path}.`);
       }
-
-      logger.warn(`Caught '${err.statusCode} - ${err.name}' for ${req.path}.`);
-      res.status(err.statusCode).json({
-        message: err.name,
-        details: err.message,
-      });
-    }
-
-    if (err instanceof TrelloAPIError) {
+      res.status(err.statusCode).json(err);
+    } else if (err instanceof TrelloAPIError || err instanceof AxiosError) {
       logger.error(`Caught '${err.message} - ${err.name}' for ${req.path}.`);
       res.status(500).json('Internal server error.');
-    }
-
-    if (err instanceof AxiosError) {
-      logger.error(`Caught '${err.message} - ${err.name}' for ${req.path}.`);
-      res.status(500).json('Internal server error.');
-    }
-
-    if (err instanceof ModeDisabledError) {
+    } else if (err instanceof ModeDisabledError) {
       res.status(404).json(err.message);
-    }
-
-    if (err instanceof InvalidStateError) {
+    } else if (err instanceof InvalidStateError) {
       res.status(428).json(err.message);
-    }
-
-    if (err) {
+    } else {
       logger.error(err);
       res.status(500).json('Internal server error.');
     }

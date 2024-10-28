@@ -4,11 +4,15 @@ export { HttpStatusCode } from 'axios';
 
 export class HttpApiException extends Error {
   public statusCode: number;
+  public message: string;
+  public name: string;
 
   constructor(statusCode: HttpStatusCode, message?: string) {
-    super(message);
+    const statusCodeMessage = HttpStatusCode[statusCode].replace(/([A-Z][a-z]*)/g, ' $1').trim();
+    super(message ?? statusCodeMessage);
 
-    this.name = HttpStatusCode[statusCode].replace(/([A-Z][a-z])/g, ' $1').trim();
+    this.name = statusCodeMessage;
     this.statusCode = statusCode;
+    this.message = message ?? statusCodeMessage;
   }
 }
