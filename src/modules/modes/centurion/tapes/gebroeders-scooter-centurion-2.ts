@@ -1,6 +1,6 @@
-import MixTape from './mix-tape';
+import MixTape, { FeedEvent } from './mix-tape';
 import SearchLight from '../../../lights/effects/movement/search-light';
-import { StaticColor } from '../../../lights/effects/color';
+import { StaticColor, Wave } from '../../../lights/effects/color';
 import { RgbColor } from '../../../lights/color-definitions';
 
 const centurion2: MixTape = {
@@ -14,11 +14,48 @@ const centurion2: MixTape = {
       type: 'effect',
       data: {
         effects: {
+          pars: [StaticColor.build({ color: RgbColor.RED })],
           movingHeadWheelColor: [StaticColor.build({ color: RgbColor.BLINDINGWHITE })],
           movingHeadWheelMovement: [SearchLight.build()],
         },
       },
     },
+    {
+      timestamp: 81.5,
+      type: 'effect',
+      data: {
+        effects: {
+          pars: [StaticColor.build({ color: RgbColor.RED, dimTimeMs: 89.1 - 81.5 })],
+          movingHeadWheelColor: [
+            StaticColor.build({ color: RgbColor.BLINDINGWHITE, dimTimeMs: 89.1 - 81.5 }),
+          ],
+          movingHeadWheelMovement: [SearchLight.build()],
+        },
+      },
+    },
+    {
+      timestamp: 90,
+      type: 'effect',
+      data: {
+        effects: {},
+        reset: true,
+      },
+    },
+    // Waves for the countdown from 10 to 1
+    ...new Array(10)
+      .fill(103.2)
+      .map((baseTimestamp: number, i) => baseTimestamp + i * 1.95)
+      .map(
+        (timestamp): FeedEvent => ({
+          timestamp: timestamp,
+          type: 'effect',
+          data: {
+            effects: {
+              pars: [Wave.build({ color: RgbColor.GOLD, singleWave: true, cycleTime: 1000 })],
+            },
+          },
+        }),
+      ),
     {
       timestamp: 123.8,
       type: 'horn',
