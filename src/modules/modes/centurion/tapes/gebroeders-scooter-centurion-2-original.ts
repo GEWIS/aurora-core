@@ -3,8 +3,8 @@ import SearchLight from '../../../lights/effects/movement/search-light';
 import { StaticColor, Wave } from '../../../lights/effects/color';
 import { RgbColor } from '../../../lights/color-definitions';
 
-const centurion2: MixTape = {
-  name: 'Gebroeders Scooter - Centurion 2.0',
+const centurion2Original: MixTape = {
+  name: 'Gebroeders Scooter - Centurion 2.0 (Original)',
   songFile: 'https://avico.gewis.nl/centurion/gebroeders-scooter-centurion-2.mp3',
   coverUrl: 'https://i1.sndcdn.com/artworks-NnmwEpeM7d9X8Ptc-50Ev5w-t500x500.jpg',
   duration: 6165,
@@ -60,7 +60,7 @@ const centurion2: MixTape = {
       timestamp: 123.8,
       type: 'horn',
       data: {
-        counter: 0,
+        counter: 1,
       },
     },
     {
@@ -76,7 +76,7 @@ const centurion2: MixTape = {
       timestamp: 188.5,
       type: 'horn',
       data: {
-        counter: 1,
+        counter: 2,
       },
     },
     {
@@ -92,7 +92,7 @@ const centurion2: MixTape = {
       timestamp: 257.7,
       type: 'horn',
       data: {
-        counter: 2,
+        counter: 3,
       },
     },
     {
@@ -108,11 +108,10 @@ const centurion2: MixTape = {
       timestamp: 309.0,
       type: 'horn',
       data: {
-        counter: 3,
+        counter: 4,
       },
     },
     {
-      // TODO: fix
       timestamp: 309.5,
       type: 'song',
       data: {
@@ -134,7 +133,7 @@ const centurion2: MixTape = {
       timestamp: 370.0,
       type: 'horn',
       data: {
-        counter: 4,
+        counter: 5,
       },
     },
     {
@@ -150,14 +149,14 @@ const centurion2: MixTape = {
       timestamp: 429.6,
       type: 'horn',
       data: {
-        counter: 5,
+        counter: 6,
       },
     },
     {
       timestamp: 490.3,
       type: 'horn',
       data: {
-        counter: 6,
+        counter: 7,
       },
     },
     {
@@ -173,7 +172,7 @@ const centurion2: MixTape = {
       timestamp: 549.9,
       type: 'horn',
       data: {
-        counter: 7,
+        counter: 8,
       },
     },
     {
@@ -205,7 +204,7 @@ const centurion2: MixTape = {
       timestamp: 615.7,
       type: 'horn',
       data: {
-        counter: 8,
+        counter: 9,
       },
     },
     {
@@ -221,7 +220,7 @@ const centurion2: MixTape = {
       timestamp: 674.0,
       type: 'horn',
       data: {
-        counter: 9,
+        counter: 10,
       },
     },
     {
@@ -237,7 +236,7 @@ const centurion2: MixTape = {
       timestamp: 731.4,
       type: 'horn',
       data: {
-        counter: 10,
+        counter: 11,
       },
     },
     {
@@ -253,7 +252,7 @@ const centurion2: MixTape = {
       timestamp: 787.4,
       type: 'horn',
       data: {
-        counter: 11,
+        counter: 12,
       },
     },
     {
@@ -287,7 +286,7 @@ const centurion2: MixTape = {
       timestamp: 853.7,
       type: 'horn',
       data: {
-        counter: 12,
+        counter: 13,
       },
     },
     {
@@ -303,7 +302,7 @@ const centurion2: MixTape = {
       timestamp: 922.0,
       type: 'horn',
       data: {
-        counter: 13,
+        counter: 14,
       },
     },
     {
@@ -319,7 +318,7 @@ const centurion2: MixTape = {
       timestamp: 976.3,
       type: 'horn',
       data: {
-        counter: 14,
+        counter: 15,
       },
     },
     {
@@ -335,7 +334,7 @@ const centurion2: MixTape = {
       timestamp: 1038.2,
       type: 'horn',
       data: {
-        counter: 15,
+        counter: 16,
       },
     },
     {
@@ -360,7 +359,7 @@ const centurion2: MixTape = {
       timestamp: 1093.2,
       type: 'horn',
       data: {
-        counter: 16,
+        counter: 17,
       },
     },
     {
@@ -376,7 +375,7 @@ const centurion2: MixTape = {
       timestamp: 1157.2,
       type: 'horn',
       data: {
-        counter: 17,
+        counter: 18,
       },
     },
     {
@@ -401,14 +400,14 @@ const centurion2: MixTape = {
       timestamp: 1214.0,
       type: 'horn',
       data: {
-        counter: 18,
+        counter: 19,
       },
     },
     {
       timestamp: 1268.3,
       type: 'horn',
       data: {
-        counter: 19,
+        counter: 20,
       },
     },
     {
@@ -433,7 +432,7 @@ const centurion2: MixTape = {
       timestamp: 1329.2,
       type: 'horn',
       data: {
-        counter: 20,
+        counter: 21,
       },
     },
     {
@@ -449,7 +448,7 @@ const centurion2: MixTape = {
       timestamp: 1391.4,
       type: 'horn',
       data: {
-        counter: 21,
+        counter: 22,
       },
     },
     {
@@ -474,7 +473,7 @@ const centurion2: MixTape = {
       timestamp: 1454.6,
       type: 'horn',
       data: {
-        counter: 22,
+        counter: 23,
       },
     },
     {
@@ -490,14 +489,14 @@ const centurion2: MixTape = {
       timestamp: 1514.8,
       type: 'horn',
       data: {
-        counter: 23,
+        counter: 24,
       },
     },
     {
       timestamp: 1570.4,
       type: 'horn',
       data: {
-        counter: 24,
+        counter: 25,
       },
     },
     {
@@ -522,7 +521,7 @@ const centurion2: MixTape = {
       timestamp: 1631.0,
       type: 'horn',
       data: {
-        counter: 25,
+        counter: 26,
       },
     },
     {
@@ -538,7 +537,7 @@ const centurion2: MixTape = {
       timestamp: 1688.3,
       type: 'horn',
       data: {
-        counter: 26,
+        counter: 27,
       },
     },
     {
@@ -554,7 +553,7 @@ const centurion2: MixTape = {
       timestamp: 1751.3,
       type: 'horn',
       data: {
-        counter: 27,
+        counter: 28,
       },
     },
     {
@@ -577,7 +576,7 @@ const centurion2: MixTape = {
       timestamp: 1815.7,
       type: 'horn',
       data: {
-        counter: 28,
+        counter: 29,
       },
     },
     {
@@ -593,7 +592,7 @@ const centurion2: MixTape = {
       timestamp: 1870.3,
       type: 'horn',
       data: {
-        counter: 29,
+        counter: 30,
       },
     },
     {
@@ -616,7 +615,7 @@ const centurion2: MixTape = {
       timestamp: 1926.5,
       type: 'horn',
       data: {
-        counter: 30,
+        counter: 31,
       },
     },
     {
@@ -632,7 +631,7 @@ const centurion2: MixTape = {
       timestamp: 1992.1,
       type: 'horn',
       data: {
-        counter: 31,
+        counter: 32,
       },
     },
     {
@@ -648,7 +647,7 @@ const centurion2: MixTape = {
       timestamp: 2053.7,
       type: 'horn',
       data: {
-        counter: 32,
+        counter: 33,
       },
     },
     {
@@ -671,7 +670,7 @@ const centurion2: MixTape = {
       timestamp: 2112.8,
       type: 'horn',
       data: {
-        counter: 33,
+        counter: 34,
       },
     },
     {
@@ -696,7 +695,7 @@ const centurion2: MixTape = {
       timestamp: 2172.9,
       type: 'horn',
       data: {
-        counter: 34,
+        counter: 35,
       },
     },
     {
@@ -712,7 +711,7 @@ const centurion2: MixTape = {
       timestamp: 2238.4,
       type: 'horn',
       data: {
-        counter: 35,
+        counter: 36,
       },
     },
     {
@@ -728,14 +727,14 @@ const centurion2: MixTape = {
       timestamp: 2288.6,
       type: 'horn',
       data: {
-        counter: 36,
+        counter: 37,
       },
     },
     {
       timestamp: 2347.5,
       type: 'horn',
       data: {
-        counter: 37,
+        counter: 38,
       },
     },
     {
@@ -760,7 +759,7 @@ const centurion2: MixTape = {
       timestamp: 2417.3,
       type: 'horn',
       data: {
-        counter: 38,
+        counter: 39,
       },
     },
     {
@@ -776,7 +775,7 @@ const centurion2: MixTape = {
       timestamp: 2473.7,
       type: 'horn',
       data: {
-        counter: 39,
+        counter: 40,
       },
     },
     {
@@ -801,7 +800,7 @@ const centurion2: MixTape = {
       timestamp: 2537.3,
       type: 'horn',
       data: {
-        counter: 40,
+        counter: 41,
       },
     },
     {
@@ -817,7 +816,7 @@ const centurion2: MixTape = {
       timestamp: 2589.4,
       type: 'horn',
       data: {
-        counter: 41,
+        counter: 42,
       },
     },
     {
@@ -842,7 +841,7 @@ const centurion2: MixTape = {
       timestamp: 2647.0,
       type: 'horn',
       data: {
-        counter: 42,
+        counter: 43,
       },
     },
     {
@@ -858,7 +857,7 @@ const centurion2: MixTape = {
       timestamp: 2715.6,
       type: 'horn',
       data: {
-        counter: 43,
+        counter: 44,
       },
     },
     {
@@ -874,7 +873,7 @@ const centurion2: MixTape = {
       timestamp: 2773.0,
       type: 'horn',
       data: {
-        counter: 44,
+        counter: 45,
       },
     },
     {
@@ -890,7 +889,7 @@ const centurion2: MixTape = {
       timestamp: 2832.1,
       type: 'horn',
       data: {
-        counter: 45,
+        counter: 46,
       },
     },
     {
@@ -906,7 +905,7 @@ const centurion2: MixTape = {
       timestamp: 2891.3,
       type: 'horn',
       data: {
-        counter: 46,
+        counter: 47,
       },
     },
     {
@@ -922,7 +921,7 @@ const centurion2: MixTape = {
       timestamp: 2950.7,
       type: 'horn',
       data: {
-        counter: 47,
+        counter: 48,
       },
     },
     {
@@ -947,7 +946,7 @@ const centurion2: MixTape = {
       timestamp: 3011.6,
       type: 'horn',
       data: {
-        counter: 48,
+        counter: 49,
       },
     },
     {
@@ -963,7 +962,7 @@ const centurion2: MixTape = {
       timestamp: 3068.7,
       type: 'horn',
       data: {
-        counter: 49,
+        counter: 50,
       },
     },
     {
@@ -979,7 +978,7 @@ const centurion2: MixTape = {
       timestamp: 3129.8,
       type: 'horn',
       data: {
-        counter: 50,
+        counter: 51,
       },
     },
     {
@@ -995,7 +994,7 @@ const centurion2: MixTape = {
       timestamp: 3186.8,
       type: 'horn',
       data: {
-        counter: 51,
+        counter: 52,
       },
     },
     {
@@ -1020,7 +1019,7 @@ const centurion2: MixTape = {
       timestamp: 3246.2,
       type: 'horn',
       data: {
-        counter: 52,
+        counter: 53,
       },
     },
     {
@@ -1036,7 +1035,7 @@ const centurion2: MixTape = {
       timestamp: 3316.0,
       type: 'horn',
       data: {
-        counter: 53,
+        counter: 54,
       },
     },
     {
@@ -1077,7 +1076,7 @@ const centurion2: MixTape = {
       timestamp: 3369.7,
       type: 'horn',
       data: {
-        counter: 54,
+        counter: 55,
       },
     },
     {
@@ -1093,7 +1092,7 @@ const centurion2: MixTape = {
       timestamp: 3423.2,
       type: 'horn',
       data: {
-        counter: 55,
+        counter: 56,
       },
     },
     {
@@ -1109,7 +1108,7 @@ const centurion2: MixTape = {
       timestamp: 3482.2,
       type: 'horn',
       data: {
-        counter: 56,
+        counter: 57,
       },
     },
     {
@@ -1125,7 +1124,7 @@ const centurion2: MixTape = {
       timestamp: 3542.2,
       type: 'horn',
       data: {
-        counter: 57,
+        counter: 58,
       },
     },
     {
@@ -1166,14 +1165,14 @@ const centurion2: MixTape = {
       timestamp: 3621.1,
       type: 'horn',
       data: {
-        counter: 58,
+        counter: 59,
       },
     },
     {
       timestamp: 3665.0,
       type: 'horn',
       data: {
-        counter: 59,
+        counter: 60,
       },
     },
     {
@@ -1198,7 +1197,7 @@ const centurion2: MixTape = {
       timestamp: 3722.8,
       type: 'horn',
       data: {
-        counter: 60,
+        counter: 61,
       },
     },
     {
@@ -1214,7 +1213,7 @@ const centurion2: MixTape = {
       timestamp: 3793.9,
       type: 'horn',
       data: {
-        counter: 61,
+        counter: 62,
       },
     },
     {
@@ -1239,7 +1238,7 @@ const centurion2: MixTape = {
       timestamp: 3854.6,
       type: 'horn',
       data: {
-        counter: 62,
+        counter: 63,
       },
     },
     {
@@ -1255,7 +1254,7 @@ const centurion2: MixTape = {
       timestamp: 3915.2,
       type: 'horn',
       data: {
-        counter: 63,
+        counter: 64,
       },
     },
     {
@@ -1278,7 +1277,7 @@ const centurion2: MixTape = {
       timestamp: 3973.7,
       type: 'horn',
       data: {
-        counter: 64,
+        counter: 65,
       },
     },
     {
@@ -1294,7 +1293,7 @@ const centurion2: MixTape = {
       timestamp: 4029.9,
       type: 'horn',
       data: {
-        counter: 65,
+        counter: 66,
       },
     },
     {
@@ -1321,7 +1320,7 @@ const centurion2: MixTape = {
       timestamp: 4155.7,
       type: 'horn',
       data: {
-        counter: 66,
+        counter: 67,
       },
     },
     {
@@ -1346,7 +1345,7 @@ const centurion2: MixTape = {
       timestamp: 4208.9,
       type: 'horn',
       data: {
-        counter: 67,
+        counter: 68,
       },
     },
     {
@@ -1362,7 +1361,7 @@ const centurion2: MixTape = {
       timestamp: 4263.6,
       type: 'horn',
       data: {
-        counter: 68,
+        counter: 69,
       },
     },
     {
@@ -1387,7 +1386,7 @@ const centurion2: MixTape = {
       timestamp: 4321.7,
       type: 'horn',
       data: {
-        counter: 69,
+        counter: 70,
       },
     },
     {
@@ -1412,7 +1411,7 @@ const centurion2: MixTape = {
       timestamp: 4384.4,
       type: 'horn',
       data: {
-        counter: 70,
+        counter: 71,
       },
     },
     {
@@ -1444,7 +1443,7 @@ const centurion2: MixTape = {
       timestamp: 4450.5,
       type: 'horn',
       data: {
-        counter: 71,
+        counter: 72,
       },
     },
     {
@@ -1469,7 +1468,7 @@ const centurion2: MixTape = {
       timestamp: 4504.0,
       type: 'horn',
       data: {
-        counter: 72,
+        counter: 73,
       },
     },
     {
@@ -1485,7 +1484,7 @@ const centurion2: MixTape = {
       timestamp: 4560.7,
       type: 'horn',
       data: {
-        counter: 73,
+        counter: 74,
       },
     },
     {
@@ -1501,7 +1500,7 @@ const centurion2: MixTape = {
       timestamp: 4615.5,
       type: 'horn',
       data: {
-        counter: 74,
+        counter: 75,
       },
     },
     {
@@ -1526,7 +1525,7 @@ const centurion2: MixTape = {
       timestamp: 4677.3,
       type: 'horn',
       data: {
-        counter: 75,
+        counter: 76,
       },
     },
     {
@@ -1551,7 +1550,7 @@ const centurion2: MixTape = {
       timestamp: 4738.8,
       type: 'horn',
       data: {
-        counter: 76,
+        counter: 77,
       },
     },
     {
@@ -1567,7 +1566,7 @@ const centurion2: MixTape = {
       timestamp: 4796.2,
       type: 'horn',
       data: {
-        counter: 77,
+        counter: 78,
       },
     },
     {
@@ -1592,7 +1591,7 @@ const centurion2: MixTape = {
       timestamp: 4858.5,
       type: 'horn',
       data: {
-        counter: 78,
+        counter: 79,
       },
     },
     {
@@ -1617,7 +1616,7 @@ const centurion2: MixTape = {
       timestamp: 4922.5,
       type: 'horn',
       data: {
-        counter: 79,
+        counter: 80,
       },
     },
     {
@@ -1633,7 +1632,7 @@ const centurion2: MixTape = {
       timestamp: 4979.6,
       type: 'horn',
       data: {
-        counter: 80,
+        counter: 81,
       },
     },
     {
@@ -1649,7 +1648,7 @@ const centurion2: MixTape = {
       timestamp: 5046.5,
       type: 'horn',
       data: {
-        counter: 81,
+        counter: 82,
       },
     },
     {
@@ -1665,7 +1664,7 @@ const centurion2: MixTape = {
       timestamp: 5111.1,
       type: 'horn',
       data: {
-        counter: 82,
+        counter: 83,
       },
     },
     {
@@ -1681,7 +1680,7 @@ const centurion2: MixTape = {
       timestamp: 5158.9,
       type: 'horn',
       data: {
-        counter: 83,
+        counter: 84,
       },
     },
     {
@@ -1697,7 +1696,7 @@ const centurion2: MixTape = {
       timestamp: 5217.5,
       type: 'horn',
       data: {
-        counter: 84,
+        counter: 85,
       },
     },
     {
@@ -1713,7 +1712,7 @@ const centurion2: MixTape = {
       timestamp: 5280.5,
       type: 'horn',
       data: {
-        counter: 85,
+        counter: 86,
       },
     },
     {
@@ -1738,7 +1737,7 @@ const centurion2: MixTape = {
       timestamp: 5345.4,
       type: 'horn',
       data: {
-        counter: 86,
+        counter: 87,
       },
     },
     {
@@ -1754,7 +1753,7 @@ const centurion2: MixTape = {
       timestamp: 5408.6,
       type: 'horn',
       data: {
-        counter: 87,
+        counter: 88,
       },
     },
     {
@@ -1770,7 +1769,7 @@ const centurion2: MixTape = {
       timestamp: 5460.6,
       type: 'horn',
       data: {
-        counter: 88,
+        counter: 89,
       },
     },
     {
@@ -1786,7 +1785,7 @@ const centurion2: MixTape = {
       timestamp: 5525.3,
       type: 'horn',
       data: {
-        counter: 89,
+        counter: 90,
       },
     },
     {
@@ -1802,7 +1801,7 @@ const centurion2: MixTape = {
       timestamp: 5587.1,
       type: 'horn',
       data: {
-        counter: 90,
+        counter: 91,
       },
     },
     {
@@ -1818,7 +1817,7 @@ const centurion2: MixTape = {
       timestamp: 5651.8,
       type: 'horn',
       data: {
-        counter: 91,
+        counter: 92,
       },
     },
     {
@@ -1843,7 +1842,7 @@ const centurion2: MixTape = {
       timestamp: 5701.5,
       type: 'horn',
       data: {
-        counter: 92,
+        counter: 93,
       },
     },
     {
@@ -1859,7 +1858,7 @@ const centurion2: MixTape = {
       timestamp: 5764.2,
       type: 'horn',
       data: {
-        counter: 93,
+        counter: 94,
       },
     },
     {
@@ -1875,7 +1874,7 @@ const centurion2: MixTape = {
       timestamp: 5822.3,
       type: 'horn',
       data: {
-        counter: 94,
+        counter: 95,
       },
     },
     {
@@ -1900,7 +1899,7 @@ const centurion2: MixTape = {
       timestamp: 5888.4,
       type: 'horn',
       data: {
-        counter: 95,
+        counter: 96,
       },
     },
     {
@@ -1925,7 +1924,7 @@ const centurion2: MixTape = {
       timestamp: 5942.6,
       type: 'horn',
       data: {
-        counter: 96,
+        counter: 97,
       },
     },
     {
@@ -1950,7 +1949,7 @@ const centurion2: MixTape = {
       timestamp: 6017.0,
       type: 'horn',
       data: {
-        counter: 97,
+        counter: 98,
       },
     },
     {
@@ -1966,17 +1965,17 @@ const centurion2: MixTape = {
       timestamp: 6071.2,
       type: 'horn',
       data: {
-        counter: 98,
+        counter: 99,
       },
     },
     {
       timestamp: 6127.6,
       type: 'horn',
       data: {
-        counter: 99,
+        counter: 100,
       },
     },
   ],
 };
 
-export default centurion2;
+export default centurion2Original;
