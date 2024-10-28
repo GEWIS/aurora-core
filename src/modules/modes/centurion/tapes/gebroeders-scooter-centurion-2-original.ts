@@ -11,10 +11,15 @@ const centurion2Original: MixTape = {
   feed: [
     {
       timestamp: 1,
+      type: 'bpm',
+      data: { bpm: 130 },
+    },
+    {
+      timestamp: 1,
       type: 'effect',
       data: {
         effects: {
-          pars: [StaticColor.build({ color: RgbColor.RED })],
+          pars: [StaticColor.build({ color: RgbColor.RED, beatToggle: true })],
           movingHeadWheelColor: [StaticColor.build({ color: RgbColor.BLINDINGWHITE })],
           movingHeadWheelMovement: [SearchLight.build()],
         },
@@ -25,7 +30,13 @@ const centurion2Original: MixTape = {
       type: 'effect',
       data: {
         effects: {
-          pars: [StaticColor.build({ color: RgbColor.RED, dimTimeMs: (89.1 - 81.5) * 1000 })],
+          pars: [
+            StaticColor.build({
+              color: RgbColor.RED,
+              beatToggle: true,
+              dimTimeMs: (89.1 - 81.5) * 1000,
+            }),
+          ],
           movingHeadWheelColor: [
             StaticColor.build({ color: RgbColor.BLINDINGWHITE, dimTimeMs: (89.1 - 81.5) * 1000 }),
           ],

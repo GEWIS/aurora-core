@@ -95,16 +95,18 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
     if (this.props.brightenTimeMs) progression = this.getProgression(this.props.brightenTimeMs);
     if (this.props.dimTimeMs) progression = 1 - this.getProgression(this.props.dimTimeMs);
 
-    this.lightsGroup.fixtures.forEach((f, i) => {
-      // If beatToggle is disabled, or if it is enabled and the fixture should be turned on
-      if (!this.props.beatToggle || i % 2 === this.ping) {
-        f.fixture.setMasterDimmer(
-          Math.round(progression * (this.props.relativeBrightness ?? 1) * 255),
-        );
-      } else {
-        f.fixture.setMasterDimmer(0);
-      }
-    });
+    this.lightsGroup.fixtures
+      .sort((f1, f2) => f1.firstChannel - f2.firstChannel)
+      .forEach((f, i) => {
+        // If beatToggle is disabled, or if it is enabled and the fixture should be turned on
+        if (!this.props.beatToggle || i % 2 === this.ping) {
+          f.fixture.setMasterDimmer(
+            Math.round(progression * (this.props.relativeBrightness ?? 1) * 255),
+          );
+        } else {
+          f.fixture.setMasterDimmer(0);
+        }
+      });
 
     return this.lightsGroup;
   }

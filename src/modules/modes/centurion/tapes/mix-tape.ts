@@ -38,6 +38,15 @@ type Effect = {
   data: EffectData;
 };
 
+export type BpmData = {
+  bpm: number;
+};
+
+type Bpm = {
+  type: 'bpm';
+  data: BpmData;
+};
+
 type Other = {
   type: 'other';
   data: any;
@@ -45,7 +54,7 @@ type Other = {
 
 export type FeedEvent = {
   timestamp: number;
-} & (Horn | Song | Effect | Other);
+} & (Horn | Song | Effect | Bpm | Other);
 
 export default interface MixTape {
   /** Unique name of the tape */

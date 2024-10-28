@@ -253,6 +253,8 @@ export default class CenturionMode extends BaseMode<
             this.lightsHandler.setMovementEffect(l, event.data.effects.movingHeadWheelMovement);
         }
       });
+    } else if (event.type === 'bpm') {
+      this.beatGenerator.start(event.data.bpm);
     } else if (event.type === 'other' && event.data === 'stop') {
       this.stop();
     }
