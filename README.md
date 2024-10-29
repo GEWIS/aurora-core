@@ -16,15 +16,9 @@ The other repositories can be found here:
 - NodeJS 20.
 
 ## Installation
-<<<<<<< HEAD
-1. Copy `.env.example` to `.env` and (optionally) fill in the environment variables. 
-2. Run `npm install`.
-3. Run `npm run dev`.
-=======
 1. Copy `.env.example` to `.env` and fill in the environment variables.
 2. Run `yarn install`.
 3. Run `yarn dev`.
->>>>>>> 0babc7c (feat: move to yarn, fix pino typing)
 4. The application is now running at http://localhost:3000. The API documentation can be found at http://localhost:3000/api-docs.
 
 Authentication is done using Keycloak (OIDC). However, while in development mode you can also use the `/auth/mock` endpoint to mock a Keycloak authentication.
