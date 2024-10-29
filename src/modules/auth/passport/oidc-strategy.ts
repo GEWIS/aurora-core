@@ -57,7 +57,7 @@ passport.use(
       return;
     }
 
-    if (Object.values(OidcProviders).includes(process.env.OIDC_PROVIDER as OidcProviders)) {
+    if (!Object.values(OidcProviders).includes(process.env.OIDC_PROVIDER as OidcProviders)) {
       logger.error(
         'The environment variable OIDC_PROVIDER is not a valid OIDC provider. Options are ' +
           Object.values(OidcProviders).join('; '),
