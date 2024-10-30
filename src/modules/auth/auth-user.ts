@@ -1,9 +1,6 @@
-import { Audio, Screen } from '../root/entities';
-import { LightsGroup } from '../lights/entities';
-import SubscribeEntity from '../root/entities/subscribe-entity';
 import { SecurityGroup } from '../../helpers/security';
 
-export interface AuthUser {
+interface AuthUser {
   id: string;
   name: string;
   roles: SecurityGroup[];
@@ -13,10 +10,17 @@ export interface AuthUser {
   screenId?: number;
 }
 
-export function userIsEntity(user: AuthUser, entity: SubscribeEntity): boolean {
+/**
+ * Check if the given object is an AuthUser
+ * @param obj - The object to check
+ */
+function isAuthUser(obj: unknown): obj is AuthUser {
   return (
-    (entity.constructor.name === Audio.name && entity.id === user.audioId) ||
-    (entity.constructor.name === Screen.name && entity.id === user.screenId) ||
-    (entity.constructor.name === LightsGroup.name && entity.id === user.lightsControllerId)
+    (obj as AuthUser)?.id !== undefined &&
+    typeof (obj as AuthUser)?.id === 'string' &&
+    (obj as AuthUser)?.name !== undefined &&
+    typeof (obj as AuthUser)?.name === 'string'
   );
 }
+
+export { AuthUser, isAuthUser };

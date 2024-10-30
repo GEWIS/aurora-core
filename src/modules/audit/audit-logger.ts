@@ -1,19 +1,7 @@
 import logger from '../../logger';
 import AuditService from './audit-service';
 import { AuthUser } from '../auth';
-
-/**
- * Check if the given object is an AuthUser
- * @param obj - The object to check
- */
-function isAuthUser(obj: unknown): obj is AuthUser {
-  return (
-    (obj as AuthUser)?.id !== undefined &&
-    typeof (obj as AuthUser)?.id === 'string' &&
-    (obj as AuthUser)?.name !== undefined &&
-    typeof (obj as AuthUser)?.name === 'string'
-  );
-}
+import { isAuthUser } from '../auth/auth-user';
 
 /**
  * Log an audit message
@@ -22,11 +10,16 @@ function isAuthUser(obj: unknown): obj is AuthUser {
  * @param args - Additional arguments to log
  */
 export function logAudit(user: unknown, msg?: string, ...args: any[]): void {
+  // If there is no message to be logged, return immediately
+  if (!msg) return;
+  // Check if the provided user is valid, otherwise return
   if (!isAuthUser(user)) {
-    logger.error(user, 'Invalid user provided, no id/name present.');
+    logger.error(
+      user,
+      `Ran into an issue when logging "${msg}": invalid user provided, no id/name present`,
+    );
     return;
   }
-  if (!msg) return;
   logger.trace<AuthUser>(user, msg, args);
 
   new AuditService()
