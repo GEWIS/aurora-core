@@ -18,6 +18,8 @@ import SocketConnectionManager from './modules/root/socket-connection-manager';
 import { ServerSettingsStore } from './modules/server-settings';
 import registerCronJobs from './cron';
 import EmitterStore from './modules/events/emitter-store';
+// do not remove; used for extending existing types
+import Types from './types';
 
 async function createApp(): Promise<void> {
   // Fix for production issue where a Docker volume overwrites the contents of a folder instead of merging them

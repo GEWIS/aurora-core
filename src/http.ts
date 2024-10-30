@@ -7,7 +7,7 @@ import passport from 'passport';
 import { pinoHttp } from 'pino-http';
 import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
-import { AuthUser, SessionMiddleware } from './modules/auth';
+import { SessionMiddleware } from './modules/auth';
 import { setupErrorHandler } from './error';
 import { authResponse } from './modules/auth/passport';
 
@@ -25,12 +25,6 @@ export function customOrigin(
     callback(null, origins);
   } else {
     callback(new Error('No origins defined'), requestOrigin);
-  }
-}
-
-declare global {
-  namespace Express {
-    interface User extends AuthUser {}
   }
 }
 
