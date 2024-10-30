@@ -24,6 +24,7 @@ interface EnableModeParams {
 
 interface CenturionParams extends EnableModeParams {
   centurionName: string;
+  centurionArtist: string;
 }
 
 interface TimeTrailRaceParams extends EnableModeParams {
@@ -84,7 +85,9 @@ export class ModeController extends Controller {
 
     const centurionMode = new CenturionMode(lights, screens, audios);
     centurionMode.initialize(this.modeManager.musicEmitter);
-    const tape = tapes.find((t) => t.name === params.centurionName);
+    const tape = tapes.find((t) => {
+      return t.name === params.centurionName && t.artist === params.centurionArtist;
+    });
     if (tape === undefined) {
       this.setStatus(404);
       return 'Centurion tape not found.';
