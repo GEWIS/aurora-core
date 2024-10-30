@@ -113,6 +113,10 @@ export const securityGroups = {
   sudosos: {
     subscriber: [SecurityGroup.SCREEN_SUBSCRIBER],
   },
+  serverSettings: {
+    base: allSecurityGroups,
+    privileged: [SecurityGroup.ADMIN],
+  },
 };
 
 // Since object above cannot be type directly, we cast it here

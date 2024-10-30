@@ -1,9 +1,10 @@
 import { Controller, TsoaResponse } from '@tsoa/runtime';
 import { Body, Get, Post, Res, Route, Security, Tags } from 'tsoa';
-import { SecurityGroup } from '../../helpers/security';
+import { SecurityGroup, SecurityNames } from '../../helpers/security';
 import ServerSettingsStore from './server-settings-store';
 import { ISettings } from './server-setting';
 import FeatureFlagManager from './feature-flag-manager';
+import { securityGroups } from '../../helpers/security-groups';
 
 type SetServerSettingRequest = {
   key: string;
@@ -17,7 +18,7 @@ export class ServerSettingsController extends Controller {
    * Get all server settings. NOTE: this can include secrets
    * like private keys!
    */
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.serverSettings.privileged)
   @Get('')
   public async getSettings() {
     return ServerSettingsStore.getInstance().getSettings();
@@ -28,7 +29,7 @@ export class ServerSettingsController extends Controller {
    * @param request
    * @param validationErrorResponse
    */
-  @Security('local', [SecurityGroup.ADMIN])
+  @Security(SecurityNames.LOCAL, securityGroups.serverSettings.privileged)
   @Post('')
   public async setSetting(
     @Body() request: SetServerSettingRequest,
@@ -58,7 +59,7 @@ export class ServerSettingsController extends Controller {
   /**
    * Get a list of all feature flags and whether they are enabled/disabled.
    */
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.serverSettings.base)
   @Get('feature-flags')
   public getFeatureFlags() {
     return FeatureFlagManager.getInstance().getFeatureFlags();
