@@ -2,11 +2,11 @@ import passport from 'passport';
 import { Strategy as CustomStrategy } from 'passport-custom';
 import { Request as ExRequest, Response as ExResponse } from 'express';
 import { HttpStatusCode } from 'axios';
-import { HttpApiException } from '../../../helpers/customError';
+import { HttpApiException } from '../../../helpers/custom-error';
 import database from '../../../database';
 import { ApiKey } from '../entities';
 import { SecurityGroup } from '../../../helpers/security';
-import { User } from '../user';
+import { AuthUser } from '../auth-user';
 
 passport.use(
   'apikey',
@@ -50,10 +50,6 @@ passport.use(
       audioId: identity.audio?.id,
       screenId: identity.screen?.id,
       lightsControllerId: identity.lightsController?.id,
-    } as User);
+    } as AuthUser);
   }),
 );
-
-export const apiKeyResponse = (req: ExRequest, res: ExResponse): void => {
-  res.status(200).send(req.user);
-};

@@ -1,7 +1,8 @@
 import MixTape from './mix-tape';
 
 const athenaCenturion: MixTape = {
-  name: 'ATHENA Centurion',
+  name: 'Centurion',
+  artist: 'ATHENA',
   songFile: 'https://avico.gewis.nl/centurion/athena-centurion.mp3',
   coverUrl: '',
   duration: 6006,

@@ -3,6 +3,7 @@ import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from 
 import { LightsGroup } from '../../entities';
 import { RgbColor } from '../../color-definitions';
 import { TrackPropertiesEvent } from '../../../events/music-emitter-events';
+import { ColorEffects } from './color-effects';
 
 export interface StaticColorProps {
   /**
@@ -47,7 +48,7 @@ export interface StaticColorProps {
 }
 
 export type StaticColorCreateParams = BaseLightsEffectCreateParams & {
-  type: 'StaticColor';
+  type: ColorEffects.StaticColor;
   props: StaticColorProps;
 };
 

@@ -1,21 +1,16 @@
 import { Body, Get, Post, Request, Response, Route, Security, SuccessResponse, Tags } from 'tsoa';
-import { Controller, Middlewares } from '@tsoa/runtime';
-import {
-  NextFunction,
-  Request as ExRequest,
-  Request as ExpressRequest,
-  Response as ExResponse,
-} from 'express';
+import { Controller } from '@tsoa/runtime';
+import { Request as ExpressRequest } from 'express';
 import ModeManager from '../mode-manager';
 import CenturionMode from './centurion-mode';
-import { SecurityGroup } from '../../../helpers/security';
+import { SecurityNames } from '../../../helpers/security';
 import MixTape, { HornData, SongData } from './tapes/mix-tape';
 import tapes from './tapes';
 import ModeDisabledError from '../mode-disabled-error';
 import logger from '../../../logger';
 import { FeatureEnabled } from '../../server-settings';
-import ServerSettingsStore from '../../server-settings/server-settings-store';
 import { RgbColor } from '../../lights/color-definitions';
+import { securityGroups } from '../../../helpers/security-groups';
 
 interface SkipCenturionRequest {
   /**
@@ -50,7 +45,7 @@ interface SongEvent {
   data: SongData | SongData[];
 }
 
-interface MixTapeResponse extends Pick<MixTape, 'name' | 'coverUrl'> {
+interface MixTapeResponse extends Pick<MixTape, 'name' | 'artist' | 'coverUrl'> {
   events: (HornEvent | SongEvent)[];
   /** Amount of horns */
   horns: number;
@@ -69,7 +64,7 @@ export class CenturionController extends Controller {
     this.modeManager = ModeManager.getInstance();
   }
 
-  @Security('local', ['*'])
+  @Security(SecurityNames.LOCAL, securityGroups.centurion.base)
   @Get('')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   public getCenturion(): CenturionResponse | null {
@@ -86,7 +81,7 @@ export class CenturionController extends Controller {
     };
   }
 
-  @Security('local', [SecurityGroup.SCREEN_SUBSCRIBER])
+  @Security(SecurityNames.LOCAL, securityGroups.centurion.base)
   @Get('state')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   public getCenturionState(): CenturionStateResponse {
@@ -107,17 +102,12 @@ export class CenturionController extends Controller {
   /**
    * Start a centurion
    */
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.centurion.privileged)
   @Post('start')
   @SuccessResponse(204, 'Start commands sent')
-  @Response<ModeDisabledError>(404, 'Centurion not enabled')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   @Response<string>(428, 'Centurion not yet fully initialized. Please wait and try again later')
+  @Response<ModeDisabledError>(404, 'Centurion not enabled')
   public startCenturion(@Request() req: ExpressRequest) {
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
@@ -135,27 +125,21 @@ export class CenturionController extends Controller {
     return '';
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.centurion.privileged)
   @Post('skip')
   @SuccessResponse(204, 'Skip commands sent')
   @Response<string>(400, 'Invalid timestamp provided')
   @Response<ModeDisabledError>(404, 'Centurion not enabled')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   public skipCenturion(@Request() req: ExpressRequest, @Body() body: SkipCenturionRequest) {
-    const { seconds } = body;
     const mode = this.modeManager.getMode(CenturionMode) as CenturionMode;
     if (mode === undefined) {
       throw new ModeDisabledError('Centurion not enabled');
     }
 
-    logger.audit(req.user, `Skip Centurion to "${seconds}" seconds.`);
+    logger.audit(req.user, `Skip Centurion to "${body.seconds}" seconds.`);
 
-    mode.skip(seconds);
+    mode.skip(body.seconds);
 
     this.setStatus(204);
     return '';
@@ -164,12 +148,7 @@ export class CenturionController extends Controller {
   /**
    * Stop a centurion
    */
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.centurion.privileged)
   @Post('stop')
   @SuccessResponse(204, 'Start commands sent')
   @Response<ModeDisabledError>(404, 'Centurion not enabled')
@@ -187,17 +166,13 @@ export class CenturionController extends Controller {
     return '';
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.centurion.base)
   @Get('tapes')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   public getCenturionTapes(): MixTapeResponse[] {
     return tapes.map((t) => ({
       name: t.name,
+      artist: t.artist,
       coverUrl: t.coverUrl,
       events: t.feed
         .filter((e) => ['horn', 'song'].includes(e.type))

@@ -1,6 +1,7 @@
 import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
 import { LightsGroup } from '../../entities';
 import { RgbColor } from '../../color-definitions';
+import { ColorEffects } from './color-effects';
 
 const TURN_ON_TIME = 75;
 const KEEP_ON_TIME = 100;
@@ -21,7 +22,7 @@ export interface SingleFloodProps {
 }
 
 export type SingleFloodCreateParams = BaseLightsEffectCreateParams & {
-  type: 'SingleFlood';
+  type: ColorEffects.SingleFlood;
   props: SingleFloodProps;
 };
 

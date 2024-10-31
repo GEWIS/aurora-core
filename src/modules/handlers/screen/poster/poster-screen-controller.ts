@@ -6,11 +6,12 @@ import { PosterScreenHandler } from './poster-screen-handler';
 import HandlerManager from '../../../root/handler-manager';
 import { Screen } from '../../../root/entities';
 import { Poster } from './poster';
-import { SecurityGroup } from '../../../../helpers/security';
+import { SecurityNames } from '../../../../helpers/security';
 import logger from '../../../../logger';
 import NsTrainsService, { TrainResponse } from './ns-trains-service';
 import GEWISPosterService, { GEWISPhotoAlbumParams } from './gewis-poster-service';
 import OlympicsService from './olympics-service';
+import { securityGroups } from '../../../../helpers/security-groups';
 
 interface BorrelModeParams {
   enabled: boolean;
@@ -33,12 +34,7 @@ export class PosterScreenController extends Controller {
       .filter((h) => h.constructor.name === PosterScreenHandler.name)[0] as PosterScreenHandler;
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BOARD,
-    SecurityGroup.SCREEN_SUBSCRIBER,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Get('')
   public async getPosters(@Query() alwaysReturnBorrelPosters?: boolean): Promise<PosterResponse> {
     if (!this.screenHandler.posterManager.posters) {
@@ -61,7 +57,7 @@ export class PosterScreenController extends Controller {
     };
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.AVICO, SecurityGroup.BOARD])
+  @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Post('force-update')
   public async forceUpdatePosters(@Request() req: ExpressRequest): Promise<void> {
     logger.audit(req.user, 'Force fetch posters from source.');
@@ -69,52 +65,44 @@ export class PosterScreenController extends Controller {
     this.screenHandler.forceUpdate();
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Get('borrel-mode')
   public async getPosterBorrelMode(): Promise<BorrelModeParams> {
     return { enabled: this.screenHandler.borrelMode };
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Put('borrel-mode')
   public async setPosterBorrelMode(
     @Request() req: ExpressRequest,
     @Body() body: BorrelModeParams,
   ): Promise<void> {
-    const { enabled } = body;
-    logger.audit(req.user, `Set poster screen borrel mode to "${enabled ? 'true' : 'false'}".`);
-    this.screenHandler.setBorrelModeEnabled(enabled);
+    logger.audit(
+      req.user,
+      `Set poster screen borrel mode to "${body.enabled ? 'true' : 'false'}".`,
+    );
+    this.screenHandler.setBorrelModeEnabled(body.enabled);
   }
 
-  @Security('local', [SecurityGroup.SCREEN_SUBSCRIBER])
+  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
   @Get('train-departures')
   public async getTrains(): Promise<TrainResponse[]> {
     return new NsTrainsService().getTrains();
   }
 
-  @Security('local', [SecurityGroup.SCREEN_SUBSCRIBER])
+  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
   @Post('photo')
   public async getPhoto(@Body() params: GEWISPhotoAlbumParams) {
     return new GEWISPosterService().getPhoto(params);
   }
 
-  @Security('local', [SecurityGroup.SCREEN_SUBSCRIBER])
+  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
   @Get('olympics/medal-table')
   public async getOlympicsMedalTable() {
     return new OlympicsService().getMedalTable();
   }
 
-  @Security('local', [SecurityGroup.SCREEN_SUBSCRIBER])
+  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
   @Get('olympics/country-medals')
   public async getDutchOlympicMedals() {
     return new OlympicsService().getDutchMedals();

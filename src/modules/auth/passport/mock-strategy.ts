@@ -6,8 +6,6 @@ import { SecurityGroup } from '../../../helpers/security';
 passport.use(
   'mock',
   new CustomStrategy((req, callback) => {
-    // req.login()
-
     callback(null, {
       id: req.body.id ?? 'dev',
       name: req.body.name ?? 'dev',
@@ -15,7 +13,3 @@ passport.use(
     });
   }),
 );
-
-export const mockLogin = (req: ExRequest, res: ExResponse) => {
-  res.send(req.user).status(200).send();
-};

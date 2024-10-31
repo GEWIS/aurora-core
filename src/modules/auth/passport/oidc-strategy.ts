@@ -2,7 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Request as ExRequest, Response as ExResponse } from 'express';
 import passport from 'passport';
 import { Strategy as CustomStrategy } from 'passport-custom';
-import { HttpApiException, HttpStatusCode } from '../../../helpers/customError';
+import { HttpApiException, HttpStatusCode } from '../../../helpers/custom-error';
 import logger from '../../../logger';
 import { parseRoles } from '../../../helpers/security';
 import AuthService, { OidcConfig } from '../auth-service';
@@ -136,7 +136,3 @@ passport.use(
     }
   }),
 );
-
-export const oidcResponse = (req: ExRequest, res: ExResponse): void => {
-  res.send(req.user).status(200).send();
-};

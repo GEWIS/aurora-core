@@ -8,7 +8,7 @@
     "basePath": "/api",
     "securityDefinitions": {
       "local": {
-        "type": "http",
+        "type": "apiKey",
         "name": "connect.sid",
         "in": "cookie"
       }
@@ -24,22 +24,8 @@
     "spec": {
       "components": {
         "schemas": {
-          "User": {
-            "dataType": "refObject",
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "roles": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            }
-          },
           "OidcParameters": {
-            "dataType": "refObject",
+            "type": "object",
             "properties": {
               "state": {
                 "type": "string"
@@ -54,7 +40,7 @@
             "additionalProperties": false
           },
           "ApiKeyParameters": {
-            "dataType": "refObject",
+            "type": "object",
             "required": ["key"],
             "properties": {
               "key": {
@@ -75,7 +61,7 @@
                 "content": {
                   "application/json": {
                     "schema": {
-                      "$ref": "#/components/schemas/User"
+                      "$ref": "#/components/schemas/AuthUser"
                     }
                   }
                 }
@@ -90,7 +76,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/AuthUser"
                   }
                 }
               }
@@ -106,7 +92,7 @@
                 "content": {
                   "application/json": {
                     "schema": {
-                      "$ref": "#/components/schemas/User"
+                      "$ref": "#/components/schemas/AuthUser"
                     }
                   }
                 }
@@ -138,7 +124,7 @@
                 "content": {
                   "application/json": {
                     "schema": {
-                      "$ref": "#/components/schemas/User"
+                      "$ref": "#/components/schemas/AuthUser"
                     }
                   }
                 }

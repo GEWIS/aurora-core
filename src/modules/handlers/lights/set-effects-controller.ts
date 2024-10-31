@@ -4,10 +4,11 @@ import { Request as ExpressRequest } from 'express';
 import SetEffectsHandler from './set-effects-handler';
 import HandlerManager from '../../root/handler-manager';
 import { LightsGroup } from '../../lights/entities';
-import { SecurityGroup } from '../../../helpers/security';
+import { SecurityNames } from '../../../helpers/security';
 import { LightsEffectsColorCreateParams } from '../../lights/effects/color';
 import { LightsEffectsMovementCreateParams } from '../../lights/effects/movement';
 import logger from '../../../logger';
+import { securityGroups } from '../../../helpers/security-groups';
 
 @Route('handler/lights/set-effects')
 @Tags('Handlers')
@@ -19,12 +20,7 @@ export class SetEffectsController extends Controller {
    * @param req
    * @param effects
    */
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.effects.base)
   @Post('{id}/color')
   public async applyLightsEffectColor(
     id: number,
@@ -61,12 +57,7 @@ export class SetEffectsController extends Controller {
    * @param req
    * @param effects
    */
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.AVICO,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.effects.base)
   @Post('{id}/movement')
   public async applyLightsEffectMovement(
     id: number,

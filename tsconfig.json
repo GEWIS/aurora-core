@@ -34,6 +34,6 @@
     "emitDecoratorMetadata": true,
 
     /* Advanced Options */
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
   }
 }

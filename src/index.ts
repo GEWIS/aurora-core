@@ -15,10 +15,11 @@ import { ArtificialBeatGenerator } from './modules/beats/artificial-beat-generat
 import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
 import { SocketioNamespaces } from './socketio-namespaces';
 import SocketConnectionManager from './modules/root/socket-connection-manager';
-import { activeDirectoryConnect } from './modules/infoscreen/entities/ldap-connector';
 import { ServerSettingsStore } from './modules/server-settings';
 import registerCronJobs from './cron';
 import EmitterStore from './modules/events/emitter-store';
+// do not remove; used for extending existing types
+import Types from './types';
 
 async function createApp(): Promise<void> {
   // Fix for production issue where a Docker volume overwrites the contents of a folder instead of merging them
@@ -58,11 +59,6 @@ async function createApp(): Promise<void> {
     handlerManager,
     musicEmitter,
   );
-
-  await activeDirectoryConnect().catch(() => {
-    // eslint-disable-next-line no-console -- non intrusive console warn for providing information
-    console.warn('Could not connect to LDAP. This will cause parts of the website to malfunction.');
-  });
 
   ModeManager.getInstance().init(musicEmitter, backofficeSyncEmitter);
   ArtificialBeatGenerator.getInstance().init(musicEmitter);

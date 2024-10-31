@@ -1,5 +1,6 @@
 import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
 import { LightsGroup } from '../../entities';
+import { MovementEffects } from './movement-effetcs';
 
 export interface RandomPositionProps {
   /**
@@ -11,7 +12,7 @@ export interface RandomPositionProps {
 }
 
 export type RandomPositionCreateParams = BaseLightsEffectCreateParams & {
-  type: 'RandomPosition';
+  type: MovementEffects.RandomPosition;
   props: RandomPositionProps;
 };
 

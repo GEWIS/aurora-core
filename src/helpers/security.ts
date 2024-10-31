@@ -11,6 +11,14 @@ export enum SecurityGroup {
   LIGHTS_SUBSCRIBER = 'lights-subscriber',
 }
 
+export enum SecurityNames {
+  LOCAL = 'local',
+}
+
+/**
+ * Parse the roles and adds to security groups
+ * @param roles - roles to parse
+ */
 export function parseRoles(roles: string[]): SecurityGroup[] {
   const rolesToProcess = roles.filter((r) => r !== '');
   const securityGroups: SecurityGroup[] = [];

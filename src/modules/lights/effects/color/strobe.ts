@@ -1,6 +1,7 @@
 import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
 import { LightsGroup } from '../../entities';
 import { TrackPropertiesEvent } from '../../../events/music-emitter-events';
+import { ColorEffects } from './color-effects';
 
 export interface StrobeProps {
   /**
@@ -12,7 +13,7 @@ export interface StrobeProps {
 }
 
 export type StrobeCreateParams = BaseLightsEffectCreateParams & {
-  type: 'Strobe';
+  type: ColorEffects.Strobe;
   props: StrobeProps;
 };
 

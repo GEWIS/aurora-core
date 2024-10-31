@@ -226,6 +226,7 @@ export default class TimeTrailRaceMode extends BaseMode<
     };
     this.screenHandler.showScoreboard(event);
     this.backofficeSyncEmitter.emit('race-scoreboard', event);
+    this.artificialBeatGenerator.stop();
 
     this.lightsHandler.setLightsToParty();
     this.spotify.resumePlayback();

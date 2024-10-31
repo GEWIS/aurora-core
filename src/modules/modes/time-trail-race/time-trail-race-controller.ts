@@ -3,12 +3,13 @@ import { Body, Get, Post, Request, Response, Route, Security, Tags } from 'tsoa'
 import { Request as ExpressRequest } from 'express';
 import TimeTrailRaceMode from './time-trail-race-mode';
 import ModeManager from '../mode-manager';
-import { SecurityGroup } from '../../../helpers/security';
+import { SecurityNames } from '../../../helpers/security';
 import { RegisterPlayerParams } from './time-trail-race-entities';
 import ModeDisabledError from '../mode-disabled-error';
 import { InvalidStateError } from './time-trail-race-invalid-state-error';
 import logger from '../../../logger';
 import { FeatureEnabled } from '../../server-settings';
+import { securityGroups } from '../../../helpers/security-groups';
 
 @Route('modes/time-trail-race')
 @Tags('Modes')
@@ -21,12 +22,8 @@ export class TimeTrailRaceController extends Controller {
     this.modeManager = ModeManager.getInstance();
   }
 
-  @Security('local', [
-    SecurityGroup.ADMIN,
-    SecurityGroup.BAC,
-    SecurityGroup.BOARD,
-    SecurityGroup.SCREEN_SUBSCRIBER,
-  ])
+  @Security(SecurityNames.LOCAL, securityGroups.timetrail.base)
+  @Security(SecurityNames.LOCAL, securityGroups.timetrail.subscriber)
   @Get('')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   public getRaceState() {
@@ -42,7 +39,7 @@ export class TimeTrailRaceController extends Controller {
     };
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security(SecurityNames.LOCAL, securityGroups.timetrail.base)
   @Post('register-player')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
@@ -61,7 +58,7 @@ export class TimeTrailRaceController extends Controller {
     return mode.registerPlayer(params);
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security(SecurityNames.LOCAL, securityGroups.timetrail.base)
   @Post('ready')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
@@ -80,7 +77,7 @@ export class TimeTrailRaceController extends Controller {
     return mode.ready();
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security(SecurityNames.LOCAL, securityGroups.timetrail.base)
   @Post('start')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
@@ -99,7 +96,7 @@ export class TimeTrailRaceController extends Controller {
     return mode.start();
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security(SecurityNames.LOCAL, securityGroups.timetrail.base)
   @Post('finish')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
@@ -118,7 +115,7 @@ export class TimeTrailRaceController extends Controller {
     return mode.finish();
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security(SecurityNames.LOCAL, securityGroups.timetrail.base)
   @Post('reveal-score')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
@@ -134,7 +131,7 @@ export class TimeTrailRaceController extends Controller {
     return mode.revealScore();
   }
 
-  @Security('local', [SecurityGroup.ADMIN, SecurityGroup.BAC, SecurityGroup.BOARD])
+  @Security(SecurityNames.LOCAL, securityGroups.timetrail.base)
   @Post('reset-player')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   @Response<ModeDisabledError>(404, 'Time Trail Race not enabled')
