@@ -1,0 +1,14 @@
+name: Semantic release
+
+on:
+  pull_request:
+    branches: 
+    - master
+
+jobs:
+  build-and-lint:
+    uses: GEWIS/actions/.github/workflows/semantic-release.yml@v0.0.1
+    with:
+      projects: '["."]'
+      docker_registry: 'abc.docker-registry.gewis.nl'
+      docker_tag: 'nc/aurora/core'
