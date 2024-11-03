@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-lint:
-    uses: GEWIS/actions/.github/workflows/semantic-release.yml@v0.0.1
+    uses: GEWIS/actions/.github/workflows/semantic-release.yml@v0.0.2
     with:
       projects: '["."]'
       docker_registry: 'abc.docker-registry.gewis.nl'
