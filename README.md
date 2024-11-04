@@ -13,7 +13,7 @@ The other repositories can be found here:
 - [Aurora DMX Lights Proxy](https://github.com/gewis/aurora-audio-player).
 
 ## Prerequisites
-- NodeJS 20.
+- NodeJS 22.
 
 ## Installation
 1. Copy `.env.example` to `.env` and fill in the environment variables.
