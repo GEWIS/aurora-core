@@ -1,20 +1,20 @@
 # Build in a different image to keep the target image clean
-FROM node:20 as build
-ENV NODE_ENV development
+FROM node:22 AS build
+ENV NODE_ENV=development
 WORKDIR /app
-COPY ./package.json ./package-lock.json ./
-RUN npm install
+COPY ./package.json ./yarn.lock ./
+RUN yarn
 COPY ./ ./
-RUN npm run build
+RUN yarn build
 
 # Target image that will be run
-FROM node:20-alpine as target
-ENV NODE_ENV production
+FROM node:22-alpine AS target
+ENV NODE_ENV=production
 
 WORKDIR /app
-COPY ./package.json ./package-lock.json ./
+COPY ./package.json ./yarn.lock ./
 RUN apk add --no-cache git
-RUN npm ci
+RUN yarn install --production
 COPY --from=build --chown=node /app/dist /app
 COPY ./public ./public
 
