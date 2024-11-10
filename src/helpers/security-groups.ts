@@ -46,13 +46,24 @@ const allSecurityGroups = [
   SecurityGroup.KEY_HOLDER,
 ];
 
+const allSecuritySubscriberGroups = [
+  SecurityGroup.ADMIN,
+  SecurityGroup.BOARD,
+  SecurityGroup.AVICO,
+  SecurityGroup.BAC,
+  SecurityGroup.KEY_HOLDER,
+  SecurityGroup.AUDIO_SUBSCRIBER,
+  SecurityGroup.SCREEN_SUBSCRIBER,
+  SecurityGroup.LIGHTS_SUBSCRIBER,
+];
+
 /**
  * Security groups that are available for each endpoint
  * Giving specific type will break tsoa; can only be done after the fact
  */
 export const securityGroups = {
   user: {
-    base: allSecurityGroups,
+    base: allSecuritySubscriberGroups,
   },
   audit: {
     base: allSecurityGroups,
