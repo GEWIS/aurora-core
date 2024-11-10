@@ -35,5 +35,10 @@
 
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true,
+
+  },
+  /* Additional Types TSNode */
+  "ts-node": {
+    "files": true,
   }
 }
