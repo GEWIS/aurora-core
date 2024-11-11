@@ -87,7 +87,7 @@ export const securityGroups = {
     subscriber: [SecurityGroup.SCREEN_SUBSCRIBER],
   },
   centurion: {
-    base: allSecurityGroups,
+    base: allSecuritySubscriberGroups,
     privileged: baseSecurityGroups,
   },
   timetrail: {
