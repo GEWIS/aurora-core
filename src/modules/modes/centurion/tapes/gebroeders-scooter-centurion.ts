@@ -63,6 +63,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Nena',
         title: '99 Luftballons',
+        bpm: 100,
       },
     },
     {
@@ -78,6 +79,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Hermes House Band',
         title: 'Country Roads',
+        bpm: 103,
       },
     },
     {
@@ -93,6 +95,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Vinzzent',
         title: 'Dromendans',
+        bpm: 103,
       },
     },
     {
@@ -108,14 +111,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Linda, Roos & Jessica',
         title: 'Ademnood',
-      },
-    },
-    {
-      timestamp: 283.0,
-      type: 'song',
-      data: {
-        artist: 'Peter de Koning',
-        title: 'Het is altijd lente in de ogen van de tandarts-assistente',
+        bpm: 103,
       },
     },
     {
@@ -123,6 +119,15 @@ const centurion: MixTape = {
       type: 'horn',
       data: {
         counter: 4,
+      },
+    },
+    {
+      timestamp: 284.0,
+      type: 'song',
+      data: {
+        artist: 'Peter de Koning',
+        title: 'Het is altijd lente in de ogen van de tandarts-assistente',
+        bpm: 103,
       },
     },
     {
@@ -138,6 +143,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Liquido',
         title: 'Narcotic',
+        bpm: 103,
       },
     },
     {
@@ -153,6 +159,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Snoop Dogg feat. Pharrell',
         title: "Drop It Like It's Hot",
+        bpm: 103,
       },
     },
     {
@@ -161,6 +168,7 @@ const centurion: MixTape = {
       data: {
         artist: 'M.O.P.',
         title: 'Ante Up',
+        bpm: 103,
       },
     },
     {
@@ -176,6 +184,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Los Del Rio',
         title: 'Macarena',
+        bpm: 103,
       },
     },
     {
@@ -191,6 +200,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Spice Girls',
         title: 'Wannabe',
+        bpm: 110,
       },
     },
     {
@@ -206,6 +216,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Major Lazer feat. Busy Signal, The Flexican & FS Green',
         title: 'Watch Out For This (Bumaye)',
+        bpm: 115,
       },
     },
     {
@@ -221,6 +232,7 @@ const centurion: MixTape = {
       data: {
         artist: 'André van Duin',
         title: 'Er staat een paard in de gang',
+        bpm: 115,
       },
     },
     {
@@ -229,6 +241,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Lil Kleine & Ronnie Flex',
         title: 'Drank & Drugs',
+        bpm: 118,
       },
     },
     {
@@ -237,6 +250,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Kabouter Plop',
         title: 'Kabouterdans',
+        bpm: 118,
       },
     },
     {
@@ -252,6 +266,7 @@ const centurion: MixTape = {
       data: {
         artist: 'K3',
         title: 'Alle kleuren',
+        bpm: 120,
       },
     },
     {
@@ -267,6 +282,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Kinderen voor Kinderen',
         title: 'Tietenlied',
+        bpm: 122 / 2,
       },
     },
     {
@@ -282,6 +298,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Guus Meeuwis',
         title: 'Het dondert en het bliksemt',
+        bpm: 123,
       },
     },
     {
@@ -297,6 +314,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Harry Vermeegen',
         title: '1-2-3-4 Dennis bier',
+        bpm: 126,
       },
     },
     {
@@ -305,6 +323,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Puhdys',
         title: "Hey, wir woll’n die Eisbär'n sehn!",
+        bpm: 127,
       },
     },
     {
@@ -320,6 +339,7 @@ const centurion: MixTape = {
       data: {
         artist: 'DJ Ötzi',
         title: 'Burger Dance',
+        bpm: 127,
       },
     },
     {
@@ -335,6 +355,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Mickie Krause',
         title: 'Hütte auf der Alm',
+        bpm: 127,
       },
     },
     {
@@ -343,6 +364,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Ali B & Yes-R & The Partysquad',
         title: 'Rampeneren',
+        bpm: 127,
       },
     },
     {
@@ -365,6 +387,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Martin Solveig',
         title: 'Intoxicated',
+        bpm: 127,
       },
     },
     {
@@ -373,6 +396,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Nicki Minaj',
         title: 'Starships',
+        bpm: 127,
       },
     },
     {
@@ -383,11 +407,28 @@ const centurion: MixTape = {
       },
     },
     {
+      timestamp: 1174.0,
+      type: 'song',
+      data: [
+        {
+          artist: 'Icona Pop',
+          title: 'I Love It (feat. Charli xcx)',
+          bpm: 127,
+        },
+        {
+          artist: 'Martin Garrix',
+          title: 'Animals',
+          bpm: 127,
+        },
+      ],
+    },
+    {
       timestamp: 1222.0,
       type: 'song',
       data: {
         artist: '2Unlimited',
         title: 'Get Ready For This',
+        bpm: 127,
       },
     },
     {
@@ -403,6 +444,7 @@ const centurion: MixTape = {
       data: {
         artist: 'The Village People',
         title: 'YMCA',
+        bpm: 127,
       },
     },
     {
@@ -425,6 +467,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Carly Rae Jepsen ft Owl City',
         title: "It's Always A Good Time",
+        bpm: 127,
       },
     },
     {
@@ -433,6 +476,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Avicii',
         title: 'Levels',
+        bpm: 127,
       },
     },
     {
@@ -448,6 +492,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Flo-Rida feat. T-Pain',
         title: 'Low',
+        bpm: 128,
       },
     },
     {
@@ -463,6 +508,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Taio Cruz',
         title: 'Hangover',
+        bpm: 128,
       },
     },
     {
@@ -478,6 +524,7 @@ const centurion: MixTape = {
       data: {
         artist: 'LMFAO',
         title: 'Party Rock Anthem',
+        bpm: 130,
       },
     },
     {
@@ -493,6 +540,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Hans Entertainment vs. Finger & Kadel',
         title: 'Hoch die Hände',
+        bpm: 130,
       },
     },
     {
@@ -501,6 +549,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Galantis',
         title: 'No Money',
+        bpm: 130,
       },
     },
     {
@@ -516,6 +565,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Kid Cudi',
         title: 'Pursuit of Happiness (Steve Aoki remix)',
+        bpm: 131,
       },
     },
     {
@@ -531,6 +581,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Yeah Yeah Yeahs',
         title: 'Heads Will Roll (A-Trak remix)',
+        bpm: 131,
       },
     },
     {
@@ -546,6 +597,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Michael Calfan',
         title: 'Resurrection',
+        bpm: 132,
       },
     },
     {
@@ -561,6 +613,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Basto!',
         title: 'Again and Again',
+        bpm: 133,
       },
     },
     {
@@ -576,6 +629,7 @@ const centurion: MixTape = {
       data: {
         artist: 'David Guetta feat. Sia',
         title: 'Titanium',
+        bpm: 133,
       },
     },
     {
@@ -591,6 +645,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Gala',
         title: 'Freed From Desire',
+        bpm: 133,
       },
     },
     {
@@ -601,11 +656,21 @@ const centurion: MixTape = {
       },
     },
     {
+      timestamp: 2005.0,
+      type: 'song',
+      data: {
+        artist: 'Feestteam',
+        title: 'Shirt Uit & Zwaaien',
+        bpm: 138,
+      },
+    },
+    {
       timestamp: 2034.0,
       type: 'song',
       data: {
         artist: 'Wolter Kroes',
         title: 'Viva Hollandia',
+        bpm: 135,
       },
     },
     {
@@ -621,6 +686,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Spongebob Squarepants',
         title: 'Het Spongebob Squarepants-lied',
+        bpm: 126,
       },
     },
     {
@@ -636,6 +702,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Westlife',
         title: 'Uptown Girl',
+        bpm: 132,
       },
     },
     {
@@ -644,6 +711,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Aqua',
         title: 'Barbie Girl',
+        bpm: 132,
       },
     },
     {
@@ -659,6 +727,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Guillermo & Tropical Danny',
         title: 'Toppertje',
+        bpm: 132,
       },
     },
     {
@@ -681,6 +750,7 @@ const centurion: MixTape = {
       data: {
         artist: 'The Bloody Beetroots feat. Steve Aoki',
         title: 'Warp 1.9',
+        bpm: 133,
       },
     },
     {
@@ -696,6 +766,7 @@ const centurion: MixTape = {
       data: {
         artist: 'David Guetta & Showtek feat. Vassy',
         title: 'Bad',
+        bpm: 133,
       },
     },
     {
@@ -704,6 +775,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Showtek & Justin Prime',
         title: 'Cannonball',
+        bpm: 134,
       },
     },
     {
@@ -719,6 +791,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Die Atzen',
         title: 'Disco Pogo',
+        bpm: 134,
       },
     },
     {
@@ -734,6 +807,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Lorenz Büffel',
         title: 'Johnny Däpp',
+        bpm: 134,
       },
     },
     {
@@ -749,6 +823,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Zware Jongens',
         title: 'Jodeljump',
+        bpm: 132,
       },
     },
     {
@@ -764,6 +839,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Parla & Pardoux',
         title: 'Liberté',
+        bpm: 135,
       },
     },
     {
@@ -779,6 +855,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Markus Becker',
         title: 'Das rote Pferd',
+        bpm: 137,
       },
     },
     {
@@ -794,6 +871,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Olaf Henning',
         title: 'Cowboy und Indianer',
+        bpm: 137,
       },
     },
     {
@@ -809,6 +887,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Ch!pz',
         title: 'Cowboy',
+        bpm: 138,
       },
     },
     {
@@ -817,6 +896,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Toy-Box',
         title: 'Tarzan & Jane',
+        bpm: 138,
       },
     },
     {
@@ -832,6 +912,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Toy-Box',
         title: 'Sailor Song',
+        bpm: 138,
       },
     },
     {
@@ -847,6 +928,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Vengaboys',
         title: 'Boom, Boom, Boom, Boom!!',
+        bpm: 138,
       },
     },
     {
@@ -862,6 +944,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Vengaboys',
         title: 'To Brazil!',
+        bpm: 134,
       },
     },
     {
@@ -877,6 +960,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Snollebollekes',
         title: 'Bam bam (bam)',
+        bpm: 134,
       },
     },
     {
@@ -892,6 +976,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Def Rhymz',
         title: 'Schudden',
+        bpm: 135,
       },
     },
     {
@@ -907,6 +992,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Cooldown Café',
         title: 'Hey baby',
+        bpm: 137,
       },
     },
     {
@@ -922,6 +1008,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Gebroeders Ko',
         title: 'Schatje, mag ik je foto',
+        bpm: 137,
       },
     },
     {
@@ -937,6 +1024,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Guus Meeuwis',
         title: 'Het is een nacht',
+        bpm: 69,
       },
     },
     {
@@ -952,6 +1040,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Tom Waes',
         title: 'Dos cervezas',
+        bpm: 136,
       },
     },
     {
@@ -967,6 +1056,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Peter Wackel',
         title: 'Vollgas',
+        bpm: 140,
       },
     },
     {
@@ -975,6 +1065,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Peter Wackel',
         title: 'Scheiß drauf!',
+        bpm: 140,
       },
     },
     {
@@ -990,6 +1081,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Ikke Hüftgold',
         title: 'Dicke titten, kartoffelsalat',
+        bpm: 140,
       },
     },
     {
@@ -1005,6 +1097,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Tim Toupet',
         title: 'Fliegerlied (So ein schöner Tag)',
+        bpm: 140,
       },
     },
     {
@@ -1013,6 +1106,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Cooldown Café',
         title: "Met z'n allen",
+        bpm: 120,
       },
     },
     {
@@ -1030,11 +1124,19 @@ const centurion: MixTape = {
       },
     },
     {
+      timestamp: 3643,
+      type: 'bpm',
+      data: {
+        bpm: 135,
+      },
+    },
+    {
       timestamp: 3659.0,
       type: 'song',
       data: {
         artist: 'The Partysquad feat. Jayh, Sjaak & Reverse',
         title: 'Helemaal naar de klote',
+        bpm: 135,
       },
     },
     {
@@ -1043,6 +1145,7 @@ const centurion: MixTape = {
       data: {
         artist: 'K-Liber',
         title: 'Viben',
+        bpm: 135, // BPM increases after the horn
       },
     },
     {
@@ -1050,6 +1153,13 @@ const centurion: MixTape = {
       type: 'horn',
       data: {
         counter: 61,
+      },
+    },
+    {
+      timestamp: 3700,
+      type: 'bpm',
+      data: {
+        bpm: 144,
       },
     },
     {
@@ -1065,6 +1175,7 @@ const centurion: MixTape = {
       data: {
         artist: 'FeestDJRuud & Dirtcaps feat. Sjaak & Kraantje Pappie',
         title: 'Weekend',
+        bpm: 145,
       },
     },
     {
@@ -1080,6 +1191,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Lawineboys',
         title: 'Joost',
+        bpm: 145,
       },
     },
     {
@@ -1088,6 +1200,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Gebroeders Ko',
         title: 'Ik heb een toeter op mijn waterscooter',
+        bpm: 145,
       },
     },
     {
@@ -1103,6 +1216,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Gebroeders Ko',
         title: 'Tringeling',
+        bpm: 145,
       },
     },
     {
@@ -1118,6 +1232,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Basshunter',
         title: 'Boten Anna',
+        bpm: 145,
       },
     },
     {
@@ -1133,6 +1248,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Lawineboys',
         title: 'Wat zullen we drinken',
+        bpm: 145,
       },
     },
     {
@@ -1148,6 +1264,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Lamme Frans',
         title: 'Wakker met een biertje!',
+        bpm: 145,
       },
     },
     {
@@ -1163,6 +1280,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Lawineboys feat. DJ Jerome',
         title: 'Seks met die kale',
+        bpm: 145,
       },
     },
     {
@@ -1178,6 +1296,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Zombie Nation',
         title: 'Kernkraft 400',
+        bpm: 145,
       },
     },
     {
@@ -1193,6 +1312,7 @@ const centurion: MixTape = {
       data: {
         artist: 'DJ Boozywoozy',
         title: 'Party Affair',
+        bpm: 146,
       },
     },
     {
@@ -1208,6 +1328,7 @@ const centurion: MixTape = {
       data: {
         artist: '2Unlimited',
         title: 'No Limit',
+        bpm: 146,
       },
     },
     {
@@ -1223,6 +1344,7 @@ const centurion: MixTape = {
       data: {
         artist: 'DJ Kicken vs. MC-Q',
         title: "Ain't No Party",
+        bpm: 147,
       },
     },
     {
@@ -1237,7 +1359,8 @@ const centurion: MixTape = {
       type: 'song',
       data: {
         artist: 'Jan Wayne',
-        title: 'Becuase the Night',
+        title: 'Because the Night',
+        bpm: 147,
       },
     },
     {
@@ -1246,6 +1369,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Cascada',
         title: 'Everytime We Touch',
+        bpm: 147,
       },
     },
     {
@@ -1261,6 +1385,7 @@ const centurion: MixTape = {
       data: {
         artist: "Gigi D'Agostino",
         title: "L'amour toujours",
+        bpm: 147,
       },
     },
     {
@@ -1276,6 +1401,19 @@ const centurion: MixTape = {
       data: {
         artist: 'Jason Paige',
         title: "Gotta Catch 'M All",
+        bpm: 147,
+      },
+    },
+    {
+      timestamp: 4573.001,
+      type: 'effect',
+      data: {
+        reset: true,
+        effects: {
+          pars: [],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
       },
     },
     {
@@ -1286,11 +1424,24 @@ const centurion: MixTape = {
       },
     },
     {
+      timestamp: 4579.0,
+      type: 'effect',
+      data: {
+        random: true,
+        effects: {
+          pars: [],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
+      },
+    },
+    {
       timestamp: 4636.0,
       type: 'song',
       data: {
         artist: 'Scooter',
         title: 'How Much Is The Fish',
+        bpm: 147,
       },
     },
     {
@@ -1306,6 +1457,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Scooter',
         title: 'Weekend',
+        bpm: 147,
       },
     },
     {
@@ -1321,6 +1473,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Scooter',
         title: 'One (Always Hardcore)',
+        bpm: 147,
       },
     },
     {
@@ -1336,6 +1489,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Scooter',
         title: 'Maria (I Like It Loud)',
+        bpm: 147,
       },
     },
     {
@@ -1344,6 +1498,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Scooter',
         title: "J'adore Hardcore",
+        bpm: 147,
       },
     },
     {
@@ -1359,6 +1514,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Wildstylez feat. Niels Geusebroek',
         title: 'Year of Summer',
+        bpm: 148,
       },
     },
     {
@@ -1374,6 +1530,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Brennan Heart & Wildstylez',
         title: 'Lose My Mind',
+        bpm: 148,
       },
     },
     {
@@ -1396,6 +1553,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Starkoo',
         title: 'Ik wil je',
+        bpm: 149,
       },
     },
     {
@@ -1404,6 +1562,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Feestteam',
         title: 'Let It Be / Hey Jude (mix)',
+        bpm: 150,
       },
     },
     {
@@ -1420,12 +1579,14 @@ const centurion: MixTape = {
         counter: 85,
       },
     },
+    // Half BPM (75) als het nummer nog niet "versneld"?
     {
       timestamp: 5179.0,
       type: 'song',
       data: {
         artist: 'DJ Nikolai & DJ Mike van Dijk',
         title: 'Piano Man',
+        bpm: 150,
       },
     },
     {
@@ -1441,6 +1602,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Robbie Williams',
         title: 'Angels',
+        bpm: 75,
       },
     },
     {
@@ -1456,6 +1618,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Enrique Iglesias',
         title: 'Hero',
+        bpm: 76,
       },
     },
     {
@@ -1471,6 +1634,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Whitney Houston',
         title: 'I Will Always Love You',
+        bpm: 76,
       },
     },
     {
@@ -1486,6 +1650,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Mariah Carey',
         title: 'All I Want For Christmas',
+        bpm: 151,
       },
     },
     {
@@ -1501,6 +1666,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Kraantje Pappie',
         title: 'Feesttent (FeestDJRuud remix)',
+        bpm: 170,
       },
     },
     {
@@ -1516,6 +1682,7 @@ const centurion: MixTape = {
       data: {
         artist: 'New Kids feat. DJ Paul Elstak',
         title: 'Turbo',
+        bpm: 170,
       },
     },
     {
@@ -1531,6 +1698,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Lipstick',
         title: "I'm a Raver",
+        bpm: 170,
       },
     },
     {
@@ -1539,6 +1707,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Nakatomi',
         title: 'Children of the Night',
+        bpm: 170,
       },
     },
     {
@@ -1554,6 +1723,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Charly Lownoise & Mental Theo',
         title: 'Wonderful Days',
+        bpm: 170,
       },
     },
     {
@@ -1562,6 +1732,7 @@ const centurion: MixTape = {
       data: {
         artist: 'DJ Paul Elstak',
         title: 'Luv You More',
+        bpm: 170,
       },
     },
     {
@@ -1577,6 +1748,7 @@ const centurion: MixTape = {
       data: {
         artist: 'DJ Paul Elstak',
         title: 'Rainbow In The Sky',
+        bpm: 170,
       },
     },
     {
@@ -1592,6 +1764,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Evil Activities',
         title: 'Nobody Said It Was Easy',
+        bpm: 170,
       },
     },
     {
@@ -1607,6 +1780,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Melrose',
         title: 'O',
+        bpm: 188,
       },
     },
     {
@@ -1617,11 +1791,19 @@ const centurion: MixTape = {
       },
     },
     {
+      timestamp: 5847,
+      type: 'bpm',
+      data: {
+        bpm: 1,
+      },
+    },
+    {
       timestamp: 5855.0,
       type: 'song',
       data: {
         artist: 'Backstreet Boys',
         title: 'I Want It That Way',
+        bpm: 100,
       },
     },
     {
@@ -1637,6 +1819,7 @@ const centurion: MixTape = {
       data: {
         artist: 'R. Kelly',
         title: "The World's Greatest",
+        bpm: 100,
       },
     },
     {
@@ -1652,13 +1835,25 @@ const centurion: MixTape = {
       data: {
         artist: 'Céline Dion',
         title: 'My Heart Will Go On',
+        bpm: 50,
       },
     },
     {
-      timestamp: 6020.0,
+      timestamp: 6020.3,
       type: 'horn',
       data: {
         counter: 100,
+      },
+    },
+    {
+      timestamp: 6021,
+      type: 'effect',
+      data: {
+        effects: {
+          pars: [Fire.build()],
+          movingHeadWheelColor: [StaticColor.build({ color: RgbColor.BLINDINGWHITE })],
+          movingHeadWheelMovement: [SearchLight.build({ cycleTime: 20000, radiusFactor: 1.5 })],
+        },
       },
     },
   ],
