@@ -26,7 +26,7 @@ interface CenturionResponse {
 }
 
 interface CenturionStateResponse {
-  tape?: Pick<MixTape, 'name' | 'coverUrl'>;
+  tape?: Pick<MixTape, 'name' | 'artist' | 'coverUrl'>;
   lastHorn?: HornEvent;
   lastSong?: SongEvent;
   colors?: RgbColor[];
@@ -91,7 +91,7 @@ export class CenturionController extends Controller {
     }
 
     return {
-      tape: { name: mode.tape.name, coverUrl: mode.tape.coverUrl },
+      tape: { name: mode.tape.name, artist: mode.tape.artist, coverUrl: mode.tape.coverUrl },
       lastHorn: mode.lastHornEvent,
       lastSong: mode.lastSongEvent,
       colors: mode.currentColors,
