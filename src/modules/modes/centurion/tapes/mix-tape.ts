@@ -23,6 +23,17 @@ export type Song = {
 };
 
 export type EffectData = {
+  /**
+   * Disable all lights (overrides effects and random)
+   */
+  reset?: boolean;
+  /**
+   * Enable an effect as if a new song is being played (overrides effects)
+   */
+  random?: boolean;
+  /**
+   * Set custom effects
+   */
   effects: {
     pars?: LightsEffectBuilder[];
     movingHeadRgbColor?: LightsEffectBuilder[];
@@ -30,7 +41,6 @@ export type EffectData = {
     movingHeadWheelColor?: LightsEffectBuilder[];
     movingHeadWheelMovement?: LightsEffectBuilder[];
   };
-  reset?: boolean;
 };
 
 type Effect = {

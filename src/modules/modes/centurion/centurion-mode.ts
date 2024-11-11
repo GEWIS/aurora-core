@@ -188,6 +188,34 @@ export default class CenturionMode extends BaseMode<
   }
 
   /**
+   * Pick random colors and random effects to show using lights and screens
+   * @private
+   */
+  private setRandomLightEffects() {
+    const { colorNames } = getTwoComplementaryRgbColors();
+    this.currentColors = colorNames;
+
+    const movingHeadEffectMovement = SearchLight.build({ radiusFactor: 1.5, cycleTime: 3000 });
+    const movingHeadEffectColor = StaticColor.build({ color: RgbColor.WHITE });
+    const newEffectBuilder = this.getRandomEffect(colorNames);
+
+    this.lights.forEach((l) => {
+      // If we have a moving head, assign a movement effect
+      if (l.movingHeadRgbs.length > 0 || l.movingHeadWheels.length > 0) {
+        this.lightsHandler.setMovementEffect(l, [movingHeadEffectMovement]);
+      }
+      // If we have a wheel moving head, assign a static color
+      if (l.movingHeadWheels.length > 0) {
+        this.lightsHandler.setColorEffect(l, [movingHeadEffectColor]);
+        // Otherwise use a random effect!
+      } else {
+        this.lightsHandler.setColorEffect(l, [newEffectBuilder]);
+      }
+    });
+    this.screenHandler.changeColors(colorNames);
+  }
+
+  /**
    * Handle a fired event
    * @param event
    * @private
@@ -205,27 +233,7 @@ export default class CenturionMode extends BaseMode<
       this.screenHandler.horn(STROBE_TIME, event.data.counter);
     } else if (event.type === 'song') {
       this.lastSongEvent = event;
-      const { colorNames } = getTwoComplementaryRgbColors();
-      this.currentColors = colorNames;
-
-      const movingHeadEffectMovement = SearchLight.build({ radiusFactor: 1.5, cycleTime: 3000 });
-      const movingHeadEffectColor = StaticColor.build({ color: RgbColor.WHITE });
-      const newEffectBuilder = this.getRandomEffect(colorNames);
-
-      this.lights.forEach((l) => {
-        // If we have a moving head, assign a movement effect
-        if (l.movingHeadRgbs.length > 0 || l.movingHeadWheels.length > 0) {
-          this.lightsHandler.setMovementEffect(l, [movingHeadEffectMovement]);
-        }
-        // If we have a wheel moving head, assign a static color
-        if (l.movingHeadWheels.length > 0) {
-          this.lightsHandler.setColorEffect(l, [movingHeadEffectColor]);
-          // Otherwise use a random effect!
-        } else {
-          this.lightsHandler.setColorEffect(l, [newEffectBuilder]);
-        }
-      });
-      this.screenHandler.changeColors(colorNames);
+      this.setRandomLightEffects();
       this.setBpm(event.data);
       this.emitSong(event.data);
     } else if (event.type === 'effect') {
@@ -234,17 +242,25 @@ export default class CenturionMode extends BaseMode<
           // Reset effect
           this.lightsHandler.removeColorEffect(l);
           this.lightsHandler.removeMovementEffect(l);
-        } else if (l.pars.length > 0 && event.data.effects.pars) {
+          return;
+        }
+        if (event.data.random) {
+          this.setRandomLightEffects();
+          return;
+        }
+        if (l.pars.length > 0 && event.data.effects.pars) {
           // Color effect for pars
           this.lightsHandler.setColorEffect(l, event.data.effects.pars);
-        } else if (l.movingHeadRgbs.length > 0) {
+        }
+        if (l.movingHeadRgbs.length > 0) {
           // Color effect for moving head rgb
           if (event.data.effects.movingHeadRgbColor)
             this.lightsHandler.setColorEffect(l, event.data.effects.movingHeadRgbColor);
           // Movement effect for moving head rgb
           if (event.data.effects.movingHeadRgbMovement)
             this.lightsHandler.setMovementEffect(l, event.data.effects.movingHeadRgbMovement);
-        } else if (l.movingHeadWheels.length > 0) {
+        }
+        if (l.movingHeadWheels.length > 0) {
           // Color effect for moving head wheel
           if (event.data.effects.movingHeadWheelColor)
             this.lightsHandler.setColorEffect(l, event.data.effects.movingHeadWheelColor);

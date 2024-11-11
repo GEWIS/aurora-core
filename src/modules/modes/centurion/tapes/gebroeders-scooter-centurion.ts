@@ -115,19 +115,19 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 283.0,
+      timestamp: 283.5,
+      type: 'horn',
+      data: {
+        counter: 4,
+      },
+    },
+    {
+      timestamp: 284.0,
       type: 'song',
       data: {
         artist: 'Peter de Koning',
         title: 'Het is altijd lente in de ogen van de tandarts-assistente',
         bpm: 103,
-      },
-    },
-    {
-      timestamp: 283.5,
-      type: 'horn',
-      data: {
-        counter: 4,
       },
     },
     {
@@ -407,7 +407,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1174.0, // TODO: check if timestamp is correct
+      timestamp: 1174.0,
       type: 'song',
       data: [
         {
@@ -492,7 +492,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Flo-Rida feat. T-Pain',
         title: 'Low',
-        bpm: 127, // TODO: niet 130?
+        bpm: 128,
       },
     },
     {
@@ -508,7 +508,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Taio Cruz',
         title: 'Hangover',
-        bpm: 127, // TODO: niet 130?
+        bpm: 128,
       },
     },
     {
@@ -648,12 +648,20 @@ const centurion: MixTape = {
         bpm: 133,
       },
     },
-    // TODO: Add Shirt uit en zwaaien (feestteam)
     {
       timestamp: 2004.1,
       type: 'horn',
       data: {
         counter: 33,
+      },
+    },
+    {
+      timestamp: 2005.0,
+      type: 'song',
+      data: {
+        artist: 'Feestteam',
+        title: 'Shirt Uit & Zwaaien',
+        bpm: 138,
       },
     },
     {
@@ -1396,12 +1404,35 @@ const centurion: MixTape = {
         bpm: 147,
       },
     },
-    // TODO: maybe add blackout between start Pokemon theme and horn?
+    {
+      timestamp: 4573.001,
+      type: 'effect',
+      data: {
+        reset: true,
+        effects: {
+          pars: [],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
+      },
+    },
     {
       timestamp: 4578.0,
       type: 'horn',
       data: {
         counter: 76,
+      },
+    },
+    {
+      timestamp: 4579.0,
+      type: 'effect',
+      data: {
+        random: true,
+        effects: {
+          pars: [],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
       },
     },
     {
@@ -1808,13 +1839,23 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 6020.0,
+      timestamp: 6020.3,
       type: 'horn',
       data: {
         counter: 100,
       },
     },
-    // Eindigen met vuur?
+    {
+      timestamp: 6021,
+      type: 'effect',
+      data: {
+        effects: {
+          pars: [Fire.build()],
+          movingHeadWheelColor: [StaticColor.build({ color: RgbColor.BLINDINGWHITE })],
+          movingHeadWheelMovement: [SearchLight.build({ cycleTime: 20000, radiusFactor: 1.5 })],
+        },
+      },
+    },
   ],
 };
 
