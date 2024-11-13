@@ -83,9 +83,8 @@ export const securityGroups = {
     base: baseSecurityGroups,
   },
   poster: {
-    base: baseSecurityGroups,
+    base: allSecuritySubscriberGroups,
     privileged: privilegedSecurityGroups,
-    subscriber: [SecurityGroup.SCREEN_SUBSCRIBER],
   },
   centurion: {
     base: allSecuritySubscriberGroups,

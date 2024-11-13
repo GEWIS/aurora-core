@@ -84,25 +84,25 @@ export class PosterScreenController extends Controller {
     this.screenHandler.setBorrelModeEnabled(body.enabled);
   }
 
-  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
+  @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Get('train-departures')
   public async getTrains(): Promise<TrainResponse[]> {
     return new NsTrainsService().getTrains();
   }
 
-  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
+  @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Post('photo')
   public async getPhoto(@Body() params: GEWISPhotoAlbumParams) {
     return new GEWISPosterService().getPhoto(params);
   }
 
-  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
+  @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Get('olympics/medal-table')
   public async getOlympicsMedalTable() {
     return new OlympicsService().getMedalTable();
   }
 
-  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
+  @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Get('olympics/country-medals')
   public async getDutchOlympicMedals() {
     return new OlympicsService().getDutchMedals();
