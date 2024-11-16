@@ -13,10 +13,14 @@ import BaseAudioHandler from '../handlers/base-audio-handler';
 import SimpleAudioHandler from '../handlers/audio/simple-audio-handler';
 import { SocketioNamespaces } from '../../socketio-namespaces';
 import BaseScreenHandler from '../handlers/base-screen-handler';
-import { CenturionScreenHandler, CurrentlyPlayingTrackHandler } from '../handlers/screen';
-import { PosterScreenHandler } from '../handlers/screen/poster';
-import StageEffectsHandler from '../handlers/screen/stage-effects-handler';
-import TimeTrailRaceScreenHandler from '../handlers/screen/time-trail-race-screen-handler';
+import {
+  CenturionScreenHandler,
+  CurrentlyPlayingTrackHandler,
+  PosterScreenHandler,
+  RoomResponsibleLegacyHandler,
+  StageEffectsHandler,
+  TimeTrailRaceScreenHandler,
+} from '../handlers/screen';
 
 /**
  * Object to create the set of all handlers belonging to each listener
@@ -79,6 +83,10 @@ export default class HandlerFactory {
       this.createHandler(PosterScreenHandler, () => new PosterScreenHandler(socket)),
       this.createHandler(StageEffectsHandler, () => new StageEffectsHandler(socket)),
       this.createHandler(TimeTrailRaceScreenHandler, () => new TimeTrailRaceScreenHandler(socket)),
+      this.createHandler(
+        RoomResponsibleLegacyHandler,
+        () => new RoomResponsibleLegacyHandler(socket),
+      ),
     ];
     return screenHandlers.filter((h) => h != null);
   }

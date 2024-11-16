@@ -4,7 +4,7 @@ import { TrackChangeEvent } from '../../../events/music-emitter-events';
 import { PosterManager } from './poster-manager';
 import { TrelloPosterManager } from './trello/trello-poster-manager';
 
-export class PosterScreenHandler extends BaseScreenHandler {
+export default class PosterScreenHandler extends BaseScreenHandler {
   public posterManager: PosterManager;
 
   private borrelModeDay: number | undefined;

@@ -2,12 +2,17 @@ import { Column, Entity } from 'typeorm';
 import BaseEntity from '../root/entities/base-entity';
 import { SudoSOSSettings, SudoSOSSettingsDefault } from '../sudosos/sudosos-settings';
 import { ModeSettings, ModeSettingsDefaults } from '../modes/mode-settings';
+import {
+  ScreenHandlerSettings,
+  ScreenHandlerSettingsDefaults,
+} from '../handlers/screen/screen-handler-settings';
 
-export interface ISettings extends SudoSOSSettings, ModeSettings {}
+export interface ISettings extends SudoSOSSettings, ModeSettings, ScreenHandlerSettings {}
 
 export const SettingsDefaults: ISettings = {
   ...SudoSOSSettingsDefault,
   ...ModeSettingsDefaults,
+  ...ScreenHandlerSettingsDefaults,
 };
 
 /**
