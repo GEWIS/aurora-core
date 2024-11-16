@@ -123,6 +123,8 @@ export default class ServerSettingsStore<T extends keyof ISettings = keyof ISett
     this.throwIfNotInitialized();
     const setting = await this.repo.findOne({ where: { key } });
     setting!.value = value;
-    return this.repo.save(setting!);
+    const result = await this.repo.save(setting!);
+    this.settings[key] = value;
+    return result;
   }
 }

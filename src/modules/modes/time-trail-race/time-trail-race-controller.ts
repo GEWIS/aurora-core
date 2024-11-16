@@ -13,7 +13,7 @@ import { securityGroups } from '../../../helpers/security-groups';
 
 @Route('modes/time-trail-race')
 @Tags('Modes')
-@FeatureEnabled('TimeTrailRaceEnabled')
+@FeatureEnabled('TimeTrailRace')
 export class TimeTrailRaceController extends Controller {
   private modeManager: ModeManager;
 

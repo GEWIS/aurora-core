@@ -7,7 +7,7 @@ import { securityGroups } from '../../helpers/security-groups';
 
 @Tags('Handlers')
 @Route('handler/screen/poster/sudosos')
-@FeatureEnabled('SudoSOSEnabled')
+@FeatureEnabled('SudoSOS')
 export class SudoSOSController extends Controller {
   @Security(SecurityNames.LOCAL, securityGroups.sudosos.subscriber)
   @Get('wall-of-shame')

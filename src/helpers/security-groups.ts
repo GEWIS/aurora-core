@@ -24,6 +24,7 @@ export interface ISecurityGroups {
   lightOperation: ISecuritySections;
   spotify: ISecuritySections;
   sudosos: ISecuritySections;
+  serverSettings: ISecuritySections;
 }
 
 /**

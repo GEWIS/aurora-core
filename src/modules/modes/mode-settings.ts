@@ -1,9 +1,9 @@
 export interface ModeSettings {
-  CenturionEnabled: boolean;
-  TimeTrailRaceEnabled: boolean;
+  Centurion: boolean;
+  TimeTrailRace: boolean;
 }
 
 export const ModeSettingsDefaults: ModeSettings = {
-  CenturionEnabled: true,
-  TimeTrailRaceEnabled: true,
+  Centurion: true,
+  TimeTrailRace: true,
 };
