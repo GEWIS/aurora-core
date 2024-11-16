@@ -89,7 +89,7 @@ export const securityGroups = {
     subscriber: [SecurityGroup.SCREEN_SUBSCRIBER],
   },
   roomresponsible: {
-    subscriber: [SecurityGroup.SCREEN_SUBSCRIBER],
+    base: [SecurityGroup.SCREEN_SUBSCRIBER],
   },
   centurion: {
     base: allSecuritySubscriberGroups,

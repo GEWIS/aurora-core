@@ -9,7 +9,7 @@ import { securityGroups } from '../../../helpers/security-groups';
 @Tags('Handlers')
 @FeatureEnabled('RoomResponsibleLegacyScreenURL')
 export class RoomResponsibleLegacyController extends Controller {
-  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
+  @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Get('room-responsible-legacy-url')
   public getRoomResponsibleLegacyUrl(): string {
     return ServerSettingsStore.getInstance().getSetting(
