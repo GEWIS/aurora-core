@@ -1,7 +1,7 @@
 import { Controller } from '@tsoa/runtime';
 import { Body, Get, Post, Put, Query, Request, Route, Security, Tags } from 'tsoa';
 import { Request as ExpressRequest } from 'express';
-import { PosterScreenHandler } from './poster-screen-handler';
+import PosterScreenHandler from './poster-screen-handler';
 // eslint-disable-next-line import/no-cycle -- TODO fix cyclic dependency
 import HandlerManager from '../../../root/handler-manager';
 import { Screen } from '../../../root/entities';

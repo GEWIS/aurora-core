@@ -5,7 +5,7 @@ import { RgbColor } from '../../lights/color-definitions';
 import { FeatureEnabled } from '../../server-settings';
 
 @FeatureEnabled('Centurion')
-export class CenturionScreenHandler extends BaseScreenHandler {
+export default class CenturionScreenHandler extends BaseScreenHandler {
   beat(event: BeatEvent): void {
     this.sendEvent('beat', event);
   }

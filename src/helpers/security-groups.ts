@@ -14,6 +14,7 @@ export interface ISecurityGroups {
   scenes: ISecuritySections;
   effects: ISecuritySections;
   poster: ISecuritySections;
+  roomresponsible: ISecuritySections;
   centurion: ISecuritySections;
   timetrail: ISecuritySections;
   mode: ISecuritySections;
@@ -85,6 +86,9 @@ export const securityGroups = {
   poster: {
     base: baseSecurityGroups,
     privileged: privilegedSecurityGroups,
+    subscriber: [SecurityGroup.SCREEN_SUBSCRIBER],
+  },
+  roomresponsible: {
     subscriber: [SecurityGroup.SCREEN_SUBSCRIBER],
   },
   centurion: {
