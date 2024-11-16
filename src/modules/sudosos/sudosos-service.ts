@@ -20,7 +20,7 @@ interface SudoSOSDebtorResponse {
   isLongstanding: boolean;
 }
 
-@FeatureEnabled('SudoSOSEnabled')
+@FeatureEnabled('SudoSOS')
 export default class SudoSOSService {
   private url: string;
 
@@ -115,8 +115,8 @@ export default class SudoSOSService {
     });
 
     const bacGroupId = ServerSettingsStore.getInstance().getSetting(
-      'SudoSOSBACGroupID',
-    ) as SudoSOSSettings['SudoSOSBACGroupID'];
+      'SudoSOS.BACGroupID',
+    ) as SudoSOSSettings['SudoSOS.BACGroupID'];
 
     const bac =
       bacGroupId > 0
@@ -151,8 +151,8 @@ export default class SudoSOSService {
 
   public async getPriceList() {
     const posID = ServerSettingsStore.getInstance().getSetting(
-      'SudoSOSBorrelmodePOSID',
-    ) as SudoSOSSettings['SudoSOSBorrelmodePOSID'];
+      'SudoSOS.BorrelmodePOSID',
+    ) as SudoSOSSettings['SudoSOS.BorrelmodePOSID'];
     const response = await this.client.pos.getAllPointOfSaleProducts(posID);
     return response.data.filter((p) => p.priceList);
   }

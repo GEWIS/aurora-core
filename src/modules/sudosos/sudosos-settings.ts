@@ -1,11 +1,11 @@
 export interface SudoSOSSettings {
-  SudoSOSEnabled: boolean;
-  SudoSOSBorrelmodePOSID: number;
-  SudoSOSBACGroupID: number;
+  SudoSOS: boolean;
+  'SudoSOS.BorrelmodePOSID': number;
+  'SudoSOS.BACGroupID': number;
 }
 
 export const SudoSOSSettingsDefault: SudoSOSSettings = {
-  SudoSOSEnabled: true,
-  SudoSOSBorrelmodePOSID: -1,
-  SudoSOSBACGroupID: -1,
+  SudoSOS: true,
+  'SudoSOS.BorrelmodePOSID': -1,
+  'SudoSOS.BACGroupID': -1,
 };

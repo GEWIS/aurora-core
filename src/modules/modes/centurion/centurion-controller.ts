@@ -55,7 +55,7 @@ interface MixTapeResponse extends Pick<MixTape, 'name' | 'artist' | 'coverUrl'> 
 
 @Route('modes/centurion')
 @Tags('Modes')
-@FeatureEnabled('CenturionEnabled')
+@FeatureEnabled('Centurion')
 export class CenturionController extends Controller {
   private modeManager: ModeManager;
 

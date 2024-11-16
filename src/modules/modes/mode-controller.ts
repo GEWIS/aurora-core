@@ -72,7 +72,7 @@ export class ModeController extends Controller {
    */
   @Security(SecurityNames.LOCAL, securityGroups.centurion.privileged)
   @Post('centurion')
-  @FeatureEnabled('CenturionEnabled')
+  @FeatureEnabled('Centurion')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   @SuccessResponse(HttpStatusCode.NoContent)
   public async enableCenturion(
@@ -101,7 +101,7 @@ export class ModeController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.centurion.privileged)
   @Delete('centurion')
-  @FeatureEnabled('CenturionEnabled')
+  @FeatureEnabled('Centurion')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   @SuccessResponse(HttpStatusCode.Ok)
   public disableCenturion(@Request() req: ExpressRequest) {
@@ -114,7 +114,7 @@ export class ModeController extends Controller {
    */
   @Security(SecurityNames.LOCAL, securityGroups.timetrail.base)
   @Post('time-trail-race')
-  @FeatureEnabled('TimeTrailRaceEnabled')
+  @FeatureEnabled('TimeTrailRace')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   @SuccessResponse(HttpStatusCode.NoContent)
   public async enableTimeTrailRace(
@@ -135,7 +135,7 @@ export class ModeController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.timetrail.base)
   @Delete('time-trail-race')
-  @FeatureEnabled('TimeTrailRaceEnabled')
+  @FeatureEnabled('TimeTrailRace')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   @SuccessResponse(HttpStatusCode.Ok)
   public disableTimeTrailRacing(@Request() req: ExpressRequest) {
