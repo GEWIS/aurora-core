@@ -67,7 +67,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 108.5,
+      timestamp: 108.4,
       type: 'horn',
       data: {
         counter: 1,
@@ -83,7 +83,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 166.99,
+      timestamp: 166.9,
       type: 'horn',
       data: {
         counter: 2,
@@ -99,7 +99,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 222.95,
+      timestamp: 222.8,
       type: 'horn',
       data: {
         counter: 3,
@@ -131,7 +131,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 339.5,
+      timestamp: 339.4,
       type: 'horn',
       data: {
         counter: 5,
@@ -147,7 +147,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 411.68,
+      timestamp: 411.75,
       type: 'horn',
       data: {
         counter: 6,
@@ -188,7 +188,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 514.27,
+      timestamp: 514.4,
       type: 'horn',
       data: {
         counter: 8,
@@ -204,7 +204,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 573.85,
+      timestamp: 573.9,
       type: 'horn',
       data: {
         counter: 9,
@@ -220,7 +220,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 634.46,
+      timestamp: 634.5,
       type: 'horn',
       data: {
         counter: 10,
@@ -400,7 +400,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1172.72,
+      timestamp: 1172.8,
       type: 'horn',
       data: {
         counter: 19,
@@ -432,7 +432,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1235.15,
+      timestamp: 1235.2,
       type: 'horn',
       data: {
         counter: 20,
@@ -448,7 +448,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1288.8,
+      timestamp: 1288.0,
       type: 'horn',
       data: {
         counter: 21,
@@ -480,7 +480,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1410.38,
+      timestamp: 1410.4,
       type: 'horn',
       data: {
         counter: 23,
@@ -496,7 +496,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1470.45,
+      timestamp: 1470.5,
       type: 'horn',
       data: {
         counter: 24,
@@ -512,7 +512,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1530.36,
+      timestamp: 1530.4,
       type: 'horn',
       data: {
         counter: 25,
@@ -528,7 +528,12 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1593.63,
+      timestamp: 1589,
+      type: 'bpm',
+      data: { bpm: 1 },
+    },
+    {
+      timestamp: 1593.7,
       type: 'horn',
       data: {
         counter: 26,
@@ -585,7 +590,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1768.71,
+      timestamp: 1768.8,
       type: 'horn',
       data: {
         counter: 29,
@@ -601,7 +606,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1828.9,
+      timestamp: 1829.0,
       type: 'horn',
       data: {
         counter: 30,
@@ -617,7 +622,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1886.9,
+      timestamp: 1887.0,
       type: 'horn',
       data: {
         counter: 31,
@@ -633,7 +638,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 1944.9,
+      timestamp: 1944.8,
       type: 'horn',
       data: {
         counter: 32,
@@ -674,7 +679,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 2063.97,
+      timestamp: 2064.1,
       type: 'horn',
       data: {
         counter: 34,
@@ -715,7 +720,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 2193.89,
+      timestamp: 2193.9,
       type: 'horn',
       data: {
         counter: 36,
@@ -731,14 +736,14 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 2244.79,
+      timestamp: 2244.8,
       type: 'horn',
       data: {
         counter: 37,
       },
     },
     {
-      timestamp: 2304.47,
+      timestamp: 2304.7,
       type: 'horn',
       data: {
         counter: 38,
@@ -754,7 +759,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 2373.39,
+      timestamp: 2373.4,
       type: 'horn',
       data: {
         counter: 39,
@@ -770,19 +775,24 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 2431.0,
+      timestamp: 2427.5,
+      type: 'bpm',
+      data: { bpm: 1 },
+    },
+    {
+      timestamp: 2431.1,
+      type: 'horn',
+      data: {
+        counter: 40,
+      },
+    },
+    {
+      timestamp: 2431.5,
       type: 'song',
       data: {
         artist: 'Showtek & Justin Prime',
         title: 'Cannonball',
         bpm: 134,
-      },
-    },
-    {
-      timestamp: 2431.2,
-      type: 'horn',
-      data: {
-        counter: 40,
       },
     },
     {
@@ -811,7 +821,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 2554.9,
+      timestamp: 2555.0,
       type: 'horn',
       data: {
         counter: 42,
@@ -827,7 +837,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 2606.35,
+      timestamp: 2606.3,
       type: 'horn',
       data: {
         counter: 43,
@@ -843,7 +853,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 2663.46,
+      timestamp: 2663.55,
       type: 'horn',
       data: {
         counter: 44,
@@ -859,7 +869,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 2729.0,
+      timestamp: 2729.1,
       type: 'horn',
       data: {
         counter: 45,
@@ -900,7 +910,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 2849.4,
+      timestamp: 2849.5,
       type: 'horn',
       data: {
         counter: 47,
@@ -932,7 +942,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 2974.58,
+      timestamp: 2974.7,
       type: 'horn',
       data: {
         counter: 49,
@@ -948,7 +958,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3038.76,
+      timestamp: 3038.9,
       type: 'horn',
       data: {
         counter: 50,
@@ -964,7 +974,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3103.18,
+      timestamp: 3103.3,
       type: 'horn',
       data: {
         counter: 51,
@@ -980,7 +990,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3160.16,
+      timestamp: 3160.25,
       type: 'horn',
       data: {
         counter: 52,
@@ -996,7 +1006,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3214.8,
+      timestamp: 3214.7,
       type: 'horn',
       data: {
         counter: 53,
@@ -1012,7 +1022,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3278.55,
+      timestamp: 3278.6,
       type: 'horn',
       data: {
         counter: 54,
@@ -1044,7 +1054,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3398.04,
+      timestamp: 3398.15,
       type: 'horn',
       data: {
         counter: 56,
@@ -1069,7 +1079,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3464.95,
+      timestamp: 3465.05,
       type: 'horn',
       data: {
         counter: 57,
@@ -1085,7 +1095,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3519.75,
+      timestamp: 3519.9,
       type: 'horn',
       data: {
         counter: 58,
@@ -1110,14 +1120,14 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3576.36,
+      timestamp: 3576.5,
       type: 'horn',
       data: {
         counter: 59,
       },
     },
     {
-      timestamp: 3642.86,
+      timestamp: 3643.0,
       type: 'horn',
       data: {
         counter: 60,
@@ -1149,7 +1159,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3699.38,
+      timestamp: 3699.4,
       type: 'horn',
       data: {
         counter: 61,
@@ -1163,7 +1173,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3752.85,
+      timestamp: 3753.0,
       type: 'horn',
       data: {
         counter: 62,
@@ -1204,7 +1214,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3873.6,
+      timestamp: 3873.7,
       type: 'horn',
       data: {
         counter: 64,
@@ -1220,7 +1230,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3931.55,
+      timestamp: 3931.5,
       type: 'horn',
       data: {
         counter: 65,
@@ -1236,7 +1246,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 3987.41,
+      timestamp: 3987.6,
       type: 'horn',
       data: {
         counter: 66,
@@ -1252,7 +1262,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 4050.0,
+      timestamp: 4050.1,
       type: 'horn',
       data: {
         counter: 67,
@@ -1268,7 +1278,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 4112.8,
+      timestamp: 4112.7,
       type: 'horn',
       data: {
         counter: 68,
@@ -1284,7 +1294,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 4175.0,
+      timestamp: 4175.1,
       type: 'horn',
       data: {
         counter: 69,
@@ -1300,7 +1310,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 4227.53,
+      timestamp: 4227.7,
       type: 'horn',
       data: {
         counter: 70,
@@ -1316,7 +1326,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 4280.12,
+      timestamp: 4280.2,
       type: 'horn',
       data: {
         counter: 71,
@@ -1332,7 +1342,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 4340.73,
+      timestamp: 4340.9,
       type: 'horn',
       data: {
         counter: 72,
@@ -1348,7 +1358,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 4408.0,
+      timestamp: 4408.1,
       type: 'horn',
       data: {
         counter: 73,
@@ -1373,7 +1383,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 4466.8,
+      timestamp: 4467.0,
       type: 'horn',
       data: {
         counter: 74,
@@ -1389,7 +1399,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 4520.84,
+      timestamp: 4521.0,
       type: 'horn',
       data: {
         counter: 75,
@@ -1417,7 +1427,19 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 4578.0,
+      timestamp: 4573.002,
+      type: 'effect',
+      data: {
+        reset: true,
+        effects: {
+          pars: [StaticColor.build({ color: RgbColor.GOLD, dimTimeMs: 3000 })],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
+      },
+    },
+    {
+      timestamp: 4578.1,
       type: 'horn',
       data: {
         counter: 76,
@@ -1445,7 +1467,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 4644.94,
+      timestamp: 4645.1,
       type: 'horn',
       data: {
         counter: 77,
@@ -1534,7 +1556,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 4952.43,
+      timestamp: 4952.6,
       type: 'horn',
       data: {
         counter: 82,
@@ -1562,24 +1584,28 @@ const centurion: MixTape = {
       data: {
         artist: 'Feestteam',
         title: 'Let It Be / Hey Jude (mix)',
-        bpm: 150,
+        bpm: 150 / 2,
       },
     },
     {
-      timestamp: 5070.43,
+      timestamp: 5070.6,
       type: 'horn',
       data: {
         counter: 84,
       },
     },
     {
-      timestamp: 5124.46,
+      timestamp: 5097.7,
+      type: 'bpm',
+      data: { bpm: 150 },
+    },
+    {
+      timestamp: 5124.6,
       type: 'horn',
       data: {
         counter: 85,
       },
     },
-    // Half BPM (75) als het nummer nog niet "versneld"?
     {
       timestamp: 5179.0,
       type: 'song',
@@ -1606,7 +1632,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 5242.71,
+      timestamp: 5242.8,
       type: 'horn',
       data: {
         counter: 87,
@@ -1638,7 +1664,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 5373.8,
+      timestamp: 5373.85,
       type: 'horn',
       data: {
         counter: 89,
@@ -1654,7 +1680,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 5431.74,
+      timestamp: 5431.3,
       type: 'horn',
       data: {
         counter: 90,
@@ -1670,7 +1696,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 5487.8,
+      timestamp: 5487.9,
       type: 'horn',
       data: {
         counter: 91,
@@ -1686,7 +1712,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 5555.55,
+      timestamp: 5555.65,
       type: 'horn',
       data: {
         counter: 92,
@@ -1711,7 +1737,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 5612.0,
+      timestamp: 5612.1,
       type: 'horn',
       data: {
         counter: 93,
@@ -1736,7 +1762,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 5667.15,
+      timestamp: 5667.2,
       type: 'horn',
       data: {
         counter: 94,
@@ -1752,7 +1778,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 5730.65,
+      timestamp: 5730.7,
       type: 'horn',
       data: {
         counter: 95,
@@ -1764,7 +1790,7 @@ const centurion: MixTape = {
       data: {
         artist: 'Evil Activities',
         title: 'Nobody Said It Was Easy',
-        bpm: 170,
+        bpm: 170 / 2,
       },
     },
     {
@@ -1773,6 +1799,11 @@ const centurion: MixTape = {
       data: {
         counter: 96,
       },
+    },
+    {
+      timestamp: 5782.9,
+      type: 'bpm',
+      data: { bpm: 170 },
     },
     {
       timestamp: 5827.0,
@@ -1784,14 +1815,14 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 5846.32,
+      timestamp: 5845.7,
       type: 'horn',
       data: {
         counter: 97,
       },
     },
     {
-      timestamp: 5847,
+      timestamp: 5846,
       type: 'bpm',
       data: {
         bpm: 1,
@@ -1807,7 +1838,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 5902.03,
+      timestamp: 5901.9,
       type: 'horn',
       data: {
         counter: 98,
@@ -1823,7 +1854,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 5969.88,
+      timestamp: 5969.8,
       type: 'horn',
       data: {
         counter: 99,
@@ -1843,6 +1874,7 @@ const centurion: MixTape = {
       type: 'horn',
       data: {
         counter: 100,
+        strobeTime: 2000,
       },
     },
     {

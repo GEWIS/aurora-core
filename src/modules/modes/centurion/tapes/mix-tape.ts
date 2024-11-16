@@ -2,6 +2,8 @@ import { LightsEffectBuilder } from '../../../lights/effects/lights-effect';
 
 export type HornData = {
   counter: number;
+  /** Time the lights should strobe in milliseconds */
+  strobeTime?: number;
 };
 
 export type Horn = {

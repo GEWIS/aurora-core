@@ -226,11 +226,15 @@ export default class CenturionMode extends BaseMode<
     if (event.type === 'horn') {
       this.lastHornEvent = event;
       this.lights.forEach((l) => {
-        l.pars.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
-        l.movingHeadRgbs.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
-        l.movingHeadWheels.forEach((p) => p.fixture.enableStrobe(STROBE_TIME));
+        l.pars.forEach((p) => p.fixture.enableStrobe(event.data.strobeTime ?? STROBE_TIME));
+        l.movingHeadRgbs.forEach((p) =>
+          p.fixture.enableStrobe(event.data.strobeTime ?? STROBE_TIME),
+        );
+        l.movingHeadWheels.forEach((p) =>
+          p.fixture.enableStrobe(event.data.strobeTime ?? STROBE_TIME),
+        );
       });
-      this.screenHandler.horn(STROBE_TIME, event.data.counter);
+      this.screenHandler.horn(event.data.strobeTime ?? STROBE_TIME, event.data.counter);
     } else if (event.type === 'song') {
       this.lastSongEvent = event;
       this.setRandomLightEffects();
