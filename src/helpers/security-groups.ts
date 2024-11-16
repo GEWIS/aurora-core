@@ -118,7 +118,7 @@ export const securityGroups = {
     base: baseSecurityGroups,
   },
   spotify: {
-    base: allSecurityGroups,
+    base: allSecuritySubscriberGroups,
     privileged: [SecurityGroup.ADMIN],
   },
   sudosos: {
