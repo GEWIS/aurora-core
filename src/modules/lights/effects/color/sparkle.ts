@@ -25,7 +25,8 @@ export interface SparkleProps {
   dimDuration?: number;
 
   /**
-   * After how many ms (approximately) a ratio of lights should be turned on
+   * After how many ms (approximately) a ratio of lights should be turned on.
+   * Defaults to 0, which enables the ratio of lights on the beat of the music.
    * @isInt
    * @minimum 0
    */
@@ -37,9 +38,9 @@ export type SparkleCreateParams = BaseLightsEffectCreateParams & {
   props: SparkleProps;
 };
 
-const DEFAULT_RATIO = 0.2;
+const DEFAULT_RATIO = 0.3;
 const DEFAULT_DIM_DURATION = 800;
-const DEFAULT_CYCLE_TIME = 200;
+const DEFAULT_CYCLE_TIME = 0;
 
 export default class Sparkle extends LightsEffect<SparkleProps> {
   private beats: Date[];
@@ -68,9 +69,33 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
       new Sparkle(lightsGroup, props, features);
   }
 
+  /**
+   * Enable a subset of lights, i.e. set their brightness back to 1
+   * @private
+   */
+  private enableLights() {
+    const ratio = this.props.ratio ?? DEFAULT_RATIO;
+
+    // Create a random permutation of the lights
+    const indices = this.beats.map((b, i) => i);
+    const permutation = indices.sort((a, b) => Math.random() - 0.5);
+    // Enable only the ratio of all lights
+    const toEnable = permutation.slice(0, Math.round(ratio * this.beats.length));
+
+    this.beats?.forEach((b, i) => {
+      if (toEnable.includes(i)) {
+        this.colorIndices[i] = (this.colorIndices[i] + 1) % Math.max(this.props.colors.length);
+        this.beats[i] = new Date();
+      }
+    });
+    this.previousTick = new Date();
+  }
+
   destroy(): void {}
 
-  beat(): void {}
+  beat(): void {
+    if (!this.props.cycleTime) this.enableLights();
+  }
 
   private getProgression(beat: Date) {
     const dimDuration = this.props.dimDuration ?? DEFAULT_DIM_DURATION;
@@ -82,17 +107,10 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
     const nrPars = this.lightsGroup.pars.length;
     const { colors, cycleTime: propsCycleTime, ratio: propsRatio } = this.props;
     const cycleTime = propsCycleTime ?? DEFAULT_CYCLE_TIME;
-    const ratio = propsRatio ?? DEFAULT_RATIO;
 
     // Turn on some lights according to the ratio if we have reached the time
-    if (new Date().getTime() - this.previousTick.getTime() >= cycleTime) {
-      this.beats?.forEach((b, i) => {
-        if (Math.random() <= ratio) {
-          this.colorIndices[i] = (this.colorIndices[i] + i) % Math.max(colors.length);
-          this.beats[i] = new Date();
-        }
-      });
-      this.previousTick = new Date();
+    if (cycleTime > 0 && new Date().getTime() - this.previousTick.getTime() >= cycleTime) {
+      this.enableLights();
     }
 
     this.lightsGroup.pars.forEach((p, i) => {

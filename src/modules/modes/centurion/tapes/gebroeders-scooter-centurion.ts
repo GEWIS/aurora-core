@@ -1415,22 +1415,9 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 4573.001,
-      type: 'effect',
-      data: {
-        reset: true,
-        effects: {
-          pars: [],
-          movingHeadWheelColor: [],
-          movingHeadWheelMovement: [],
-        },
-      },
-    },
-    {
       timestamp: 4573.002,
       type: 'effect',
       data: {
-        reset: true,
         effects: {
           pars: [StaticColor.build({ color: RgbColor.GOLD, dimTimeMs: 3000 })],
           movingHeadWheelColor: [],

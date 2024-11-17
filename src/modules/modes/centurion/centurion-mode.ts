@@ -5,7 +5,7 @@ import SetEffectsHandler from '../../handlers/lights/set-effects-handler';
 import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
 import MixTape, { FeedEvent, Horn, Song, SongData } from './tapes/mix-tape';
 import { BeatFadeOut, StaticColor } from '../../lights/effects/color';
-import { SearchLight } from '../../lights/effects/movement';
+import { ClassicRotate, SearchLight } from '../../lights/effects/movement';
 import { getTwoComplementaryRgbColors, RgbColor } from '../../lights/color-definitions';
 import { MusicEmitter } from '../../events';
 import { TrackChangeEvent } from '../../events/music-emitter-events';
@@ -143,27 +143,68 @@ export default class CenturionMode extends BaseMode<
     );
   }
 
+  private getRandomMovementEffect(): LightsEffectBuilder {
+    // If we do not have a bpm, choose SearchLight as the default
+    const defaultEffect = SearchLight.build({ radiusFactor: 1.5, cycleTime: 3000 });
+    if (!this.beatGenerator.bpm) {
+      return defaultEffect;
+    }
+
+    const baseCycleTime = Math.round(360000 / this.beatGenerator.bpm);
+    const classicRotateProb = Math.max(0, Math.min(1, (this.beatGenerator.bpm - 120) / 60));
+    console.log(this.beatGenerator.bpm, classicRotateProb);
+
+    const effects = [
+      {
+        effect: ClassicRotate.build({ cycleTime: baseCycleTime * 4 }),
+        probability: classicRotateProb,
+      },
+      {
+        effect: SearchLight.build({ radiusFactor: 1.5, cycleTime: baseCycleTime }),
+        probability: 1 - classicRotateProb,
+      },
+    ];
+    let factor = Math.random();
+
+    return (
+      effects.find((effect, i) => {
+        const previous = effects.slice(0, i).reduce((x, e) => x + e.probability, 0);
+        return previous <= factor && previous + effect.probability > factor;
+      })?.effect || defaultEffect
+    );
+  }
+
   /**
    * Get a random effect given a set of colors
    * @param colors
    * @private
    */
-  private getRandomEffect(colors: RgbColor[]): LightsEffectBuilder {
+  private getRandomParEffect(colors: RgbColor[]): LightsEffectBuilder {
     const effects = [
       {
         effect: BeatFadeOut.build({ colors, enableFade: false, nrBlacks: 1 }),
         probability: 0.8,
       },
       {
-        effect: Wave.build({ color: colors[0] }),
-        probability: 0.1,
-      },
-      {
         effect: Sparkle.build({ colors }),
         probability: 0.1,
       },
+      {
+        effect: Wave.build({ color: colors[0] }),
+        probability: 0.1,
+      },
     ];
-    const factor = Math.random();
+    let factor = Math.random();
+
+    if (!this.beatGenerator.bpm || this.beatGenerator.bpm < 120) {
+      // If the music is relatively slow or really fast, do not use wave or sparkle
+      factor = factor - 0.2;
+    } else if (this.beatGenerator.bpm > 160) {
+      // If the music is really fast, do not use wave, as the other effects will be
+      // much more energetic
+      factor = factor - 0.1;
+    }
+
     return (
       effects.find((effect, i) => {
         const previous = effects.slice(0, i).reduce((x, e) => x + e.probability, 0);
@@ -195,14 +236,14 @@ export default class CenturionMode extends BaseMode<
     const { colorNames } = getTwoComplementaryRgbColors();
     this.currentColors = colorNames;
 
-    const movingHeadEffectMovement = SearchLight.build({ radiusFactor: 1.5, cycleTime: 3000 });
+    const newMovementEffectBuilder = this.getRandomMovementEffect();
     const movingHeadEffectColor = StaticColor.build({ color: RgbColor.WHITE });
-    const newEffectBuilder = this.getRandomEffect(colorNames);
+    const newEffectBuilder = this.getRandomParEffect(colorNames);
 
     this.lights.forEach((l) => {
       // If we have a moving head, assign a movement effect
       if (l.movingHeadRgbs.length > 0 || l.movingHeadWheels.length > 0) {
-        this.lightsHandler.setMovementEffect(l, [movingHeadEffectMovement]);
+        this.lightsHandler.setMovementEffect(l, [newMovementEffectBuilder]);
       }
       // If we have a wheel moving head, assign a static color
       if (l.movingHeadWheels.length > 0) {
@@ -237,8 +278,9 @@ export default class CenturionMode extends BaseMode<
       this.screenHandler.horn(event.data.strobeTime ?? STROBE_TIME, event.data.counter);
     } else if (event.type === 'song') {
       this.lastSongEvent = event;
-      this.setRandomLightEffects();
       this.setBpm(event.data);
+      // Set effects after setting bpm, because the effects might need the bpm
+      this.setRandomLightEffects();
       this.emitSong(event.data);
     } else if (event.type === 'effect') {
       this.lights.forEach((l) => {
