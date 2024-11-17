@@ -38,7 +38,7 @@ export type SparkleCreateParams = BaseLightsEffectCreateParams & {
   props: SparkleProps;
 };
 
-const DEFAULT_RATIO = 0.2;
+const DEFAULT_RATIO = 0.3;
 const DEFAULT_DIM_DURATION = 800;
 const DEFAULT_CYCLE_TIME = 0;
 
@@ -69,6 +69,10 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
       new Sparkle(lightsGroup, props, features);
   }
 
+  /**
+   * Enable a subset of lights, i.e. set their brightness back to 1
+   * @private
+   */
   private enableLights() {
     const ratio = this.props.ratio ?? DEFAULT_RATIO;
 
@@ -80,7 +84,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
 
     this.beats?.forEach((b, i) => {
       if (toEnable.includes(i)) {
-        this.colorIndices[i] = (this.colorIndices[i] + i) % Math.max(this.props.colors.length);
+        this.colorIndices[i] = (this.colorIndices[i] + 1) % Math.max(this.props.colors.length);
         this.beats[i] = new Date();
       }
     });
