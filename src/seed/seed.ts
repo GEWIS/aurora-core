@@ -13,7 +13,7 @@ import { LightsScene, LightsSceneEffect } from '../modules/lights/entities/scene
 import { SearchLightCreateParams } from '../modules/lights/effects/movement/search-light';
 import LightsWheelColorChannelValue from '../modules/lights/entities/lights-wheel-color-channel-value';
 import LightsWheelGoboChannelValue from '../modules/lights/entities/lights-wheel-gobo-channel-value';
-import { PosterScreenHandler } from '../modules/handlers/screen/poster';
+import GewisPosterScreenHandler from '../modules/handlers/screen/poster/gewis/gewis-poster-screen-handler';
 import SimpleAudioHandler from '../modules/handlers/audio/simple-audio-handler';
 import LightsWheelRotateChannelValue from '../modules/lights/entities/lights-wheel-rotate-channel-value';
 import { FixedPositionCreateParams } from '../modules/lights/effects/movement/fixed-position';
@@ -32,15 +32,15 @@ export default async function seedDatabase() {
   const rootScreenService = new RootScreenService();
   await rootScreenService.createScreen({
     name: 'PCGEWISB-links',
-    defaultHandler: PosterScreenHandler.name,
+    defaultHandler: GewisPosterScreenHandler.name,
   });
   await rootScreenService.createScreen({
     name: 'PCGEWISB-rechts',
-    defaultHandler: PosterScreenHandler.name,
+    defaultHandler: GewisPosterScreenHandler.name,
   });
   await rootScreenService.createScreen({
     name: 'PCGEWISINFO',
-    defaultHandler: PosterScreenHandler.name,
+    defaultHandler: GewisPosterScreenHandler.name,
   });
 
   const rootLightsService = new RootLightsService();

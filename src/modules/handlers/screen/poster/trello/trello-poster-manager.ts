@@ -119,7 +119,11 @@ export class TrelloPosterManager extends PosterManager {
 
     const labels = card.labels?.map((l) => l.name ?? '') ?? [];
     const hideBorder = labels.includes('HIDE_BORDER');
-    const footers = labels.filter((l) => !['HIDE_BORDER', 'BorrelMode'].includes(l));
+    const footers = labels.filter(
+      (l) => !['HIDE_BORDER', 'BorrelMode'].includes(l) && !l.startsWith('#'),
+    );
+
+    let color = labels.find((l) => l.startsWith('#'));
 
     return {
       id: card.id ?? randomUUID(),
@@ -128,10 +132,11 @@ export class TrelloPosterManager extends PosterManager {
       // If there is a due date present, set the due date
       due: card.due ? new Date(card.due) : undefined,
       // If there are labels, set the label of this poster to be the first label of the card
-      label: footers.length > 0 ? labels[0] : '',
+      label: footers.length > 0 ? footers[0] : '',
       // If the card has a HIDE_LABEL label, set the footer size to minimal
       footer: hideBorder ? FooterSize.MINIMAL : FooterSize.FULL,
       borrelMode,
+      color,
     };
   }
 

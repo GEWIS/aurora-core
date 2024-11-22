@@ -14,7 +14,6 @@ import DevelopEffectsHandler from '../handlers/lights/develop-effects-handler';
 import { BeatEvent, TrackChangeEvent } from '../events/music-emitter-events';
 import { CurrentlyPlayingTrackHandler, CenturionScreenHandler } from '../handlers/screen';
 // eslint-disable-next-line import/no-cycle -- TODO fix cyclic dependency
-import { PosterScreenHandler } from '../handlers/screen/poster';
 import { ScenesHandler } from '../handlers/lights/scenes-handler';
 import EffectSequenceHandler from '../handlers/lights/effect-sequence-handler';
 import { MusicEmitter } from '../events';
