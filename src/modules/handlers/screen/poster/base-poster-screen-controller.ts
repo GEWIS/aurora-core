@@ -1,0 +1,42 @@
+import { Controller } from '@tsoa/runtime';
+import { Request } from 'tsoa';
+import { Request as ExpressRequest } from 'express';
+import BasePosterScreenHandler from './base-poster-screen-handler';
+import { Poster } from './poster';
+import logger from '../../../../logger';
+
+export interface BorrelModeParams {
+  enabled: boolean;
+}
+
+export interface BasePosterResponse {
+  posters: Poster[];
+}
+
+export class BasePosterScreenController extends Controller {
+  protected screenHandler: BasePosterScreenHandler;
+
+  constructor() {
+    super();
+  }
+
+  public async getPosters(): Promise<BasePosterResponse> {
+    if (!this.screenHandler.posterManager.posters) {
+      try {
+        await this.screenHandler.posterManager.fetchPosters();
+      } catch (e) {
+        logger.error(e);
+      }
+    }
+    const posters = this.screenHandler.posterManager.posters ?? [];
+    return {
+      posters: posters.filter((p) => !p.borrelMode)
+    };
+  }
+
+  public async forceUpdatePosters(@Request() req: ExpressRequest): Promise<void> {
+    logger.audit(req.user, 'Force fetch posters from source.');
+    await this.screenHandler.posterManager.fetchPosters();
+    this.screenHandler.forceUpdate();
+  }
+}
