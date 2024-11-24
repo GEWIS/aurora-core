@@ -1,11 +1,6 @@
 import { FeatureEnabled, ServerSettingsStore } from '../server-settings';
 import { ISettings } from '../server-settings/server-setting';
-
-export type Order = {
-  number: number;
-  startTime: Date;
-  timeoutSeconds: number;
-};
+import { Order } from './entities';
 
 /**
  * In memory store of all orders that should be propagated using Aurora.
@@ -15,18 +10,9 @@ export type Order = {
  */
 @FeatureEnabled('Orders')
 export default class OrderStore {
-  private static instance: OrderStore;
-
   private settingsStore: ServerSettingsStore;
 
   private _orders: Order[] = [];
-
-  public static getInstance() {
-    if (!this.instance) {
-      this.instance = new OrderStore();
-    }
-    return this.instance;
-  }
 
   constructor() {
     this.settingsStore = ServerSettingsStore.getInstance();
