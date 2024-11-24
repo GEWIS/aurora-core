@@ -43,16 +43,24 @@ export default class OrderStore {
    * @param timeoutSeconds Time after which the order should automatically be hidden
    */
   public async addOrder(orderNumber: number, timeoutSeconds?: number): Promise<void> {
-    const order: Order = {
-      number: orderNumber,
-      startTime: new Date(),
-      timeoutSeconds:
-        timeoutSeconds ??
-        (this.settingsStore.getSetting(
-          'Orders.DefaultTimeoutSeconds',
-        ) as ISettings['Orders.DefaultTimeoutSeconds']),
-    };
-    this._orders.push(order);
+    const index = this._orders.findIndex((o) => o.number === orderNumber);
+    const timeout =
+      timeoutSeconds ??
+      (this.settingsStore.getSetting(
+        'Orders.DefaultTimeoutSeconds',
+      ) as ISettings['Orders.DefaultTimeoutSeconds']);
+
+    if (index >= 0) {
+      this._orders[index].startTime = new Date();
+      this._orders[index].timeoutSeconds = timeout;
+    } else {
+      const order: Order = {
+        number: orderNumber,
+        startTime: new Date(),
+        timeoutSeconds: timeout,
+      };
+      this._orders.push(order);
+    }
 
     await this.removeExpiredOrders();
   }
