@@ -25,6 +25,8 @@ import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 import TimeTrailRaceScreenHandler from '../handlers/screen/time-trail-race-screen-handler';
 import TimeTrailRaceLightsHandler from '../handlers/lights/time-trail-race-lights-handler';
 import HandlerFactory from './handler-factory';
+import { ShowOrdersEvent } from '../events/order-emitter-events';
+import EmitterStore from '../events/emitter-store';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -77,13 +79,13 @@ export default class HandlerManager {
    */
   private constructor(
     private io: Server,
-    private musicEmitter: MusicEmitter,
-    private backofficeSyncEmitter: BackofficeSyncEmitter,
+    private emitterStore: EmitterStore,
   ) {
-    this.musicEmitter.on('beat', this.beat.bind(this));
-    this.musicEmitter.on('change_track', this.changeTrack.bind(this));
+    this.emitterStore.musicEmitter.on('beat', this.beat.bind(this));
+    this.emitterStore.musicEmitter.on('change_track', this.changeTrack.bind(this));
+    this.emitterStore.orderEmitter.on('orders', this.showOrders.bind(this));
 
-    const factory = new HandlerFactory(this.io, this.musicEmitter);
+    const factory = new HandlerFactory(this.io, this.emitterStore.musicEmitter);
 
     // Register all handlers
     this._handlers.set(Audio, factory.createAudioHandlers());
@@ -95,21 +97,13 @@ export default class HandlerManager {
    * Get the current instance. Parameters are only necessary if it is
    * the first time an instance is requested and a new object should be created
    * @param io
-   * @param musicEmitter
-   * @param backofficeSyncEmitter
+   * @param emitterStore
    */
-  public static getInstance(
-    io?: Server,
-    musicEmitter?: MusicEmitter,
-    backofficeSyncEmitter?: BackofficeSyncEmitter,
-  ) {
-    if (
-      this.instance == null &&
-      (io === undefined || musicEmitter === undefined || backofficeSyncEmitter === undefined)
-    ) {
+  public static getInstance(io?: Server, emitterStore?: EmitterStore) {
+    if (this.instance == null && (io === undefined || emitterStore === undefined)) {
       throw new Error('Not all parameters provided to initialize');
     } else if (this.instance == null) {
-      this.instance = new HandlerManager(io!, musicEmitter!, backofficeSyncEmitter!);
+      this.instance = new HandlerManager(io!, emitterStore!);
     }
     return this.instance;
   }
@@ -160,7 +154,9 @@ export default class HandlerManager {
       entity.currentHandler = '';
       entity.save().catch((e) => logger.error(e));
     }
-    this.backofficeSyncEmitter.emit(`handler_${entity.constructor.name.toLowerCase()}_update`);
+    this.emitterStore.backofficeSyncEmitter.emit(
+      `handler_${entity.constructor.name.toLowerCase()}_update`,
+    );
 
     return true;
   }
@@ -183,8 +179,18 @@ export default class HandlerManager {
   public changeTrack(event: TrackChangeEvent[]) {
     const handlers = this.getHandlers();
     handlers.forEach((h) => {
-      // @ts-ignore
-      if (h.changeTrack) h.changeTrack(event);
+      if (h instanceof BaseScreenHandler && h.changeTrack) h.changeTrack(event);
+    });
+  }
+
+  /**
+   * Transmit an order change to all screen handlers
+   * (like changeTrack())
+   */
+  public showOrders(event: ShowOrdersEvent) {
+    const handlers = this.getHandlers();
+    handlers.forEach((h) => {
+      if (h instanceof BaseScreenHandler && h.showOrders) h.showOrders(event);
     });
   }
 }

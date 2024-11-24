@@ -29,8 +29,8 @@ export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator
       return;
     }
 
-    const value = store.getSetting(setting);
-    if (!value) {
+    const enabled = featureFlagManager.flagIsEnabled(setting);
+    if (!enabled) {
       res.status(409).send(`Endpoint is disabled by setting "${setting}".`);
       return;
     }
@@ -69,8 +69,8 @@ export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator
         constructor(...constructorArgs: any[]) {
           store.throwIfNotInitialized();
 
-          const value = store.getSetting(setting);
-          if (!value) {
+          const enabled = featureFlagManager.flagIsEnabled(setting);
+          if (!enabled) {
             throw new Error(`Class "${constr.name}" is disabled by setting "${setting}"`);
           }
 
@@ -88,8 +88,8 @@ export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator
       const store = ServerSettingsStore.getInstance();
       store.throwIfNotInitialized();
 
-      const value = store.getSetting(setting);
-      if (!value) {
+      const enabled = featureFlagManager.flagIsEnabled(setting);
+      if (!enabled) {
         throw new Error(`Method "${propertyKey.toString()}" is disabled by setting "${setting}"`);
       }
       return originalMethod.apply(this, methodArgs);

@@ -6,13 +6,19 @@ import {
   ScreenHandlerSettings,
   ScreenHandlerSettingsDefaults,
 } from '../handlers/screen/screen-handler-settings';
+import { OrderSettings, OrderSettingsDefault } from '../orders/order-settings';
 
-export interface ISettings extends SudoSOSSettings, ModeSettings, ScreenHandlerSettings {}
+export interface ISettings
+  extends SudoSOSSettings,
+    ModeSettings,
+    ScreenHandlerSettings,
+    OrderSettings {}
 
 export const SettingsDefaults: ISettings = {
   ...SudoSOSSettingsDefault,
   ...ModeSettingsDefaults,
   ...ScreenHandlerSettingsDefaults,
+  ...OrderSettingsDefault,
 };
 
 /**

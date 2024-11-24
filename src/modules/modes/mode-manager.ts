@@ -1,13 +1,12 @@
 import BaseMode from './base-mode';
 import { MusicEmitter } from '../events';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
+import EmitterStore from '../events/emitter-store';
 
 export default class ModeManager {
   private static instance: ModeManager;
 
-  private _musicEmitter: MusicEmitter;
-
-  private _backofficeSyncEmitter: BackofficeSyncEmitter;
+  private _emitterStore: EmitterStore;
 
   private modes: Map<typeof BaseMode, BaseMode<any, any, any> | undefined> = new Map();
 
@@ -20,10 +19,9 @@ export default class ModeManager {
     return this.instance;
   }
 
-  public init(musicEmitter: MusicEmitter, backofficeEmitter: BackofficeSyncEmitter) {
+  public init(emitterStore: EmitterStore) {
     if (this.initialized) throw new Error('ModeManager already initialized');
-    this._musicEmitter = musicEmitter;
-    this._backofficeSyncEmitter = backofficeEmitter;
+    this._emitterStore = emitterStore;
     this.initialized = true;
   }
 
@@ -36,7 +34,7 @@ export default class ModeManager {
     if (this.modes.has(modeClass)) this.disableMode(modeClass);
 
     this.modes.set(modeClass, mode);
-    this._backofficeSyncEmitter.emit(`mode_${name}_update`);
+    this._emitterStore.backofficeSyncEmitter.emit(`mode_${name}_update`);
   }
 
   public getMode(modeClass: typeof BaseMode<any, any, any>) {
@@ -46,16 +44,16 @@ export default class ModeManager {
   public disableMode(modeClass: typeof BaseMode<any, any, any>, name?: string) {
     const instance = this.modes.get(modeClass);
     if (instance) instance.destroy();
-    if (name) this._backofficeSyncEmitter.emit(`mode_${name}_update`);
+    if (name) this._emitterStore.backofficeSyncEmitter.emit(`mode_${name}_update`);
     return this.modes.delete(modeClass);
   }
 
   public get musicEmitter() {
-    return this._musicEmitter;
+    return this._emitterStore.musicEmitter;
   }
 
   public get backofficeSyncEmitter() {
-    return this._backofficeSyncEmitter;
+    return this._emitterStore.backofficeSyncEmitter;
   }
 
   /**
