@@ -26,6 +26,7 @@ export interface ISecurityGroups {
   spotify: ISecuritySections;
   sudosos: ISecuritySections;
   serverSettings: ISecuritySections;
+  orders: ISecuritySections;
 }
 
 /**
@@ -131,6 +132,10 @@ export const securityGroups = {
   serverSettings: {
     base: allSecurityGroups,
     privileged: [SecurityGroup.ADMIN],
+  },
+  orders: {
+    base: allSecuritySubscriberGroups,
+    privileged: baseSecurityGroups,
   },
 };
 
