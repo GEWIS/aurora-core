@@ -4,6 +4,8 @@ import { Request as ExpressRequest } from 'express';
 import BasePosterScreenHandler from './base-poster-screen-handler';
 import { Poster } from './poster';
 import logger from '../../../../logger';
+import OlympicsService from "./olympics-service";
+import NsTrainsService, {TrainResponse} from "./ns-trains-service";
 
 export interface BorrelModeParams {
   enabled: boolean;
@@ -38,5 +40,13 @@ export class BasePosterScreenController extends Controller {
     logger.audit(req.user, 'Force fetch posters from source.');
     await this.screenHandler.posterManager.fetchPosters();
     this.screenHandler.forceUpdate();
+  }
+
+  public async getTrains(): Promise<TrainResponse[]> {
+    return new NsTrainsService().getTrains();
+  }
+
+  public async getOlympicsMedalTable() {
+    return new OlympicsService().getMedalTable();
   }
 }

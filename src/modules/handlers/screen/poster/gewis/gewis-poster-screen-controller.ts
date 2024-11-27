@@ -1,16 +1,16 @@
-import {BasePosterResponse, BasePosterScreenController, BorrelModeParams} from "./base-poster-screen-controller";
-import HandlerManager from "../../../root/handler-manager";
-import {Screen} from "../../../root/entities";
-import BasePosterScreenHandler from "./base-poster-screen-handler";
-import {GewisPosterScreenHandler} from "../index";
+import {BasePosterResponse, BasePosterScreenController, BorrelModeParams} from "../base-poster-screen-controller";
+import HandlerManager from "../../../../root/handler-manager";
+import {Screen} from "../../../../root/entities";
+import BasePosterScreenHandler from "../base-poster-screen-handler";
+import {GewisPosterScreenHandler} from "../../index";
 import {Body, Get, Post, Put, Query, Request, Route, Security, Tags} from "tsoa";
-import {SecurityNames} from "../../../../helpers/security";
-import {securityGroups} from "../../../../helpers/security-groups";
-import logger from "../../../../logger";
+import {SecurityNames} from "../../../../../helpers/security";
+import {securityGroups} from "../../../../../helpers/security-groups";
+import logger from "../../../../../logger";
 import {Request as ExpressRequest} from "express";
-import NsTrainsService, {TrainResponse} from "./ns-trains-service";
+import {TrainResponse} from "../ns-trains-service";
 import GEWISPosterService, {GEWISPhotoAlbumParams} from "./gewis-poster-service";
-import OlympicsService from "./olympics-service";
+import OlympicsService from "../olympics-service";
 
 interface GewisPosterResponse extends BasePosterResponse {
     borrelMode: boolean;
@@ -77,7 +77,7 @@ export class GewisPosterScreenController extends BasePosterScreenController {
     @Security(SecurityNames.LOCAL, securityGroups.poster.base)
     @Get('train-departures')
     public async getTrains(): Promise<TrainResponse[]> {
-        return new NsTrainsService().getTrains();
+        return super.getTrains();
     }
 
     @Security(SecurityNames.LOCAL, securityGroups.poster.base)
@@ -89,7 +89,7 @@ export class GewisPosterScreenController extends BasePosterScreenController {
     @Security(SecurityNames.LOCAL, securityGroups.poster.base)
     @Get('olympics/medal-table')
     public async getOlympicsMedalTable() {
-        return new OlympicsService().getMedalTable();
+        return super.getOlympicsMedalTable();
     }
 
     @Security(SecurityNames.LOCAL, securityGroups.poster.base)

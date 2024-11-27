@@ -1,11 +1,11 @@
-import {BasePosterResponse, BasePosterScreenController} from "./base-poster-screen-controller";
-import HandlerManager from "../../../root/handler-manager";
-import {Screen} from "../../../root/entities";
-import BasePosterScreenHandler from "./base-poster-screen-handler";
-import {HubblePosterScreenHandler} from "../index";
+import {BasePosterResponse, BasePosterScreenController} from "../base-poster-screen-controller";
+import HandlerManager from "../../../../root/handler-manager";
+import {Screen} from "../../../../root/entities";
+import BasePosterScreenHandler from "../base-poster-screen-handler";
+import {HubblePosterScreenHandler} from "../../index";
 import {Get, Post, Request, Route, Security, Tags} from "tsoa";
-import {SecurityNames} from "../../../../helpers/security";
-import {securityGroups} from "../../../../helpers/security-groups";
+import {SecurityNames} from "../../../../../helpers/security";
+import {securityGroups} from "../../../../../helpers/security-groups";
 import {Request as ExpressRequest} from "express";
 
 @Route('handler/screen/hubble-poster')

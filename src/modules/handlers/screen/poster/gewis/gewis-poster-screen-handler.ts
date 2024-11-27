@@ -1,4 +1,4 @@
-import BasePosterScreenHandler from "./base-poster-screen-handler";
+import BasePosterScreenHandler from "../base-poster-screen-handler";
 import { Namespace } from "socket.io";
 
 
