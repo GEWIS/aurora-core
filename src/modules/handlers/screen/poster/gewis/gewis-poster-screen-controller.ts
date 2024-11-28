@@ -1,7 +1,6 @@
 import {BasePosterResponse, BasePosterScreenController, BorrelModeParams} from "../base-poster-screen-controller";
 import HandlerManager from "../../../../root/handler-manager";
 import {Screen} from "../../../../root/entities";
-import BasePosterScreenHandler from "../base-poster-screen-handler";
 import {GewisPosterScreenHandler} from "../../index";
 import {Body, Get, Post, Put, Query, Request, Route, Security, Tags} from "tsoa";
 import {SecurityNames} from "../../../../../helpers/security";
@@ -19,11 +18,13 @@ interface GewisPosterResponse extends BasePosterResponse {
 @Route('handler/screen/gewis-poster')
 @Tags('Handlers')
 export class GewisPosterScreenController extends BasePosterScreenController {
+    protected screenHandler: GewisPosterScreenHandler;
+
     constructor() {
         super();
         this.screenHandler = HandlerManager.getInstance()
             .getHandlers(Screen)
-            .filter((h) => h.constructor.name === GewisPosterScreenHandler.name)[0] as BasePosterScreenHandler;
+            .filter((h) => h.constructor.name === GewisPosterScreenHandler.name)[0] as GewisPosterScreenHandler;
     }
 
     @Security(SecurityNames.LOCAL, securityGroups.poster.base)
