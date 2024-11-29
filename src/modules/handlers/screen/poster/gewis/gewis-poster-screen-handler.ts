@@ -1,7 +1,8 @@
 import BasePosterScreenHandler from "../base-poster-screen-handler";
 import { Namespace } from "socket.io";
+import { FeatureEnabled } from "../../../../server-settings";
 
-
+@FeatureEnabled('GewisPosterScreenHandler')
 export default class GewisPosterScreenHandler extends BasePosterScreenHandler {
     private borrelModeDay: number | undefined;
 

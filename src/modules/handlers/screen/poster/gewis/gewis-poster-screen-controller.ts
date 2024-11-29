@@ -10,6 +10,7 @@ import {Request as ExpressRequest} from "express";
 import {TrainResponse} from "../ns-trains-service";
 import GEWISPosterService, {GEWISPhotoAlbumParams} from "./gewis-poster-service";
 import OlympicsService from "../olympics-service";
+import {FeatureEnabled} from "../../../../server-settings";
 
 interface GewisPosterResponse extends BasePosterResponse {
     borrelMode: boolean;
@@ -17,6 +18,7 @@ interface GewisPosterResponse extends BasePosterResponse {
 
 @Route('handler/screen/gewis-poster')
 @Tags('Handlers')
+@FeatureEnabled('GewisPosterScreenHandler')
 export class GewisPosterScreenController extends BasePosterScreenController {
     protected screenHandler: GewisPosterScreenHandler;
 

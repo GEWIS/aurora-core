@@ -7,9 +7,11 @@ import {Get, Post, Request, Route, Security, Tags} from "tsoa";
 import {SecurityNames} from "../../../../../helpers/security";
 import {securityGroups} from "../../../../../helpers/security-groups";
 import {Request as ExpressRequest} from "express";
+import {FeatureEnabled} from "../../../../server-settings";
 
 @Route('handler/screen/hubble-poster')
 @Tags('Handlers')
+@FeatureEnabled('HubblePosterScreenHandler')
 export class HubblePosterScreenController extends BasePosterScreenController {
     constructor() {
         super();
