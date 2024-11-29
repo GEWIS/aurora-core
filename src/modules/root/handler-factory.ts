@@ -16,7 +16,8 @@ import BaseScreenHandler from '../handlers/base-screen-handler';
 import {
   CenturionScreenHandler,
   CurrentlyPlayingTrackHandler,
-  PosterScreenHandler,
+  GewisPosterScreenHandler,
+  HubblePosterScreenHandler,
   RoomResponsibleLegacyHandler,
   StageEffectsHandler,
   TimeTrailRaceScreenHandler,
@@ -80,7 +81,8 @@ export default class HandlerFactory {
         () => new CurrentlyPlayingTrackHandler(socket),
       ),
       this.createHandler(CenturionScreenHandler, () => new CenturionScreenHandler(socket)),
-      this.createHandler(PosterScreenHandler, () => new PosterScreenHandler(socket)),
+      this.createHandler(GewisPosterScreenHandler, () => new GewisPosterScreenHandler(socket)),
+      this.createHandler(HubblePosterScreenHandler, () => new HubblePosterScreenHandler(socket)),
       this.createHandler(StageEffectsHandler, () => new StageEffectsHandler(socket)),
       this.createHandler(TimeTrailRaceScreenHandler, () => new TimeTrailRaceScreenHandler(socket)),
       this.createHandler(

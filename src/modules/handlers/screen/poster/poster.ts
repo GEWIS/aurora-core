@@ -29,7 +29,8 @@ export interface BasePoster {
   timeout: number;
   footer: FooterSize;
   /** Whether this poster should only be shown when in BorrelMode */
-  borrelMode: boolean;
+  borrelMode?: boolean;
+  color?: string;
 }
 
 export type LocalPosterType =
