@@ -40,22 +40,15 @@ export class GewisPosterScreenController extends BasePosterScreenController {
   public async getGewisPosters(
     @Query() alwaysReturnBorrelPosters?: boolean,
   ): Promise<GewisPosterResponse> {
-    if (!this.screenHandler.posterManager.posters) {
-      try {
-        await this.screenHandler.posterManager.fetchPosters();
-      } catch (e) {
-        logger.error(e);
-      }
-    }
-    const posters = this.screenHandler.posterManager.posters ?? [];
+    const postersRes = await super.getPosters();
     if (alwaysReturnBorrelPosters || this.screenHandler.borrelMode) {
       return {
-        posters,
+        posters: postersRes.posters,
         borrelMode: this.screenHandler.borrelMode,
       };
     }
     return {
-      posters: posters.filter((p) => !p.borrelMode),
+      posters: postersRes.posters.filter((p) => !p.borrelMode),
       borrelMode: false,
     };
   }

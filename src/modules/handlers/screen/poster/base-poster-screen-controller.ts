@@ -32,7 +32,7 @@ export class BasePosterScreenController extends Controller {
     }
     const posters = this.screenHandler.posterManager.posters ?? [];
     return {
-      posters: posters.filter((p) => !p.borrelMode),
+      posters: posters
     };
   }
 
