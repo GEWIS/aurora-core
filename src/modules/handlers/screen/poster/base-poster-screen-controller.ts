@@ -4,8 +4,8 @@ import { Request as ExpressRequest } from 'express';
 import BasePosterScreenHandler from './base-poster-screen-handler';
 import { Poster } from './poster';
 import logger from '../../../../logger';
-import OlympicsService from "./olympics-service";
-import NsTrainsService, {TrainResponse} from "./ns-trains-service";
+import OlympicsService from './olympics-service';
+import NsTrainsService, { TrainResponse } from './ns-trains-service';
 
 export interface BorrelModeParams {
   enabled: boolean;
@@ -32,7 +32,7 @@ export class BasePosterScreenController extends Controller {
     }
     const posters = this.screenHandler.posterManager.posters ?? [];
     return {
-      posters: posters.filter((p) => !p.borrelMode)
+      posters: posters.filter((p) => !p.borrelMode),
     };
   }
 

@@ -119,9 +119,11 @@ export class TrelloPosterManager extends PosterManager {
 
     const labels = card.labels?.map((l) => l.name ?? '') ?? [];
     const hideBorder = labels.includes('HIDE_BORDER');
-    const footers = labels.filter((l) => !['HIDE_BORDER', 'BorrelMode'].includes(l) && !l.startsWith('#'));
+    const footers = labels.filter(
+      (l) => !['HIDE_BORDER', 'BorrelMode'].includes(l) && !l.startsWith('#'),
+    );
 
-    let color = labels.find(l => l.startsWith('#'));
+    let color = labels.find((l) => l.startsWith('#'));
 
     return {
       id: card.id ?? randomUUID(),
@@ -134,7 +136,7 @@ export class TrelloPosterManager extends PosterManager {
       // If the card has a HIDE_LABEL label, set the footer size to minimal
       footer: hideBorder ? FooterSize.MINIMAL : FooterSize.FULL,
       borrelMode,
-      color
+      color,
     };
   }
 
