@@ -15,10 +15,10 @@ export interface BasePosterResponse {
   posters: Poster[];
 }
 
-export class BasePosterScreenController extends Controller {
+export abstract class BasePosterScreenController extends Controller {
   protected screenHandler: BasePosterScreenHandler;
 
-  constructor() {
+  protected constructor() {
     super();
   }
 

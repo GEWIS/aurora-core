@@ -4,7 +4,7 @@ import { TrackChangeEvent } from '../../../events/music-emitter-events';
 import { PosterManager } from './poster-manager';
 import { TrelloPosterManager } from './trello/trello-poster-manager';
 
-export default class BasePosterScreenHandler extends BaseScreenHandler {
+export default abstract class BasePosterScreenHandler extends BaseScreenHandler {
   public posterManager: PosterManager;
 
   constructor(socket: Namespace) {
