@@ -32,7 +32,7 @@ export abstract class BasePosterScreenController extends Controller {
     }
     const posters = this.screenHandler.posterManager.posters ?? [];
     return {
-      posters: posters
+      posters: posters,
     };
   }
 
