@@ -15,11 +15,12 @@ import { ArtificialBeatGenerator } from './modules/beats/artificial-beat-generat
 import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
 import { SocketioNamespaces } from './socketio-namespaces';
 import SocketConnectionManager from './modules/root/socket-connection-manager';
-import { ServerSettingsStore } from './modules/server-settings';
+import { FeatureFlagManager, ServerSettingsStore } from './modules/server-settings';
 import registerCronJobs from './cron';
 import EmitterStore from './modules/events/emitter-store';
 // do not remove; used for extending existing types
 import Types from './types';
+import { OrderManager } from './modules/orders';
 
 async function createApp(): Promise<void> {
   // Fix for production issue where a Docker volume overwrites the contents of a folder instead of merging them
@@ -38,30 +39,31 @@ async function createApp(): Promise<void> {
   await dataSource.initialize();
 
   await ServerSettingsStore.getInstance().initialize();
+  const featureFlagManager = new FeatureFlagManager();
 
   const app = await createHttp();
   const httpServer = createServer(app);
   const io = createWebsocket(httpServer);
 
-  const { musicEmitter, backofficeSyncEmitter } = EmitterStore.getInstance();
+  const emitterStore = EmitterStore.getInstance();
 
-  const handlerManager = HandlerManager.getInstance(io, musicEmitter, backofficeSyncEmitter);
+  const handlerManager = HandlerManager.getInstance(io, emitterStore);
   await handlerManager.init();
   const socketConnectionManager = new SocketConnectionManager(
     handlerManager,
     io,
-    backofficeSyncEmitter,
+    emitterStore.backofficeSyncEmitter,
   );
   await socketConnectionManager.clearSavedSocketIds();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO should this be used somewhere?
   const lightsControllerManager = new LightsControllerManager(
     io.of(SocketioNamespaces.LIGHTS),
     handlerManager,
-    musicEmitter,
+    emitterStore.musicEmitter,
   );
 
-  ModeManager.getInstance().init(musicEmitter, backofficeSyncEmitter);
-  ArtificialBeatGenerator.getInstance().init(musicEmitter);
+  ModeManager.getInstance().init(emitterStore);
+  ArtificialBeatGenerator.getInstance().init(emitterStore.musicEmitter);
 
   if (
     process.env.SPOTIFY_ENABLE === 'true' &&
@@ -71,13 +73,14 @@ async function createApp(): Promise<void> {
   ) {
     logger.info('Initialize Spotify...');
     await SpotifyApiHandler.getInstance().init();
-    await SpotifyTrackHandler.getInstance().init(musicEmitter);
+    await SpotifyTrackHandler.getInstance().init(emitterStore.musicEmitter);
   }
 
-  initBackofficeSynchronizer(io.of('/backoffice'), {
-    musicEmitter,
-    backofficeEmitter: backofficeSyncEmitter,
-  });
+  if (featureFlagManager.flagIsEnabled('Orders')) {
+    OrderManager.getInstance().init(emitterStore.orderEmitter);
+  }
+
+  initBackofficeSynchronizer(io.of('/backoffice'), emitterStore);
 
   registerCronJobs();
 

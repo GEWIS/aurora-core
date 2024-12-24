@@ -6,10 +6,13 @@ type HandlerClass = new (...args: any[]) => BaseHandler<any>;
 
 /**
  * Being an extension of the ServerSettingsStore, the Feature Flag Manager is responsible for
- * - as the name suggests - all feature flags present in the system. It does not say whether
- * a flag is enabled or not, but it does keep track of all other operations regarding those flags.
+ * - as the name suggests - all feature flags present in the system and whether they are
+ * enabled or not.
  */
 export default class FeatureFlagManager {
+  // Class has to be a singleton, because the @FeatureEnabled() decorator
+  // uses this class as storage to keep track which settings are being
+  // used as feature flags.
   private static instance: FeatureFlagManager;
 
   private featureFlags = new Set<keyof ISettings>();
@@ -36,6 +39,16 @@ export default class FeatureFlagManager {
    */
   public registerFeatureFlag(key: keyof ISettings) {
     this.featureFlags.add(key);
+  }
+
+  /**
+   * Returns whether a feature flag resolves to true (and thus is enabled)
+   * @param key
+   */
+  public flagIsEnabled(key: keyof ISettings): boolean {
+    // For sanity, register the key as a feature flag
+    this.registerFeatureFlag(key);
+    return !!this.serverSettingsStore.getSetting(key);
   }
 
   /**
