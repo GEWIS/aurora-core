@@ -62,6 +62,7 @@ export class OrderController extends Controller {
         throw new Error(`Failed to fetch public key: ${response.statusText}`);
       }
       this.webhookPublicKey = await response.text();
+      this.webhookKeyLastUpdate = new Date();
     }
 
     // Create a verifier
