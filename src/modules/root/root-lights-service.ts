@@ -21,9 +21,15 @@ import LightsMovingHeadWheelShutterOptions from '../lights/entities/lights-movin
 import LightsFixtureShutterOptions, {
   ShutterOption,
 } from '../lights/entities/lights-fixture-shutter-options';
+import { WheelColor } from '../lights/color-definitions';
 
 export interface LightsControllerResponse
   extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
+
+export interface ShutterChannelValuesResponse {
+  open?: number;
+  strobe?: number;
+}
 
 export interface LightsFixtureResponse
   extends Pick<
@@ -31,6 +37,9 @@ export interface LightsFixtureResponse
     'id' | 'createdAt' | 'updatedAt' | 'name' | 'masterDimChannel' | 'shutterChannel'
   > {
   canReset: boolean;
+  resetChannel?: number;
+  resetChannelValue?: number;
+  shutterChannelValues: ShutterChannelValuesResponse;
 }
 
 // do not remove; tsoa cannot deal with multiple utility types.
@@ -48,11 +57,17 @@ export interface MovingHeadResponse extends LightsFixtureResponse, Movement {}
 
 export interface MovingHeadRgbResponse extends MovingHeadResponse, ColorResponse {}
 
+export interface MovingHeadWheelColorChannelValueResponse {
+  color: WheelColor;
+  channelValue: number;
+}
+
 export interface MovingHeadWheelResponse
-  extends LightsFixtureResponse,
+  extends MovingHeadResponse,
     Pick<LightsMovingHeadWheel, 'colorWheelChannel' | 'goboWheelChannel' | 'goboRotateChannel'> {
   gobos: string[];
   goboRotates: string[];
+  colorChannelValues: MovingHeadWheelColorChannelValueResponse[];
 }
 
 export interface FixtureInGroupResponse<
@@ -169,6 +184,8 @@ export default class RootLightsService {
   }
 
   private static toFixtureResponse(f: LightsFixture, firstChannel: number): LightsFixtureResponse {
+    const canReset = f.resetChannelAndValue != null && f.resetChannelAndValue.length === 2;
+
     return {
       id: f.id,
       createdAt: f.createdAt,
@@ -176,7 +193,10 @@ export default class RootLightsService {
       name: f.name,
       masterDimChannel: f.masterDimChannel + firstChannel - 1,
       shutterChannel: f.shutterChannel + firstChannel - 1,
-      canReset: !!f.resetChannelAndValue,
+      shutterChannelValues: {},
+      canReset,
+      resetChannel: canReset ? f.resetChannelAndValue![0] + firstChannel - 1 : undefined,
+      resetChannelValue: canReset ? f.resetChannelAndValue![1] : undefined,
     };
   }
 
@@ -190,10 +210,23 @@ export default class RootLightsService {
     };
   }
 
+  private static getShutterChannelsResponse(
+    shutterOptions: LightsFixtureShutterOptions[],
+  ): ShutterChannelValuesResponse {
+    const shutterOpen = shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN);
+    const shutterStrobe = shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE);
+
+    return {
+      open: shutterOpen?.channelValue,
+      strobe: shutterStrobe?.channelValue,
+    };
+  }
+
   public static toParResponse(p: LightsPar, firstChannel = 1): ParResponse {
     return {
       ...this.toFixtureResponse(p, firstChannel),
       ...this.toColorResponse(p.color, firstChannel),
+      shutterChannelValues: this.getShutterChannelsResponse(p.shutterOptions),
     };
   }
 
@@ -204,6 +237,7 @@ export default class RootLightsService {
     return {
       ...this.toMovingHeadResponse(m, firstChannel),
       ...this.toColorResponse(m.color, firstChannel),
+      shutterChannelValues: this.getShutterChannelsResponse(m.shutterOptions),
     };
   }
 
@@ -213,11 +247,16 @@ export default class RootLightsService {
   ): MovingHeadWheelResponse {
     return {
       ...this.toMovingHeadResponse(m, firstChannel),
-      colorWheelChannel: m.colorWheelChannel,
-      goboWheelChannel: m.goboWheelChannel,
+      colorWheelChannel: m.colorWheelChannel + firstChannel - 1,
+      colorChannelValues: m.colorWheelChannelValues.map((x) => ({
+        color: x.name,
+        channelValue: x.value,
+      })),
+      goboWheelChannel: m.goboWheelChannel + firstChannel - 1,
       goboRotateChannel: m.goboRotateChannel ? m.goboRotateChannel + firstChannel - 1 : null,
       gobos: m.goboWheelChannelValues.map((v) => v.name),
       goboRotates: m.goboRotateChannelValues.map((v) => v.name),
+      shutterChannelValues: this.getShutterChannelsResponse(m.shutterOptions),
     };
   }
 

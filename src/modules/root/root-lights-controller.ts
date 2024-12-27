@@ -1,4 +1,4 @@
-import { Body, Get, Post, Route, Security, Tags } from 'tsoa';
+import { Body, Get, Post, Request, Route, Security, Tags } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import RootLightsService, {
   LightsControllerCreateParams,
@@ -19,8 +19,9 @@ import {
   rgbColors,
   RgbColorSpecification,
 } from '../lights/color-definitions';
-import { SecurityNames } from '../../helpers/security';
+import { SecurityGroup, SecurityNames } from '../../helpers/security';
 import { securityGroups } from '../../helpers/security-groups';
+import { Request as ExpressRequest } from 'express';
 
 interface LightsColorResponse {
   color: RgbColor;
@@ -76,13 +77,33 @@ export class RootLightsController extends Controller {
     return RootLightsService.toLightsGroupResponse(group);
   }
 
+  @Security(SecurityNames.LOCAL, securityGroups.light.subscriber)
+  @Get('controller/{id}/groups')
+  public async getControllerLightsGroups(
+    @Request() req: ExpressRequest,
+    id: number,
+  ): Promise<LightsGroupResponse[] | undefined> {
+    if (
+      !req.user ||
+      (!req.user.roles.includes(SecurityGroup.ADMIN) && req.user.lightsControllerId !== id)
+    ) {
+      this.setStatus(403);
+      return undefined;
+    }
+
+    const groups = await new RootLightsService().getAllLightsGroups();
+    const controllerGroups = groups.filter((g) => g.controller.id === id);
+
+    return controllerGroups.map((g) => RootLightsService.toLightsGroupResponse(g));
+  }
+
   @Security(SecurityNames.LOCAL, securityGroups.light.privileged)
-  @Post('controller/{controllerId}/group')
+  @Post('controller/{id}/group')
   public async createLightsGroup(
-    controllerId: number,
+    id: number,
     @Body() params: LightsGroupCreateParams,
   ): Promise<LightsGroupResponse | undefined> {
-    const group = await new RootLightsService().createLightGroup(controllerId, params);
+    const group = await new RootLightsService().createLightGroup(id, params);
     if (!group) {
       this.setStatus(404);
       return undefined;
