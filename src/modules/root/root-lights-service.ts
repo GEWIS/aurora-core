@@ -76,6 +76,8 @@ export interface FixtureInGroupResponse<
   fixture: T;
   id: number;
   firstChannel: number;
+  positionX: number;
+  positionY: number;
 }
 
 export interface BaseLightsGroupResponse
@@ -83,6 +85,8 @@ export interface BaseLightsGroupResponse
 
 export interface LightsGroupResponse extends BaseLightsGroupResponse {
   controller: LightsControllerResponse;
+  gridSizeX: number;
+  gridSizeY: number;
   pars: FixtureInGroupResponse<ParResponse>[];
   movingHeadRgbs: FixtureInGroupResponse<MovingHeadRgbResponse>[];
   movingHeadWheels: FixtureInGroupResponse<MovingHeadWheelResponse>[];
@@ -140,10 +144,43 @@ export interface LightsMovingHeadWheelCreateParams extends LightsMovingHeadParam
 
 export interface LightsInGroup {
   fixtureId: number;
+  /**
+   * @isInt
+   * @minimum 0
+   */
   firstChannel: number;
+  /**
+   * Position of the fixture within the group's grid/line
+   * @isFloat
+   * @minimum 0
+   */
+  positionX: number;
+  /**
+   * Position of the fixture within the group's grid.
+   * Should be undefined if the group is a line of fixtures
+   * (and not a grid).
+   * @isFloat
+   * @minimum 0
+   */
+  positionY?: number;
 }
 
 export interface LightsGroupCreateParams extends Pick<LightsGroup, 'name' | 'defaultHandler'> {
+  /**
+   * Size (width) of the X axis where all the fixtures are positioned.
+   * All fixtures should have their positionX be in range [0, gridSizeX).
+   * @isFloat
+   * @minimum 0
+   */
+  gridSizeX: number;
+
+  /**
+   * Size (width) of the Y axis where all the fixtures are positioned.
+   * 0 if the lights are positioned in a line (and not in a grid)
+   * @isFloat
+   * @minimum 0
+   */
+  gridSizeY?: number;
   pars: LightsInGroup[];
   movingHeadRgbs: LightsInGroup[];
   movingHeadWheels: LightsInGroup[];
@@ -266,21 +303,29 @@ export default class RootLightsService {
       createdAt: g.createdAt,
       updatedAt: g.updatedAt,
       name: g.name,
+      gridSizeX: g.gridSizeX,
+      gridSizeY: g.gridSizeY,
       controller: this.toLightsControllerResponse(g.controller),
       pars: g.pars.map((p) => ({
         fixture: this.toParResponse(p.fixture, p.firstChannel),
         id: p.id,
         firstChannel: p.firstChannel,
+        positionX: p.positionX,
+        positionY: p.positionY,
       })),
       movingHeadRgbs: g.movingHeadRgbs.map((m) => ({
         fixture: this.toMovingHeadRgbResponse(m.fixture, m.firstChannel),
         id: m.id,
         firstChannel: m.firstChannel,
+        positionX: m.positionX,
+        positionY: m.positionY,
       })),
       movingHeadWheels: g.movingHeadWheels.map((m) => ({
         fixture: this.toMovingHeadWheelResponse(m.fixture, m.firstChannel),
         id: m.id,
         firstChannel: m.firstChannel,
+        positionX: m.positionX,
+        positionY: m.positionY,
       })),
     };
   }
@@ -331,6 +376,8 @@ export default class RootLightsService {
         name: params.name,
         defaultHandler: params.defaultHandler,
         controller,
+        gridSizeX: params.gridSizeX,
+        gridSizeY: params.gridSizeY,
       })) as LightsGroup;
 
       await Promise.all(
@@ -341,6 +388,8 @@ export default class RootLightsService {
             group,
             fixture: par,
             firstChannel: p.firstChannel,
+            positionX: p.positionX,
+            positionY: p.positionY,
           });
         }),
       );
@@ -356,6 +405,8 @@ export default class RootLightsService {
             group,
             fixture: movingHead,
             firstChannel: p.firstChannel,
+            positionX: p.positionX,
+            positionY: p.positionY,
           });
         }),
       );
@@ -371,6 +422,8 @@ export default class RootLightsService {
             group,
             fixture: movingHead,
             firstChannel: p.firstChannel,
+            positionX: p.positionX,
+            positionY: p.positionY,
           });
         }),
       );
