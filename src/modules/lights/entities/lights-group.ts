@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 // eslint-disable-next-line import/no-cycle
 import { LightsController } from '../../root/entities';
 // eslint-disable-next-line import/no-cycle
@@ -23,6 +23,20 @@ export default class LightsGroup extends SubscribeEntity {
 
   @OneToMany(() => LightsGroupMovingHeadRgbs, (pars) => pars.group, { eager: true })
   public movingHeadRgbs: LightsGroupMovingHeadRgbs[];
+
+  /**
+   * Size (width) of the X axis where all the fixtures are positioned.
+   * All fixtures should have their positionX be in range [0, gridSizeX).
+   */
+  @Column({ type: 'real', unsigned: true, nullable: false })
+  public gridSizeX: number;
+
+  /**
+   * Size (width) of the Y axis where all the fixtures are positioned.
+   * 0 if the lights are positioned in a line (and not in a grid)
+   */
+  @Column({ type: 'real', unsigned: true, nullable: false, default: 0 })
+  public gridSizeY: number;
 
   public get fixtures(): (
     | LightsGroupPars
