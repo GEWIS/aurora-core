@@ -71,9 +71,9 @@ export default class Wave extends LightsEffect<WaveProps> {
    * range relatively between those two ranges.
    * @private
    */
-  private getRelativeProgression(absoluteProgression: number, fixtureIndex: number) {
-    const nrLights = this.lightsGroup.pars.length + this.lightsGroup.movingHeadRgbs.length;
-    return fixtureIndex / nrLights - 1 + 2 * absoluteProgression;
+  private getRelativeProgression(absoluteProgression: number, fixturePositionX: number) {
+    const nrLights = this.lightsGroup.gridSizeX;
+    return fixturePositionX / nrLights + 1 - 2 * absoluteProgression;
   }
 
   /**
@@ -101,17 +101,15 @@ export default class Wave extends LightsEffect<WaveProps> {
     }
 
     // Apply the wave effect to the fixture in a group
-    const apply = (p: LightsGroupPars | LightsGroupMovingHeadRgbs, i: number) => {
-      const relativeProgression = this.getRelativeProgression(progression, i);
+    const apply = (p: LightsGroupPars | LightsGroupMovingHeadRgbs) => {
+      const relativeProgression = this.getRelativeProgression(progression, p.positionX);
       const brightness = this.getBrightness(relativeProgression);
       p.fixture.setMasterDimmer(Math.max(0, brightness * 255));
       p.fixture.setColor(this.props.color);
     };
 
-    this.lightsGroup.pars.sort((p1, p2) => p2.firstChannel - p1.firstChannel).forEach(apply);
-    this.lightsGroup.movingHeadRgbs
-      .sort((p1, p2) => p2.firstChannel - p1.firstChannel)
-      .forEach(apply);
+    this.lightsGroup.pars.forEach(apply);
+    this.lightsGroup.movingHeadRgbs.forEach(apply);
 
     return this.lightsGroup;
   }
