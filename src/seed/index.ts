@@ -1,6 +1,6 @@
 import '../env';
 import dataSource from '../database';
-import seedDatabase, { seedBorrelLights, seedOpeningSequence } from './seed';
+import seedDatabase, { seedBorrelLights, seedDiscoFloor, seedOpeningSequence } from './seed';
 import logger from '../logger';
 
 async function createSeeder() {
@@ -11,6 +11,7 @@ async function createSeeder() {
   const [room, bar, lounge, movingHeadsGEWIS, movingHeadsRoy] = await seedDatabase();
   await seedBorrelLights(room!, bar!, lounge!, movingHeadsGEWIS!);
   await seedOpeningSequence(room!, bar!, movingHeadsGEWIS!, movingHeadsRoy!);
+  await seedDiscoFloor(8, 8);
 }
 
 if (require.main === module) {

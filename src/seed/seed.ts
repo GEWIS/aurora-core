@@ -1,8 +1,8 @@
 import RootAudioService from '../modules/root/root-audio-service';
 import RootScreenService from '../modules/root/root-screen-service';
-import RootLightsService from '../modules/root/root-lights-service';
+import RootLightsService, { LightsInGroup } from '../modules/root/root-lights-service';
 import dataSource from '../database';
-import { LightsGroup, LightsMovingHeadWheel } from '../modules/lights/entities';
+import { LightsGroup, LightsMovingHeadWheel, LightsPar } from '../modules/lights/entities';
 import { RgbColor, WheelColor } from '../modules/lights/color-definitions';
 import { SparkleCreateParams } from '../modules/lights/effects/color/sparkle';
 import { StaticColorCreateParams } from '../modules/lights/effects/color/static-color';
@@ -728,4 +728,43 @@ export async function seedOpeningSequence(
 
   await addStep(borrelRuimte, 285000, 15000, [room]);
   await addStep(borrelBar, 285000, 15000, [bar]);
+}
+
+export async function seedDiscoFloor(width: number, height: number) {
+  const service = await new RootLightsService();
+  const controller = await service.createController({ name: 'GEWIS-DISCO-FLOOR' });
+  const fixture = await service.createLightsPar({
+    name: 'Disco floor panel',
+    colorRedChannel: 1,
+    colorGreenChannel: 2,
+    colorBlueChannel: 3,
+    masterDimChannel: 4,
+    shutterChannel: 5,
+    shutterOptionValues: {
+      open: 0,
+      strobe: 220,
+    },
+  });
+
+  const pars: LightsInGroup[] = [];
+  for (let positionY = 0; positionY < height; positionY++) {
+    for (let positionX = 0; positionX < width; positionX++) {
+      pars.push({
+        fixtureId: fixture.id,
+        firstChannel: pars.length * 16 + 1,
+        positionX,
+        positionY,
+      });
+    }
+  }
+
+  return await service.createLightGroup(controller.id, {
+    name: 'Disco floor',
+    defaultHandler: '',
+    gridSizeX: width,
+    gridSizeY: height,
+    pars,
+    movingHeadWheels: [],
+    movingHeadRgbs: [],
+  });
 }
