@@ -115,7 +115,7 @@ export default class LightsControllerManager {
   /**
    * Given a fixture, put the new DMX values in the correct spot in the packet
    * @param p
-   * @param packet Array of 512 integers [0, 255]
+   * @param packet Array of at least 512 integers in the range [0, 255]
    * @private
    */
   private calculateNewDmxValues(
@@ -123,7 +123,11 @@ export default class LightsControllerManager {
     packet: number[],
   ) {
     const dmxValues = p.fixture.toDmx();
-    packet.splice(p.firstChannel - 1, dmxValues.length, ...dmxValues);
+
+    for (let i = 0; i < dmxValues.length; i++) {
+      packet[p.firstChannel - 1 + i] = dmxValues[i];
+    }
+
     return packet;
   }
 
