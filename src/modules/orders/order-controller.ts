@@ -16,9 +16,9 @@ interface OrderRequest {
 @Route('/orders')
 @FeatureEnabled('Orders')
 export class OrderController extends Controller {
-  private webhookPublicKey: string;
+  private static webhookPublicKey: string;
 
-  private webhookKeyLastUpdate = new Date();
+  private static webhookKeyLastUpdate = new Date();
 
   @Security(SecurityNames.LOCAL, securityGroups.orders.base)
   @Get('')
@@ -50,8 +50,9 @@ export class OrderController extends Controller {
     ) as OrderSettings['Orders.DefaultTimeoutSeconds'];
 
     if (
-      !this.webhookPublicKey ||
-      new Date().getTime() - this.webhookKeyLastUpdate.getTime() > 1000 * expiryTimeSeconds
+      !OrderController.webhookPublicKey ||
+      new Date().getTime() - OrderController.webhookKeyLastUpdate.getTime() >
+        1000 * expiryTimeSeconds
     ) {
       const webhookKeyUrl = settingsStore.getSetting(
         'Orders.WebhookPublicKeyURL',
@@ -61,8 +62,8 @@ export class OrderController extends Controller {
       if (!response.ok) {
         throw new Error(`Failed to fetch public key: ${response.statusText}`);
       }
-      this.webhookPublicKey = await response.text();
-      this.webhookKeyLastUpdate = new Date();
+      OrderController.webhookPublicKey = await response.text();
+      OrderController.webhookKeyLastUpdate = new Date();
     }
 
     // Create a verifier
@@ -74,7 +75,7 @@ export class OrderController extends Controller {
     const decodedSignature = Buffer.from(signature, 'base64');
 
     // Verify the signature
-    const isValid = verifier.verify(this.webhookPublicKey, decodedSignature);
+    const isValid = verifier.verify(OrderController.webhookPublicKey, decodedSignature);
     if (!isValid) {
       return invalidSignatureResponse(400, { message: 'Signature invalid' });
     }
