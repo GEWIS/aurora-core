@@ -27,6 +27,7 @@ export interface ISecurityGroups {
   sudosos: ISecuritySections;
   serverSettings: ISecuritySections;
   orders: ISecuritySections;
+  timedEvents: ISecuritySections;
 }
 
 /**
@@ -137,6 +138,10 @@ export const securityGroups = {
   orders: {
     base: allSecuritySubscriberGroups,
     privileged: baseSecurityGroups,
+  },
+  timedEvents: {
+    base: allSecurityGroups,
+    privileged: [SecurityGroup.ADMIN],
   },
 };
 
