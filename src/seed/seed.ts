@@ -108,6 +108,26 @@ export default async function seedDatabase() {
     colorUvChannel: 13,
   });
 
+  const showtec_Kanjo_Spot10 = await rootLightsService.createMovingHeadWheel({
+    name: 'Showtec Kanjo Spot 10',
+    masterDimChannel: 8,
+    shutterChannel: 9,
+    shutterOptionValues: {
+      open: 0,
+      strobe: 120,
+    },
+    panChannel: 1,
+    finePanChannel: 2,
+    tiltChannel: 3,
+    fineTiltChannel: 4,
+    movingSpeedChannel: 5,
+    colorWheelChannel: 6,
+    goboWheelChannel: 7,
+    colorWheelChannelValues: [],
+    goboWheelChannelValues: [],
+    goboRotateChannelValues: [],
+  });
+
   const gewisRoom = await rootLightsService.createLightGroup(controller.id, {
     name: 'Ruimte',
     defaultHandler: '',
@@ -190,6 +210,36 @@ export default async function seedDatabase() {
       movingHead: eurolite_LED_TMH_S30,
     }),
   ]);
+  await Promise.all([
+    colorRepo.save({ id: 8, name: WheelColor.WHITE, value: 0, movingHead: showtec_Kanjo_Spot10 }),
+    colorRepo.save({ id: 9, name: WheelColor.RED, value: 16, movingHead: showtec_Kanjo_Spot10 }),
+    colorRepo.save({ id: 10, name: WheelColor.GREEN, value: 32, movingHead: showtec_Kanjo_Spot10 }),
+    colorRepo.save({ id: 11, name: WheelColor.BLUE, value: 48, movingHead: showtec_Kanjo_Spot10 }),
+    colorRepo.save({
+      id: 12,
+      name: WheelColor.YELLOW,
+      value: 64,
+      movingHead: showtec_Kanjo_Spot10,
+    }),
+    colorRepo.save({
+      id: 13,
+      name: WheelColor.ROSERED,
+      value: 80,
+      movingHead: showtec_Kanjo_Spot10,
+    }),
+    colorRepo.save({
+      id: 14,
+      name: WheelColor.LIGHTBLUE,
+      value: 96,
+      movingHead: showtec_Kanjo_Spot10,
+    }),
+    colorRepo.save({
+      id: 15,
+      name: WheelColor.ORANGE,
+      value: 112,
+      movingHead: showtec_Kanjo_Spot10,
+    }),
+  ]);
   const goboRepo = dataSource.getRepository(LightsWheelGoboChannelValue);
   await Promise.all([
     goboRepo.save({ id: 1, name: 'Open', value: 0, movingHead: eurolite_LED_TMH_S30 }),
@@ -206,6 +256,9 @@ export default async function seedDatabase() {
     goboRepo.save({ id: 7, name: 'GEWIS', value: 51, movingHead: eurolite_LED_TMH_S30 }),
     goboRepo.save({ id: 8, name: 'Swoosh', value: 61, movingHead: eurolite_LED_TMH_S30 }),
     goboRepo.save({ id: 9, name: 'HalvePizza', value: 71, movingHead: eurolite_LED_TMH_S30 }),
+  ]);
+  await Promise.all([
+    goboRepo.save({ id: 10, name: 'Open', value: 0, movingHead: showtec_Kanjo_Spot10 }),
   ]);
   const goboRotateRepo = dataSource.getRepository(LightsWheelRotateChannelValue);
   await Promise.all([

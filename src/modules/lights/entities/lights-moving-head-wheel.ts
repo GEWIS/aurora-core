@@ -2,7 +2,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import LightsMovingHead from './lights-moving-head';
 import Movement from './movement';
 import { LightsFixtureCurrentValues } from './lights-fixture';
-import { RgbColor, rgbColorDefinitions } from '../color-definitions';
+import { RgbColor, rgbColorDefinitions, WheelColor } from '../color-definitions';
 // eslint-disable-next-line import/no-cycle
 import LightsMovingHeadWheelShutterOptions from './lights-moving-head-wheel-shutter-options';
 import { ShutterOption } from './lights-fixture-shutter-options';
@@ -126,6 +126,20 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     return this.currentValues;
   }
 
+  /**
+   * Get the DMX packet for a strobing light
+   * @protected
+   */
+  protected getStrobeDMX(): number[] {
+    const values: number[] = new Array(16).fill(0);
+    values[this.masterDimChannel - 1] = 255;
+    values[this.shutterChannel - 1] =
+      this.shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
+    values[this.colorWheelChannel - 1] =
+      this.colorWheelChannelValues.find((o) => o.name === WheelColor.WHITE)?.value ?? 0;
+    return values;
+  }
+
   toDmx(): number[] {
     if (this.frozenDmx != null && this.frozenDmx.length > 0) {
       return this.frozenDmx;
@@ -154,11 +168,24 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     }
 
     if (this.strobeEnabled) {
-      values[this.colorWheelChannel - 1] = 0;
-      values[this.goboWheelChannel - 1] = 0;
-      if (this.goboRotateChannel != null) values[this.goboRotateChannel - 1] = 0;
-      values[this.masterDimChannel - 1] = 255;
-      values[this.shutterChannel - 1] = 220;
+      const strobeDmxValues = this.getStrobeDMX();
+
+      // Remove starting zeroes, so we don't override the position of the moving head.
+      // Assumes that all color-related channels are near each other;
+      let nrStartingZeroes = 0;
+      while (strobeDmxValues.length > 0) {
+        if (strobeDmxValues[0] === 0) {
+          strobeDmxValues.shift();
+          nrStartingZeroes += 1;
+        } else {
+          break;
+        }
+      }
+      values.splice(
+        nrStartingZeroes,
+        nrStartingZeroes + strobeDmxValues.length,
+        ...strobeDmxValues,
+      );
     }
 
     values = this.applyDmxOverride(values);
