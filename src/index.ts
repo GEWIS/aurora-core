@@ -20,6 +20,7 @@ import EmitterStore from './modules/events/emitter-store';
 // do not remove; used for extending existing types
 import Types from './types';
 import { OrderManager } from './modules/orders';
+import TimedEventsService from './modules/timed-events/timed-events-service';
 
 async function createApp(): Promise<void> {
   // Fix for production issue where a Docker volume overwrites the contents of a folder instead of merging them
@@ -39,6 +40,7 @@ async function createApp(): Promise<void> {
 
   await ServerSettingsStore.getInstance().initialize();
   const featureFlagManager = new FeatureFlagManager();
+  await TimedEventsService.getInstance().registerAllDatabaseEvents();
 
   const app = await createHttp();
   const httpServer = createServer(app);
