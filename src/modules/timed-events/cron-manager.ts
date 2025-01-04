@@ -7,14 +7,13 @@ import HandlerManager from '../root/handler-manager';
 import RootAudioService from '../root/root-audio-service';
 import RootLightsService from '../root/root-lights-service';
 import RootScreenService from '../root/root-screen-service';
-import dataSource from '../../database';
 
 export class CronExpressionError extends Error {}
 
 export default class CronManager {
   private cronTasks: Map<number, ScheduledTask>;
 
-  constructor() {
+  constructor(private eventIsSkipped: (event: TimedEvent) => Promise<void>) {
     this.cronTasks = new Map();
   }
 
@@ -56,7 +55,7 @@ export default class CronManager {
       if (event.skipNext) {
         logger.info(`Timed event "${event.id}": skip.`);
         event.skipNext = false;
-        await dataSource.getRepository(TimedEvent).save(event);
+        await this.eventIsSkipped(event);
 
         return;
       }
@@ -68,10 +67,6 @@ export default class CronManager {
             'Reset system state to default.',
           );
           await new HandlerService().resetToDefaults();
-          break;
-
-        case 'ping':
-          logger.info('Pong!');
           break;
 
         case 'clean-audit-logs':

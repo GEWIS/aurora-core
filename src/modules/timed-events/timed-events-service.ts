@@ -19,7 +19,7 @@ export default class TimedEventsService {
   private repo: Repository<TimedEvent>;
 
   constructor() {
-    this.cronManager = new CronManager();
+    this.cronManager = new CronManager(this.eventIsSkipped.bind(this));
     this.repo = dataSource.getRepository(TimedEvent);
   }
 
@@ -72,6 +72,10 @@ export default class TimedEventsService {
         throw e;
       }
     }
+  }
+
+  private async eventIsSkipped(event: TimedEvent) {
+    await this.repo.update(event.id, { skipNext: false });
   }
 
   /**
