@@ -19,4 +19,10 @@ export default class TimedEvent extends BaseEntity {
     },
   })
   public eventSpec: EventSpec;
+
+  /**
+   * Whether the next time this should fire, it should be skipped instead
+   */
+  @Column({ default: false })
+  public skipNext: boolean;
 }

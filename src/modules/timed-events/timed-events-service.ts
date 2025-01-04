@@ -5,7 +5,11 @@ import dataSource from '../../database';
 import { TimedEvent } from './entities';
 import logger from '../../logger';
 
-export interface TimedEventRequest extends Pick<TimedEvent, 'cronExpression' | 'eventSpec'> {}
+export interface CreateTimedEventRequest extends Pick<TimedEvent, 'cronExpression' | 'eventSpec'> {}
+
+export interface UpdateTimedEventRequest
+  extends CreateTimedEventRequest,
+    Pick<TimedEvent, 'skipNext'> {}
 
 export default class TimedEventsService {
   private static instance: TimedEventsService;
@@ -17,10 +21,6 @@ export default class TimedEventsService {
   constructor() {
     this.cronManager = new CronManager();
     this.repo = dataSource.getRepository(TimedEvent);
-
-    this.registerAllDatabaseEvents()
-      .then(() => logger.info('Registered timed events stored in database'))
-      .catch((e) => logger.error(`Could not register timed events stored in database: "${e}"`));
   }
 
   public static getInstance() {
@@ -31,8 +31,13 @@ export default class TimedEventsService {
   }
 
   public async registerAllDatabaseEvents() {
-    const events = await this.repo.find();
-    events.forEach((event) => this.cronManager.registerEvent(event));
+    try {
+      const events = await this.repo.find();
+      events.forEach((event) => this.cronManager.registerEvent(event));
+      logger.info(`Registered ${events.length} timed events stored in database`);
+    } catch (error) {
+      logger.error(`Could not register timed events stored in database: "${error}"`);
+    }
   }
 
   public async getEvents(): Promise<TimedEvent[]> {
@@ -73,7 +78,7 @@ export default class TimedEventsService {
    * Create and register a new timed event
    * @param timedEventRequest
    */
-  public async createEvent(timedEventRequest: TimedEventRequest): Promise<TimedEvent> {
+  public async createEvent(timedEventRequest: CreateTimedEventRequest): Promise<TimedEvent> {
     const timedEvent = await this.repo.save(timedEventRequest);
 
     await this.registerEventInCron(timedEvent, async () => {
@@ -88,7 +93,10 @@ export default class TimedEventsService {
    * @param id
    * @param timedEventRequest
    */
-  public async updateEvent(id: number, timedEventRequest: TimedEventRequest): Promise<TimedEvent> {
+  public async updateEvent(
+    id: number,
+    timedEventRequest: UpdateTimedEventRequest,
+  ): Promise<TimedEvent> {
     const timedEventOld = await this.getEvent(id);
 
     await this.repo.update(id, timedEventRequest);

@@ -3,7 +3,10 @@ import { Body, Delete, Get, Post, Put, Route, Security, Tags } from 'tsoa';
 import EventSpec from './event-spec';
 import { SecurityNames } from '../../helpers/security';
 import { securityGroups } from '../../helpers/security-groups';
-import TimedEventsService, { TimedEventRequest } from './timed-events-service';
+import TimedEventsService, {
+  CreateTimedEventRequest,
+  UpdateTimedEventRequest,
+} from './timed-events-service';
 import { TimedEvent } from './entities';
 
 interface TimedEventResponse {
@@ -12,6 +15,7 @@ interface TimedEventResponse {
   updatedAt: Date;
   cronExpression: string;
   eventSpec: EventSpec;
+  skipNext: boolean;
 }
 
 @Route('timed-events')
@@ -31,6 +35,7 @@ export class TimedEventsController extends Controller {
       updatedAt: timedEvent.updatedAt,
       cronExpression: timedEvent.cronExpression,
       eventSpec: timedEvent.eventSpec,
+      skipNext: timedEvent.skipNext,
     };
   }
 
@@ -51,7 +56,7 @@ export class TimedEventsController extends Controller {
   @Security(SecurityNames.LOCAL, securityGroups.timedEvents.privileged)
   @Post('')
   public async createTimedEvent(
-    @Body() timedEventRequest: TimedEventRequest,
+    @Body() timedEventRequest: CreateTimedEventRequest,
   ): Promise<TimedEventResponse> {
     const timedEvent = await this.service.createEvent(timedEventRequest);
     return this.toTimedEventResponse(timedEvent);
@@ -61,7 +66,7 @@ export class TimedEventsController extends Controller {
   @Put('{id}')
   public async updateTimedEvent(
     id: number,
-    @Body() timedEventRequest: TimedEventRequest,
+    @Body() timedEventRequest: UpdateTimedEventRequest,
   ): Promise<TimedEventResponse> {
     const timedEvent = await this.service.updateEvent(id, timedEventRequest);
     return this.toTimedEventResponse(timedEvent);

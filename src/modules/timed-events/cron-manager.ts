@@ -7,6 +7,7 @@ import HandlerManager from '../root/handler-manager';
 import RootAudioService from '../root/root-audio-service';
 import RootLightsService from '../root/root-lights-service';
 import RootScreenService from '../root/root-screen-service';
+import dataSource from '../../database';
 
 export class CronExpressionError extends Error {}
 
@@ -52,6 +53,14 @@ export default class CronManager {
   async handleEvent(event: TimedEvent): Promise<void> {
     const spec = event.eventSpec;
     try {
+      if (event.skipNext) {
+        logger.info(`Timed event "${event.id}": skip.`);
+        event.skipNext = false;
+        await dataSource.getRepository(TimedEvent).save(event);
+
+        return;
+      }
+
       switch (spec.type) {
         case 'system-reset':
           logger.audit(
