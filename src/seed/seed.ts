@@ -19,8 +19,21 @@ import LightsWheelRotateChannelValue from '../modules/lights/entities/lights-whe
 import { FixedPositionCreateParams } from '../modules/lights/effects/movement/fixed-position';
 import { ColorEffects } from '../modules/lights/effects/color/color-effects';
 import { MovementEffects } from '../modules/lights/effects/movement/movement-effetcs';
+import { TimedEvent } from '../modules/timed-events/entities';
 
 export default async function seedDatabase() {
+  const timedEventsRepo = dataSource.getRepository(TimedEvent);
+  await timedEventsRepo.save([
+    {
+      cronExpression: '39 5 * * *',
+      eventSpec: { type: 'system-reset' },
+    },
+    {
+      cronExpression: '39 4 * * *',
+      eventSpec: { type: 'clean-audit-logs' },
+    },
+  ]);
+
   const rootAudioService = new RootAudioService();
   await Promise.all([
     rootAudioService.createAudio({

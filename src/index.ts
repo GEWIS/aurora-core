@@ -16,11 +16,11 @@ import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
 import { SocketioNamespaces } from './socketio-namespaces';
 import SocketConnectionManager from './modules/root/socket-connection-manager';
 import { FeatureFlagManager, ServerSettingsStore } from './modules/server-settings';
-import registerCronJobs from './cron';
 import EmitterStore from './modules/events/emitter-store';
 // do not remove; used for extending existing types
 import Types from './types';
 import { OrderManager } from './modules/orders';
+import TimedEventsService from './modules/timed-events/timed-events-service';
 
 async function createApp(): Promise<void> {
   // Fix for production issue where a Docker volume overwrites the contents of a folder instead of merging them
@@ -40,6 +40,7 @@ async function createApp(): Promise<void> {
 
   await ServerSettingsStore.getInstance().initialize();
   const featureFlagManager = new FeatureFlagManager();
+  await TimedEventsService.getInstance().registerAllDatabaseEvents();
 
   const app = await createHttp();
   const httpServer = createServer(app);
@@ -81,8 +82,6 @@ async function createApp(): Promise<void> {
   }
 
   initBackofficeSynchronizer(io.of('/backoffice'), emitterStore);
-
-  registerCronJobs();
 
   const port = process.env.PORT || 3000;
   httpServer.listen(port, () => logger.info(`Listening at http://localhost:${port}`));
