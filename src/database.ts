@@ -1,4 +1,5 @@
 import { DataSource } from 'typeorm';
+import fs from 'fs';
 import ServerSetting from './modules/server-settings/server-setting';
 import { Entities as BaseEntities } from './modules/root/entities';
 import { Entities as AuthEntities } from './modules/auth/entities';
@@ -14,6 +15,13 @@ const dataSource = new DataSource({
   type: process.env.TYPEORM_CONNECTION as any,
   username: process.env.TYPEORM_USERNAME,
   password: process.env.TYPEORM_PASSWORD,
+  ...(process.env.TYPEORM_SSL_ENABLED === 'true' && process.env.TYPEORM_SSL_CACERTS
+    ? {
+        ssl: {
+          ca: fs.readFileSync(process.env.TYPEORM_SSL_CACERTS),
+        },
+      }
+    : {}),
   synchronize: process.env.TYPEORM_SYNCHRONIZE === 'true',
   logging: process.env.TYPEORM_LOGGING === 'true',
   extra: {
