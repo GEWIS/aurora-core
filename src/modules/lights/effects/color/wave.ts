@@ -2,6 +2,7 @@ import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from 
 import { LightsGroup, LightsGroupMovingHeadRgbs, LightsGroupPars } from '../../entities';
 import { RgbColor } from '../../color-definitions';
 import { ColorEffects } from './color-effects';
+import { EffectProgressionTickStrategy } from '../progression-strategies';
 
 export interface WaveProps {
   /**
@@ -40,10 +41,9 @@ const DEFAULT_NR_WAVES = 2;
 const DEFAULT_CYCLE_TIME = 2000;
 
 export default class Wave extends LightsEffect<WaveProps> {
-  private cycleStartTick: Date = new Date();
-
   constructor(lightsGroup: LightsGroup, props: WaveProps) {
-    super(lightsGroup);
+    const cycleTime = props.cycleTime ?? DEFAULT_CYCLE_TIME;
+    super(lightsGroup, new EffectProgressionTickStrategy(cycleTime, props.singleWave));
     this.props = props;
   }
 
@@ -54,16 +54,6 @@ export default class Wave extends LightsEffect<WaveProps> {
   destroy(): void {}
 
   beat(): void {}
-
-  /**
-   * Get progression of the complete animation (in the range [0, 1])
-   * @param currentTick
-   * @private
-   */
-  private getProgression(currentTick: Date) {
-    const cycleTime = this.props.cycleTime ?? DEFAULT_CYCLE_TIME;
-    return Math.min(1, (currentTick.getTime() - this.cycleStartTick.getTime()) / cycleTime);
-  }
 
   /**
    * Get the relative progression of an individual fixture. The fixture at the start of the chain
@@ -94,14 +84,13 @@ export default class Wave extends LightsEffect<WaveProps> {
   }
 
   tick(): LightsGroup {
+    super.tick();
+
     const currentTick = new Date();
     const progression = this.getProgression(currentTick);
-    if (progression >= 1 && !this.props.singleWave) {
-      this.cycleStartTick = currentTick;
-    }
 
     // Apply the wave effect to the fixture in a group
-    const apply = (p: LightsGroupPars | LightsGroupMovingHeadRgbs) => {
+    const apply = (p: LightsGroupPars | LightsGroupMovingHeadRgbs, index: number) => {
       const relativeProgression = this.getRelativeProgression(progression, p.positionX);
       const brightness = this.getBrightness(relativeProgression);
       p.fixture.setMasterDimmer(Math.max(0, brightness * 255));

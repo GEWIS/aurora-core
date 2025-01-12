@@ -8,6 +8,11 @@ import {
 } from '../../entities';
 import { RgbColor } from '../../color-definitions';
 import { ColorEffects } from './color-effects';
+import {
+  EffectProgressionBeatStrategy,
+  EffectProgressionTickStrategy,
+} from '../progression-strategies';
+import EffectProgressionStrategy from '../progression-strategies/effect-progression-strategy';
 
 export interface BeatFadeOutProps {
   /**
@@ -43,14 +48,25 @@ export type BeatFadeOutCreateParams = BaseLightsEffectCreateParams & {
 };
 
 export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
-  private phase = 0;
+  private readonly nrSteps;
 
   private lastBeat = new Date().getTime(); // in ms since epoch;
 
   private beatLength: number = 1; // in ms;
 
   constructor(lightsGroup: LightsGroup, props: BeatFadeOutProps, features?: TrackPropertiesEvent) {
-    super(lightsGroup, features);
+    const nrSteps = props.colors.length + (props.nrBlacks ?? 0);
+
+    let progressionStrategy: EffectProgressionStrategy;
+    if (props.customCycleTime) {
+      progressionStrategy = new EffectProgressionTickStrategy(props.customCycleTime);
+    } else {
+      progressionStrategy = new EffectProgressionBeatStrategy(nrSteps);
+    }
+
+    super(lightsGroup, progressionStrategy, features);
+
+    this.nrSteps = nrSteps;
     this.props = props;
 
     if (this.props.customCycleTime) {
@@ -72,18 +88,20 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
   destroy(): void {}
 
   beat(event: BeatEvent): void {
+    super.beat(event);
+
     // If we use a custom cycle time, ignore all beats
     if (this.props.customCycleTime) return;
 
     this.lastBeat = new Date().getTime();
     this.beatLength = event.beat.duration * 1000;
-    this.phase = (this.phase + 1) % (this.props.colors.length + (this.props.nrBlacks ?? 0));
   }
 
   getCurrentColor(i: number) {
     const { colors, nrBlacks } = this.props;
     const nrColors = colors.length + (nrBlacks || 0);
-    const index = (i + this.phase) % nrColors;
+    const phase = Math.floor(this.getProgression(new Date()) * this.nrSteps);
+    const index = (i + phase) % nrColors;
     if (index === colors.length) {
       return null;
     }
@@ -109,14 +127,7 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
   }
 
   tick(): LightsGroup {
-    if (this.props.customCycleTime) {
-      const now = new Date().getTime();
-      const msDiff = now - this.lastBeat;
-      if (msDiff >= this.props.customCycleTime) {
-        this.lastBeat = now;
-        this.phase = (this.phase + 1) % (this.props.colors.length + (this.props.nrBlacks ?? 0));
-      }
-    }
+    super.tick();
 
     [
       ...this.lightsGroup.pars,

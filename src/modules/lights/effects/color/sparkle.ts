@@ -55,7 +55,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
    * @param features
    */
   constructor(lightsGroup: LightsGroup, props: SparkleProps, features?: TrackPropertiesEvent) {
-    super(lightsGroup, features);
+    super(lightsGroup, undefined, features);
 
     const nrFixtures = lightsGroup.pars.length + lightsGroup.movingHeadRgbs.length;
     this.beats = new Array(nrFixtures).fill(new Date(0));
@@ -97,7 +97,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
     if (!this.props.cycleTime) this.enableLights();
   }
 
-  private getProgression(beat: Date) {
+  private getDimProgression(beat: Date) {
     const dimDuration = this.props.dimDuration ?? DEFAULT_DIM_DURATION;
 
     return Math.max(1 - (new Date().getTime() - beat.getTime()) / dimDuration, 0);
@@ -115,7 +115,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
 
     this.lightsGroup.pars.forEach((p, i) => {
       const index = i;
-      const progression = this.getProgression(this.beats[index]);
+      const progression = this.getDimProgression(this.beats[index]);
       const colorIndex = this.colorIndices[index];
       const color = colors[colorIndex % colors.length];
       p.fixture.setColor(color);
@@ -123,7 +123,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
     });
     this.lightsGroup.movingHeadRgbs.forEach((p, i) => {
       const index = i;
-      const progression = this.getProgression(this.beats[nrPars + index]);
+      const progression = this.getDimProgression(this.beats[nrPars + index]);
       const colorIndex = this.colorIndices[nrPars + index];
       const color = colors[colorIndex % colors.length];
       p.fixture.setColor(color);

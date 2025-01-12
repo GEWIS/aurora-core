@@ -1,5 +1,7 @@
 import LightsEffect from '../lights-effect';
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../../entities';
+import { EffectProgressionTickStrategy } from '../progression-strategies';
+import { BeatEvent } from '../../../events/music-emitter-events';
 
 export interface BaseRotateProps {
   /**
@@ -21,18 +23,12 @@ export interface BaseRotateProps {
  * setPosition() function.
  */
 export default abstract class BaseRotate<T extends BaseRotateProps> extends LightsEffect<T> {
-  private cycleStartTick: Date = new Date();
-
   protected constructor(
     lightsGroup: LightsGroup,
     protected readonly defaults: Required<BaseRotateProps>,
+    cycleTime?: number,
   ) {
-    super(lightsGroup);
-  }
-
-  protected getProgression(currentTick: Date) {
-    const cycleTime = this.props.cycleTime ?? this.defaults.cycleTime;
-    return Math.min(1, (currentTick.getTime() - this.cycleStartTick.getTime()) / cycleTime);
+    super(lightsGroup, new EffectProgressionTickStrategy(cycleTime ?? defaults.cycleTime));
   }
 
   /**
@@ -50,15 +46,14 @@ export default abstract class BaseRotate<T extends BaseRotateProps> extends Ligh
 
   destroy(): void {}
 
-  beat(): void {}
+  beat(event: BeatEvent): void {
+    super.beat(event);
+  }
 
   tick(): LightsGroup {
     const currentTick = new Date();
     const progression = this.getProgression(currentTick);
     const offsetFactor = this.props.offsetFactor ?? this.defaults.offsetFactor;
-    if (progression >= 1) {
-      this.cycleStartTick = currentTick;
-    }
 
     this.lightsGroup.movingHeadWheels.forEach((m, i) => {
       this.setPosition(m.fixture, progression, i * offsetFactor * 2 * Math.PI);
@@ -69,6 +64,7 @@ export default abstract class BaseRotate<T extends BaseRotateProps> extends Ligh
       this.setPosition(m.fixture, progression, index * offsetFactor * 2 * Math.PI);
     });
 
+    super.tick();
     return this.lightsGroup;
   }
 }

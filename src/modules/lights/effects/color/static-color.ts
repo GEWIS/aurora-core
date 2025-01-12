@@ -58,7 +58,7 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
   private cycleStartTick: Date = new Date();
 
   constructor(lightsGroup: LightsGroup, props: StaticColorProps, features?: TrackPropertiesEvent) {
-    super(lightsGroup, features);
+    super(lightsGroup, undefined, features);
     this.props = props;
 
     this.lightsGroup.fixtures.forEach((f) => {
@@ -87,14 +87,14 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
 
   destroy(): void {}
 
-  private getProgression(durationMs: number) {
+  private getDimProgression(durationMs: number) {
     return Math.min(1, (new Date().getTime() - this.cycleStartTick.getTime()) / durationMs);
   }
 
   tick(): LightsGroup {
     let progression = 1;
-    if (this.props.brightenTimeMs) progression = this.getProgression(this.props.brightenTimeMs);
-    if (this.props.dimTimeMs) progression = 1 - this.getProgression(this.props.dimTimeMs);
+    if (this.props.brightenTimeMs) progression = this.getDimProgression(this.props.brightenTimeMs);
+    if (this.props.dimTimeMs) progression = 1 - this.getDimProgression(this.props.dimTimeMs);
 
     this.lightsGroup.fixtures
       .sort((f1, f2) => f1.firstChannel - f2.firstChannel)
