@@ -13,6 +13,8 @@ import {
   EffectProgressionTickStrategy,
 } from '../progression-strategies';
 import EffectProgressionStrategy from '../progression-strategies/effect-progression-strategy';
+import LightsGroupFixture from '../../entities/lights-group-fixture';
+import { LightsEffectPattern } from '../lights-effect-pattern';
 
 export interface BeatFadeOutProps {
   /**
@@ -48,7 +50,7 @@ export type BeatFadeOutCreateParams = BaseLightsEffectCreateParams & {
 };
 
 export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
-  private readonly nrSteps;
+  private readonly nrSteps: number;
 
   private lastBeat = new Date().getTime(); // in ms since epoch;
 
@@ -64,7 +66,7 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
       progressionStrategy = new EffectProgressionBeatStrategy(nrSteps);
     }
 
-    super(lightsGroup, progressionStrategy, features);
+    super(lightsGroup, progressionStrategy, LightsEffectPattern.HORIZONTAL, features);
 
     this.nrSteps = nrSteps;
     this.props = props;
@@ -97,11 +99,10 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
     this.beatLength = event.beat.duration * 1000;
   }
 
-  getCurrentColor(i: number) {
+  getCurrentColor(fixture: LightsGroupFixture, i: number) {
     const { colors, nrBlacks } = this.props;
-    const nrColors = colors.length + (nrBlacks || 0);
-    const phase = Math.floor(this.getProgression(new Date()) * this.nrSteps);
-    const index = (i + phase) % nrColors;
+    const phase = Math.floor(this.getProgression(new Date(), fixture) * this.lightsGroup.gridSizeX);
+    const index = phase % this.nrSteps;
     if (index === colors.length) {
       return null;
     }
@@ -117,7 +118,7 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
       ? Math.max(1 - (new Date().getTime() - this.lastBeat) / this.beatLength, 0)
       : 1;
 
-    const color = this.getCurrentColor(i);
+    const color = this.getCurrentColor(p, i);
     if (color == null) {
       p.fixture.setMasterDimmer(0);
     } else {

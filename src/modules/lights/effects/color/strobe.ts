@@ -19,7 +19,7 @@ export type StrobeCreateParams = BaseLightsEffectCreateParams & {
 
 export default class Strobe extends LightsEffect<StrobeProps> {
   constructor(lightsGroup: LightsGroup, props: StrobeProps, features?: TrackPropertiesEvent) {
-    super(lightsGroup, undefined, features);
+    super(lightsGroup, undefined, undefined, features);
     this.props = props;
 
     this.lightsGroup.pars.forEach((p) => {

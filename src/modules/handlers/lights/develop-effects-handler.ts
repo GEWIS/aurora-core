@@ -12,8 +12,9 @@ export default class DevelopEffectsHandler extends EffectsHandler {
       logger.info(`Set develop effects for ${entity.name}`);
       this.groupColorEffects.set(entity, [
         new BeatFadeOut(entity, { colors: [RgbColor.ORANGE, RgbColor.BLUE], nrBlacks: 1 }),
+        // new Wave(entity, { color: RgbColor.ORANGE, nrWaves: 4 }),
       ]);
       this.groupMovementEffects.set(entity, [new TableRotate(entity, {})]);
-    }, 5000);
+    }, 3000);
   }
 }

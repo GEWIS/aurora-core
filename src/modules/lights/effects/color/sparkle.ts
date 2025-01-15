@@ -55,7 +55,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
    * @param features
    */
   constructor(lightsGroup: LightsGroup, props: SparkleProps, features?: TrackPropertiesEvent) {
-    super(lightsGroup, undefined, features);
+    super(lightsGroup, undefined, undefined, features);
 
     const nrFixtures = lightsGroup.pars.length + lightsGroup.movingHeadRgbs.length;
     this.beats = new Array(nrFixtures).fill(new Date(0));

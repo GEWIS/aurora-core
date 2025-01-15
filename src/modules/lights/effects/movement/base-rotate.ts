@@ -52,14 +52,15 @@ export default abstract class BaseRotate<T extends BaseRotateProps> extends Ligh
 
   tick(): LightsGroup {
     const currentTick = new Date();
-    const progression = this.getProgression(currentTick);
     const offsetFactor = this.props.offsetFactor ?? this.defaults.offsetFactor;
 
     this.lightsGroup.movingHeadWheels.forEach((m, i) => {
+      const progression = this.getProgression(currentTick, m);
       this.setPosition(m.fixture, progression, i * offsetFactor * 2 * Math.PI);
     });
 
     this.lightsGroup.movingHeadRgbs.forEach((m, i) => {
+      const progression = this.getProgression(currentTick, m);
       const index = i + this.lightsGroup.movingHeadWheels.length;
       this.setPosition(m.fixture, progression, index * offsetFactor * 2 * Math.PI);
     });

@@ -58,7 +58,7 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
   private cycleStartTick: Date = new Date();
 
   constructor(lightsGroup: LightsGroup, props: StaticColorProps, features?: TrackPropertiesEvent) {
-    super(lightsGroup, undefined, features);
+    super(lightsGroup, undefined, undefined, features);
     this.props = props;
 
     this.lightsGroup.fixtures.forEach((f) => {
