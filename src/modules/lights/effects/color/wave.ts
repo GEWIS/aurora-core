@@ -4,6 +4,7 @@ import { RgbColor } from '../../color-definitions';
 import { ColorEffects } from './color-effects';
 import { EffectProgressionTickStrategy } from '../progression-strategies';
 import { LightsEffectPattern } from '../lights-effect-pattern';
+import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
 
 export interface WaveProps {
   /**
@@ -47,7 +48,7 @@ export default class Wave extends LightsEffect<WaveProps> {
     super(
       lightsGroup,
       new EffectProgressionTickStrategy(cycleTime, props.singleWave),
-      LightsEffectPattern.CENTERED_SQUARED,
+      new EffectProgressionMapFactory(lightsGroup).getMapper(LightsEffectPattern.CENTERED_CIRCULAR),
     );
     this.props = props;
   }

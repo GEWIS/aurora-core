@@ -15,6 +15,7 @@ import {
 import EffectProgressionStrategy from '../progression-strategies/effect-progression-strategy';
 import LightsGroupFixture from '../../entities/lights-group-fixture';
 import { LightsEffectPattern } from '../lights-effect-pattern';
+import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
 
 export interface BeatFadeOutProps {
   /**
@@ -59,14 +60,21 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
   constructor(lightsGroup: LightsGroup, props: BeatFadeOutProps, features?: TrackPropertiesEvent) {
     const nrSteps = props.colors.length + (props.nrBlacks ?? 0);
 
+    const progressionMapperStrategy = new EffectProgressionMapFactory(lightsGroup).getMapper(
+      LightsEffectPattern.CENTERED_SQUARED,
+      nrSteps,
+    );
+
     let progressionStrategy: EffectProgressionStrategy;
     if (props.customCycleTime) {
       progressionStrategy = new EffectProgressionTickStrategy(props.customCycleTime);
     } else {
-      progressionStrategy = new EffectProgressionBeatStrategy(nrSteps);
+      progressionStrategy = new EffectProgressionBeatStrategy(
+        progressionMapperStrategy.getNrFixtures(),
+      );
     }
 
-    super(lightsGroup, progressionStrategy, LightsEffectPattern.HORIZONTAL, features);
+    super(lightsGroup, progressionStrategy, progressionMapperStrategy, features);
 
     this.nrSteps = nrSteps;
     this.props = props;
@@ -100,12 +108,12 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
   }
 
   getCurrentColor(fixture: LightsGroupFixture, i: number) {
-    const { colors, nrBlacks } = this.props;
-    const phase = Math.floor(this.getProgression(new Date(), fixture) * this.lightsGroup.gridSizeX);
-    const index = phase % this.nrSteps;
-    if (index === colors.length) {
-      return null;
-    }
+    const { colors } = this.props;
+    const progression = this.getProgression(new Date(), fixture);
+
+    const phase = progression * this.getEffectNrFixtures();
+    const index = Math.round(phase % this.nrSteps);
+
     return colors[index];
   }
 

@@ -3,6 +3,8 @@ import { LightsGroup } from '../entities';
 import EffectProgressionStrategy from './progression-strategies/effect-progression-strategy';
 import LightsGroupFixture from '../entities/lights-group-fixture';
 import { LightsEffectPattern } from './lights-effect-pattern';
+import EffectProgressionMapStrategy from './progression-strategies/mappers/effect-progression-map-strategy';
+import EffectProgressionMapFactory from './progression-strategies/mappers/effect-progression-map-factory';
 
 export type LightsEffectBuilder<P = {}, T extends LightsEffect<P> = LightsEffect<P>> = (
   lightsGroup: LightsGroup,
@@ -14,72 +16,37 @@ export type BaseLightsEffectCreateParams = {};
 export default abstract class LightsEffect<P = {}> {
   protected props: P;
 
+  private readonly progressionMapperStrategy: EffectProgressionMapStrategy;
+
   protected constructor(
-    public lightsGroup: LightsGroup,
-    private progressionStrategy?: EffectProgressionStrategy,
-    private pattern: LightsEffectPattern = LightsEffectPattern.HORIZONTAL,
+    public readonly lightsGroup: LightsGroup,
+    private readonly progressionStrategy?: EffectProgressionStrategy,
+    progressionMapperStrategy?: EffectProgressionMapStrategy,
     protected features?: TrackPropertiesEvent,
-  ) {}
+  ) {
+    if (!progressionMapperStrategy) {
+      this.progressionMapperStrategy = new EffectProgressionMapFactory(this.lightsGroup).getMapper(
+        LightsEffectPattern.HORIZONTAL,
+      );
+    } else {
+      this.progressionMapperStrategy = progressionMapperStrategy;
+    }
+  }
 
   public setNewProps(props: P) {
     this.props = props;
   }
 
-  private getCenter(): { x: number; y: number } {
-    return {
-      x: (this.lightsGroup.gridSizeX - 1) / 2,
-      y: (this.lightsGroup.gridSizeY - 1) / 2,
-    };
+  protected getEffectNrFixtures(): number {
+    return this.progressionMapperStrategy.getNrFixtures();
   }
 
   protected getProgression(currentTick: Date, fixture: LightsGroupFixture): number {
     if (!this.progressionStrategy) return 0;
 
     const progression = this.progressionStrategy.getProgression(currentTick);
-    let relativePosition: number = fixture.positionX / this.lightsGroup.gridSizeX;
-
-    const { x: centerX, y: centerY } = this.getCenter();
-
-    switch (this.pattern) {
-      case LightsEffectPattern.HORIZONTAL:
-        relativePosition = fixture.positionX / this.lightsGroup.gridSizeX;
-        break;
-      case LightsEffectPattern.VERTICAL:
-        relativePosition = fixture.positionY / this.lightsGroup.gridSizeY;
-        break;
-      case LightsEffectPattern.DIAGONAL_TOP_LEFT_TO_BOTTOM_RIGHT:
-        relativePosition =
-          (fixture.positionX + fixture.positionY) /
-          (this.lightsGroup.gridSizeX + this.lightsGroup.gridSizeY);
-        break;
-      case LightsEffectPattern.DIAGONAL_BOTTOM_LEFT_TO_TOP_RIGHT:
-        relativePosition =
-          (fixture.positionX - fixture.positionY) /
-          (this.lightsGroup.gridSizeX + this.lightsGroup.gridSizeY);
-        break;
-      case LightsEffectPattern.CENTERED_SQUARED:
-        const distanceX_1 = Math.abs(fixture.positionX - centerX);
-        const distanceY_1 = Math.abs(fixture.positionY - centerY);
-        relativePosition =
-          (distanceX_1 + distanceY_1) /
-          ((this.lightsGroup.gridSizeX + this.lightsGroup.gridSizeY) / 2);
-        break;
-      case LightsEffectPattern.CENTERED_CIRCULAR:
-        const distanceX_2 = fixture.positionX - centerX;
-        const distanceY_2 = fixture.positionY - centerY;
-        const maxDistance = Math.sqrt(centerX ** 2 + centerY ** 2);
-        relativePosition = Math.sqrt(distanceX_2 ** 2 + distanceY_2 ** 2) / maxDistance;
-        break;
-      case LightsEffectPattern.ROTATIONAL:
-        const x = fixture.positionX - centerX;
-        const y = fixture.positionY - centerY;
-        const angle = Math.atan2(x, y) / Math.PI;
-        // Transform range [-1, 1] to [0, 1]
-        relativePosition = (angle + 1) / 2;
-        break;
-    }
-
-    return (relativePosition + progression) % 1;
+    const fixtureProgression = this.progressionMapperStrategy.getProgression(progression, fixture);
+    return fixtureProgression;
   }
 
   /**
