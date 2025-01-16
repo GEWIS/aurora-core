@@ -37,7 +37,7 @@ export type WaveCreateParams = BaseLightsEffectCreateParams & {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const DEFAULT_NR_WAVES = 2;
+const DEFAULT_NR_WAVES = 1;
 const DEFAULT_CYCLE_TIME = 2000;
 
 export default class Wave extends LightsEffect<WaveProps> {
@@ -68,13 +68,13 @@ export default class Wave extends LightsEffect<WaveProps> {
   private getBrightness(relativeProgression: number) {
     // If we only show a single wave, we want it to be visible. So, by trial and error a size of
     // 1.5 fits best. This works, because the singleWave prop
-    const nrWaves = this.props.singleWave ? 1.5 : (this.props.nrWaves ?? DEFAULT_NR_WAVES);
+    const nrWaves = this.props.singleWave ? 0.75 : (this.props.nrWaves ?? DEFAULT_NR_WAVES);
 
     // If we are outside the first half sine wave, we set some bounds.
     if (this.props.singleWave && relativeProgression < 0) return 0;
     if (this.props.singleWave && relativeProgression > 1) return 0;
 
-    return Math.sin(relativeProgression * nrWaves * Math.PI);
+    return Math.sin(relativeProgression * nrWaves * Math.PI * 2);
   }
 
   tick(): LightsGroup {

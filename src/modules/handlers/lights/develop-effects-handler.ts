@@ -1,10 +1,14 @@
 import EffectsHandler from './effects-handler';
 import { LightsGroup } from '../../lights/entities';
 import { RgbColor } from '../../lights/color-definitions';
-import { BeatFadeOut } from '../../lights/effects/color';
+import { Wave } from '../../lights/effects/color';
 import TableRotate from '../../lights/effects/movement/table-rotate';
 import logger from '../../../logger';
 import { ArtificialBeatGenerator } from '../../beats/artificial-beat-generator';
+import {
+  LightsEffectDirection,
+  LightsEffectPattern,
+} from '../../lights/effects/lights-effect-pattern';
 
 export default class DevelopEffectsHandler extends EffectsHandler {
   public registerEntity(entity: LightsGroup) {
@@ -16,17 +20,22 @@ export default class DevelopEffectsHandler extends EffectsHandler {
     setTimeout(() => {
       logger.info(`Set develop effects for ${entity.name}`);
       this.groupColorEffects.set(entity, [
-        new BeatFadeOut(entity, {
-          colors: [
-            RgbColor.ORANGE,
-            RgbColor.BLUE,
-            // RgbColor.GREEN,
-            // RgbColor.YELLOW,
-            // RgbColor.LIGHTPINK,
-          ],
-          nrBlacks: 1,
+        // new BeatFadeOut(entity, {
+        //   colors: [
+        //     RgbColor.ORANGE,
+        //     RgbColor.BLUE,
+        //     // RgbColor.GREEN,
+        //     // RgbColor.YELLOW,
+        //     // RgbColor.LIGHTPINK,
+        //   ],
+        //   nrBlacks: 1,
+        // }),
+        new Wave(entity, {
+          colors: [RgbColor.ORANGE],
+          nrWaves: 1,
+          pattern: LightsEffectPattern.HORIZONTAL,
+          direction: LightsEffectDirection.BACKWARDS,
         }),
-        // new Wave(entity, { color: RgbColor.ORANGE, nrWaves: 4 }),
       ]);
       this.groupMovementEffects.set(entity, [new TableRotate(entity, {})]);
     }, 3000);
