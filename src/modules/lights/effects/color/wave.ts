@@ -1,17 +1,16 @@
-import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
+import LightsEffect, {
+  BaseLightsEffectCreateParams,
+  BaseLightsEffectProgressionProps,
+  BaseLightsEffectProps,
+  LightsEffectBuilder,
+} from '../lights-effect';
 import { LightsGroup, LightsGroupMovingHeadRgbs, LightsGroupPars } from '../../entities';
-import { RgbColor } from '../../color-definitions';
 import { ColorEffects } from './color-effects';
 import { EffectProgressionTickStrategy } from '../progression-strategies';
-import { LightsEffectPattern } from '../lights-effect-pattern';
+import { LightsEffectDirection, LightsEffectPattern } from '../lights-effect-pattern';
 import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
 
-export interface WaveProps {
-  /**
-   * Color of the lights
-   */
-  color: RgbColor;
-
+export interface WaveProps extends BaseLightsEffectProps, BaseLightsEffectProgressionProps {
   /**
    * Number of waves, ignored if singleWave=true (1 by default)
    * @isInt
@@ -84,11 +83,11 @@ export default class Wave extends LightsEffect<WaveProps> {
     const currentTick = new Date();
 
     // Apply the wave effect to the fixture in a group
-    const apply = (p: LightsGroupPars | LightsGroupMovingHeadRgbs, index: number) => {
+    const apply = (p: LightsGroupPars | LightsGroupMovingHeadRgbs) => {
       const progression = this.getProgression(currentTick, p);
       const brightness = this.getBrightness(progression);
       p.fixture.setMasterDimmer(Math.max(0, brightness * 255));
-      p.fixture.setColor(this.props.color);
+      p.fixture.setColor(this.props.colors[0]);
     };
 
     this.lightsGroup.pars.forEach(apply);

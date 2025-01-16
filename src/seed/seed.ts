@@ -573,21 +573,21 @@ export async function seedOpeningSequence(
   await addStep(movingHeadsWhite, 28000, 32000, [movingHeadsGEWIS]);
   await addStep(allOfTheLights, 27500, 1500, [room, bar]);
   await addStep(
-    { type: 'Wave', props: { color: RgbColor.ROSERED } } as WaveCreateParams,
+    { type: 'Wave', props: { colors: [RgbColor.ROSERED] } } as WaveCreateParams,
     29000,
     4000,
     spots,
   );
   await addStep(allOfTheLights, 33000, 2000, [room, bar]);
   await addStep(
-    { type: 'Wave', props: { color: RgbColor.ROSERED } } as WaveCreateParams,
+    { type: 'Wave', props: { colors: [RgbColor.ROSERED] } } as WaveCreateParams,
     35000,
     5000,
     spots,
   );
   await addStep(allOfTheLights, 40000, 1500, [room, bar]);
   await addStep(
-    { type: 'Wave', props: { color: RgbColor.ROSERED } } as WaveCreateParams,
+    { type: 'Wave', props: { colors: [RgbColor.ROSERED] } } as WaveCreateParams,
     41500,
     13500,
     spots,
@@ -616,9 +616,19 @@ export async function seedOpeningSequence(
   await addStep(movingHeadsWhite, 63000, 155000, [movingHeadsGEWIS]);
 
   await addStep(allOfTheLights, 81500, 2000, spots);
-  await addStep({ type: ColorEffects.Wave, props: { color: RgbColor.PINK } }, 83500, 4500, spots);
+  await addStep(
+    { type: ColorEffects.Wave, props: { colors: [RgbColor.PINK] } },
+    83500,
+    4500,
+    spots,
+  );
   await addStep(allOfTheLights, 88000, 2000, spots);
-  await addStep({ type: ColorEffects.Wave, props: { color: RgbColor.PINK } }, 90000, 4800, spots);
+  await addStep(
+    { type: ColorEffects.Wave, props: { colors: [RgbColor.PINK] } },
+    90000,
+    4800,
+    spots,
+  );
   await addStep(allOfTheLights, 94800, 1600, spots);
   await addStep(
     { type: ColorEffects.Sparkle, props: { colors: [RgbColor.GREEN, RgbColor.BROWN] } },
@@ -640,14 +650,14 @@ export async function seedOpeningSequence(
   // Refrein
   await addStep(allOfTheLights, 135800, 1200, spots);
   await addStep(
-    { type: ColorEffects.Wave, props: { color: RgbColor.YELLOW } },
+    { type: ColorEffects.Wave, props: { colors: [RgbColor.YELLOW] } },
     138000,
     4000,
     spots,
   );
   await addStep(allOfTheLights, 142000, 2000, spots);
   await addStep(
-    { type: ColorEffects.Wave, props: { color: RgbColor.YELLOW } },
+    { type: ColorEffects.Wave, props: { colors: [RgbColor.YELLOW] } },
     144000,
     4000,
     spots,
@@ -676,7 +686,7 @@ export async function seedOpeningSequence(
     spots,
   );
   await addStep(
-    { type: ColorEffects.Wave, props: { color: RgbColor.YELLOW, cycleTime: 425 } },
+    { type: ColorEffects.Wave, props: { colors: [RgbColor.YELLOW], cycleTime: 425 } },
     190500,
     27500,
     spots,

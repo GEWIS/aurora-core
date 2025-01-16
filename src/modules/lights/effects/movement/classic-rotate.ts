@@ -1,9 +1,14 @@
-import { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
+import {
+  BaseLightsEffectCreateParams,
+  BaseLightsEffectProgressionProps,
+  LightsEffectBuilder,
+} from '../lights-effect';
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../../entities';
 import BaseRotate, { BaseRotateProps } from './base-rotate';
 import { MovementEffects } from './movement-effetcs';
+import { LightsEffectDirection, LightsEffectPattern } from '../lights-effect-pattern';
 
-export interface ClassicRotateProps extends BaseRotateProps {}
+export interface ClassicRotateProps extends BaseRotateProps, BaseLightsEffectProgressionProps {}
 
 export type ClassicRotateCreateParams = BaseLightsEffectCreateParams & {
   type: MovementEffects.ClassicRotate;
@@ -19,7 +24,14 @@ export default class ClassicRotate extends BaseRotate<ClassicRotateProps> {
    * @param props
    */
   constructor(lightsGroup: LightsGroup, props: ClassicRotateProps) {
-    super(lightsGroup, { cycleTime: DEFAULT_CYCLE_TIME, offsetFactor: DEFAULT_OFFSET_FACTOR });
+    super(
+      lightsGroup,
+      {
+        cycleTime: DEFAULT_CYCLE_TIME,
+        offsetFactor: DEFAULT_OFFSET_FACTOR,
+      },
+      { pattern: props.pattern, direction: props.direction },
+    );
     this.props = props;
   }
 

@@ -1,4 +1,9 @@
-import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
+import LightsEffect, {
+  BaseLightsEffectCreateParams,
+  BaseLightsEffectProgressionProps,
+  BaseLightsEffectProps,
+  LightsEffectBuilder,
+} from '../lights-effect';
 import { BeatEvent, TrackPropertiesEvent } from '../../../events/music-emitter-events';
 import {
   LightsGroup,
@@ -14,15 +19,10 @@ import {
 } from '../progression-strategies';
 import EffectProgressionStrategy from '../progression-strategies/effect-progression-strategy';
 import LightsGroupFixture from '../../entities/lights-group-fixture';
-import { LightsEffectPattern } from '../lights-effect-pattern';
+import { LightsEffectDirection, LightsEffectPattern } from '../lights-effect-pattern';
 import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
 
-export interface BeatFadeOutProps {
-  /**
-   * One or more colors that should be shown
-   */
-  colors: RgbColor[];
-
+export interface BeatFadeOutProps extends BaseLightsEffectProps, BaseLightsEffectProgressionProps {
   /**
    * Whether the lights should be turned off using a fade effect
    * on each beat
@@ -61,7 +61,7 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
     const nrSteps = props.colors.length + (props.nrBlacks ?? 0);
 
     const progressionMapperStrategy = new EffectProgressionMapFactory(lightsGroup).getMapper(
-      LightsEffectPattern.CENTERED_SQUARED,
+      LightsEffectPattern.ROTATIONAL,
       nrSteps,
     );
 

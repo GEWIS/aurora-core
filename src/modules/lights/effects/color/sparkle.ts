@@ -1,15 +1,14 @@
-import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
+import LightsEffect, {
+  BaseLightsEffectCreateParams,
+  BaseLightsEffectProps,
+  LightsEffectBuilder,
+} from '../lights-effect';
 import { RgbColor } from '../../color-definitions';
 import { LightsGroup } from '../../entities';
 import { TrackPropertiesEvent } from '../../../events/music-emitter-events';
 import { ColorEffects } from './color-effects';
 
-export interface SparkleProps {
-  /**
-   * Colors of the lights
-   */
-  colors: RgbColor[];
-
+export interface SparkleProps extends BaseLightsEffectProps {
   /**
    * What percentage (on average) of the lights should be turned on
    * @minimum 0

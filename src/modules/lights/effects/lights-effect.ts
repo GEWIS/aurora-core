@@ -2,14 +2,34 @@ import { BeatEvent, TrackPropertiesEvent } from '../../events/music-emitter-even
 import { LightsGroup } from '../entities';
 import EffectProgressionStrategy from './progression-strategies/effect-progression-strategy';
 import LightsGroupFixture from '../entities/lights-group-fixture';
-import { LightsEffectPattern } from './lights-effect-pattern';
+import { LightsEffectDirection, LightsEffectPattern } from './lights-effect-pattern';
 import EffectProgressionMapStrategy from './progression-strategies/mappers/effect-progression-map-strategy';
 import EffectProgressionMapFactory from './progression-strategies/mappers/effect-progression-map-factory';
+import { RgbColor } from '../color-definitions';
 
 export type LightsEffectBuilder<P = {}, T extends LightsEffect<P> = LightsEffect<P>> = (
   lightsGroup: LightsGroup,
   features?: TrackPropertiesEvent,
 ) => T;
+
+export interface BaseLightsEffectProps {
+  /**
+   * One or more colors that should be shown
+   */
+  colors: RgbColor[];
+}
+
+export interface BaseLightsEffectProgressionProps {
+  /**
+   * 2D pattern for this effect. Defaults to "HORIZONTAL"
+   */
+  pattern?: LightsEffectPattern;
+
+  /**
+   * Direction of this effect. Defaults to "FORWARDS"
+   */
+  direction?: LightsEffectDirection;
+}
 
 export type BaseLightsEffectCreateParams = {};
 

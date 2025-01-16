@@ -1,7 +1,9 @@
-import LightsEffect from '../lights-effect';
+import LightsEffect, { BaseLightsEffectProgressionProps } from '../lights-effect';
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../../entities';
 import { EffectProgressionTickStrategy } from '../progression-strategies';
 import { BeatEvent } from '../../../events/music-emitter-events';
+import { LightsEffectDirection, LightsEffectPattern } from '../lights-effect-pattern';
+import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
 
 export interface BaseRotateProps {
   /**
@@ -26,9 +28,14 @@ export default abstract class BaseRotate<T extends BaseRotateProps> extends Ligh
   protected constructor(
     lightsGroup: LightsGroup,
     protected readonly defaults: Required<BaseRotateProps>,
+    progressionProps: BaseLightsEffectProgressionProps,
     cycleTime?: number,
   ) {
-    super(lightsGroup, new EffectProgressionTickStrategy(cycleTime ?? defaults.cycleTime));
+    super(
+      lightsGroup,
+      new EffectProgressionTickStrategy(cycleTime ?? defaults.cycleTime),
+      new EffectProgressionMapFactory(lightsGroup).getMapper(progressionProps.pattern),
+    );
   }
 
   /**

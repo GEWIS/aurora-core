@@ -42,7 +42,7 @@ export default class RandomEffectsHandler extends EffectsHandler {
           ),
         );
       } else if (random < 0.9) {
-        this.groupColorEffects.set(entity, new Wave(entity, { color: this.colors[0] }));
+        this.groupColorEffects.set(entity, new Wave(entity, { colors: this.colors }));
       } else {
         this.groupColorEffects.set(entity, new Sparkle(entity, { colors: this.colors }));
       }

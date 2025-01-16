@@ -13,7 +13,7 @@ export default class EffectProgressionMapFactory {
   constructor(private lightsGroup: LightsGroup) {}
 
   public getMapper(
-    pattern: LightsEffectPattern,
+    pattern: LightsEffectPattern = LightsEffectPattern.HORIZONTAL,
     multiplier?: number,
   ): EffectProgressionMapStrategy {
     switch (pattern) {
