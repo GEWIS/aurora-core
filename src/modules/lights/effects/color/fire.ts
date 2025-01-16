@@ -11,7 +11,7 @@ export type FireCreateParams = BaseLightsEffectCreateParams & {
 
 export default class Fire extends LightsEffect<FireProps> {
   constructor(lightsGroup: LightsGroup, props?: FireProps, features?: TrackPropertiesEvent) {
-    super(lightsGroup, undefined, undefined, features);
+    super(lightsGroup, undefined, undefined, undefined, features);
   }
 
   public static build(props?: FireProps): LightsEffectBuilder<FireProps, Fire> {

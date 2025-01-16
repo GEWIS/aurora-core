@@ -42,6 +42,7 @@ export default abstract class LightsEffect<P = {}> {
     public readonly lightsGroup: LightsGroup,
     private readonly progressionStrategy?: EffectProgressionStrategy,
     progressionMapperStrategy?: EffectProgressionMapStrategy,
+    private patternDirection = LightsEffectDirection.FORWARDS,
     protected features?: TrackPropertiesEvent,
   ) {
     if (!progressionMapperStrategy) {
@@ -64,9 +65,12 @@ export default abstract class LightsEffect<P = {}> {
   protected getProgression(currentTick: Date, fixture: LightsGroupFixture): number {
     if (!this.progressionStrategy) return 0;
 
-    const progression = this.progressionStrategy.getProgression(currentTick);
-    const fixtureProgression = this.progressionMapperStrategy.getProgression(progression, fixture);
-    return fixtureProgression;
+    let progression = 1 - this.progressionStrategy.getProgression(currentTick);
+    if (this.patternDirection === LightsEffectDirection.FORWARDS) {
+      progression = 1 - progression;
+    }
+
+    return this.progressionMapperStrategy.getProgression(progression, fixture);
   }
 
   /**

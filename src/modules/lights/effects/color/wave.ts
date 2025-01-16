@@ -7,7 +7,6 @@ import LightsEffect, {
 import { LightsGroup, LightsGroupMovingHeadRgbs, LightsGroupPars } from '../../entities';
 import { ColorEffects } from './color-effects';
 import { EffectProgressionTickStrategy } from '../progression-strategies';
-import { LightsEffectDirection, LightsEffectPattern } from '../lights-effect-pattern';
 import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
 
 export interface WaveProps extends BaseLightsEffectProps, BaseLightsEffectProgressionProps {
@@ -47,7 +46,8 @@ export default class Wave extends LightsEffect<WaveProps> {
     super(
       lightsGroup,
       new EffectProgressionTickStrategy(cycleTime, props.singleWave),
-      new EffectProgressionMapFactory(lightsGroup).getMapper(LightsEffectPattern.CENTERED_CIRCULAR),
+      new EffectProgressionMapFactory(lightsGroup).getMapper(props.pattern),
+      props.direction,
     );
     this.props = props;
   }

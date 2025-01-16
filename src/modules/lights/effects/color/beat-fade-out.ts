@@ -61,7 +61,7 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
     const nrSteps = props.colors.length + (props.nrBlacks ?? 0);
 
     const progressionMapperStrategy = new EffectProgressionMapFactory(lightsGroup).getMapper(
-      LightsEffectPattern.ROTATIONAL,
+      props.pattern,
       nrSteps,
     );
 
@@ -74,7 +74,7 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
       );
     }
 
-    super(lightsGroup, progressionStrategy, progressionMapperStrategy, features);
+    super(lightsGroup, progressionStrategy, progressionMapperStrategy, props.direction, features);
 
     this.nrSteps = nrSteps;
     this.props = props;
