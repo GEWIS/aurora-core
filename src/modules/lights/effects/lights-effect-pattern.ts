@@ -1,0 +1,14 @@
+export enum LightsEffectPattern {
+  HORIZONTAL,
+  VERTICAL,
+  DIAGONAL_BOTTOM_LEFT_TO_TOP_RIGHT,
+  DIAGONAL_TOP_LEFT_TO_BOTTOM_RIGHT,
+  CENTERED_CIRCULAR,
+  CENTERED_SQUARED,
+  ROTATIONAL,
+}
+
+export enum LightsEffectDirection {
+  FORWARDS,
+  BACKWARDS,
+}

@@ -1,11 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import BaseEntity from '../../root/entities/base-entity';
 // eslint-disable-next-line import/no-cycle
 import LightsGroup from './lights-group';
 import LightsMovingHeadWheel from './lights-moving-head-wheel';
+import LightsGroupFixture from './lights-group-fixture';
 
 @Entity()
-export default class LightsGroupMovingHeadWheels extends BaseEntity {
+export default class LightsGroupMovingHeadWheels extends LightsGroupFixture {
   @ManyToOne(() => LightsGroup)
   @JoinColumn()
   public group: LightsGroup;
@@ -13,11 +13,4 @@ export default class LightsGroupMovingHeadWheels extends BaseEntity {
   @ManyToOne(() => LightsMovingHeadWheel, { eager: true })
   @JoinColumn()
   public fixture: LightsMovingHeadWheel;
-
-  @Column({ type: 'smallint', unsigned: true })
-  public firstChannel: number;
-
-  public getActualChannel(relativeChannel: number) {
-    return relativeChannel + this.firstChannel - 1;
-  }
 }

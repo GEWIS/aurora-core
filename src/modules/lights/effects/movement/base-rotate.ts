@@ -1,5 +1,9 @@
-import LightsEffect from '../lights-effect';
+import LightsEffect, { BaseLightsEffectProgressionProps } from '../lights-effect';
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../../entities';
+import { EffectProgressionTickStrategy } from '../progression-strategies';
+import { BeatEvent } from '../../../events/music-emitter-events';
+import { LightsEffectDirection, LightsEffectPattern } from '../lights-effect-pattern';
+import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
 
 export interface BaseRotateProps {
   /**
@@ -21,18 +25,17 @@ export interface BaseRotateProps {
  * setPosition() function.
  */
 export default abstract class BaseRotate<T extends BaseRotateProps> extends LightsEffect<T> {
-  private cycleStartTick: Date = new Date();
-
   protected constructor(
     lightsGroup: LightsGroup,
     protected readonly defaults: Required<BaseRotateProps>,
+    progressionProps: BaseLightsEffectProgressionProps,
+    cycleTime?: number,
   ) {
-    super(lightsGroup);
-  }
-
-  protected getProgression(currentTick: Date) {
-    const cycleTime = this.props.cycleTime ?? this.defaults.cycleTime;
-    return Math.min(1, (currentTick.getTime() - this.cycleStartTick.getTime()) / cycleTime);
+    super(
+      lightsGroup,
+      new EffectProgressionTickStrategy(cycleTime ?? defaults.cycleTime),
+      new EffectProgressionMapFactory(lightsGroup).getMapper(progressionProps.pattern),
+    );
   }
 
   /**
@@ -50,25 +53,26 @@ export default abstract class BaseRotate<T extends BaseRotateProps> extends Ligh
 
   destroy(): void {}
 
-  beat(): void {}
+  beat(event: BeatEvent): void {
+    super.beat(event);
+  }
 
   tick(): LightsGroup {
     const currentTick = new Date();
-    const progression = this.getProgression(currentTick);
     const offsetFactor = this.props.offsetFactor ?? this.defaults.offsetFactor;
-    if (progression >= 1) {
-      this.cycleStartTick = currentTick;
-    }
 
     this.lightsGroup.movingHeadWheels.forEach((m, i) => {
+      const progression = this.getProgression(currentTick, m);
       this.setPosition(m.fixture, progression, i * offsetFactor * 2 * Math.PI);
     });
 
     this.lightsGroup.movingHeadRgbs.forEach((m, i) => {
+      const progression = this.getProgression(currentTick, m);
       const index = i + this.lightsGroup.movingHeadWheels.length;
       this.setPosition(m.fixture, progression, index * offsetFactor * 2 * Math.PI);
     });
 
+    super.tick();
     return this.lightsGroup;
   }
 }

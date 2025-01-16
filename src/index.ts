@@ -48,6 +48,8 @@ async function createApp(): Promise<void> {
 
   const emitterStore = EmitterStore.getInstance();
 
+  ArtificialBeatGenerator.getInstance().init(emitterStore.musicEmitter);
+
   const handlerManager = HandlerManager.getInstance(io, emitterStore);
   await handlerManager.init();
   const socketConnectionManager = new SocketConnectionManager(
@@ -64,7 +66,6 @@ async function createApp(): Promise<void> {
   );
 
   ModeManager.getInstance().init(emitterStore);
-  ArtificialBeatGenerator.getInstance().init(emitterStore.musicEmitter);
 
   if (
     process.env.SPOTIFY_ENABLE === 'true' &&

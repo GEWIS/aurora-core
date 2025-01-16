@@ -190,7 +190,7 @@ export default class CenturionMode extends BaseMode<
         probability: 0.1,
       },
       {
-        effect: Wave.build({ color: colors[0] }),
+        effect: Wave.build({ colors: colors }),
         probability: 0.1,
       },
     ];

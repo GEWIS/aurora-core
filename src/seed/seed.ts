@@ -1,8 +1,8 @@
 import RootAudioService from '../modules/root/root-audio-service';
 import RootScreenService from '../modules/root/root-screen-service';
-import RootLightsService from '../modules/root/root-lights-service';
+import RootLightsService, { LightsInGroup } from '../modules/root/root-lights-service';
 import dataSource from '../database';
-import { LightsGroup, LightsMovingHeadWheel } from '../modules/lights/entities';
+import { LightsGroup, LightsMovingHeadWheel, LightsPar } from '../modules/lights/entities';
 import { RgbColor, WheelColor } from '../modules/lights/color-definitions';
 import { SparkleCreateParams } from '../modules/lights/effects/color/sparkle';
 import { StaticColorCreateParams } from '../modules/lights/effects/color/static-color';
@@ -144,19 +144,21 @@ export default async function seedDatabase() {
   const gewisRoom = await rootLightsService.createLightGroup(controller.id, {
     name: 'Ruimte',
     defaultHandler: '',
+    gridSizeX: 12,
+    gridSizeY: 0,
     pars: [
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 1 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 17 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 33 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 49 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 65 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 81 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 193 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 209 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 225 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 241 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 257 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 273 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 1, positionX: 0 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 17, positionX: 1 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 33, positionX: 2 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 49, positionX: 3 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 65, positionX: 4 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 81, positionX: 5 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 193, positionX: 6 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 209, positionX: 7 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 225, positionX: 8 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 241, positionX: 9 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 257, positionX: 10 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 273, positionX: 11 },
     ],
     movingHeadRgbs: [],
     movingHeadWheels: [],
@@ -164,11 +166,13 @@ export default async function seedDatabase() {
   const gewisBar = await rootLightsService.createLightGroup(controller.id, {
     name: 'Bar',
     defaultHandler: '',
+    gridSizeX: 4,
+    gridSizeY: 0,
     pars: [
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 97 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 113 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 289 },
-      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 305 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 97, positionX: 0 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 113, positionX: 1 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 289, positionX: 2 },
+      { fixtureId: eurolite_LED_7C_7.id, firstChannel: 305, positionX: 3 },
     ],
     movingHeadRgbs: [],
     movingHeadWheels: [],
@@ -176,28 +180,34 @@ export default async function seedDatabase() {
   const gewisLounge = await rootLightsService.createLightGroup(controller.id, {
     name: 'Lounge',
     defaultHandler: '',
-    pars: [{ fixtureId: eurolite_LED_7C_7.id, firstChannel: 129 }],
+    gridSizeX: 1,
+    gridSizeY: 0,
+    pars: [{ fixtureId: eurolite_LED_7C_7.id, firstChannel: 129, positionX: 0 }],
     movingHeadRgbs: [],
     movingHeadWheels: [],
   });
   const gewisMHRoom = await rootLightsService.createLightGroup(controller.id, {
     name: 'Ruimte MH',
     defaultHandler: '',
+    gridSizeX: 2,
+    gridSizeY: 0,
     pars: [],
     movingHeadRgbs: [],
     movingHeadWheels: [
-      { fixtureId: eurolite_LED_TMH_S30.id, firstChannel: 161 },
-      { fixtureId: eurolite_LED_TMH_S30.id, firstChannel: 177 },
+      { fixtureId: eurolite_LED_TMH_S30.id, firstChannel: 161, positionX: 0 },
+      { fixtureId: eurolite_LED_TMH_S30.id, firstChannel: 177, positionX: 1 },
     ],
   });
   if (!gewisMHRoom) throw new Error('GEWIS MHs not created');
   const royMHs = await rootLightsService.createLightGroup(controller.id, {
     name: 'Roy MH',
     defaultHandler: '',
+    gridSizeX: 2,
+    gridSizeY: 0,
     pars: [],
     movingHeadRgbs: [
-      { fixtureId: ayra_ERO_506.id, firstChannel: 353 },
-      { fixtureId: ayra_ERO_506.id, firstChannel: 369 },
+      { fixtureId: ayra_ERO_506.id, firstChannel: 353, positionX: 0 },
+      { fixtureId: ayra_ERO_506.id, firstChannel: 369, positionX: 1 },
     ],
     movingHeadWheels: [],
   });
@@ -563,21 +573,21 @@ export async function seedOpeningSequence(
   await addStep(movingHeadsWhite, 28000, 32000, [movingHeadsGEWIS]);
   await addStep(allOfTheLights, 27500, 1500, [room, bar]);
   await addStep(
-    { type: 'Wave', props: { color: RgbColor.ROSERED } } as WaveCreateParams,
+    { type: 'Wave', props: { colors: [RgbColor.ROSERED] } } as WaveCreateParams,
     29000,
     4000,
     spots,
   );
   await addStep(allOfTheLights, 33000, 2000, [room, bar]);
   await addStep(
-    { type: 'Wave', props: { color: RgbColor.ROSERED } } as WaveCreateParams,
+    { type: 'Wave', props: { colors: [RgbColor.ROSERED] } } as WaveCreateParams,
     35000,
     5000,
     spots,
   );
   await addStep(allOfTheLights, 40000, 1500, [room, bar]);
   await addStep(
-    { type: 'Wave', props: { color: RgbColor.ROSERED } } as WaveCreateParams,
+    { type: 'Wave', props: { colors: [RgbColor.ROSERED] } } as WaveCreateParams,
     41500,
     13500,
     spots,
@@ -606,9 +616,19 @@ export async function seedOpeningSequence(
   await addStep(movingHeadsWhite, 63000, 155000, [movingHeadsGEWIS]);
 
   await addStep(allOfTheLights, 81500, 2000, spots);
-  await addStep({ type: ColorEffects.Wave, props: { color: RgbColor.PINK } }, 83500, 4500, spots);
+  await addStep(
+    { type: ColorEffects.Wave, props: { colors: [RgbColor.PINK] } },
+    83500,
+    4500,
+    spots,
+  );
   await addStep(allOfTheLights, 88000, 2000, spots);
-  await addStep({ type: ColorEffects.Wave, props: { color: RgbColor.PINK } }, 90000, 4800, spots);
+  await addStep(
+    { type: ColorEffects.Wave, props: { colors: [RgbColor.PINK] } },
+    90000,
+    4800,
+    spots,
+  );
   await addStep(allOfTheLights, 94800, 1600, spots);
   await addStep(
     { type: ColorEffects.Sparkle, props: { colors: [RgbColor.GREEN, RgbColor.BROWN] } },
@@ -630,14 +650,14 @@ export async function seedOpeningSequence(
   // Refrein
   await addStep(allOfTheLights, 135800, 1200, spots);
   await addStep(
-    { type: ColorEffects.Wave, props: { color: RgbColor.YELLOW } },
+    { type: ColorEffects.Wave, props: { colors: [RgbColor.YELLOW] } },
     138000,
     4000,
     spots,
   );
   await addStep(allOfTheLights, 142000, 2000, spots);
   await addStep(
-    { type: ColorEffects.Wave, props: { color: RgbColor.YELLOW } },
+    { type: ColorEffects.Wave, props: { colors: [RgbColor.YELLOW] } },
     144000,
     4000,
     spots,
@@ -666,7 +686,7 @@ export async function seedOpeningSequence(
     spots,
   );
   await addStep(
-    { type: ColorEffects.Wave, props: { color: RgbColor.YELLOW, cycleTime: 425 } },
+    { type: ColorEffects.Wave, props: { colors: [RgbColor.YELLOW], cycleTime: 425 } },
     190500,
     27500,
     spots,
@@ -718,4 +738,43 @@ export async function seedOpeningSequence(
 
   await addStep(borrelRuimte, 285000, 15000, [room]);
   await addStep(borrelBar, 285000, 15000, [bar]);
+}
+
+export async function seedDiscoFloor(width: number, height: number) {
+  const service = await new RootLightsService();
+  const controller = await service.createController({ name: 'GEWIS-DISCO-FLOOR' });
+  const fixture = await service.createLightsPar({
+    name: 'Disco floor panel',
+    colorRedChannel: 1,
+    colorGreenChannel: 2,
+    colorBlueChannel: 3,
+    masterDimChannel: 4,
+    shutterChannel: 5,
+    shutterOptionValues: {
+      open: 0,
+      strobe: 220,
+    },
+  });
+
+  const pars: LightsInGroup[] = [];
+  for (let positionY = 0; positionY < height; positionY++) {
+    for (let positionX = 0; positionX < width; positionX++) {
+      pars.push({
+        fixtureId: fixture.id,
+        firstChannel: pars.length * 16 + 1,
+        positionX,
+        positionY,
+      });
+    }
+  }
+
+  return await service.createLightGroup(controller.id, {
+    name: 'Disco floor',
+    defaultHandler: '',
+    gridSizeX: width,
+    gridSizeY: height,
+    pars,
+    movingHeadWheels: [],
+    movingHeadRgbs: [],
+  });
 }

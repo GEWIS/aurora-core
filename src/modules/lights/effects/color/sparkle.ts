@@ -1,15 +1,14 @@
-import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
+import LightsEffect, {
+  BaseLightsEffectCreateParams,
+  BaseLightsEffectProps,
+  LightsEffectBuilder,
+} from '../lights-effect';
 import { RgbColor } from '../../color-definitions';
 import { LightsGroup } from '../../entities';
 import { TrackPropertiesEvent } from '../../../events/music-emitter-events';
 import { ColorEffects } from './color-effects';
 
-export interface SparkleProps {
-  /**
-   * Colors of the lights
-   */
-  colors: RgbColor[];
-
+export interface SparkleProps extends BaseLightsEffectProps {
   /**
    * What percentage (on average) of the lights should be turned on
    * @minimum 0
@@ -55,7 +54,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
    * @param features
    */
   constructor(lightsGroup: LightsGroup, props: SparkleProps, features?: TrackPropertiesEvent) {
-    super(lightsGroup, features);
+    super(lightsGroup, undefined, undefined, undefined, features);
 
     const nrFixtures = lightsGroup.pars.length + lightsGroup.movingHeadRgbs.length;
     this.beats = new Array(nrFixtures).fill(new Date(0));
@@ -97,7 +96,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
     if (!this.props.cycleTime) this.enableLights();
   }
 
-  private getProgression(beat: Date) {
+  private getDimProgression(beat: Date) {
     const dimDuration = this.props.dimDuration ?? DEFAULT_DIM_DURATION;
 
     return Math.max(1 - (new Date().getTime() - beat.getTime()) / dimDuration, 0);
@@ -115,7 +114,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
 
     this.lightsGroup.pars.forEach((p, i) => {
       const index = i;
-      const progression = this.getProgression(this.beats[index]);
+      const progression = this.getDimProgression(this.beats[index]);
       const colorIndex = this.colorIndices[index];
       const color = colors[colorIndex % colors.length];
       p.fixture.setColor(color);
@@ -123,7 +122,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
     });
     this.lightsGroup.movingHeadRgbs.forEach((p, i) => {
       const index = i;
-      const progression = this.getProgression(this.beats[nrPars + index]);
+      const progression = this.getDimProgression(this.beats[nrPars + index]);
       const colorIndex = this.colorIndices[nrPars + index];
       const color = colors[colorIndex % colors.length];
       p.fixture.setColor(color);

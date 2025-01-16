@@ -1,9 +1,15 @@
-import { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
+import {
+  BaseLightsEffectCreateParams,
+  BaseLightsEffectProgressionProps,
+  BaseLightsEffectProps,
+  LightsEffectBuilder,
+} from '../lights-effect';
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../../entities';
 import BaseRotate, { BaseRotateProps } from './base-rotate';
 import { MovementEffects } from './movement-effetcs';
+import { LightsEffectDirection, LightsEffectPattern } from '../lights-effect-pattern';
 
-export interface SearchLightProps extends BaseRotateProps {
+export interface SearchLightProps extends BaseRotateProps, BaseLightsEffectProgressionProps {
   /**
    * Radius of the search light
    * @minimum 0
@@ -27,7 +33,14 @@ export default class SearchLight extends BaseRotate<SearchLightProps> {
    * @param props
    */
   constructor(lightsGroup: LightsGroup, props: SearchLightProps) {
-    super(lightsGroup, { cycleTime: DEFAULT_CYCLE_TIME, offsetFactor: DEFAULT_OFFSET_FACTOR });
+    super(
+      lightsGroup,
+      {
+        cycleTime: DEFAULT_CYCLE_TIME,
+        offsetFactor: DEFAULT_OFFSET_FACTOR,
+      },
+      { pattern: props.pattern, direction: props.direction },
+    );
     this.props = props;
   }
 

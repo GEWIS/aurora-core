@@ -1,11 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import BaseEntity from '../../root/entities/base-entity';
+import { Entity, JoinColumn, ManyToOne } from 'typeorm';
 // eslint-disable-next-line import/no-cycle
 import LightsGroup from './lights-group';
 import LightsPar from './lights-par';
+import LightsGroupFixture from './lights-group-fixture';
 
 @Entity()
-export default class LightsGroupPars extends BaseEntity {
+export default class LightsGroupPars extends LightsGroupFixture {
   @ManyToOne(() => LightsGroup, (group) => group.pars)
   @JoinColumn()
   public group: LightsGroup;
@@ -13,11 +13,4 @@ export default class LightsGroupPars extends BaseEntity {
   @ManyToOne(() => LightsPar, { eager: true })
   @JoinColumn()
   public fixture: LightsPar;
-
-  @Column({ type: 'smallint', unsigned: true })
-  public firstChannel: number;
-
-  public getActualChannel(relativeChannel: number) {
-    return relativeChannel + this.firstChannel - 1;
-  }
 }

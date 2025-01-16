@@ -44,7 +44,7 @@ export default class SingleFlood extends LightsEffect<SingleFloodProps> {
     return (lightsGroup) => new SingleFlood(lightsGroup, props);
   }
 
-  private getProgression(currentTick: Date) {
+  protected getProgression(currentTick: Date) {
     const dimMilliseconds = this.props.dimMilliseconds ?? DEFAULT_DIM_MILLISECONDS;
     const diff = Math.max(0, currentTick.getTime() - this.effectStartTime.getTime());
     if (diff < TURN_ON_TIME) return diff / TURN_ON_TIME;

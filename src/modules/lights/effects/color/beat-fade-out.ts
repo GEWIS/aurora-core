@@ -1,4 +1,9 @@
-import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
+import LightsEffect, {
+  BaseLightsEffectCreateParams,
+  BaseLightsEffectProgressionProps,
+  BaseLightsEffectProps,
+  LightsEffectBuilder,
+} from '../lights-effect';
 import { BeatEvent, TrackPropertiesEvent } from '../../../events/music-emitter-events';
 import {
   LightsGroup,
@@ -8,13 +13,16 @@ import {
 } from '../../entities';
 import { RgbColor } from '../../color-definitions';
 import { ColorEffects } from './color-effects';
+import {
+  EffectProgressionBeatStrategy,
+  EffectProgressionTickStrategy,
+} from '../progression-strategies';
+import EffectProgressionStrategy from '../progression-strategies/effect-progression-strategy';
+import LightsGroupFixture from '../../entities/lights-group-fixture';
+import { LightsEffectDirection, LightsEffectPattern } from '../lights-effect-pattern';
+import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
 
-export interface BeatFadeOutProps {
-  /**
-   * One or more colors that should be shown
-   */
-  colors: RgbColor[];
-
+export interface BeatFadeOutProps extends BaseLightsEffectProps, BaseLightsEffectProgressionProps {
   /**
    * Whether the lights should be turned off using a fade effect
    * on each beat
@@ -43,14 +51,32 @@ export type BeatFadeOutCreateParams = BaseLightsEffectCreateParams & {
 };
 
 export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
-  private phase = 0;
+  private readonly nrSteps: number;
 
   private lastBeat = new Date().getTime(); // in ms since epoch;
 
   private beatLength: number = 1; // in ms;
 
   constructor(lightsGroup: LightsGroup, props: BeatFadeOutProps, features?: TrackPropertiesEvent) {
-    super(lightsGroup, features);
+    const nrSteps = props.colors.length + (props.nrBlacks ?? 0);
+
+    const progressionMapperStrategy = new EffectProgressionMapFactory(lightsGroup).getMapper(
+      props.pattern,
+      nrSteps,
+    );
+
+    let progressionStrategy: EffectProgressionStrategy;
+    if (props.customCycleTime) {
+      progressionStrategy = new EffectProgressionTickStrategy(props.customCycleTime);
+    } else {
+      progressionStrategy = new EffectProgressionBeatStrategy(
+        progressionMapperStrategy.getNrFixtures(),
+      );
+    }
+
+    super(lightsGroup, progressionStrategy, progressionMapperStrategy, props.direction, features);
+
+    this.nrSteps = nrSteps;
     this.props = props;
 
     if (this.props.customCycleTime) {
@@ -72,21 +98,22 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
   destroy(): void {}
 
   beat(event: BeatEvent): void {
+    super.beat(event);
+
     // If we use a custom cycle time, ignore all beats
     if (this.props.customCycleTime) return;
 
     this.lastBeat = new Date().getTime();
     this.beatLength = event.beat.duration * 1000;
-    this.phase = (this.phase + 1) % (this.props.colors.length + (this.props.nrBlacks ?? 0));
   }
 
-  getCurrentColor(i: number) {
-    const { colors, nrBlacks } = this.props;
-    const nrColors = colors.length + (nrBlacks || 0);
-    const index = (i + this.phase) % nrColors;
-    if (index === colors.length) {
-      return null;
-    }
+  getCurrentColor(fixture: LightsGroupFixture, i: number) {
+    const { colors } = this.props;
+    const progression = this.getProgression(new Date(), fixture);
+
+    const phase = progression * this.getEffectNrFixtures();
+    const index = Math.round(phase % this.nrSteps);
+
     return colors[index];
   }
 
@@ -99,7 +126,7 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
       ? Math.max(1 - (new Date().getTime() - this.lastBeat) / this.beatLength, 0)
       : 1;
 
-    const color = this.getCurrentColor(i);
+    const color = this.getCurrentColor(p, i);
     if (color == null) {
       p.fixture.setMasterDimmer(0);
     } else {
@@ -109,17 +136,15 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
   }
 
   tick(): LightsGroup {
-    if (this.props.customCycleTime) {
-      const now = new Date().getTime();
-      const msDiff = now - this.lastBeat;
-      if (msDiff >= this.props.customCycleTime) {
-        this.lastBeat = now;
-        this.phase = (this.phase + 1) % (this.props.colors.length + (this.props.nrBlacks ?? 0));
-      }
-    }
+    super.tick();
 
-    this.lightsGroup.pars.forEach(this.applyColorToFixture.bind(this));
-    this.lightsGroup.movingHeadRgbs.forEach(this.applyColorToFixture.bind(this));
+    [
+      ...this.lightsGroup.pars,
+      ...this.lightsGroup.movingHeadRgbs,
+      ...this.lightsGroup.movingHeadWheels,
+    ]
+      .sort((a, b) => a.positionX - b.positionX)
+      .forEach(this.applyColorToFixture.bind(this));
 
     return this.lightsGroup;
   }

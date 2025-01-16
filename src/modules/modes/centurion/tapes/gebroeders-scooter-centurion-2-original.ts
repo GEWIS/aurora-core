@@ -63,7 +63,7 @@ const centurion2Original: MixTape = {
           type: 'effect',
           data: {
             effects: {
-              pars: [Wave.build({ color: RgbColor.GOLD, singleWave: true, cycleTime: 1000 })],
+              pars: [Wave.build({ colors: [RgbColor.GOLD], singleWave: true, cycleTime: 1000 })],
             },
           },
         }),
