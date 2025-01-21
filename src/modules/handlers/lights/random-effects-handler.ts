@@ -35,11 +35,7 @@ export default class RandomEffectsHandler extends EffectsHandler {
       if (random < 0.8) {
         this.groupColorEffects.set(
           entity,
-          new BeatFadeOut(
-            entity,
-            { colors: this.colors, enableFade: false, nrBlacks: 1 },
-            this.trackFeatures,
-          ),
+          new BeatFadeOut(entity, { colors: this.colors, enableFade: false, nrBlacks: 1 }),
         );
       } else if (random < 0.9) {
         this.groupColorEffects.set(entity, new Wave(entity, { colors: this.colors }));

@@ -9,7 +9,6 @@ import {
   LightsGroup,
 } from '../lights/entities';
 import HandlerManager from './handler-manager';
-import { TrackPropertiesEvent } from '../events/music-emitter-events';
 import { SocketioNamespaces } from '../../socketio-namespaces';
 
 const DMX_VALUES_LENGTH = 512;
@@ -50,8 +49,6 @@ export default class LightsControllerManager {
       this.lightsControllersValues.set(c.id, this.constructNewValuesArray());
     });
 
-    musicEmitter.on('features', this.setTrackFeatures.bind(this));
-
     // Tick rate (currently 35Hz)
     setInterval(this.tick.bind(this), Number(process.env.LIGHTS_TICK_INTERVAL) ?? 29);
   }
@@ -88,10 +85,6 @@ export default class LightsControllerManager {
 
   private get lightsHandlers() {
     return this.handlerManager.getHandlers(LightsGroup) as BaseLightsHandler[];
-  }
-
-  private setTrackFeatures(event: TrackPropertiesEvent) {
-    this.lightsHandlers.forEach((h) => h.setFeatures(event));
   }
 
   /**

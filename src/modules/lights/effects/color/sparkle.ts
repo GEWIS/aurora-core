@@ -3,9 +3,7 @@ import LightsEffect, {
   BaseLightsEffectProps,
   LightsEffectBuilder,
 } from '../lights-effect';
-import { RgbColor } from '../../color-definitions';
 import { LightsGroup } from '../../entities';
-import { TrackPropertiesEvent } from '../../../events/music-emitter-events';
 import { ColorEffects } from './color-effects';
 
 export interface SparkleProps extends BaseLightsEffectProps {
@@ -51,10 +49,9 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
   /**
    * @param lightsGroup The group of lights this effect will be applied to
    * @param props
-   * @param features
    */
-  constructor(lightsGroup: LightsGroup, props: SparkleProps, features?: TrackPropertiesEvent) {
-    super(lightsGroup, undefined, undefined, undefined, features);
+  constructor(lightsGroup: LightsGroup, props: SparkleProps) {
+    super(lightsGroup);
 
     const nrFixtures = lightsGroup.pars.length + lightsGroup.movingHeadRgbs.length;
     this.beats = new Array(nrFixtures).fill(new Date(0));
@@ -64,8 +61,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
   }
 
   public static build(props: SparkleProps): LightsEffectBuilder<SparkleProps, Sparkle> {
-    return (lightsGroup: LightsGroup, features?: TrackPropertiesEvent) =>
-      new Sparkle(lightsGroup, props, features);
+    return (lightsGroup: LightsGroup) => new Sparkle(lightsGroup, props);
   }
 
   /**

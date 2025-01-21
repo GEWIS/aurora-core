@@ -1,5 +1,4 @@
 import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
-import { TrackPropertiesEvent } from '../../../events/music-emitter-events';
 import { LightsGroup } from '../../entities';
 
 interface FireProps {}
@@ -10,13 +9,12 @@ export type FireCreateParams = BaseLightsEffectCreateParams & {
 };
 
 export default class Fire extends LightsEffect<FireProps> {
-  constructor(lightsGroup: LightsGroup, props?: FireProps, features?: TrackPropertiesEvent) {
-    super(lightsGroup, undefined, undefined, undefined, features);
+  constructor(lightsGroup: LightsGroup, props?: FireProps) {
+    super(lightsGroup);
   }
 
   public static build(props?: FireProps): LightsEffectBuilder<FireProps, Fire> {
-    return (lightsGroup: LightsGroup, features?: TrackPropertiesEvent) =>
-      new Fire(lightsGroup, props, features);
+    return (lightsGroup: LightsGroup) => new Fire(lightsGroup, props);
   }
 
   beat(): void {}
