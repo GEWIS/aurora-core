@@ -1,4 +1,4 @@
-import { BeatEvent, TrackPropertiesEvent } from '../../events/music-emitter-events';
+import { BeatEvent } from '../../events/music-emitter-events';
 import { LightsGroup } from '../entities';
 import EffectProgressionStrategy from './progression-strategies/effect-progression-strategy';
 import LightsGroupFixture from '../entities/lights-group-fixture';
@@ -9,7 +9,6 @@ import { RgbColor } from '../color-definitions';
 
 export type LightsEffectBuilder<P = {}, T extends LightsEffect<P> = LightsEffect<P>> = (
   lightsGroup: LightsGroup,
-  features?: TrackPropertiesEvent,
 ) => T;
 
 export interface BaseLightsEffectProps {
@@ -43,7 +42,6 @@ export default abstract class LightsEffect<P = {}> {
     private readonly progressionStrategy?: EffectProgressionStrategy,
     progressionMapperStrategy?: EffectProgressionMapStrategy,
     private patternDirection = LightsEffectDirection.FORWARDS,
-    protected features?: TrackPropertiesEvent,
   ) {
     if (!progressionMapperStrategy) {
       this.progressionMapperStrategy = new EffectProgressionMapFactory(this.lightsGroup).getMapper(

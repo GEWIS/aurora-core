@@ -1,6 +1,5 @@
 import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
 import { LightsGroup } from '../../entities';
-import { TrackPropertiesEvent } from '../../../events/music-emitter-events';
 import { ColorEffects } from './color-effects';
 
 export interface StrobeProps {
@@ -18,8 +17,8 @@ export type StrobeCreateParams = BaseLightsEffectCreateParams & {
 };
 
 export default class Strobe extends LightsEffect<StrobeProps> {
-  constructor(lightsGroup: LightsGroup, props: StrobeProps, features?: TrackPropertiesEvent) {
-    super(lightsGroup, undefined, undefined, undefined, features);
+  constructor(lightsGroup: LightsGroup, props: StrobeProps) {
+    super(lightsGroup);
     this.props = props;
 
     this.lightsGroup.pars.forEach((p) => {
@@ -46,6 +45,6 @@ export default class Strobe extends LightsEffect<StrobeProps> {
   }
 
   public static build(props: StrobeProps): LightsEffectBuilder<StrobeProps, Strobe> {
-    return (lightsGroup, features) => new Strobe(lightsGroup, props, features);
+    return (lightsGroup) => new Strobe(lightsGroup, props);
   }
 }

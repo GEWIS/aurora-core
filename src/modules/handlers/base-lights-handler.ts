@@ -1,18 +1,7 @@
 import BaseHandler from './base-handler';
 import { LightsGroup } from '../lights/entities';
-import { TrackPropertiesEvent } from '../events/music-emitter-events';
 
 export default abstract class BaseLightsHandler extends BaseHandler<LightsGroup> {
-  protected trackFeatures?: TrackPropertiesEvent;
-
-  /**
-   * Set the bpm of the current song. Zero (0) if no bpm
-   * @param features
-   */
-  public setFeatures(features: TrackPropertiesEvent): void {
-    this.trackFeatures = features;
-  }
-
   /**
    * Second event loop to calculate the current DMX values.
    * Always runs at a predefined frequency, defined in `LIGHTS_TICK_INTERVAL` (in Hz).

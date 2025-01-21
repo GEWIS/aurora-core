@@ -20,7 +20,7 @@ export default class SetEffectsHandler extends EffectsHandler {
     this.destroyEffect(effectsMap.get(lightsGroup));
     effectsMap.set(
       lightsGroup,
-      effects.map((e) => e(lightsGroup, this.trackFeatures)),
+      effects.map((e) => e(lightsGroup)),
     );
   }
 

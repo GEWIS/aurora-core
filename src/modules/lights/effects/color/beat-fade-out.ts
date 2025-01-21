@@ -4,14 +4,13 @@ import LightsEffect, {
   BaseLightsEffectProps,
   LightsEffectBuilder,
 } from '../lights-effect';
-import { BeatEvent, TrackPropertiesEvent } from '../../../events/music-emitter-events';
+import { BeatEvent } from '../../../events/music-emitter-events';
 import {
   LightsGroup,
   LightsGroupMovingHeadRgbs,
   LightsGroupMovingHeadWheels,
   LightsGroupPars,
 } from '../../entities';
-import { RgbColor } from '../../color-definitions';
 import { ColorEffects } from './color-effects';
 import {
   EffectProgressionBeatStrategy,
@@ -19,7 +18,6 @@ import {
 } from '../progression-strategies';
 import EffectProgressionStrategy from '../progression-strategies/effect-progression-strategy';
 import LightsGroupFixture from '../../entities/lights-group-fixture';
-import { LightsEffectDirection, LightsEffectPattern } from '../lights-effect-pattern';
 import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
 
 export interface BeatFadeOutProps extends BaseLightsEffectProps, BaseLightsEffectProgressionProps {
@@ -57,7 +55,7 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
 
   private beatLength: number = 1; // in ms;
 
-  constructor(lightsGroup: LightsGroup, props: BeatFadeOutProps, features?: TrackPropertiesEvent) {
+  constructor(lightsGroup: LightsGroup, props: BeatFadeOutProps) {
     const nrSteps = props.colors.length + (props.nrBlacks ?? 0);
 
     const progressionMapperStrategy = new EffectProgressionMapFactory(lightsGroup).getMapper(
@@ -74,7 +72,7 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
       );
     }
 
-    super(lightsGroup, progressionStrategy, progressionMapperStrategy, props.direction, features);
+    super(lightsGroup, progressionStrategy, progressionMapperStrategy, props.direction);
 
     this.nrSteps = nrSteps;
     this.props = props;
@@ -91,8 +89,7 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
    * @param props
    */
   public static build(props: BeatFadeOutProps): LightsEffectBuilder<BeatFadeOutProps, BeatFadeOut> {
-    return (lightsGroup: LightsGroup, features?: TrackPropertiesEvent) =>
-      new BeatFadeOut(lightsGroup, props, features);
+    return (lightsGroup: LightsGroup) => new BeatFadeOut(lightsGroup, props);
   }
 
   destroy(): void {}

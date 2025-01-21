@@ -1,8 +1,6 @@
 import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from '../lights-effect';
-
 import { LightsGroup } from '../../entities';
 import { RgbColor } from '../../color-definitions';
-import { TrackPropertiesEvent } from '../../../events/music-emitter-events';
 import { ColorEffects } from './color-effects';
 
 export interface StaticColorProps {
@@ -57,8 +55,8 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
 
   private cycleStartTick: Date = new Date();
 
-  constructor(lightsGroup: LightsGroup, props: StaticColorProps, features?: TrackPropertiesEvent) {
-    super(lightsGroup, undefined, undefined, undefined, features);
+  constructor(lightsGroup: LightsGroup, props: StaticColorProps) {
+    super(lightsGroup);
     this.props = props;
 
     this.lightsGroup.fixtures.forEach((f) => {
@@ -76,7 +74,7 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
   }
 
   public static build(props: StaticColorProps): LightsEffectBuilder<StaticColorProps, StaticColor> {
-    return (lightsGroup, features) => new StaticColor(lightsGroup, props, features);
+    return (lightsGroup) => new StaticColor(lightsGroup, props);
   }
 
   beat(): void {
