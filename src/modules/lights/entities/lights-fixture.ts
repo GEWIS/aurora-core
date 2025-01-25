@@ -1,5 +1,6 @@
 import { AfterLoad, Column } from 'typeorm';
 import BaseEntity from '../../root/entities/base-entity';
+import { RgbColor } from '../color-definitions';
 
 export interface LightsFixtureCurrentValues extends Pick<LightsFixture, 'masterDimChannel'> {}
 
@@ -28,6 +29,8 @@ export default abstract class LightsFixture extends BaseEntity {
     nullable: true,
   })
   public resetChannelAndValue?: number[] | null;
+
+  public currentMasterDim: number | undefined;
 
   public valuesUpdatedAt: Date;
 
@@ -86,6 +89,14 @@ export default abstract class LightsFixture extends BaseEntity {
     this.valuesUpdatedAt = new Date();
   }
 
+  public abstract setColor(color: RgbColor): void;
+  public abstract resetColor(): void;
+
+  public setMasterDimmer(value: number) {
+    this.currentMasterDim = value;
+    this.valuesUpdatedAt = new Date();
+  }
+
   /**
    * Override any set relative DMX channels with the given values.
    * Undefined if a channel should not be overriden
@@ -119,9 +130,53 @@ export default abstract class LightsFixture extends BaseEntity {
   }
 
   /**
+   * Apply a blackout to this fixture, i.e. set all channels to zero
+   * @protected
+   */
+  public abstract blackout(): void;
+
+  /**
+   * Get the DMX channels that should be used when the fixture should strobe
+   * @protected
+   */
+  protected abstract getStrobeDMX(): number[];
+
+  /**
+   * Get the DMX channels that are created from the channel values
+   * @protected
+   */
+  protected abstract getDmxFromCurrentValues(): number[];
+
+  /**
    * Get the current DMX values as an 16-length array of integers.
    */
-  abstract toDmx(): number[];
+  toDmx(): number[] {
+    if (this.strobeEnabled) return this.getStrobeDMX();
+
+    if (this.frozenDmx != null && this.frozenDmx.length > 0) {
+      return this.frozenDmx;
+    }
+
+    let values: number[] = this.getDmxFromCurrentValues();
+    values = this.applyDmxOverride(values);
+
+    if (this.shouldReset !== undefined) {
+      if (new Date().getTime() - this.shouldReset.getTime() > 5000) {
+        this.shouldReset = undefined;
+      }
+      if (this.resetChannelAndValue && this.resetChannelAndValue.length >= 2) {
+        const [channel, value] = this.resetChannelAndValue;
+        values[channel - 1] = value;
+        this.valuesUpdatedAt = new Date();
+      }
+    }
+
+    if (this.shouldFreezeDmx) {
+      this.frozenDmx = values;
+    }
+
+    return values;
+  }
 
   /**
    * Store the next state of the fixture and do not change anymore

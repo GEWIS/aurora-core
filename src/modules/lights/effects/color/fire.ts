@@ -22,11 +22,12 @@ export default class Fire extends LightsEffect<FireProps> {
   destroy(): void {}
 
   tick(): LightsGroup {
-    this.lightsGroup.pars.forEach((p) => {
-      p.fixture.setCurrentValues({
-        masterDimChannel: 128,
+    [...this.lightsGroup.pars, ...this.lightsGroup.movingHeadRgbs].forEach((p) => {
+      p.fixture.setMasterDimmer(128);
+      p.fixture.setCustomColor({
         redChannel: 255,
         greenChannel: 32 + Math.round(Math.random() * 64),
+        blueChannel: 0,
         amberChannel: 128,
       });
     });

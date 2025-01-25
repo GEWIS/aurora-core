@@ -8,12 +8,12 @@ import {
 } from '../lights/entities';
 import dataSource from '../../database';
 import LightsFixture from '../lights/entities/lights-fixture';
-import Colors from '../lights/entities/colors';
+import ColorsRgb, { IColorsRgb } from '../lights/entities/colors-rgb';
 import LightsMovingHead from '../lights/entities/lights-moving-head';
 import LightsGroupPars from '../lights/entities/lights-group-pars';
 import LightsGroupMovingHeadRgbs from '../lights/entities/lights-group-moving-head-rgbs';
 import LightsGroupMovingHeadWheels from '../lights/entities/lights-group-moving-head-wheels';
-import Movement from '../lights/entities/movement';
+import Movement, { IMovement } from '../lights/entities/movement';
 import AuthService from '../auth/auth-service';
 import LightsParShutterOptions from '../lights/entities/lights-par-shutter-options';
 import LightsMovingHeadRgbShutterOptions from '../lights/entities/lights-moving-head-rgb-shutter-options';
@@ -22,6 +22,7 @@ import LightsFixtureShutterOptions, {
   ShutterOption,
 } from '../lights/entities/lights-fixture-shutter-options';
 import { WheelColor } from '../lights/color-definitions';
+import ColorsWheel, { IColorsWheel } from '../lights/entities/colors-wheel';
 
 export interface LightsControllerResponse
   extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
@@ -47,13 +48,13 @@ export interface LightsFixtureResponse
 // prettier-ignore
 export interface ColorResponse
   extends Pick<
-    Colors,
+    ColorsRgb,
     'redChannel' | 'blueChannel' | 'greenChannel' | 'coldWhiteChannel' | 'warmWhiteChannel' | 'amberChannel' | 'uvChannel'
   > {}
 
 export interface ParResponse extends LightsFixtureResponse, ColorResponse {}
 
-export interface MovingHeadResponse extends LightsFixtureResponse, Movement {}
+export interface MovingHeadResponse extends LightsFixtureResponse, IMovement {}
 
 export interface MovingHeadRgbResponse extends MovingHeadResponse, ColorResponse {}
 
@@ -62,12 +63,13 @@ export interface MovingHeadWheelColorChannelValueResponse {
   channelValue: number;
 }
 
-export interface MovingHeadWheelResponse
-  extends MovingHeadResponse,
-    Pick<LightsMovingHeadWheel, 'colorWheelChannel' | 'goboWheelChannel' | 'goboRotateChannel'> {
+export interface MovingHeadWheelResponse extends MovingHeadResponse {
+  wheelColorChannel: number;
+  wheelColorChannelValues: MovingHeadWheelColorChannelValueResponse[];
+  wheelGoboChannel: number;
   gobos: string[];
+  wheelGoboRotateChannel: number | null;
   goboRotates: string[];
-  colorChannelValues: MovingHeadWheelColorChannelValueResponse[];
 }
 
 export interface FixtureInGroupResponse<
@@ -198,7 +200,7 @@ export default class RootLightsService {
     this.groupRepository = dataSource.getRepository(LightsGroup);
   }
 
-  private static toColorResponse(c: Colors, firstChannel: number): ColorResponse {
+  private static toColorResponse(c: ColorsRgb, firstChannel: number): ColorResponse {
     return {
       redChannel: c.redChannel + firstChannel - 1,
       blueChannel: c.blueChannel + firstChannel - 1,
@@ -210,7 +212,7 @@ export default class RootLightsService {
     };
   }
 
-  private static toMovementResponse(m: Movement, firstChannel: number): Movement {
+  private static toMovementResponse(m: Movement, firstChannel: number): IMovement {
     return {
       tiltChannel: m.tiltChannel + firstChannel - 1,
       fineTiltChannel: m.fineTiltChannel ? m.fineTiltChannel + firstChannel - 1 : null,
@@ -284,15 +286,17 @@ export default class RootLightsService {
   ): MovingHeadWheelResponse {
     return {
       ...this.toMovingHeadResponse(m, firstChannel),
-      colorWheelChannel: m.colorWheelChannel + firstChannel - 1,
-      colorChannelValues: m.colorWheelChannelValues.map((x) => ({
+      wheelColorChannel: m.wheel.colorChannel + firstChannel - 1,
+      wheelColorChannelValues: m.wheel.colorChannelValues.map((x) => ({
         color: x.name,
         channelValue: x.value,
       })),
-      goboWheelChannel: m.goboWheelChannel + firstChannel - 1,
-      goboRotateChannel: m.goboRotateChannel ? m.goboRotateChannel + firstChannel - 1 : null,
-      gobos: m.goboWheelChannelValues.map((v) => v.name),
-      goboRotates: m.goboRotateChannelValues.map((v) => v.name),
+      wheelGoboChannel: m.wheel.goboChannel + firstChannel - 1,
+      wheelGoboRotateChannel: m.wheel.goboRotateChannel
+        ? m.wheel.goboRotateChannel + firstChannel - 1
+        : null,
+      gobos: m.wheel.goboChannelValues.map((v) => v.name),
+      goboRotates: m.wheel.goboRotateChannelValues.map((v) => v.name),
       shutterChannelValues: this.getShutterChannelsResponse(m.shutterOptions),
     };
   }
@@ -457,7 +461,7 @@ export default class RootLightsService {
     } as LightsFixture;
   }
 
-  private toColor(params: ColorParams): Colors {
+  private toColorRgb(params: ColorParams): IColorsRgb {
     return {
       redChannel: params.colorRedChannel,
       blueChannel: params.colorBlueChannel,
@@ -477,6 +481,14 @@ export default class RootLightsService {
       fineTiltChannel: params.fineTiltChannel,
       movingSpeedChannel: params.movingSpeedChannel,
     } as Movement;
+  }
+
+  private toColorWheel(params: LightsMovingHeadWheelCreateParams): IColorsWheel {
+    return {
+      colorChannel: params.colorWheelChannel,
+      goboChannel: params.goboWheelChannel,
+      goboRotateChannel: params.goboRotateChannel,
+    };
   }
 
   public async getAllLightsPars(): Promise<LightsPar[]> {
@@ -518,7 +530,7 @@ export default class RootLightsService {
     const repository = dataSource.getRepository(LightsPar);
     const par = await repository.save({
       ...this.toFixture(params),
-      color: this.toColor(params),
+      color: this.toColorRgb(params),
     });
     par.shutterOptions = (await this.createFixtureShutterOptions(
       dataSource.getRepository(LightsParShutterOptions),
@@ -535,7 +547,7 @@ export default class RootLightsService {
     const movingHead = await repository.save({
       ...this.toFixture(params),
       movement: this.toMovement(params),
-      color: this.toColor(params),
+      color: this.toColorRgb(params),
     });
     movingHead.shutterOptions = (await this.createFixtureShutterOptions(
       dataSource.getRepository(LightsMovingHeadRgbShutterOptions),
@@ -552,9 +564,7 @@ export default class RootLightsService {
     const movingHead = await repository.save({
       ...this.toFixture(params),
       movement: this.toMovement(params),
-      colorWheelChannel: params.colorWheelChannel,
-      goboWheelChannel: params.goboWheelChannel,
-      goboRotateChannel: params.goboRotateChannel,
+      wheel: this.toColorWheel(params),
     });
     movingHead.shutterOptions = (await this.createFixtureShutterOptions(
       dataSource.getRepository(LightsMovingHeadWheelShutterOptions),
