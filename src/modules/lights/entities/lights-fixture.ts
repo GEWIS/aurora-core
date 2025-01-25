@@ -47,9 +47,6 @@ export default abstract class LightsFixture extends BaseEntity {
     return true;
   }
 
-  public abstract get masterDimChannel(): number;
-  public abstract get shutterChannel(): number;
-
   public abstract setColor(color: RgbColor): void;
   public abstract resetColor(): void;
 

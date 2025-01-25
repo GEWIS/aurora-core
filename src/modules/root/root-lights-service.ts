@@ -22,7 +22,7 @@ import LightsFixtureShutterOptions, {
   ShutterOption,
 } from '../lights/entities/lights-fixture-shutter-options';
 import { WheelColor } from '../lights/color-definitions';
-import ColorsWheel, { IColorsWheel } from '../lights/entities/colors-wheel';
+import { IColorsWheel } from '../lights/entities/colors-wheel';
 
 export interface LightsControllerResponse
   extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
@@ -33,10 +33,7 @@ export interface ShutterChannelValuesResponse {
 }
 
 export interface LightsFixtureResponse
-  extends Pick<
-    LightsFixture,
-    'id' | 'createdAt' | 'updatedAt' | 'name' | 'masterDimChannel' | 'shutterChannel'
-  > {
+  extends Pick<LightsFixture, 'id' | 'createdAt' | 'updatedAt' | 'name'> {
   canReset: boolean;
   resetChannel?: number;
   resetChannelValue?: number;
@@ -49,7 +46,7 @@ export interface LightsFixtureResponse
 export interface ColorResponse
   extends Pick<
     ColorsRgb,
-    'redChannel' | 'blueChannel' | 'greenChannel' | 'coldWhiteChannel' | 'warmWhiteChannel' | 'amberChannel' | 'uvChannel'
+    'masterDimChannel' | 'shutterChannel' | 'redChannel' | 'blueChannel' | 'greenChannel' | 'coldWhiteChannel' | 'warmWhiteChannel' | 'amberChannel' | 'uvChannel'
   > {}
 
 export interface ParResponse extends LightsFixtureResponse, ColorResponse {}
@@ -64,6 +61,8 @@ export interface MovingHeadWheelColorChannelValueResponse {
 }
 
 export interface MovingHeadWheelResponse extends MovingHeadResponse {
+  masterDimChannel: number;
+  shutterChannel?: number;
   wheelColorChannel: number;
   wheelColorChannelValues: MovingHeadWheelColorChannelValueResponse[];
   wheelGoboChannel: number;
@@ -95,6 +94,8 @@ export interface LightsGroupResponse extends BaseLightsGroupResponse {
 }
 
 export interface ColorParams {
+  masterDimChannel?: number;
+  shutterChannel?: number;
   colorRedChannel: number;
   colorGreenChannel: number;
   colorBlueChannel: number;
@@ -109,9 +110,8 @@ export interface ShutterOptionValues {
   strobe: number;
 }
 
-export interface LightsFixtureParams
-  extends Pick<LightsFixture, 'name' | 'masterDimChannel' | 'shutterChannel'> {
-  shutterOptionValues: ShutterOptionValues;
+export interface LightsFixtureParams extends Pick<LightsFixture, 'name'> {
+  shutterOptionValues?: ShutterOptionValues;
 }
 
 export interface LightsParCreateParams extends LightsFixtureParams, ColorParams {}
@@ -127,6 +127,8 @@ export interface LightsMovingHeadParams extends LightsFixtureParams {
 export interface LightsMovingHeadRgbCreateParams extends LightsMovingHeadParams, ColorParams {}
 
 export interface LightsMovingHeadWheelCreateParams extends LightsMovingHeadParams {
+  masterDimChannel: number;
+  shutterChannel?: number;
   colorWheelChannel: number;
   colorWheelChannelValues: {
     name: string;
@@ -202,6 +204,8 @@ export default class RootLightsService {
 
   private static toColorResponse(c: ColorsRgb, firstChannel: number): ColorResponse {
     return {
+      masterDimChannel: c.masterDimChannel ? c.masterDimChannel + firstChannel - 1 : undefined,
+      shutterChannel: c.shutterChannel ? c.shutterChannel + firstChannel - 1 : undefined,
       redChannel: c.redChannel + firstChannel - 1,
       blueChannel: c.blueChannel + firstChannel - 1,
       greenChannel: c.greenChannel + firstChannel - 1,
@@ -230,8 +234,6 @@ export default class RootLightsService {
       createdAt: f.createdAt,
       updatedAt: f.updatedAt,
       name: f.name,
-      masterDimChannel: f.masterDimChannel + firstChannel - 1,
-      shutterChannel: f.shutterChannel + firstChannel - 1,
       shutterChannelValues: {},
       canReset,
       resetChannel: canReset ? f.resetChannelAndValue![0] + firstChannel - 1 : undefined,
@@ -286,6 +288,8 @@ export default class RootLightsService {
   ): MovingHeadWheelResponse {
     return {
       ...this.toMovingHeadResponse(m, firstChannel),
+      masterDimChannel: m.wheel.masterDimChannel,
+      shutterChannel: m.wheel.shutterChannel,
       wheelColorChannel: m.wheel.colorChannel + firstChannel - 1,
       wheelColorChannelValues: m.wheel.colorChannelValues.map((x) => ({
         color: x.name,
@@ -508,8 +512,9 @@ export default class RootLightsService {
       | LightsMovingHeadWheelShutterOptions
     >,
     fixture: LightsFixture,
-    params: ShutterOptionValues,
+    params: ShutterOptionValues | undefined,
   ): Promise<LightsFixtureShutterOptions[]> {
+    if (!params) return [];
     return Promise.all([
       repo.save({
         fixtureId: fixture.id,
@@ -531,7 +536,7 @@ export default class RootLightsService {
       color: {
         ...this.toColorRgb(params),
         masterDimChannel: params.masterDimChannel,
-        shutterChannel: params.shutterChannel,
+        shutterChannel: params.shutterOptionValues ? params.shutterChannel : undefined,
       },
     });
     par.shutterOptions = (await this.createFixtureShutterOptions(
@@ -552,7 +557,7 @@ export default class RootLightsService {
       color: {
         ...this.toColorRgb(params),
         masterDimChannel: params.masterDimChannel,
-        shutterChannel: params.shutterChannel,
+        shutterChannel: params.shutterOptionValues ? params.shutterChannel : undefined,
       },
     });
     movingHead.shutterOptions = (await this.createFixtureShutterOptions(
@@ -573,7 +578,7 @@ export default class RootLightsService {
       wheel: {
         ...this.toColorWheel(params),
         masterDimChannel: params.masterDimChannel,
-        shutterChannel: params.shutterChannel,
+        shutterChannel: params.shutterOptionValues ? params.shutterChannel : undefined,
       },
     });
     movingHead.shutterOptions = (await this.createFixtureShutterOptions(

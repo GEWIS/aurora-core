@@ -17,8 +17,8 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
   @Column({ type: 'tinyint', unsigned: true })
   public masterDimChannel: number;
 
-  @Column({ type: 'tinyint', unsigned: true })
-  public shutterChannel: number;
+  @Column({ type: 'tinyint', unsigned: true, nullable: true })
+  public shutterChannel?: number;
 
   @Column({ type: 'tinyint', unsigned: true })
   public colorChannel: number;
@@ -37,6 +37,8 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
 
   @OneToMany(() => LightsWheelRotateChannelValue, (c) => c.movingHead, { eager: true })
   public goboRotateChannelValues: LightsWheelRotateChannelValue[];
+
+  private strobePing = false;
 
   private currentValues: IColorsWheel = {
     colorChannel: 0,
@@ -82,19 +84,34 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
   }
 
   public setStrobeInDmx(values: number[], shutterOptions: LightsFixtureShutterOptions[]): number[] {
-    values[this.masterDimChannel - 1] = 255;
-    values[this.shutterChannel - 1] =
-      shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
+    if (this.shutterChannel)
+      values[this.shutterChannel - 1] =
+        shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
     values[this.colorChannel - 1] =
       this.colorChannelValues.find((o) => o.name === WheelColor.WHITE)?.value ?? 0;
 
+    if (this.shutterChannel || this.strobePing) {
+      // If we have a shutter channel or we should manually strobe,
+      // turn on the light
+      values[this.masterDimChannel - 1] = 255;
+    } else if (!this.shutterChannel) {
+      // If we do not have a shutter channel and the ping is off,
+      // turn off the light
+      values[this.masterDimChannel - 1] = 0;
+    }
+
+    // If we have no shutter channel, manually flip the strobe bit
+    if (!this.shutterChannel) {
+      this.strobePing = !this.strobePing;
+    }
     return values;
   }
 
   public setColorsInDmx(values: number[], shutterOptions: LightsFixtureShutterOptions[]): number[] {
     values[this.masterDimChannel - 1] = Math.round(this.currentBrightness * 255);
-    values[this.shutterChannel - 1] =
-      shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
+    if (this.shutterChannel)
+      values[this.shutterChannel - 1] =
+        shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
     values[this.colorChannel - 1] = this.channelValues.colorChannel;
     values[this.goboChannel - 1] = this.channelValues.goboChannel;
     if (this.goboRotateChannel != null) {

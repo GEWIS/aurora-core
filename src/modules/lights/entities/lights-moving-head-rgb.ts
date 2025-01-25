@@ -13,14 +13,6 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
   @Column(() => ColorsRgb)
   public color: ColorsRgb;
 
-  public get masterDimChannel(): number {
-    return this.color.masterDimChannel;
-  }
-
-  public get shutterChannel(): number {
-    return this.color.shutterChannel;
-  }
-
   public setColor(color: RgbColor) {
     this.valuesUpdatedAt = new Date();
     this.color.setColor(color);
@@ -41,12 +33,12 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
     this.color.reset();
   }
 
-  public disableStrobe(): void {
+  public enableStrobe(milliseconds?: number): void {
     this.valuesUpdatedAt = new Date();
-    this.color.disableStrobe();
+    this.color.enableStrobe(milliseconds);
   }
 
-  public enableStrobe(milliseconds?: number): void {
+  public disableStrobe(): void {
     this.valuesUpdatedAt = new Date();
     this.color.disableStrobe();
   }
@@ -69,6 +61,13 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
 
     values = this.color.setStrobeInDmx(values, this.shutterOptions);
     values = this.setPositionInDmx(values);
+
+    if (!this.color.shutterChannel) {
+      // The getStrobeInDmx() value changes its state if we need to
+      // strobe manually. Because of optimizations, we need to also
+      // indicate the state has changed.
+      this.valuesUpdatedAt = new Date(new Date().getTime() + 1000);
+    }
 
     return values;
   }
