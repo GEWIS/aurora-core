@@ -1,5 +1,7 @@
 import { Column } from 'typeorm';
 import { RgbColor, rgbColorDefinitions } from '../color-definitions';
+import LightsFixtureShutterOptions, { ShutterOption } from './lights-fixture-shutter-options';
+import Colors from './colors';
 
 export type ColorChannel = keyof ColorsRgb;
 
@@ -13,7 +15,13 @@ export interface IColorsRgb {
   uvChannel?: number | null;
 }
 
-export default class ColorsRgb implements IColorsRgb {
+export default class ColorsRgb extends Colors implements IColorsRgb {
+  @Column({ type: 'tinyint', unsigned: true })
+  public masterDimChannel: number;
+
+  @Column({ type: 'tinyint', unsigned: true })
+  public shutterChannel: number;
+
   @Column({ type: 'tinyint', unsigned: true })
   public redChannel: number;
 
@@ -69,7 +77,23 @@ export default class ColorsRgb implements IColorsRgb {
     return this.currentValues;
   }
 
-  public setColorsInDmx(values: number[]): number[] {
+  public setStrobeInDmx(values: number[], shutterOptions: LightsFixtureShutterOptions[]): number[] {
+    values[this.masterDimChannel - 1] = 255;
+    values[this.shutterChannel - 1] =
+      shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
+    values[this.redChannel - 1] = 255;
+    values[this.blueChannel - 1] = 255;
+    values[this.greenChannel - 1] = 255;
+    if (this.warmWhiteChannel) values[this.warmWhiteChannel - 1] = 255;
+    if (this.coldWhiteChannel) values[this.coldWhiteChannel - 1] = 255;
+    if (this.amberChannel) values[this.amberChannel - 1] = 255;
+    return values;
+  }
+
+  public setColorsInDmx(values: number[], shutterOptions: LightsFixtureShutterOptions[]): number[] {
+    values[this.masterDimChannel - 1] = Math.round(this.currentBrightness * 255);
+    values[this.shutterChannel - 1] =
+      shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
     values[this.redChannel - 1] = this.channelValues.redChannel;
     values[this.greenChannel - 1] = this.channelValues.greenChannel;
     values[this.blueChannel - 1] = this.channelValues.blueChannel;

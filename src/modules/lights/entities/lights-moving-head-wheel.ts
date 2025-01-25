@@ -1,8 +1,7 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import LightsMovingHead from './lights-moving-head';
-import { RgbColor, WheelColor } from '../color-definitions';
+import { RgbColor } from '../color-definitions';
 import LightsMovingHeadWheelShutterOptions from './lights-moving-head-wheel-shutter-options';
-import { ShutterOption } from './lights-fixture-shutter-options';
 import ColorsWheel from './colors-wheel';
 
 @Entity()
@@ -12,6 +11,14 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
 
   @Column(() => ColorsWheel)
   public wheel: ColorsWheel;
+
+  public get masterDimChannel(): number {
+    return this.wheel.masterDimChannel;
+  }
+
+  public get shutterChannel(): number {
+    return this.wheel.shutterChannel;
+  }
 
   public setColor(color: RgbColor) {
     this.valuesUpdatedAt = new Date();
@@ -38,18 +45,33 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     this.wheel.reset();
   }
 
+  public disableStrobe(): void {
+    this.valuesUpdatedAt = new Date();
+    this.wheel.disableStrobe();
+  }
+
+  public enableStrobe(milliseconds?: number): void {
+    this.valuesUpdatedAt = new Date();
+    this.wheel.disableStrobe();
+  }
+
+  public setBrightness(brightness: number): void {
+    this.valuesUpdatedAt = new Date();
+    this.wheel.setBrightness(brightness);
+  }
+
+  protected strobeEnabled(): boolean {
+    return this.wheel.strobeEnabled();
+  }
+
   /**
    * Get the DMX packet for a strobing light
    * @protected
    */
   protected getStrobeDMX(): number[] {
     let values: number[] = new Array(16).fill(0);
-    values[this.masterDimChannel - 1] = 255;
-    values[this.shutterChannel - 1] =
-      this.shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
-    values[this.wheel.colorChannel - 1] =
-      this.wheel.colorChannelValues.find((o) => o.name === WheelColor.WHITE)?.value ?? 0;
 
+    values = this.wheel.setStrobeInDmx(values, this.shutterOptions);
     values = this.setPositionInDmx(values);
 
     return values;
@@ -58,11 +80,7 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
   public getDmxFromCurrentValues(): number[] {
     let values: number[] = new Array(16).fill(0);
 
-    values[this.masterDimChannel - 1] = Math.round(this.currentBrightness * 255);
-    values[this.shutterChannel - 1] =
-      this.shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
-
-    values = this.wheel.setColorsInDmx(values);
+    values = this.wheel.setColorsInDmx(values, this.shutterOptions);
     values = this.setPositionInDmx(values);
 
     return values;

@@ -2,17 +2,9 @@ import { AfterLoad, Column } from 'typeorm';
 import BaseEntity from '../../root/entities/base-entity';
 import { RgbColor } from '../color-definitions';
 
-export interface LightsFixtureCurrentValues extends Pick<LightsFixture, 'masterDimChannel'> {}
-
 export default abstract class LightsFixture extends BaseEntity {
   @Column()
   public name: string;
-
-  @Column({ type: 'tinyint', unsigned: true })
-  public masterDimChannel: number;
-
-  @Column({ type: 'tinyint', unsigned: true })
-  public shutterChannel: number;
 
   @Column({
     type: 'varchar',
@@ -30,8 +22,6 @@ export default abstract class LightsFixture extends BaseEntity {
   })
   public resetChannelAndValue?: number[] | null;
 
-  public currentBrightness: number = 1;
-
   public valuesUpdatedAt: Date;
 
   private overrideDmx: (number | null)[] = new Array(16).fill(null);
@@ -47,10 +37,6 @@ export default abstract class LightsFixture extends BaseEntity {
 
   protected shouldReset: Date | undefined;
 
-  protected strobeEnabled = false;
-
-  private strobeDisableEvent: NodeJS.Timeout | undefined;
-
   /**
    * Reset the fixture if possible.
    * @return true if reset command can be sent. False otherwise
@@ -61,47 +47,22 @@ export default abstract class LightsFixture extends BaseEntity {
     return true;
   }
 
-  /**
-   * How long the strobe needs to be enabled
-   * @param milliseconds
-   */
-  enableStrobe(milliseconds?: number) {
-    this.strobeEnabled = true;
-    this.valuesUpdatedAt = new Date();
-
-    // Stop an existing stop strobe timeout if it exists
-    if (this.strobeDisableEvent) {
-      clearTimeout(this.strobeDisableEvent);
-      this.strobeDisableEvent = undefined;
-    }
-
-    // Create a stop strobe timeout if a time is given
-    if (milliseconds) {
-      this.strobeDisableEvent = setTimeout(this.disableStrobe.bind(this), milliseconds);
-    }
-  }
-
-  /**
-   * Disable the strobe if it is enabled
-   */
-  disableStrobe() {
-    this.strobeEnabled = false;
-    this.valuesUpdatedAt = new Date();
-  }
+  public abstract get masterDimChannel(): number;
+  public abstract get shutterChannel(): number;
 
   public abstract setColor(color: RgbColor): void;
   public abstract resetColor(): void;
+
+  public abstract enableStrobe(milliseconds?: number): void;
+  protected abstract strobeEnabled(): boolean;
+  public abstract disableStrobe(): void;
 
   /**
    * Set the relative brightness of the fixture.
    * Should be used by effects.
    * @param brightness Value between [0, 1]
    */
-  public setBrightness(brightness: number) {
-    // Set upper and lower bounds to 1 and 0 respectively
-    this.currentBrightness = Math.max(0, Math.min(1, brightness));
-    this.valuesUpdatedAt = new Date();
-  }
+  public abstract setBrightness(brightness: number): void;
 
   /**
    * Override any set relative DMX channels with the given values.
@@ -141,7 +102,6 @@ export default abstract class LightsFixture extends BaseEntity {
    */
   public blackout(): void {
     this.valuesUpdatedAt = new Date();
-    this.currentBrightness = 1;
   }
 
   /**
@@ -160,7 +120,7 @@ export default abstract class LightsFixture extends BaseEntity {
    * Get the current DMX values as an 16-length array of integers.
    */
   toDmx(): number[] {
-    if (this.strobeEnabled) return this.getStrobeDMX();
+    if (this.strobeEnabled()) return this.getStrobeDMX();
 
     if (this.frozenDmx != null && this.frozenDmx.length > 0) {
       return this.frozenDmx;

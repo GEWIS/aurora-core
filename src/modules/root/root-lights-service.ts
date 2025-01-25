@@ -456,8 +456,6 @@ export default class RootLightsService {
   private toFixture(params: LightsFixtureParams): LightsFixture {
     return {
       name: params.name,
-      masterDimChannel: params.masterDimChannel,
-      shutterChannel: params.shutterChannel,
     } as LightsFixture;
   }
 
@@ -530,7 +528,11 @@ export default class RootLightsService {
     const repository = dataSource.getRepository(LightsPar);
     const par = await repository.save({
       ...this.toFixture(params),
-      color: this.toColorRgb(params),
+      color: {
+        ...this.toColorRgb(params),
+        masterDimChannel: params.masterDimChannel,
+        shutterChannel: params.shutterChannel,
+      },
     });
     par.shutterOptions = (await this.createFixtureShutterOptions(
       dataSource.getRepository(LightsParShutterOptions),
@@ -547,7 +549,11 @@ export default class RootLightsService {
     const movingHead = await repository.save({
       ...this.toFixture(params),
       movement: this.toMovement(params),
-      color: this.toColorRgb(params),
+      color: {
+        ...this.toColorRgb(params),
+        masterDimChannel: params.masterDimChannel,
+        shutterChannel: params.shutterChannel,
+      },
     });
     movingHead.shutterOptions = (await this.createFixtureShutterOptions(
       dataSource.getRepository(LightsMovingHeadRgbShutterOptions),
@@ -564,7 +570,11 @@ export default class RootLightsService {
     const movingHead = await repository.save({
       ...this.toFixture(params),
       movement: this.toMovement(params),
-      wheel: this.toColorWheel(params),
+      wheel: {
+        ...this.toColorWheel(params),
+        masterDimChannel: params.masterDimChannel,
+        shutterChannel: params.shutterChannel,
+      },
     });
     movingHead.shutterOptions = (await this.createFixtureShutterOptions(
       dataSource.getRepository(LightsMovingHeadWheelShutterOptions),

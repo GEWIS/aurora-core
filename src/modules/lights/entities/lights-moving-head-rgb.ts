@@ -4,7 +4,6 @@ import ColorsRgb, { IColorsRgb } from './colors-rgb';
 import { RgbColor } from '../color-definitions';
 // eslint-disable-next-line import/no-cycle
 import LightsMovingHeadRgbShutterOptions from './lights-moving-head-rgb-shutter-options';
-import { ShutterOption } from './lights-fixture-shutter-options';
 
 @Entity()
 export default class LightsMovingHeadRgb extends LightsMovingHead {
@@ -13,6 +12,14 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
 
   @Column(() => ColorsRgb)
   public color: ColorsRgb;
+
+  public get masterDimChannel(): number {
+    return this.color.masterDimChannel;
+  }
+
+  public get shutterChannel(): number {
+    return this.color.shutterChannel;
+  }
 
   public setColor(color: RgbColor) {
     this.valuesUpdatedAt = new Date();
@@ -34,22 +41,33 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
     this.color.reset();
   }
 
+  public disableStrobe(): void {
+    this.valuesUpdatedAt = new Date();
+    this.color.disableStrobe();
+  }
+
+  public enableStrobe(milliseconds?: number): void {
+    this.valuesUpdatedAt = new Date();
+    this.color.disableStrobe();
+  }
+
+  public setBrightness(brightness: number): void {
+    this.valuesUpdatedAt = new Date();
+    this.color.setBrightness(brightness);
+  }
+
+  protected strobeEnabled(): boolean {
+    return this.color.strobeEnabled();
+  }
+
   /**
    * Get the DMX packet for a strobing light
    * @protected
    */
   protected getStrobeDMX(): number[] {
     let values: number[] = new Array(16).fill(0);
-    values[this.masterDimChannel - 1] = 255;
-    values[this.shutterChannel - 1] =
-      this.shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
-    values[this.color.redChannel - 1] = 255;
-    values[this.color.blueChannel - 1] = 255;
-    values[this.color.greenChannel - 1] = 255;
-    if (this.color.warmWhiteChannel) values[this.color.warmWhiteChannel - 1] = 255;
-    if (this.color.coldWhiteChannel) values[this.color.coldWhiteChannel - 1] = 255;
-    if (this.color.amberChannel) values[this.color.amberChannel - 1] = 255;
 
+    values = this.color.setStrobeInDmx(values, this.shutterOptions);
     values = this.setPositionInDmx(values);
 
     return values;
@@ -58,11 +76,7 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
   public getDmxFromCurrentValues(): number[] {
     let values: number[] = new Array(16).fill(0);
 
-    values[this.masterDimChannel - 1] = Math.round(this.currentBrightness * 255);
-    values[this.shutterChannel - 1] =
-      this.shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
-
-    values = this.color.setColorsInDmx(values);
+    values = this.color.setColorsInDmx(values, this.shutterOptions);
     values = this.setPositionInDmx(values);
 
     return values;
