@@ -57,7 +57,7 @@ export default class LightsPar extends LightsFixture {
    * @protected
    */
   protected getStrobeDMX(): number[] {
-    let values: number[] = new Array(16).fill(0);
+    let values = this.getEmptyDmxSubPacket();
     values = this.color.setStrobeInDmx(values, this.shutterOptions);
 
     if (!this.color.shutterChannel) {
@@ -71,7 +71,7 @@ export default class LightsPar extends LightsFixture {
   }
 
   public getDmxFromCurrentValues(): number[] {
-    let values: number[] = new Array(16).fill(0);
+    let values = this.getEmptyDmxSubPacket();
 
     values = this.color.setColorsInDmx(values, this.shutterOptions);
 

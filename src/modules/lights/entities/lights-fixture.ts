@@ -6,6 +6,9 @@ export default abstract class LightsFixture extends BaseEntity {
   @Column()
   public name: string;
 
+  @Column({ type: 'tinyint', unsigned: true })
+  public nrChannels: number;
+
   @Column({
     type: 'varchar',
     transformer: {
@@ -24,7 +27,7 @@ export default abstract class LightsFixture extends BaseEntity {
 
   public valuesUpdatedAt: Date;
 
-  private overrideDmx: (number | null)[] = new Array(16).fill(null);
+  private overrideDmx: (number | null)[];
 
   protected shouldFreezeDmx: boolean;
 
@@ -36,6 +39,12 @@ export default abstract class LightsFixture extends BaseEntity {
   }
 
   protected shouldReset: Date | undefined;
+
+  constructor() {
+    super();
+
+    this.overrideDmx = this.getEmptyDmxSubPacket().map(() => null);
+  }
 
   /**
    * Reset the fixture if possible.
@@ -67,7 +76,8 @@ export default abstract class LightsFixture extends BaseEntity {
    * @param relativeChannels
    */
   public setOverrideDmx(relativeChannels: (number | null)[]) {
-    this.overrideDmx = relativeChannels.concat(new Array(16).fill(null)).slice(0, 16);
+    const safetyMargin = this.getEmptyDmxSubPacket().map(() => null);
+    this.overrideDmx = relativeChannels.concat(safetyMargin).slice(0, this.nrChannels);
     this.valuesUpdatedAt = new Date();
   }
 
@@ -99,6 +109,15 @@ export default abstract class LightsFixture extends BaseEntity {
    */
   public blackout(): void {
     this.valuesUpdatedAt = new Date();
+  }
+
+  /**
+   * Get an array of zeroes with length equaling the number of channels
+   * this fixture requires
+   * @protected
+   */
+  protected getEmptyDmxSubPacket(): number[] {
+    return new Array(this.nrChannels).fill(0);
   }
 
   /**

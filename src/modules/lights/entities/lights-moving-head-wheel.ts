@@ -61,7 +61,7 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
    * @protected
    */
   protected getStrobeDMX(): number[] {
-    let values: number[] = new Array(16).fill(0);
+    let values = this.getEmptyDmxSubPacket();
 
     values = this.wheel.setStrobeInDmx(values, this.shutterOptions);
     values = this.setPositionInDmx(values);
@@ -77,7 +77,7 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
   }
 
   public getDmxFromCurrentValues(): number[] {
-    let values: number[] = new Array(16).fill(0);
+    let values = this.getEmptyDmxSubPacket();
 
     values = this.wheel.setColorsInDmx(values, this.shutterOptions);
     values = this.setPositionInDmx(values);

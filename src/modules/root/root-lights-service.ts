@@ -33,7 +33,7 @@ export interface ShutterChannelValuesResponse {
 }
 
 export interface LightsFixtureResponse
-  extends Pick<LightsFixture, 'id' | 'createdAt' | 'updatedAt' | 'name'> {
+  extends Pick<LightsFixture, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'nrChannels'> {
   canReset: boolean;
   resetChannel?: number;
   resetChannelValue?: number;
@@ -110,7 +110,7 @@ export interface ShutterOptionValues {
   strobe: number;
 }
 
-export interface LightsFixtureParams extends Pick<LightsFixture, 'name'> {
+export interface LightsFixtureParams extends Pick<LightsFixture, 'name' | 'nrChannels'> {
   shutterOptionValues?: ShutterOptionValues;
 }
 
@@ -234,6 +234,7 @@ export default class RootLightsService {
       createdAt: f.createdAt,
       updatedAt: f.updatedAt,
       name: f.name,
+      nrChannels: f.nrChannels,
       shutterChannelValues: {},
       canReset,
       resetChannel: canReset ? f.resetChannelAndValue![0] + firstChannel - 1 : undefined,
@@ -460,6 +461,7 @@ export default class RootLightsService {
   private toFixture(params: LightsFixtureParams): LightsFixture {
     return {
       name: params.name,
+      nrChannels: params.nrChannels,
     } as LightsFixture;
   }
 
