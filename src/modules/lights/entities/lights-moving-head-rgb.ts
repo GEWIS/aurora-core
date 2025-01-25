@@ -30,7 +30,6 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
   }
 
   public blackout() {
-    this.valuesUpdatedAt = new Date();
     super.blackout();
     this.color.reset();
   }
@@ -59,7 +58,7 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
   public getDmxFromCurrentValues(): number[] {
     let values: number[] = new Array(16).fill(0);
 
-    values[this.masterDimChannel - 1] = this.currentMasterDim ?? 0;
+    values[this.masterDimChannel - 1] = Math.round(this.currentBrightness * 255);
     values[this.shutterChannel - 1] =
       this.shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
 

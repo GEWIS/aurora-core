@@ -30,7 +30,7 @@ export default abstract class LightsFixture extends BaseEntity {
   })
   public resetChannelAndValue?: number[] | null;
 
-  public currentMasterDim: number | undefined;
+  public currentBrightness: number = 1;
 
   public valuesUpdatedAt: Date;
 
@@ -92,8 +92,14 @@ export default abstract class LightsFixture extends BaseEntity {
   public abstract setColor(color: RgbColor): void;
   public abstract resetColor(): void;
 
-  public setMasterDimmer(value: number) {
-    this.currentMasterDim = value;
+  /**
+   * Set the relative brightness of the fixture.
+   * Should be used by effects.
+   * @param brightness Value between [0, 1]
+   */
+  public setBrightness(brightness: number) {
+    // Set upper and lower bounds to 1 and 0 respectively
+    this.currentBrightness = Math.max(0, Math.min(1, brightness));
     this.valuesUpdatedAt = new Date();
   }
 
@@ -133,7 +139,10 @@ export default abstract class LightsFixture extends BaseEntity {
    * Apply a blackout to this fixture, i.e. set all channels to zero
    * @protected
    */
-  public abstract blackout(): void;
+  public blackout(): void {
+    this.valuesUpdatedAt = new Date();
+    this.currentBrightness = 1;
+  }
 
   /**
    * Get the DMX channels that should be used when the fixture should strobe

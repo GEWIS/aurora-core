@@ -114,7 +114,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
       const colorIndex = this.colorIndices[index];
       const color = colors[colorIndex % colors.length];
       p.fixture.setColor(color);
-      p.fixture.setMasterDimmer(Math.round(255 * progression));
+      p.fixture.setBrightness(progression);
     });
     this.lightsGroup.movingHeadRgbs.forEach((p, i) => {
       const index = i;
@@ -122,7 +122,7 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
       const colorIndex = this.colorIndices[nrPars + index];
       const color = colors[colorIndex % colors.length];
       p.fixture.setColor(color);
-      p.fixture.setMasterDimmer(Math.round(255 * progression));
+      p.fixture.setBrightness(progression);
     });
 
     return this.lightsGroup;

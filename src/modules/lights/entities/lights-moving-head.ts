@@ -30,7 +30,7 @@ export default abstract class LightsMovingHead extends LightsFixture {
   }
 
   public blackout(): void {
-    this.valuesUpdatedAt = new Date();
+    super.blackout();
     this.movement.reset();
   }
 }

@@ -62,7 +62,7 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
     this.lightsGroup.fixtures.forEach((f) => {
       f.fixture.setColor(this.props.color);
       if (!this.props.beatToggle) {
-        f.fixture.setMasterDimmer(Math.round((this.props.relativeBrightness ?? 1) * 255));
+        f.fixture.setBrightness(this.props.relativeBrightness ?? 1);
       }
     });
     this.lightsGroup.movingHeadWheels.forEach((f) => {
@@ -99,11 +99,9 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
       .forEach((f, i) => {
         // If beatToggle is disabled, or if it is enabled and the fixture should be turned on
         if (!this.props.beatToggle || i % 2 === this.ping) {
-          f.fixture.setMasterDimmer(
-            Math.round(progression * (this.props.relativeBrightness ?? 1) * 255),
-          );
+          f.fixture.setBrightness(progression * (this.props.relativeBrightness ?? 1));
         } else {
-          f.fixture.setMasterDimmer(0);
+          f.fixture.setBrightness(0);
         }
       });
 
