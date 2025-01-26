@@ -1,12 +1,14 @@
-import { Body, Post, Request, Route, Security, Tags } from 'tsoa';
+import { Body, Get, Post, Request, Route, Security, Tags } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import { Request as ExpressRequest } from 'express';
 import HandlerManager from './handler-manager';
-import { LightsGroup } from '../lights/entities';
+import { LightsGroup, LightsSwitch } from '../lights/entities';
 import { StrobeProps } from '../lights/effects/color/strobe';
 import { SecurityNames } from '../../helpers/security';
 import logger from '../../logger';
 import { securityGroups } from '../../helpers/security-groups';
+import dataSource from '../../database';
+import LightsSwitchManager from './lights-switch-manager';
 
 interface GroupFixtureOverrideParams {
   /**
@@ -26,6 +28,10 @@ export class RootLightsOperationsController extends Controller {
       .getHandlers(LightsGroup)
       .map((handler) => handler.entities)
       .flat() as LightsGroup[];
+  }
+
+  private async getLightsSwitch(id: number): Promise<LightsSwitch | null> {
+    return dataSource.getRepository(LightsSwitch).findOne({ where: { id } });
   }
 
   /**
@@ -375,5 +381,33 @@ export class RootLightsOperationsController extends Controller {
     );
 
     chosenMovingHead.fixture.unfreezeDmx();
+  }
+
+  @Security(SecurityNames.LOCAL, securityGroups.lightOperation.base)
+  @Post('switch/{id}/on')
+  public async turnOnLightsSwitch(@Request() req: ExpressRequest, id: number): Promise<void> {
+    const lightsSwitch = await this.getLightsSwitch(id);
+    if (!lightsSwitch) {
+      this.setStatus(404);
+      return;
+    }
+
+    LightsSwitchManager.getInstance().enableSwitch(lightsSwitch);
+
+    logger.audit(req.user, `Turn on lights switch "${lightsSwitch.name}"`);
+  }
+
+  @Security(SecurityNames.LOCAL, securityGroups.lightOperation.base)
+  @Post('switch/{id}/off')
+  public async turnOffLightsSwitch(@Request() req: ExpressRequest, id: number): Promise<void> {
+    const lightsSwitch = await this.getLightsSwitch(id);
+    if (!lightsSwitch) {
+      this.setStatus(404);
+      return;
+    }
+
+    LightsSwitchManager.getInstance().disableSwitch(lightsSwitch);
+
+    logger.audit(req.user, `Turn off lights switch "${lightsSwitch.name}"`);
   }
 }

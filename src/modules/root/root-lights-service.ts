@@ -1,10 +1,11 @@
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { LightsController } from './entities';
 import {
   LightsGroup,
   LightsMovingHeadRgb,
   LightsMovingHeadWheel,
   LightsPar,
+  LightsSwitch,
 } from '../lights/entities';
 import dataSource from '../../database';
 import LightsFixture from '../lights/entities/lights-fixture';
@@ -23,6 +24,7 @@ import LightsFixtureShutterOptions, {
 } from '../lights/entities/lights-fixture-shutter-options';
 import { WheelColor } from '../lights/color-definitions';
 import { IColorsWheel } from '../lights/entities/colors-wheel';
+import LightsSwitchManager from './lights-switch-manager';
 
 export interface LightsControllerResponse
   extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
@@ -92,6 +94,12 @@ export interface LightsGroupResponse extends BaseLightsGroupResponse {
   movingHeadRgbs: FixtureInGroupResponse<MovingHeadRgbResponse>[];
   movingHeadWheels: FixtureInGroupResponse<MovingHeadWheelResponse>[];
 }
+
+export interface LightsSwitchResponse
+  extends Pick<
+    LightsSwitch,
+    'id' | 'createdAt' | 'updatedAt' | 'name' | 'dmxChannel' | 'onValue'
+  > {}
 
 export interface ColorParams {
   masterDimChannel?: number;
@@ -189,6 +197,9 @@ export interface LightsGroupCreateParams extends Pick<LightsGroup, 'name' | 'def
   movingHeadRgbs: LightsInGroup[];
   movingHeadWheels: LightsInGroup[];
 }
+
+export interface LightsSwitchCreateParams
+  extends Pick<LightsSwitch, 'name' | 'dmxChannel' | 'onValue'> {}
 
 export interface LightsControllerCreateParams extends Pick<LightsController, 'name'> {}
 
@@ -346,6 +357,17 @@ export default class RootLightsService {
       updatedAt: c.updatedAt,
       name: c.name,
       socketIds: c.socketIds,
+    };
+  }
+
+  public static toLightsSwitchResponse(s: LightsSwitch): LightsSwitchResponse {
+    return {
+      id: s.id,
+      createdAt: s.createdAt,
+      updatedAt: s.updatedAt,
+      name: s.name,
+      dmxChannel: s.dmxChannel,
+      onValue: s.onValue,
     };
   }
 
@@ -589,5 +611,28 @@ export default class RootLightsService {
       params.shutterOptionValues,
     )) as LightsMovingHeadWheelShutterOptions[];
     return movingHead;
+  }
+
+  public async getAllLightsSwitches(controllerId?: number): Promise<LightsSwitch[]> {
+    let whereClause: FindOptionsWhere<LightsSwitch> = {};
+    if (controllerId) {
+      whereClause = { controller: { id: controllerId } };
+    }
+
+    return dataSource.getRepository(LightsSwitch).find({ where: whereClause });
+  }
+
+  public async createLightsSwitch(
+    controllerId: number,
+    params: LightsSwitchCreateParams,
+  ): Promise<LightsSwitch | null> {
+    const controller = await this.controllerRepository.findOne({ where: { id: controllerId } });
+    if (controller == null) return null;
+
+    const repository = dataSource.getRepository(LightsSwitch);
+    return repository.save({
+      controller,
+      ...params,
+    });
   }
 }
