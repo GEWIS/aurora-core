@@ -86,7 +86,7 @@ export default class Wave extends LightsEffect<WaveProps> {
     const apply = (p: LightsGroupPars | LightsGroupMovingHeadRgbs) => {
       const progression = this.getProgression(currentTick, p);
       const brightness = this.getBrightness(progression);
-      p.fixture.setMasterDimmer(Math.max(0, brightness * 255));
+      p.fixture.setBrightness(Math.max(0, brightness));
       p.fixture.setColor(this.props.colors[0]);
     };
 

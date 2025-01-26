@@ -57,7 +57,7 @@ export default class SingleFlood extends LightsEffect<SingleFloodProps> {
 
     this.lightsGroup.pars.forEach((p) => {
       p.fixture.setColor(this.props.color ?? RgbColor.ORANGE);
-      p.fixture.setMasterDimmer(255 * progression);
+      p.fixture.setBrightness(progression);
     });
 
     this.lightsGroup.movingHeadWheels.forEach((m) => m.fixture.blackout());

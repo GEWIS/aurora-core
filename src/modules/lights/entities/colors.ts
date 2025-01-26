@@ -1,26 +1,76 @@
-import { Column } from 'typeorm';
+import { RgbColor } from '../color-definitions';
+import LightsFixtureShutterOptions from './lights-fixture-shutter-options';
 
-export type ColorChannel = keyof Colors;
+export default abstract class Colors {
+  protected currentBrightness: number = 1;
 
-export default class Colors {
-  @Column({ type: 'tinyint', unsigned: true })
-  public redChannel: number;
+  protected strobe: boolean = false;
+  private strobeDisableEvent: NodeJS.Timeout | undefined;
 
-  @Column({ type: 'tinyint', unsigned: true })
-  public greenChannel: number;
+  public abstract setColor(color: RgbColor): void;
+  public abstract reset(): void;
 
-  @Column({ type: 'tinyint', unsigned: true })
-  public blueChannel: number;
+  /**
+   * Set the relative brightness of the fixture.
+   * Should be used by effects.
+   * @param brightness Value between [0, 1]
+   */
+  public setBrightness(brightness: number) {
+    // Set upper and lower bounds to 1 and 0 respectively
+    this.currentBrightness = Math.max(0, Math.min(1, brightness));
+  }
 
-  @Column({ type: 'tinyint', nullable: true, unsigned: true })
-  public coldWhiteChannel?: number | null;
+  /**
+   * Start strobing
+   * @param milliseconds After how many ms the strobe should automatically
+   * be disabled.
+   */
+  public enableStrobe(milliseconds?: number): void {
+    this.strobe = true;
 
-  @Column({ type: 'tinyint', nullable: true, unsigned: true })
-  public warmWhiteChannel?: number | null;
+    // Stop an existing stop strobe timeout if it exists
+    if (this.strobeDisableEvent) {
+      clearTimeout(this.strobeDisableEvent);
+      this.strobeDisableEvent = undefined;
+    }
 
-  @Column({ type: 'tinyint', nullable: true, unsigned: true })
-  public amberChannel?: number | null;
+    // Create a stop strobe timeout if a time is given
+    if (milliseconds) {
+      this.strobeDisableEvent = setTimeout(this.disableStrobe.bind(this), milliseconds);
+    }
+  }
 
-  @Column({ type: 'tinyint', nullable: true, unsigned: true })
-  public uvChannel?: number | null;
+  /**
+   * Stop strobe if strobing
+   */
+  public disableStrobe(): void {
+    this.strobe = false;
+
+    if (this.strobeDisableEvent) {
+      clearTimeout(this.strobeDisableEvent);
+      this.strobeDisableEvent = undefined;
+    }
+  }
+
+  /**
+   * Whether strobe is enabled
+   */
+  public strobeEnabled(): boolean {
+    return this.strobe;
+  }
+
+  public abstract setStrobeInDmx(
+    values: number[],
+    shutterOptions: LightsFixtureShutterOptions[],
+  ): number[];
+
+  /**
+   * Apply colors to the given DMX subpacket (in-place)
+   * @param values
+   * @param shutterOptions
+   */
+  public abstract setColorsInDmx(
+    values: number[],
+    shutterOptions: LightsFixtureShutterOptions[],
+  ): number[];
 }

@@ -1,65 +1,55 @@
 import { Column, Entity, OneToMany } from 'typeorm';
-import LightsFixture, { LightsFixtureCurrentValues } from './lights-fixture';
-import Colors from './colors';
-import { RgbColor, rgbColorDefinitions } from '../color-definitions';
+import LightsFixture from './lights-fixture';
+import ColorsRgb, { IColorsRgb } from './colors-rgb';
+import { RgbColor } from '../color-definitions';
 // eslint-disable-next-line import/no-cycle
 import LightsParShutterOptions from './lights-par-shutter-options';
-import { ShutterOption } from './lights-fixture-shutter-options';
 
 @Entity()
 export default class LightsPar extends LightsFixture {
   @OneToMany(() => LightsParShutterOptions, (opt) => opt.fixture, { eager: true })
   public shutterOptions: LightsParShutterOptions[];
 
-  @Column(() => Colors)
-  public color: Colors;
+  @Column(() => ColorsRgb)
+  public color: ColorsRgb;
 
-  private currentValues: Required<Colors & LightsFixtureCurrentValues> = {
-    masterDimChannel: 0,
-    redChannel: 0,
-    greenChannel: 0,
-    blueChannel: 0,
-    coldWhiteChannel: 0,
-    warmWhiteChannel: 0,
-    amberChannel: 0,
-    uvChannel: 0,
-  };
-
-  setCurrentValues(values: Partial<Colors & LightsFixtureCurrentValues>) {
-    this.currentValues = {
-      ...this.currentValues,
-      ...values,
-    };
+  public setColor(color: RgbColor) {
     this.valuesUpdatedAt = new Date();
+    this.color.setColor(color);
   }
 
-  setColor(color: RgbColor) {
-    this.setCurrentValues(rgbColorDefinitions[color].definition);
+  public setCustomColor(color: IColorsRgb) {
+    this.valuesUpdatedAt = new Date();
+    this.color.setCustomColor(color);
   }
 
-  setMasterDimmer(masterDimChannel: number) {
-    if (this.currentValues.masterDimChannel === masterDimChannel) return;
-    this.setCurrentValues({
-      masterDimChannel,
-    });
+  public resetColor() {
+    this.valuesUpdatedAt = new Date();
+    this.color.reset();
   }
 
-  blackout() {
-    if (Object.values(this.currentValues).every((v) => v === 0)) return;
-    this.setCurrentValues({
-      masterDimChannel: 0,
-      redChannel: 0,
-      greenChannel: 0,
-      blueChannel: 0,
-      coldWhiteChannel: 0,
-      warmWhiteChannel: 0,
-      amberChannel: 0,
-      uvChannel: 0,
-    });
+  public blackout() {
+    super.blackout();
+    this.color.reset();
   }
 
-  public get channelValues() {
-    return this.currentValues;
+  public enableStrobe(milliseconds?: number): void {
+    this.valuesUpdatedAt = new Date();
+    this.color.enableStrobe(milliseconds);
+  }
+
+  public disableStrobe(): void {
+    this.valuesUpdatedAt = new Date();
+    this.color.disableStrobe();
+  }
+
+  public setBrightness(brightness: number): void {
+    this.valuesUpdatedAt = new Date();
+    this.color.setBrightness(brightness);
+  }
+
+  protected strobeEnabled(): boolean {
+    return this.color.strobeEnabled();
   }
 
   /**
@@ -67,63 +57,23 @@ export default class LightsPar extends LightsFixture {
    * @protected
    */
   protected getStrobeDMX(): number[] {
-    const values: number[] = new Array(16).fill(0);
-    values[this.masterDimChannel - 1] = 255;
-    values[this.shutterChannel - 1] =
-      this.shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
-    values[this.color.redChannel - 1] = 255;
-    values[this.color.blueChannel - 1] = 255;
-    values[this.color.greenChannel - 1] = 255;
-    if (this.color.warmWhiteChannel) values[this.color.warmWhiteChannel - 1] = 255;
-    if (this.color.coldWhiteChannel) values[this.color.coldWhiteChannel - 1] = 255;
-    if (this.color.amberChannel) values[this.color.amberChannel - 1] = 255;
+    let values = this.getEmptyDmxSubPacket();
+    values = this.color.setStrobeInDmx(values, this.shutterOptions);
+
+    if (!this.color.shutterChannel) {
+      // The getStrobeInDmx() value changes its state if we need to
+      // strobe manually. Because of optimizations, we need to also
+      // indicate the state has changed.
+      this.valuesUpdatedAt = new Date(new Date().getTime() + 1000);
+    }
+
     return values;
   }
 
-  toDmx(): number[] {
-    if (this.strobeEnabled) return this.getStrobeDMX();
+  public getDmxFromCurrentValues(): number[] {
+    let values = this.getEmptyDmxSubPacket();
 
-    if (this.frozenDmx != null && this.frozenDmx.length > 0) {
-      return this.frozenDmx;
-    }
-
-    let values: number[] = new Array(16).fill(0);
-
-    values[this.masterDimChannel - 1] = this.channelValues.masterDimChannel;
-    values[this.shutterChannel - 1] =
-      this.shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
-    values[this.color.redChannel - 1] = this.channelValues.redChannel;
-    values[this.color.greenChannel - 1] = this.channelValues.greenChannel;
-    values[this.color.blueChannel - 1] = this.channelValues.blueChannel;
-    if (this.color.coldWhiteChannel != null) {
-      values[this.color.coldWhiteChannel - 1] = this.channelValues.coldWhiteChannel || 0;
-    }
-    if (this.color.warmWhiteChannel != null) {
-      values[this.color.warmWhiteChannel - 1] = this.channelValues.warmWhiteChannel || 0;
-    }
-    if (this.color.amberChannel != null) {
-      values[this.color.amberChannel - 1] = this.channelValues.amberChannel || 0;
-    }
-    if (this.color.uvChannel != null) {
-      values[this.color.uvChannel - 1] = this.channelValues.uvChannel || 0;
-    }
-
-    values = this.applyDmxOverride(values);
-
-    if (this.shouldReset !== undefined) {
-      if (new Date().getTime() - this.shouldReset.getTime() > 5000) {
-        this.shouldReset = undefined;
-      }
-      if (this.resetChannelAndValue && this.resetChannelAndValue.length >= 2) {
-        const [channel, value] = this.resetChannelAndValue;
-        values[channel - 1] = value;
-        this.valuesUpdatedAt = new Date();
-      }
-    }
-
-    if (this.shouldFreezeDmx) {
-      this.frozenDmx = values;
-    }
+    values = this.color.setColorsInDmx(values, this.shutterOptions);
 
     return values;
   }

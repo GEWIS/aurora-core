@@ -1,4 +1,4 @@
-import { ColorChannel } from './entities/colors';
+import { ColorChannel, IColorsRgb } from './entities/colors-rgb';
 
 export enum WheelColor {
   WHITE = 'white',
@@ -35,12 +35,8 @@ export const wheelColors = Object.values(WheelColor);
 
 export const rgbColors = Object.values(RgbColor);
 
-// TODO: implement wheel colors
-export type RgbColorDefinition = { [k in ColorChannel]: number };
-export type WheelColorDefinition = RgbColorDefinition;
-
 export type RgbColorSpecification = {
-  definition: RgbColorDefinition;
+  definition: Required<IColorsRgb>;
   alternative: WheelColor;
   complementary: RgbColor[];
   hex: string;

@@ -125,9 +125,9 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
 
     const color = this.getCurrentColor(p, i);
     if (color == null) {
-      p.fixture.setMasterDimmer(0);
+      p.fixture.resetColor();
     } else {
-      p.fixture.setMasterDimmer(Math.round(255 * beatProgression));
+      p.fixture.setBrightness(beatProgression);
       p.fixture.setColor(color);
     }
   }
