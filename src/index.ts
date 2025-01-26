@@ -21,6 +21,7 @@ import EmitterStore from './modules/events/emitter-store';
 import Types from './types';
 import { OrderManager } from './modules/orders';
 import TimedEventsService from './modules/timed-events/timed-events-service';
+import LightsSwitchManager from './modules/root/lights-switch-manager';
 
 async function createApp(): Promise<void> {
   // Fix for production issue where a Docker volume overwrites the contents of a folder instead of merging them
@@ -50,18 +51,22 @@ async function createApp(): Promise<void> {
 
   ArtificialBeatGenerator.getInstance().init(emitterStore.musicEmitter);
 
+  const lightsSwitchManager = LightsSwitchManager.getInstance();
   const handlerManager = HandlerManager.getInstance(io, emitterStore);
   await handlerManager.init();
   const socketConnectionManager = new SocketConnectionManager(
     handlerManager,
+    lightsSwitchManager,
     io,
     emitterStore.backofficeSyncEmitter,
   );
   await socketConnectionManager.clearSavedSocketIds();
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO should this be used somewhere?
   const lightsControllerManager = new LightsControllerManager(
     io.of(SocketioNamespaces.LIGHTS),
     handlerManager,
+    lightsSwitchManager,
     emitterStore.musicEmitter,
   );
 

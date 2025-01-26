@@ -12,6 +12,7 @@ import SubscribeEntity from './entities/subscribe-entity';
 import BaseHandler from '../handlers/base-handler';
 import logger from '../../logger';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
+import LightsSwitchManager from './lights-switch-manager';
 
 export default class SocketConnectionManager {
   /**
@@ -26,6 +27,7 @@ export default class SocketConnectionManager {
 
   constructor(
     private handlerManager: HandlerManager,
+    private lightsSwitchManager: LightsSwitchManager,
     private ioServer: Server,
     private backofficeEmitter: BackofficeSyncEmitter,
   ) {
@@ -160,6 +162,11 @@ export default class SocketConnectionManager {
             if (g.controller.id !== user.lightsControllerId) return;
             // eslint-disable-next-line no-param-reassign
             g.controller.socketIds = controller.socketIds;
+          });
+          this.lightsSwitchManager.getEnabledSwitches().forEach((s) => {
+            if (s.controller.id !== user.lightsControllerId) return;
+            // eslint-disable-next-line no-param-reassign
+            s.controller.socketIds = controller.socketIds;
           });
         }
         this.backofficeEmitter.emit('connect_lightsgroup');
