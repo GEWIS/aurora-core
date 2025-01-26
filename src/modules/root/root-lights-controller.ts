@@ -8,6 +8,8 @@ import RootLightsService, {
   LightsMovingHeadRgbCreateParams,
   LightsMovingHeadWheelCreateParams,
   LightsParCreateParams,
+  LightsSwitchCreateParams,
+  LightsSwitchResponse,
   MovingHeadRgbResponse,
   MovingHeadWheelResponse,
   ParResponse,
@@ -22,6 +24,7 @@ import {
 import { SecurityGroup, SecurityNames } from '../../helpers/security';
 import { securityGroups } from '../../helpers/security-groups';
 import { Request as ExpressRequest } from 'express';
+import { LightsSwitch } from '../lights/entities';
 
 interface LightsColorResponse {
   color: RgbColor;
@@ -109,6 +112,38 @@ export class RootLightsController extends Controller {
       return undefined;
     }
     return RootLightsService.toLightsGroupResponse(group);
+  }
+
+  @Security(SecurityNames.LOCAL, securityGroups.light.subscriber)
+  @Get('controller/{id}/switches')
+  public async getControllerLightsSwitches(
+    @Request() req: ExpressRequest,
+    id: number,
+  ): Promise<LightsSwitchResponse[] | undefined> {
+    if (
+      !req.user ||
+      (!req.user.roles.includes(SecurityGroup.ADMIN) && req.user.lightsControllerId !== id)
+    ) {
+      this.setStatus(403);
+      return undefined;
+    }
+
+    const switches = await new RootLightsService().getAllLightsSwitches(id);
+    return switches.map((s) => RootLightsService.toLightsSwitchResponse(s));
+  }
+
+  @Security(SecurityNames.LOCAL, securityGroups.light.privileged)
+  @Post('controller/{id}/switches')
+  public async createLightsSwitch(
+    id: number,
+    @Body() params: LightsSwitchCreateParams,
+  ): Promise<LightsSwitchResponse | undefined> {
+    const lightsSwitch = await new RootLightsService().createLightsSwitch(id, params);
+    if (!lightsSwitch) {
+      this.setStatus(404);
+      return undefined;
+    }
+    return RootLightsService.toLightsSwitchResponse(lightsSwitch);
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.light.privileged)

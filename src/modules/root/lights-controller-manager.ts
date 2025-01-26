@@ -7,9 +7,11 @@ import {
   LightsGroupMovingHeadRgbs,
   LightsGroupMovingHeadWheels,
   LightsGroup,
+  LightsSwitch,
 } from '../lights/entities';
 import HandlerManager from './handler-manager';
 import { SocketioNamespaces } from '../../socketio-namespaces';
+import LightsSwitchManager from './lights-switch-manager';
 
 const DMX_VALUES_LENGTH = 512;
 
@@ -42,6 +44,7 @@ export default class LightsControllerManager {
   constructor(
     protected websocket: Namespace,
     protected handlerManager: HandlerManager,
+    protected lightsSwitchManager: LightsSwitchManager,
     musicEmitter: MusicEmitter,
     lightControllers: LightsController[] = [],
   ) {
@@ -78,13 +81,19 @@ export default class LightsControllerManager {
     if (packet.length !== oldPacket.length) return true;
 
     for (let i = 0; i < packet.length; i += 1) {
-      if (packet[i] !== oldPacket[i]) return true;
+      if (packet[i] !== oldPacket[i]) {
+        return true;
+      }
     }
     return false;
   }
 
   private get lightsHandlers() {
     return this.handlerManager.getHandlers(LightsGroup) as BaseLightsHandler[];
+  }
+
+  private get lightsSwitches(): LightsSwitch[] {
+    return this.lightsSwitchManager.getEnabledSwitches();
   }
 
   /**
@@ -125,6 +134,22 @@ export default class LightsControllerManager {
   }
 
   /**
+   * Given a lights switch, enable that switch in the DMX packet
+   * @param lightsSwitch
+   * @param packet Array of at least 512 integers in the range [0, 255]
+   * @private
+   */
+  private enableLightsSwitch(lightsSwitch: LightsSwitch, packet: number[]): number[] {
+    const c = lightsSwitch.dmxChannel - 1;
+    const existingValue = packet[c] || 0;
+
+    // Bitwise OR, as there might be multiple switches on the same DMX channel
+    packet[c] = existingValue | lightsSwitch.onValue;
+
+    return packet;
+  }
+
+  /**
    *
    * @private
    */
@@ -159,6 +184,7 @@ export default class LightsControllerManager {
    */
   private tick() {
     const lightGroups = this.lightsHandlers.map((h) => h.tick());
+    const lightsSwitches = this.lightsSwitches;
 
     // Create a new mapping from DMX controller ID to DMX packet
     const newControllerValues = new Map<number, number[]>();
@@ -204,6 +230,22 @@ export default class LightsControllerManager {
       // Save the packet in its current state. If other light groups use the same controller,
       // they will fetch this packet again and update it
       newControllerValues.set(g.controller.id, newValues);
+    });
+
+    // Turn on the lights switches
+    lightsSwitches.forEach((s) => {
+      const controllerId = s.controller.id;
+      if (!this.lightsControllers.has(controllerId)) {
+        // Update the reference to the controller
+        this.lightsControllers.set(controllerId, s.controller);
+      }
+
+      let newValues = newControllerValues.get(controllerId);
+      if (!newValues) {
+        newValues = this.constructNewValuesArray();
+      }
+      newValues = this.enableLightsSwitch(s, newValues);
+      newControllerValues.set(controllerId, newValues);
     });
 
     const controllersToRemove: number[] = [];
