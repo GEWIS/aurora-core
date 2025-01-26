@@ -2,7 +2,7 @@ import RootAudioService from '../modules/root/root-audio-service';
 import RootScreenService from '../modules/root/root-screen-service';
 import RootLightsService, { LightsInGroup } from '../modules/root/root-lights-service';
 import dataSource from '../database';
-import { LightsGroup, LightsMovingHeadWheel, LightsPar } from '../modules/lights/entities';
+import { LightsGroup, LightsMovingHeadWheel } from '../modules/lights/entities';
 import { RgbColor, WheelColor } from '../modules/lights/color-definitions';
 import { SparkleCreateParams } from '../modules/lights/effects/color/sparkle';
 import { StaticColorCreateParams } from '../modules/lights/effects/color/static-color';
@@ -62,6 +62,7 @@ export default async function seedDatabase() {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const eurolite_LED_7C_7 = await rootLightsService.createLightsPar({
     name: 'Eurolite LED 7C-7',
+    nrChannels: 12,
     masterDimChannel: 1,
     shutterChannel: 2,
     shutterOptionValues: {
@@ -79,6 +80,7 @@ export default async function seedDatabase() {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const eurolite_LED_TMH_S30 = await rootLightsService.createMovingHeadWheel({
     name: 'Eurolite LED TMH-S30',
+    nrChannels: 12,
     masterDimChannel: 10,
     shutterChannel: 9,
     shutterOptionValues: {
@@ -103,6 +105,7 @@ export default async function seedDatabase() {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const ayra_ERO_506 = await rootLightsService.createMovingHeadRgb({
     name: 'Ayra ERO 506',
+    nrChannels: 15,
     masterDimChannel: 6,
     shutterChannel: 7,
     shutterOptionValues: {
@@ -123,6 +126,7 @@ export default async function seedDatabase() {
 
   const showtec_Kanjo_Spot10 = await rootLightsService.createMovingHeadWheel({
     name: 'Showtec Kanjo Spot 10',
+    nrChannels: 10,
     masterDimChannel: 8,
     shutterChannel: 9,
     shutterOptionValues: {
@@ -745,15 +749,10 @@ export async function seedDiscoFloor(width: number, height: number) {
   const controller = await service.createController({ name: 'GEWIS-DISCO-FLOOR' });
   const fixture = await service.createLightsPar({
     name: 'Disco floor panel',
+    nrChannels: 3,
     colorRedChannel: 1,
     colorGreenChannel: 2,
     colorBlueChannel: 3,
-    masterDimChannel: 4,
-    shutterChannel: 5,
-    shutterOptionValues: {
-      open: 0,
-      strobe: 220,
-    },
   });
 
   const pars: LightsInGroup[] = [];
@@ -761,7 +760,7 @@ export async function seedDiscoFloor(width: number, height: number) {
     for (let positionX = 0; positionX < width; positionX++) {
       pars.push({
         fixtureId: fixture.id,
-        firstChannel: pars.length * 16 + 1,
+        firstChannel: pars.length * fixture.nrChannels + 1,
         positionX,
         positionY,
       });

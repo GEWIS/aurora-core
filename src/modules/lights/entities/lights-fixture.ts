@@ -1,17 +1,13 @@
 import { AfterLoad, Column } from 'typeorm';
 import BaseEntity from '../../root/entities/base-entity';
-
-export interface LightsFixtureCurrentValues extends Pick<LightsFixture, 'masterDimChannel'> {}
+import { RgbColor } from '../color-definitions';
 
 export default abstract class LightsFixture extends BaseEntity {
   @Column()
   public name: string;
 
   @Column({ type: 'tinyint', unsigned: true })
-  public masterDimChannel: number;
-
-  @Column({ type: 'tinyint', unsigned: true })
-  public shutterChannel: number;
+  public nrChannels: number;
 
   @Column({
     type: 'varchar',
@@ -31,7 +27,7 @@ export default abstract class LightsFixture extends BaseEntity {
 
   public valuesUpdatedAt: Date;
 
-  private overrideDmx: (number | null)[] = new Array(16).fill(null);
+  private overrideDmx: (number | null)[];
 
   protected shouldFreezeDmx: boolean;
 
@@ -44,9 +40,11 @@ export default abstract class LightsFixture extends BaseEntity {
 
   protected shouldReset: Date | undefined;
 
-  protected strobeEnabled = false;
+  constructor() {
+    super();
 
-  private strobeDisableEvent: NodeJS.Timeout | undefined;
+    this.overrideDmx = this.getEmptyDmxSubPacket().map(() => null);
+  }
 
   /**
    * Reset the fixture if possible.
@@ -58,33 +56,19 @@ export default abstract class LightsFixture extends BaseEntity {
     return true;
   }
 
-  /**
-   * How long the strobe needs to be enabled
-   * @param milliseconds
-   */
-  enableStrobe(milliseconds?: number) {
-    this.strobeEnabled = true;
-    this.valuesUpdatedAt = new Date();
+  public abstract setColor(color: RgbColor): void;
+  public abstract resetColor(): void;
 
-    // Stop an existing stop strobe timeout if it exists
-    if (this.strobeDisableEvent) {
-      clearTimeout(this.strobeDisableEvent);
-      this.strobeDisableEvent = undefined;
-    }
-
-    // Create a stop strobe timeout if a time is given
-    if (milliseconds) {
-      this.strobeDisableEvent = setTimeout(this.disableStrobe.bind(this), milliseconds);
-    }
-  }
+  public abstract enableStrobe(milliseconds?: number): void;
+  protected abstract strobeEnabled(): boolean;
+  public abstract disableStrobe(): void;
 
   /**
-   * Disable the strobe if it is enabled
+   * Set the relative brightness of the fixture.
+   * Should be used by effects.
+   * @param brightness Value between [0, 1]
    */
-  disableStrobe() {
-    this.strobeEnabled = false;
-    this.valuesUpdatedAt = new Date();
-  }
+  public abstract setBrightness(brightness: number): void;
 
   /**
    * Override any set relative DMX channels with the given values.
@@ -92,7 +76,8 @@ export default abstract class LightsFixture extends BaseEntity {
    * @param relativeChannels
    */
   public setOverrideDmx(relativeChannels: (number | null)[]) {
-    this.overrideDmx = relativeChannels.concat(new Array(16).fill(null)).slice(0, 16);
+    const safetyMargin = this.getEmptyDmxSubPacket().map(() => null);
+    this.overrideDmx = relativeChannels.concat(safetyMargin).slice(0, this.nrChannels);
     this.valuesUpdatedAt = new Date();
   }
 
@@ -119,9 +104,64 @@ export default abstract class LightsFixture extends BaseEntity {
   }
 
   /**
+   * Apply a blackout to this fixture, i.e. set all channels to zero
+   * @protected
+   */
+  public blackout(): void {
+    this.valuesUpdatedAt = new Date();
+  }
+
+  /**
+   * Get an array of zeroes with length equaling the number of channels
+   * this fixture requires
+   * @protected
+   */
+  protected getEmptyDmxSubPacket(): number[] {
+    return new Array(this.nrChannels).fill(0);
+  }
+
+  /**
+   * Get the DMX channels that should be used when the fixture should strobe
+   * @protected
+   */
+  protected abstract getStrobeDMX(): number[];
+
+  /**
+   * Get the DMX channels that are created from the channel values
+   * @protected
+   */
+  protected abstract getDmxFromCurrentValues(): number[];
+
+  /**
    * Get the current DMX values as an 16-length array of integers.
    */
-  abstract toDmx(): number[];
+  toDmx(): number[] {
+    if (this.strobeEnabled()) return this.getStrobeDMX();
+
+    if (this.frozenDmx != null && this.frozenDmx.length > 0) {
+      return this.frozenDmx;
+    }
+
+    let values: number[] = this.getDmxFromCurrentValues();
+    values = this.applyDmxOverride(values);
+
+    if (this.shouldReset !== undefined) {
+      if (new Date().getTime() - this.shouldReset.getTime() > 5000) {
+        this.shouldReset = undefined;
+      }
+      if (this.resetChannelAndValue && this.resetChannelAndValue.length >= 2) {
+        const [channel, value] = this.resetChannelAndValue;
+        values[channel - 1] = value;
+        this.valuesUpdatedAt = new Date();
+      }
+    }
+
+    if (this.shouldFreezeDmx) {
+      this.frozenDmx = values;
+    }
+
+    return values;
+  }
 
   /**
    * Store the next state of the fixture and do not change anymore
