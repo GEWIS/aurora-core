@@ -1,7 +1,7 @@
 import BaseLightsHandler from '../base-lights-handler';
 import { BeatEvent, TrackChangeEvent } from '../../events/music-emitter-events';
 import { LightsGroup } from '../../lights/entities';
-import { LightsPredefinedEffect } from '../../lights/entities/sequences/lights-predefined-effect';
+import { LightsTrackEffect } from '../../lights/entities/sequences/lights-track-effect';
 import LightsEffect from '../../lights/effects/lights-effect';
 import dataSource from '../../../database';
 import { MusicEmitter } from '../../events';
@@ -26,7 +26,7 @@ interface LightsGroupEffect extends LightsGroupEffectBase {
 }
 
 export default class EffectSequenceHandler extends BaseLightsHandler {
-  private sequence: LightsPredefinedEffect[] = [];
+  private sequence: LightsTrackEffect[] = [];
 
   private sequenceStart: Date = new Date(0);
 
@@ -171,7 +171,7 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
     this.stopSequence(true);
 
     dataSource
-      .getRepository(LightsPredefinedEffect)
+      .getRepository(LightsTrackEffect)
       .find({
         where: { trackUri: event.trackURI },
         relations: { lightGroups: true },

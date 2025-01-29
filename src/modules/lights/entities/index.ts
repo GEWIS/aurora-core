@@ -9,7 +9,7 @@ import LightsGroupMovingHeadWheels from './lights-group-moving-head-wheels';
 import LightsWheelColorChannelValue from './lights-wheel-color-channel-value';
 import LightsWheelGoboChannelValue from './lights-wheel-gobo-channel-value';
 import { LightsScene, LightsSceneEffect } from './scenes';
-import { LightsPredefinedEffect } from './sequences/lights-predefined-effect';
+import { LightsTrackEffect } from './sequences/lights-track-effect';
 import LightsParShutterOptions from './lights-par-shutter-options';
 import LightsMovingHeadRgbShutterOptions from './lights-moving-head-rgb-shutter-options';
 import LightsMovingHeadWheelShutterOptions from './lights-moving-head-wheel-shutter-options';
@@ -42,5 +42,5 @@ export const Entities = [
   LightsSwitch,
   LightsScene,
   LightsSceneEffect,
-  LightsPredefinedEffect,
+  LightsTrackEffect,
 ];
