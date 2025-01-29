@@ -1,5 +1,5 @@
-import { Controller } from '@tsoa/runtime';
-import { Body, Post, Request, Route, Security, Tags } from 'tsoa';
+import { Controller, Patch } from '@tsoa/runtime';
+import { Body, Delete, Get, Post, Request, Route, Security, Tags } from 'tsoa';
 import { Request as ExpressRequest } from 'express';
 import SetEffectsHandler from './set-effects-handler';
 import HandlerManager from '../../root/handler-manager';
@@ -9,6 +9,11 @@ import { LightsEffectsColorCreateParams } from '../../lights/effects/color';
 import { LightsEffectsMovementCreateParams } from '../../lights/effects/movement';
 import logger from '../../../logger';
 import { securityGroups } from '../../../helpers/security-groups';
+import SetEffectsService, {
+  LightsPredefinedEffectCreateParams,
+  LightsPredefinedEffectResponse,
+  LightsPredefinedEffectUpdateParams,
+} from './set-effects-service';
 
 @Route('handler/lights/set-effects')
 @Tags('Handlers')
@@ -85,5 +90,56 @@ export class SetEffectsController extends Controller {
     handler.parseAndSetMovementEffects(id, effects);
 
     return { message: 'success' };
+  }
+
+  /**
+   * Get all existing predefined effects
+   */
+  @Security(SecurityNames.LOCAL, securityGroups.effects.base)
+  @Get('predefined')
+  public async getAllPredefinedLightsEffects(): Promise<LightsPredefinedEffectResponse[]> {
+    const effects = await new SetEffectsService().getAllPredefinedEffects();
+    return effects.map(SetEffectsService.toLightsEffectPredefinedEffectResponse);
+  }
+
+  /**
+   * Create a new predefined effect
+   */
+  @Security(SecurityNames.LOCAL, securityGroups.effects.privileged)
+  @Post('predefined')
+  public async createPredefinedLightsEffect(
+    @Request() req: ExpressRequest,
+    @Body() predefinedEffect: LightsPredefinedEffectCreateParams,
+  ): Promise<LightsPredefinedEffectResponse> {
+    const effect = await new SetEffectsService().createPredefinedEffect(predefinedEffect);
+
+    logger.audit(req.user, `Create new predefined effect on button "${predefinedEffect.buttonId}"`);
+
+    return SetEffectsService.toLightsEffectPredefinedEffectResponse(effect);
+  }
+
+  @Security(SecurityNames.LOCAL, securityGroups.effects.privileged)
+  @Patch('predefined/{id}')
+  public async updatePredefinedLightsEffect(
+    id: number,
+    @Request() req: ExpressRequest,
+    @Body() predefinedEffect: LightsPredefinedEffectUpdateParams,
+  ): Promise<LightsPredefinedEffectResponse> {
+    const effect = await new SetEffectsService().updatePredefinedEffect(id, predefinedEffect);
+
+    logger.audit(req.user, `Update new predefined effect with id "${id}"`);
+
+    return SetEffectsService.toLightsEffectPredefinedEffectResponse(effect);
+  }
+
+  @Security(SecurityNames.LOCAL, securityGroups.effects.privileged)
+  @Delete('predefined/{id}')
+  public async deletePredefinedLightsEffect(
+    id: number,
+    @Request() req: ExpressRequest,
+  ): Promise<void> {
+    await new SetEffectsService().deletePredefinedEffect(id);
+
+    logger.audit(req.user, `Delete predefined effect with id "${id}"`);
   }
 }

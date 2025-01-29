@@ -613,13 +613,27 @@ export default class RootLightsService {
     return movingHead;
   }
 
-  public async getAllLightsSwitches(controllerId?: number): Promise<LightsSwitch[]> {
+  public async getAllLightsSwitches(
+    controllerId?: number,
+    enabled?: boolean,
+  ): Promise<LightsSwitch[]> {
     let whereClause: FindOptionsWhere<LightsSwitch> = {};
     if (controllerId) {
       whereClause = { controller: { id: controllerId } };
     }
 
-    return dataSource.getRepository(LightsSwitch).find({ where: whereClause });
+    let switches = await dataSource.getRepository(LightsSwitch).find({ where: whereClause });
+    if (enabled != null) {
+      const manager = LightsSwitchManager.getInstance();
+      switches = switches.filter((s) => {
+        const isEnabled = manager.switchEnabled(s);
+        if (enabled && isEnabled) return true;
+        if (!enabled && !isEnabled) return true;
+        return false;
+      });
+    }
+
+    return switches;
   }
 
   public async createLightsSwitch(
