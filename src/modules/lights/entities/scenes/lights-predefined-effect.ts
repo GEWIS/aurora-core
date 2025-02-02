@@ -21,6 +21,11 @@ export type LightsButtonEffectMovement = {
   lightsGroupIds: number[];
 };
 
+export type LightsButtonReset = {
+  type: 'LightsButtonReset';
+  lightsGroupIds: number[];
+};
+
 export type LightsButtonSwitch = {
   type: 'LightsButtonSwitch';
   switchIds: number[];
@@ -39,6 +44,7 @@ export type LightsPredefinedEffectProperties =
   | LightsButtonColors
   | LightsButtonEffectColor
   | LightsButtonEffectMovement
+  | LightsButtonReset
   | LightsButtonSwitch
   | LightsButtonStrobe
   | LightsButtonNull;
