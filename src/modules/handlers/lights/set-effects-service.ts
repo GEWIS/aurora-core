@@ -11,11 +11,13 @@ export interface LightsPredefinedEffectResponse {
   createdAt: string;
   updatedAt: string;
   buttonId: number;
+  icon?: string;
+  name?: string;
   properties: LightsPredefinedEffectProperties;
 }
 
 export interface LightsPredefinedEffectCreateParams
-  extends Pick<LightsPredefinedEffect, 'buttonId' | 'properties'> {}
+  extends Pick<LightsPredefinedEffect, 'buttonId' | 'properties' | 'icon' | 'name'> {}
 
 export interface LightsPredefinedEffectUpdateParams
   extends Partial<LightsPredefinedEffectCreateParams> {}
@@ -35,6 +37,8 @@ export default class SetEffectsService {
       createdAt: e.createdAt.toISOString(),
       updatedAt: e.updatedAt.toISOString(),
       buttonId: e.buttonId,
+      name: e.name,
+      icon: e.icon,
       properties: e.properties,
     };
   }
@@ -89,6 +93,8 @@ export default class SetEffectsService {
     }
 
     if (params.properties) existing.properties = params.properties;
+    if (params.name) existing.name = params.name;
+    if (params.icon) existing.icon = params.icon;
 
     return this.repo.save(existing);
   }

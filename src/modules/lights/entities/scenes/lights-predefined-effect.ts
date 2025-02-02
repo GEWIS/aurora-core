@@ -23,14 +23,25 @@ export type LightsButtonEffectMovement = {
 
 export type LightsButtonSwitch = {
   type: 'LightsButtonSwitch';
-  switchId: number;
+  switchIds: number[];
+};
+
+export type LightsButtonStrobe = {
+  type: 'LightsButtonStrobe';
+  lightsGroupIds: number[];
+};
+
+export type LightsButtonNull = {
+  type: 'LightsButtonNull';
 };
 
 export type LightsPredefinedEffectProperties =
   | LightsButtonColors
   | LightsButtonEffectColor
   | LightsButtonEffectMovement
-  | LightsButtonSwitch;
+  | LightsButtonSwitch
+  | LightsButtonStrobe
+  | LightsButtonNull;
 
 /**
  * Button on the effect controller board, applying an effect, color, or switch
@@ -52,4 +63,10 @@ export default class LightsPredefinedEffect extends BaseEntity {
     },
   })
   properties: LightsPredefinedEffectProperties;
+
+  @Column({ nullable: true })
+  icon?: string;
+
+  @Column({ nullable: true })
+  name?: string;
 }
