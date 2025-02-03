@@ -72,6 +72,14 @@ export default abstract class LightsEffect<P = {}> {
   }
 
   /**
+   * Update the colors of the effect, if applicable.
+   * Intended to be overriden by any effect that
+   * uses colors
+   * @param colors
+   */
+  public setColors(colors: RgbColor[]): void {}
+
+  /**
    * Clean up effect when it is destroyed
    */
   abstract destroy(): void;

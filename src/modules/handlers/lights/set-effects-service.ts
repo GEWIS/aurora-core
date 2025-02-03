@@ -11,8 +11,8 @@ export interface LightsPredefinedEffectResponse {
   createdAt: string;
   updatedAt: string;
   buttonId: number;
-  icon?: string;
-  name?: string;
+  icon?: string | null;
+  name?: string | null;
   properties: LightsPredefinedEffectProperties;
 }
 

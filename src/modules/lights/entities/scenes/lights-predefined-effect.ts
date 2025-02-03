@@ -7,6 +7,10 @@ import { RgbColor } from '../../color-definitions';
 export type LightsButtonColors = {
   type: 'LightsButtonColors';
   colors: RgbColor[];
+  /**
+   * Lights groups to which these colors should be immediately applied to
+   */
+  lightsGroupIds?: number[];
 };
 
 export type LightsButtonEffectColor = {
@@ -70,9 +74,9 @@ export default class LightsPredefinedEffect extends BaseEntity {
   })
   properties: LightsPredefinedEffectProperties;
 
-  @Column({ nullable: true })
-  icon?: string;
+  @Column({ nullable: true, type: 'varchar' })
+  icon?: string | null;
 
-  @Column({ nullable: true })
-  name?: string;
+  @Column({ nullable: true, type: 'varchar' })
+  name?: string | null;
 }

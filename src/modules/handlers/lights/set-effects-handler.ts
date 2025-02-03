@@ -4,6 +4,7 @@ import { LightsEffectBuilder } from '../../lights/effects/lights-effect';
 import { LIGHTS_EFFECTS, LightsEffectsCreateParams } from '../../lights/effects';
 import { LightsEffectsColorCreateParams } from '../../lights/effects/color';
 import { LightsEffectsMovementCreateParams } from '../../lights/effects/movement';
+import { RgbColor } from '../../lights/color-definitions';
 
 export default class SetEffectsHandler extends EffectsHandler {
   /**
