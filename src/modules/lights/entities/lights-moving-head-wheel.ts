@@ -60,10 +60,10 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
    * Get the DMX packet for a strobing light
    * @protected
    */
-  protected getStrobeDMX(): number[] {
+  protected getStrobeDMX(masterRelativeBrightness: number): number[] {
     let values = this.getEmptyDmxSubPacket();
 
-    values = this.wheel.setStrobeInDmx(values, this.shutterOptions);
+    values = this.wheel.setStrobeInDmx(masterRelativeBrightness, values, this.shutterOptions);
     values = this.setPositionInDmx(values);
 
     if (!this.wheel.shutterChannel) {
@@ -76,10 +76,10 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
     return values;
   }
 
-  public getDmxFromCurrentValues(): number[] {
+  public getDmxFromCurrentValues(masterRelativeBrightness: number): number[] {
     let values = this.getEmptyDmxSubPacket();
 
-    values = this.wheel.setColorsInDmx(values, this.shutterOptions);
+    values = this.wheel.setColorsInDmx(masterRelativeBrightness, values, this.shutterOptions);
     values = this.setPositionInDmx(values);
 
     return values;

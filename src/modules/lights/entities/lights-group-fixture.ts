@@ -11,7 +11,19 @@ export default abstract class LightsGroupFixture extends BaseEntity {
   @Column({ type: 'smallint', unsigned: true })
   public firstChannel: number;
 
+  /**
+   * Relative brightness of a fixture, applied on top of the relative
+   * brightness applied by an effect
+   */
+  @Column({ type: 'double', default: 1 })
+  public masterRelativeBrightness: number;
+
   public getActualChannel(relativeChannel: number) {
     return relativeChannel + this.firstChannel - 1;
   }
+
+  /**
+   * Get the current DMX values as an 16-length array of integers.
+   */
+  public abstract toDmx(): number[];
 }

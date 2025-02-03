@@ -56,10 +56,10 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
    * Get the DMX packet for a strobing light
    * @protected
    */
-  protected getStrobeDMX(): number[] {
+  protected getStrobeDMX(masterRelativeBrightness: number): number[] {
     let values = this.getEmptyDmxSubPacket();
 
-    values = this.color.setStrobeInDmx(values, this.shutterOptions);
+    values = this.color.setStrobeInDmx(masterRelativeBrightness, values, this.shutterOptions);
     values = this.setPositionInDmx(values);
 
     if (!this.color.shutterChannel) {
@@ -72,10 +72,10 @@ export default class LightsMovingHeadRgb extends LightsMovingHead {
     return values;
   }
 
-  public getDmxFromCurrentValues(): number[] {
+  public getDmxFromCurrentValues(masterRelativeBrightness: number): number[] {
     let values = this.getEmptyDmxSubPacket();
 
-    values = this.color.setColorsInDmx(values, this.shutterOptions);
+    values = this.color.setColorsInDmx(masterRelativeBrightness, values, this.shutterOptions);
     values = this.setPositionInDmx(values);
 
     return values;
