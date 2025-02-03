@@ -6,6 +6,7 @@ import LightsWheelRotateChannelValue from './lights-wheel-rotate-channel-value';
 import { RgbColor, rgbColorDefinitions, WheelColor } from '../color-definitions';
 import Colors from './colors';
 import LightsFixtureShutterOptions, { ShutterOption } from './lights-fixture-shutter-options';
+import logger from '../../../logger';
 
 export interface IColorsWheel {
   colorChannel: number;
@@ -46,8 +47,19 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
     goboRotateChannel: 0,
   };
 
-  public setColor(color: RgbColor): void {
-    const wheelColor = rgbColorDefinitions[color].alternative;
+  public setColor(color?: RgbColor): void {
+    if (!color) {
+      this.reset();
+      return;
+    }
+    const spec = rgbColorDefinitions[color];
+    if (!spec) {
+      logger.error(`Color "${color}" not found in rgbColorDefinitions.`);
+      this.reset();
+      return;
+    }
+
+    const wheelColor = spec.alternative;
     const channelValueObj = this.colorChannelValues.find((v) => v.name === wheelColor);
     this.currentValues = {
       ...this.currentValues,

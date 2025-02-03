@@ -3,6 +3,7 @@ import { RgbColor, rgbColorDefinitions } from '../color-definitions';
 import LightsFixtureShutterOptions, { ShutterOption } from './lights-fixture-shutter-options';
 import Colors from './colors';
 import { IColorsWheel } from './colors-wheel';
+import logger from '../../../logger';
 
 export type ColorChannel = keyof ColorsRgb;
 
@@ -56,8 +57,18 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
     uvChannel: 0,
   };
 
-  public setColor(color: RgbColor): void {
-    this.currentValues = rgbColorDefinitions[color].definition;
+  public setColor(color?: RgbColor): void {
+    if (!color) {
+      this.reset();
+      return;
+    }
+    const spec = rgbColorDefinitions[color];
+    if (!spec) {
+      logger.error(`Color "${color}" not found in rgbColorDefinitions.`);
+      this.reset();
+      return;
+    }
+    this.currentValues = spec.definition;
   }
 
   public setCustomColor(color: IColorsRgb): void {

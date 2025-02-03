@@ -2,6 +2,7 @@ import BaseLightsHandler from '../base-lights-handler';
 import { LightsGroup } from '../../lights/entities';
 import LightsEffect from '../../lights/effects/lights-effect';
 import { BeatEvent } from '../../events/music-emitter-events';
+import { RgbColor } from '../../lights/color-definitions';
 
 export type GroupEffectsMap = Map<LightsGroup, LightsEffect | LightsEffect[] | null>;
 
@@ -111,5 +112,34 @@ export default abstract class EffectsHandler extends BaseLightsHandler {
         effect.beat(event);
       }
     });
+  }
+
+  /**
+   * Change the color of the given lights group's effects
+   * @param entityCopy
+   * @param colors
+   */
+  updateColors(entityCopy: LightsGroup, colors: RgbColor[]): void {
+    const entity: LightsGroup | undefined = this.entities.find((e) => e.id === entityCopy.id);
+    if (!entity) return;
+
+    const effect = this.groupColorEffects.get(entity);
+    if (Array.isArray(effect)) {
+      effect.forEach((e) => e.setColors(colors));
+    } else {
+      effect?.setColors(colors);
+    }
+  }
+
+  /**
+   * Change the color of the effects of the lights group with the given ID
+   * @param id
+   * @param colors
+   */
+  updateColorsById(id: number, colors: RgbColor[]): void {
+    const entity: LightsGroup | undefined = this.entities.find((e) => e.id === id);
+    if (!entity) return;
+
+    this.updateColors(entity, colors);
   }
 }

@@ -19,6 +19,7 @@ import {
 import EffectProgressionStrategy from '../progression-strategies/effect-progression-strategy';
 import LightsGroupFixture from '../../entities/lights-group-fixture';
 import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
+import { RgbColor } from '../../color-definitions';
 
 export interface BeatFadeOutProps extends BaseLightsEffectProps, BaseLightsEffectProgressionProps {
   /**
@@ -90,6 +91,10 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
    */
   public static build(props: BeatFadeOutProps): LightsEffectBuilder<BeatFadeOutProps, BeatFadeOut> {
     return (lightsGroup: LightsGroup) => new BeatFadeOut(lightsGroup, props);
+  }
+
+  setColors(colors: RgbColor[]) {
+    this.props.colors = colors;
   }
 
   destroy(): void {}
