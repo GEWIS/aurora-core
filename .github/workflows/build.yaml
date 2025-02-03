@@ -10,10 +10,9 @@ on:
 
 jobs:
   build-and-lint:
-    uses: GEWIS/actions/.github/workflows/typescript-lint-and-build.yml@v0.0.2
+    uses: GEWIS/actions/.github/workflows/lint-and-build-yarn.yml@v1
     with:
       node-version: "22.x"
-      package-manager: "yarn"
       lint: true
       format: true
       build: true

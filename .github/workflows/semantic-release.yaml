@@ -9,12 +9,17 @@ on:
     - master
 
 jobs:
-  semantic-release:
-    uses: GEWIS/actions/.github/workflows/semantic-release.yml@v0.0.2
+  versioning:
+    uses: GEWIS/actions/.github/workflows/typescript-lint-and-build.yml@v1
+
+  release:
+    uses: GEWIS/actions/.github/workflows/docker-release.yml@v1
     with:
       projects: "['.']"
-      docker_registry: "abc.docker-registry.gewis.nl"
-      docker_paths: "['nc/aurora/core']"
+      version: ${{ needs.versioning.outputs.next-version }}
+      docker-registry: "abc.docker-registry.gewis.nl"
+      docker-paths: "['nc/aurora/core']"
+      github-registry: "true"
     secrets:
       REGISTRY_USERNAME: ${{ secrets.SVC_GH_ABCNC_USERNAME }}
       REGISTRY_PASSWORD: ${{ secrets.SVC_GH_ABCNC_PWD }}
