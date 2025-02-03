@@ -12,7 +12,7 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
   @Column(() => ColorsWheel)
   public wheel: ColorsWheel;
 
-  public setColor(color: RgbColor) {
+  public setColor(color?: RgbColor) {
     this.valuesUpdatedAt = new Date();
     this.wheel.setColor(color);
   }

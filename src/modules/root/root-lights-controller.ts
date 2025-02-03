@@ -1,4 +1,4 @@
-import { Body, Get, Post, Request, Route, Security, Tags } from 'tsoa';
+import { Body, Get, Post, Query, Request, Route, Security, Tags } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import RootLightsService, {
   LightsControllerCreateParams,
@@ -60,6 +60,13 @@ export class RootLightsController extends Controller {
     @Body() params: LightsControllerCreateParams,
   ): Promise<LightsControllerResponse> {
     return new RootLightsService().createController(params);
+  }
+
+  @Security(SecurityNames.LOCAL, securityGroups.light.base)
+  @Get('switch')
+  public async getAllLightsSwitches(@Query() enabled?: boolean): Promise<LightsSwitchResponse[]> {
+    const switches = await new RootLightsService().getAllLightsSwitches(undefined, enabled);
+    return switches.map((s) => RootLightsService.toLightsSwitchResponse(s));
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.light.base)

@@ -6,7 +6,7 @@ import { LightsGroup, LightsMovingHeadWheel } from '../modules/lights/entities';
 import { RgbColor, WheelColor } from '../modules/lights/color-definitions';
 import { SparkleCreateParams } from '../modules/lights/effects/color/sparkle';
 import { StaticColorCreateParams } from '../modules/lights/effects/color/static-color';
-import { LightsPredefinedEffect } from '../modules/lights/entities/sequences/lights-predefined-effect';
+import { LightsTrackEffect } from '../modules/lights/entities/sequences/lights-track-effect';
 import { LightsEffectsCreateParams } from '../modules/lights/effects';
 import { WaveCreateParams } from '../modules/lights/effects/color/wave';
 import { LightsScene, LightsSceneEffect } from '../modules/lights/entities/scenes';
@@ -488,7 +488,7 @@ export async function seedOpeningSequence(
   movingHeadsGEWIS: LightsGroup,
   movingHeadsRoy?: LightsGroup,
 ) {
-  const repo = dataSource.getRepository(LightsPredefinedEffect);
+  const repo = dataSource.getRepository(LightsTrackEffect);
   const trackUri = 'spotify:track:22L7bfCiAkJo5xGSQgmiIO';
 
   const addStep = async (
@@ -504,7 +504,7 @@ export async function seedOpeningSequence(
       effect: effect.type,
       effectProps: JSON.stringify(effect.props),
       lightGroups,
-    } as LightsPredefinedEffect);
+    } as LightsTrackEffect);
   };
 
   const allOfTheLights: SparkleCreateParams = {

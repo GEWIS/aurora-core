@@ -5,6 +5,7 @@ import LightsEffect, {
 } from '../lights-effect';
 import { LightsGroup } from '../../entities';
 import { ColorEffects } from './color-effects';
+import { RgbColor } from '../../color-definitions';
 
 export interface SparkleProps extends BaseLightsEffectProps {
   /**
@@ -62,6 +63,10 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
 
   public static build(props: SparkleProps): LightsEffectBuilder<SparkleProps, Sparkle> {
     return (lightsGroup: LightsGroup) => new Sparkle(lightsGroup, props);
+  }
+
+  setColors(colors: RgbColor[]) {
+    this.props.colors = colors;
   }
 
   /**

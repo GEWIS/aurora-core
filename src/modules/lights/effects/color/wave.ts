@@ -8,6 +8,7 @@ import { LightsGroup, LightsGroupMovingHeadRgbs, LightsGroupPars } from '../../e
 import { ColorEffects } from './color-effects';
 import { EffectProgressionTickStrategy } from '../progression-strategies';
 import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
+import { RgbColor } from '../../color-definitions';
 
 export interface WaveProps extends BaseLightsEffectProps, BaseLightsEffectProgressionProps {
   /**
@@ -54,6 +55,10 @@ export default class Wave extends LightsEffect<WaveProps> {
 
   public static build(props: WaveProps): LightsEffectBuilder<WaveProps, Wave> {
     return (lightsGroup) => new Wave(lightsGroup, props);
+  }
+
+  setColors(colors: RgbColor[]) {
+    this.props.colors = colors;
   }
 
   destroy(): void {}

@@ -77,6 +77,10 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
     return (lightsGroup) => new StaticColor(lightsGroup, props);
   }
 
+  setColors(colors: RgbColor[]) {
+    this.props.color = colors[0];
+  }
+
   beat(): void {
     if (!this.props.beatToggle) return;
 

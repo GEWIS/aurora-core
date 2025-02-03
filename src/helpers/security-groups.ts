@@ -84,6 +84,7 @@ export const securityGroups = {
   },
   effects: {
     base: baseSecurityGroups,
+    privileged: [SecurityGroup.ADMIN],
   },
   poster: {
     base: allSecuritySubscriberGroups,

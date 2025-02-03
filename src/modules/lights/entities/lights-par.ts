@@ -13,7 +13,7 @@ export default class LightsPar extends LightsFixture {
   @Column(() => ColorsRgb)
   public color: ColorsRgb;
 
-  public setColor(color: RgbColor) {
+  public setColor(color?: RgbColor) {
     this.valuesUpdatedAt = new Date();
     this.color.setColor(color);
   }

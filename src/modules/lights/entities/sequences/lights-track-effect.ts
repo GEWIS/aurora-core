@@ -4,7 +4,7 @@ import BaseEntity from '../../../root/entities/base-entity';
 import LightsGroup from '../lights-group';
 
 @Entity()
-export class LightsPredefinedEffect extends BaseEntity {
+export class LightsTrackEffect extends BaseEntity {
   /**
    * Either a Spotify Track URI (spotify:track:<id>) or a local identifier (local:<id>)
    */

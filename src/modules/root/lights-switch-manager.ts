@@ -44,4 +44,12 @@ export default class LightsSwitchManager {
   public getEnabledSwitches(): LightsSwitch[] {
     return this.enabledSwitches;
   }
+
+  /**
+   * Returns whether the given switch is enabled or disabled
+   * @param lightsSwitch
+   */
+  public switchEnabled(lightsSwitch: LightsSwitch): boolean {
+    return this.enabledSwitches.some((s) => s.id === lightsSwitch.id);
+  }
 }
