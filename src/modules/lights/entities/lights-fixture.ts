@@ -1,6 +1,7 @@
 import { AfterLoad, Column } from 'typeorm';
 import BaseEntity from '../../root/entities/base-entity';
 import { RgbColor } from '../color-definitions';
+import { DEFAULT_MASTER_DIMMER } from './lights-group-fixture';
 
 export default abstract class LightsFixture extends BaseEntity {
   @Column()
@@ -135,7 +136,7 @@ export default abstract class LightsFixture extends BaseEntity {
   /**
    * Get the current DMX values as an 16-length array of integers.
    */
-  toDmx(relativeBrightness: number = 1): number[] {
+  toDmx(relativeBrightness: number = DEFAULT_MASTER_DIMMER): number[] {
     if (this.strobeEnabled()) return this.getStrobeDMX(relativeBrightness);
 
     if (this.frozenDmx != null && this.frozenDmx.length > 0) {

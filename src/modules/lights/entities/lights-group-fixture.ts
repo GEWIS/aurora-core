@@ -1,6 +1,8 @@
 import BaseEntity from '../../root/entities/base-entity';
 import { Column } from 'typeorm';
 
+export const DEFAULT_MASTER_DIMMER = 1;
+
 export default abstract class LightsGroupFixture extends BaseEntity {
   @Column({ type: 'real', unsigned: true, nullable: false })
   public positionX: number;
@@ -15,7 +17,7 @@ export default abstract class LightsGroupFixture extends BaseEntity {
    * Relative brightness of a fixture, applied on top of the relative
    * brightness applied by an effect
    */
-  @Column({ type: 'double', default: 1 })
+  @Column({ type: 'double', default: DEFAULT_MASTER_DIMMER })
   public masterRelativeBrightness: number;
 
   public getActualChannel(relativeChannel: number) {
