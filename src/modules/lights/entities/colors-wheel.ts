@@ -95,7 +95,11 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
     return this.currentValues;
   }
 
-  public setStrobeInDmx(values: number[], shutterOptions: LightsFixtureShutterOptions[]): number[] {
+  public setStrobeInDmx(
+    masterRelativeBrightness: number,
+    values: number[],
+    shutterOptions: LightsFixtureShutterOptions[],
+  ): number[] {
     if (this.shutterChannel)
       values[this.shutterChannel - 1] =
         shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
@@ -105,7 +109,7 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
     if (this.shutterChannel || this.strobePing) {
       // If we have a shutter channel or we should manually strobe,
       // turn on the light
-      values[this.masterDimChannel - 1] = 255;
+      values[this.masterDimChannel - 1] = Math.round(masterRelativeBrightness * 255);
     } else if (!this.shutterChannel) {
       // If we do not have a shutter channel and the ping is off,
       // turn off the light
@@ -119,8 +123,14 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
     return values;
   }
 
-  public setColorsInDmx(values: number[], shutterOptions: LightsFixtureShutterOptions[]): number[] {
-    values[this.masterDimChannel - 1] = Math.round(this.currentBrightness * 255);
+  public setColorsInDmx(
+    masterRelativeBrightness: number,
+    values: number[],
+    shutterOptions: LightsFixtureShutterOptions[],
+  ): number[] {
+    values[this.masterDimChannel - 1] = Math.round(
+      masterRelativeBrightness * this.currentBrightness * 255,
+    );
     if (this.shutterChannel)
       values[this.shutterChannel - 1] =
         shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;

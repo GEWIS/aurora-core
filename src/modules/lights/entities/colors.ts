@@ -59,17 +59,26 @@ export default abstract class Colors {
     return this.strobe;
   }
 
+  /**
+   * Apply strobe effect to the given DMX subpacket
+   * @param masterRelativeBrightness Value in [0, 1], indicating the master dimmer value
+   * @param values DMX subpacket
+   * @param shutterOptions Fixture's shutter options
+   */
   public abstract setStrobeInDmx(
+    masterRelativeBrightness: number,
     values: number[],
     shutterOptions: LightsFixtureShutterOptions[],
   ): number[];
 
   /**
    * Apply colors to the given DMX subpacket (in-place)
-   * @param values
-   * @param shutterOptions
+   * @param masterRelativeBrightness Value in [0, 1], indicating the master dimmer value
+   * @param values DMX subpacket
+   * @param shutterOptions Fixture's shutter options
    */
   public abstract setColorsInDmx(
+    masterRelativeBrightness: number,
     values: number[],
     shutterOptions: LightsFixtureShutterOptions[],
   ): number[];

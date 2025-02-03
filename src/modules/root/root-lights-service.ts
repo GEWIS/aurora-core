@@ -81,6 +81,7 @@ export interface FixtureInGroupResponse<
   firstChannel: number;
   positionX: number;
   positionY: number;
+  masterDimmer: number;
 }
 
 export interface BaseLightsGroupResponse
@@ -332,6 +333,7 @@ export default class RootLightsService {
         firstChannel: p.firstChannel,
         positionX: p.positionX,
         positionY: p.positionY,
+        masterDimmer: p.masterRelativeBrightness,
       })),
       movingHeadRgbs: g.movingHeadRgbs.map((m) => ({
         fixture: this.toMovingHeadRgbResponse(m.fixture, m.firstChannel),
@@ -339,6 +341,7 @@ export default class RootLightsService {
         firstChannel: m.firstChannel,
         positionX: m.positionX,
         positionY: m.positionY,
+        masterDimmer: m.masterRelativeBrightness,
       })),
       movingHeadWheels: g.movingHeadWheels.map((m) => ({
         fixture: this.toMovingHeadWheelResponse(m.fixture, m.firstChannel),
@@ -346,6 +349,7 @@ export default class RootLightsService {
         firstChannel: m.firstChannel,
         positionX: m.positionX,
         positionY: m.positionY,
+        masterDimmer: m.masterRelativeBrightness,
       })),
     };
   }

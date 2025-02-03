@@ -1,14 +1,23 @@
-import { Body, Get, Post, Request, Route, Security, Tags } from 'tsoa';
-import { Controller } from '@tsoa/runtime';
+import { Body, Delete, Post, Request, Res, Route, Security, Tags } from 'tsoa';
+import { Controller, TsoaResponse } from '@tsoa/runtime';
 import { Request as ExpressRequest } from 'express';
 import HandlerManager from './handler-manager';
-import { LightsGroup, LightsSwitch } from '../lights/entities';
+import {
+  LightsGroup,
+  LightsGroupMovingHeadRgbs,
+  LightsGroupMovingHeadWheels,
+  LightsGroupPars,
+  LightsSwitch,
+} from '../lights/entities';
 import { StrobeProps } from '../lights/effects/color/strobe';
 import { SecurityNames } from '../../helpers/security';
 import logger from '../../logger';
 import { securityGroups } from '../../helpers/security-groups';
 import dataSource from '../../database';
 import LightsSwitchManager from './lights-switch-manager';
+import { HttpStatusCode } from 'axios';
+import RootLightsOperationsService from './root-lights-operations-service';
+import { DEFAULT_MASTER_DIMMER } from '../lights/entities/lights-group-fixture';
 
 interface GroupFixtureOverrideParams {
   /**
@@ -19,15 +28,20 @@ interface GroupFixtureOverrideParams {
   dmxValues: (number | null)[];
 }
 
+interface GroupFixtureDimmingParams {
+  /**
+   * Relative brightness of the fixture(s). Value in range [0, 1]
+   * @minimum 0
+   * @maximum 1
+   */
+  relativeBrightness: number;
+}
+
 @Route('lights')
 @Tags('Lights')
 export class RootLightsOperationsController extends Controller {
   private getGroups(): LightsGroup[] {
-    const manager = HandlerManager.getInstance();
-    return manager
-      .getHandlers(LightsGroup)
-      .map((handler) => handler.entities)
-      .flat() as LightsGroup[];
+    return new RootLightsOperationsService().getGroups();
   }
 
   private async getLightsSwitch(id: number): Promise<LightsSwitch | null> {
@@ -105,6 +119,58 @@ export class RootLightsOperationsController extends Controller {
     logger.audit(req.user, `Unfreeze lights group "${group.name}" (id: ${id}).`);
 
     group.fixtures.forEach((f) => f.fixture.unfreezeDmx());
+  }
+
+  @Security(SecurityNames.LOCAL, securityGroups.lightOperation.base)
+  @Post('group/{id}/dimmer')
+  public async setLightsGroupMasterDimmer(
+    @Request() req: ExpressRequest,
+    id: number,
+    @Body() params: GroupFixtureDimmingParams,
+    @Res() notFoundResponse: TsoaResponse<HttpStatusCode.NotFound, { message: string }>,
+  ) {
+    const dbLightsGroup = await dataSource.getRepository(LightsGroup).findOne({
+      where: { id },
+      relations: { pars: true, movingHeadRgbs: true, movingHeadWheels: true },
+    });
+    if (!dbLightsGroup) {
+      return notFoundResponse(HttpStatusCode.NotFound, { message: 'Lights group not found' });
+    }
+
+    const masterRelativeBrightness = params.relativeBrightness;
+
+    logger.audit(
+      req.user,
+      `Set lights group "${dbLightsGroup.name}" (id: ${id}) relative brightness to ${masterRelativeBrightness}.`,
+    );
+
+    await new RootLightsOperationsService().applyLightsGroupRelativeBrightness(
+      id,
+      masterRelativeBrightness,
+    );
+  }
+
+  @Security(SecurityNames.LOCAL, securityGroups.lightOperation.base)
+  @Delete('group/{id}/dimmer')
+  public async clearLightsGroupMasterDimmer(
+    @Request() req: ExpressRequest,
+    id: number,
+    @Res() notFoundResponse: TsoaResponse<HttpStatusCode.NotFound, { message: string }>,
+  ) {
+    const dbLightsGroup = await dataSource.getRepository(LightsGroup).findOne({
+      where: { id },
+      relations: { pars: true, movingHeadRgbs: true, movingHeadWheels: true },
+    });
+    if (!dbLightsGroup) {
+      return notFoundResponse(HttpStatusCode.NotFound, { message: 'Lights group not found' });
+    }
+
+    logger.audit(
+      req.user,
+      `Reset lights group "${dbLightsGroup.name}" (id: ${id}) relative brightness to default.`,
+    );
+
+    await new RootLightsOperationsService().resetLightsGroupRelativeBrightness(id);
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.lightOperation.base)

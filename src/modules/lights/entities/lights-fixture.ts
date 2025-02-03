@@ -1,6 +1,7 @@
 import { AfterLoad, Column } from 'typeorm';
 import BaseEntity from '../../root/entities/base-entity';
 import { RgbColor } from '../color-definitions';
+import { DEFAULT_MASTER_DIMMER } from './lights-group-fixture';
 
 export default abstract class LightsFixture extends BaseEntity {
   @Column()
@@ -124,25 +125,25 @@ export default abstract class LightsFixture extends BaseEntity {
    * Get the DMX channels that should be used when the fixture should strobe
    * @protected
    */
-  protected abstract getStrobeDMX(): number[];
+  protected abstract getStrobeDMX(masterRelativeBrightness: number): number[];
 
   /**
    * Get the DMX channels that are created from the channel values
    * @protected
    */
-  protected abstract getDmxFromCurrentValues(): number[];
+  protected abstract getDmxFromCurrentValues(masterRelativeBrightness: number): number[];
 
   /**
    * Get the current DMX values as an 16-length array of integers.
    */
-  toDmx(): number[] {
-    if (this.strobeEnabled()) return this.getStrobeDMX();
+  toDmx(relativeBrightness: number = DEFAULT_MASTER_DIMMER): number[] {
+    if (this.strobeEnabled()) return this.getStrobeDMX(relativeBrightness);
 
     if (this.frozenDmx != null && this.frozenDmx.length > 0) {
       return this.frozenDmx;
     }
 
-    let values: number[] = this.getDmxFromCurrentValues();
+    let values: number[] = this.getDmxFromCurrentValues(relativeBrightness);
     values = this.applyDmxOverride(values);
 
     if (this.shouldReset !== undefined) {

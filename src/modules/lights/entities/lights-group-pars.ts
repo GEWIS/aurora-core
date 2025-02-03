@@ -13,4 +13,8 @@ export default class LightsGroupPars extends LightsGroupFixture {
   @ManyToOne(() => LightsPar, { eager: true })
   @JoinColumn()
   public fixture: LightsPar;
+
+  public toDmx(): number[] {
+    return this.fixture.toDmx(this.masterRelativeBrightness);
+  }
 }
