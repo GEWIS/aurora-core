@@ -97,21 +97,34 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
     return value;
   }
 
-  public setStrobeInDmx(values: number[], shutterOptions: LightsFixtureShutterOptions[]): number[] {
-    if (this.masterDimChannel) values[this.masterDimChannel - 1] = 255;
+  public setStrobeInDmx(
+    masterRelativeBrightness: number,
+    values: number[],
+    shutterOptions: LightsFixtureShutterOptions[],
+  ): number[] {
+    const brightnessValue = Math.round(masterRelativeBrightness * 255);
+    if (this.masterDimChannel) values[this.masterDimChannel - 1] = brightnessValue;
     if (this.shutterChannel)
       values[this.shutterChannel - 1] =
         shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
 
-    if (this.shutterChannel || this.strobePing) {
-      // If we have a shutter channel or we should manually strobe
+    if (this.shutterChannel) {
+      // If we have a shutter channel
       values[this.redChannel - 1] = 255;
       values[this.blueChannel - 1] = 255;
       values[this.greenChannel - 1] = 255;
       if (this.warmWhiteChannel) values[this.warmWhiteChannel - 1] = 255;
       if (this.coldWhiteChannel) values[this.coldWhiteChannel - 1] = 255;
       if (this.amberChannel) values[this.amberChannel - 1] = 255;
-    } else if (!this.shutterChannel) {
+    } else if (this.strobePing) {
+      // If we should manually strobe
+      values[this.redChannel - 1] = brightnessValue;
+      values[this.blueChannel - 1] = brightnessValue;
+      values[this.greenChannel - 1] = brightnessValue;
+      if (this.warmWhiteChannel) values[this.warmWhiteChannel - 1] = brightnessValue;
+      if (this.coldWhiteChannel) values[this.coldWhiteChannel - 1] = brightnessValue;
+      if (this.amberChannel) values[this.amberChannel - 1] = brightnessValue;
+    } else {
       // If we do not have a shutter channel and the ping is off,
       // turn off all colors
       values[this.redChannel - 1] = 0;
@@ -130,9 +143,15 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
     return values;
   }
 
-  public setColorsInDmx(values: number[], shutterOptions: LightsFixtureShutterOptions[]): number[] {
+  public setColorsInDmx(
+    masterRelativeBrightness: number,
+    values: number[],
+    shutterOptions: LightsFixtureShutterOptions[],
+  ): number[] {
     if (this.masterDimChannel)
-      values[this.masterDimChannel - 1] = Math.round(this.currentBrightness * 255);
+      values[this.masterDimChannel - 1] = Math.round(
+        this.currentBrightness * masterRelativeBrightness * 255,
+      );
     if (this.shutterChannel)
       values[this.shutterChannel - 1] =
         shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;

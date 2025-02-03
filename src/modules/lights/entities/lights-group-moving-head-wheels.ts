@@ -13,4 +13,8 @@ export default class LightsGroupMovingHeadWheels extends LightsGroupFixture {
   @ManyToOne(() => LightsMovingHeadWheel, { eager: true })
   @JoinColumn()
   public fixture: LightsMovingHeadWheel;
+
+  public toDmx(): number[] {
+    return this.fixture.toDmx(this.masterRelativeBrightness);
+  }
 }

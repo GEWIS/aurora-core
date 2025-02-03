@@ -124,7 +124,7 @@ export default class LightsControllerManager {
     p: LightsGroupPars | LightsGroupMovingHeadRgbs | LightsGroupMovingHeadWheels,
     packet: number[],
   ) {
-    const dmxValues = p.fixture.toDmx();
+    const dmxValues = p.toDmx();
 
     for (let i = 0; i < dmxValues.length; i++) {
       packet[p.firstChannel - 1 + i] = dmxValues[i];
