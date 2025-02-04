@@ -64,7 +64,7 @@ export default abstract class LightsEffect<P = {}> {
     if (!this.progressionStrategy) return 0;
 
     let progression = 1 - this.progressionStrategy.getProgression(currentTick);
-    if (this.patternDirection === LightsEffectDirection.FORWARDS) {
+    if (this.patternDirection === LightsEffectDirection.BACKWARDS) {
       progression = 1 - progression;
     }
 
