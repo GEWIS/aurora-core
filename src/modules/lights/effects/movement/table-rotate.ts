@@ -25,7 +25,10 @@ export default class TableRotate extends BaseRotate<TableRotateProps> {
   constructor(lightsGroup: LightsGroup, props: TableRotateProps) {
     super(
       lightsGroup,
-      { cycleTime: DEFAULT_CYCLE_TIME, offsetFactor: DEFAULT_OFFSET_FACTOR },
+      {
+        cycleTime: props.cycleTime || DEFAULT_CYCLE_TIME,
+        offsetFactor: props.offsetFactor || DEFAULT_OFFSET_FACTOR,
+      },
       { pattern: props.pattern, direction: props.direction },
     );
     this.props = props;
