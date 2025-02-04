@@ -135,13 +135,13 @@ export default class BackgroundPulse extends LightsEffect<BackgroundPulseProps> 
    * @param colorIndex
    * @private
    */
-  private getColor(p: number, colorIndex: number): Required<IColorsRgb> {
-    const baseColor = rgbColorDefinitions[this.props.colors[0]].definition;
+  private getColor(p: number, colorIndex: number): Required<IColorsRgb> | undefined {
+    const baseColor = rgbColorDefinitions[this.props.colors[0]]?.definition;
     if (p <= 0 || this.props.colors.length < 2) {
       return baseColor;
     }
 
-    const compositeColor = rgbColorDefinitions[this.props.colors[colorIndex]].definition;
+    const compositeColor = rgbColorDefinitions[this.props.colors[colorIndex]]?.definition;
 
     return {
       redChannel: baseColor.redChannel * (1 - p) + compositeColor.redChannel * p,
@@ -172,7 +172,11 @@ export default class BackgroundPulse extends LightsEffect<BackgroundPulseProps> 
       }
 
       const color = this.getColor(p, this.colorIndices[i] + 1);
-      f.fixture.setCustomColor(color);
+      if (color) {
+        f.fixture.setCustomColor(color);
+      } else {
+        f.fixture.resetColor();
+      }
     });
 
     return this.lightsGroup;
