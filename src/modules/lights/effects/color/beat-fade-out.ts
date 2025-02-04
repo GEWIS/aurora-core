@@ -109,36 +109,10 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
     this.beatLength = event.beat.duration * 1000;
   }
 
-  getCurrentColor(fixture: LightsGroupFixture, i: number) {
-    const { colors } = this.props;
-    const progression = this.getProgression(new Date(), fixture);
-
-    const phase = progression * this.getEffectNrFixtures();
-    const index = Math.round(phase % this.nrSteps);
-
-    return colors[index];
-  }
-
-  applyColorToFixture(
-    p: LightsGroupPars | LightsGroupMovingHeadRgbs | LightsGroupMovingHeadWheels,
-    i: number,
-  ) {
-    const { enableFade } = this.props;
-    const beatProgression = enableFade
-      ? Math.max(1 - (new Date().getTime() - this.lastBeat) / this.beatLength, 0)
-      : 1;
-
-    const color = this.getCurrentColor(p, i);
-    if (color == null) {
-      p.fixture.resetColor();
-    } else {
-      p.fixture.setBrightness(beatProgression);
-      p.fixture.setColor(color);
-    }
-  }
-
   tick(): LightsGroup {
     super.tick();
+
+    const progressions: { id: number; value: string }[] = [];
 
     [
       ...this.lightsGroup.pars,
@@ -146,7 +120,35 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
       ...this.lightsGroup.movingHeadWheels,
     ]
       .sort((a, b) => a.positionX - b.positionX)
-      .forEach(this.applyColorToFixture.bind(this));
+      .forEach((p, i) => {
+        const { enableFade } = this.props;
+        const beatProgression = enableFade
+          ? Math.max(1 - (new Date().getTime() - this.lastBeat) / this.beatLength, 0)
+          : 1;
+
+        const { colors } = this.props;
+        const progression = this.getProgression(new Date(), p);
+
+        const phase = Math.round(progression * this.getEffectNrFixtures());
+        const index = phase % this.nrSteps;
+
+        const color = colors[index];
+        if (color == null) {
+          p.fixture.resetColor();
+        } else {
+          p.fixture.setBrightness(beatProgression);
+          p.fixture.setColor(color);
+        }
+
+        progressions.push({
+          id: i,
+          // value: `${progression.toFixed(3)} (${Math.round(phase).toString().padStart(2, '0')} -> ${index})`,
+          value: index.toString(),
+        });
+      });
+
+    const outputString = progressions.map((v) => `${v.id}: ${v.value}`).join(' | ');
+    // console.log(outputString);
 
     return this.lightsGroup;
   }
