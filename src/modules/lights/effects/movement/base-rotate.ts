@@ -2,7 +2,6 @@ import LightsEffect, { BaseLightsEffectProgressionProps } from '../lights-effect
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../../entities';
 import { EffectProgressionTickStrategy } from '../progression-strategies';
 import { BeatEvent } from '../../../events/music-emitter-events';
-import { LightsEffectDirection, LightsEffectPattern } from '../lights-effect-pattern';
 import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
 
 export interface BaseRotateProps {
@@ -11,8 +10,8 @@ export interface BaseRotateProps {
    * @isInt must be an integer
    * @minimum 0 must be positive
    */
-
   cycleTime?: number;
+
   /**
    * What phase the lights should move apart from each other. 0 for synchronous
    */

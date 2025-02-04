@@ -4,4 +4,5 @@ export enum MovementEffects {
   ClassicRotate = 'ClassicRotate',
   RandomPosition = 'RandomPosition',
   FixedPosition = 'FixedPosition',
+  ZigZag = 'ZigZag',
 }
