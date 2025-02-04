@@ -3,7 +3,7 @@ import LightsGroupFixture from '../../../entities/lights-group-fixture';
 
 export default class EffectProgressionMapCenteredSquaredStrategy extends EffectProgressionMapStrategy {
   public getNrFixtures(): number {
-    return (this.lightsGroup.gridSizeX + this.lightsGroup.gridSizeY) / 2;
+    return Math.round((this.lightsGroup.gridSizeX + this.lightsGroup.gridSizeY) / 2) - 1;
   }
 
   public getProgression(progression: number, fixture: LightsGroupFixture): number {
