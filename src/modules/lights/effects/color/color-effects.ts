@@ -1,5 +1,6 @@
 // Exists mostly for proper typing in the frontend
 export enum ColorEffects {
+  BackgroundPulse = 'BackgroundPulse',
   BeatFadeOut = 'BeatFadeOut',
   SingleFlood = 'SingleFlood',
   Sparkle = 'Sparkle',
