@@ -515,7 +515,9 @@ export default class RootLightsService {
     } as Movement;
   }
 
-  private toColorWheel(params: LightsMovingHeadWheelCreateParams): IColorsWheel {
+  private toColorWheel(
+    params: LightsMovingHeadWheelCreateParams,
+  ): IColorsWheel & { colorChannel: number } {
     return {
       colorChannel: params.colorWheelChannel,
       goboChannel: params.goboWheelChannel,
