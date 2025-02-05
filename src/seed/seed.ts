@@ -20,6 +20,7 @@ import { FixedPositionCreateParams } from '../modules/lights/effects/movement/fi
 import { ColorEffects } from '../modules/lights/effects/color/color-effects';
 import { MovementEffects } from '../modules/lights/effects/movement/movement-effetcs';
 import { TimedEvent } from '../modules/timed-events/entities';
+import AuthService from '../modules/auth/auth-service';
 
 export default async function seedDatabase() {
   const timedEventsRepo = dataSource.getRepository(TimedEvent);
@@ -55,6 +56,7 @@ export default async function seedDatabase() {
     name: 'PCGEWISINFO',
     defaultHandler: GewisPosterScreenHandler.name,
   });
+  await new AuthService().createIntegrationUser({ name: 'BPM-script' });
 
   const rootLightsService = new RootLightsService();
   const controller = await rootLightsService.createController({ name: 'GEWIS-BAR' });
@@ -198,8 +200,12 @@ export default async function seedDatabase() {
     pars: [],
     movingHeadRgbs: [],
     movingHeadWheels: [
-      { fixtureId: eurolite_LED_TMH_S30.id, firstChannel: 161, positionX: 0 },
-      { fixtureId: eurolite_LED_TMH_S30.id, firstChannel: 177, positionX: 1 },
+      { fixtureId: showtec_Kanjo_Spot10.id, firstChannel: 385, positionX: 0 },
+      { fixtureId: eurolite_LED_TMH_S30.id, firstChannel: 161, positionX: 1 },
+      { fixtureId: showtec_Kanjo_Spot10.id, firstChannel: 401, positionX: 2 },
+      { fixtureId: showtec_Kanjo_Spot10.id, firstChannel: 417, positionX: 3 },
+      { fixtureId: eurolite_LED_TMH_S30.id, firstChannel: 177, positionX: 4 },
+      { fixtureId: showtec_Kanjo_Spot10.id, firstChannel: 433, positionX: 5 },
     ],
   });
   if (!gewisMHRoom) throw new Error('GEWIS MHs not created');
@@ -756,8 +762,26 @@ export async function seedDiscoFloor(width: number, height: number) {
   });
 
   const pars: LightsInGroup[] = [];
-  for (let positionY = 0; positionY < height; positionY++) {
-    for (let positionX = 0; positionX < width; positionX++) {
+  for (let positionY = 0; positionY < height * 2; positionY += 2) {
+    for (let positionX = 0; positionX < width * 2; positionX += 2) {
+      pars.push({
+        fixtureId: fixture.id,
+        firstChannel: pars.length * fixture.nrChannels + 1,
+        positionX: positionX + 1,
+        positionY: positionY + 1,
+      });
+      pars.push({
+        fixtureId: fixture.id,
+        firstChannel: pars.length * fixture.nrChannels + 1,
+        positionX,
+        positionY: positionY + 1,
+      });
+      pars.push({
+        fixtureId: fixture.id,
+        firstChannel: pars.length * fixture.nrChannels + 1,
+        positionX: positionX + 1,
+        positionY,
+      });
       pars.push({
         fixtureId: fixture.id,
         firstChannel: pars.length * fixture.nrChannels + 1,
