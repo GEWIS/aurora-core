@@ -75,7 +75,11 @@ export default class FixedPosition extends LightsEffect<FixedPositionProps> {
 
   beat(): void {}
 
-  destroy(): void {}
+  destroy(): void {
+    [...this.lightsGroup.movingHeadRgbs, ...this.lightsGroup.movingHeadWheels].forEach((f) => {
+      f.fixture.movement.reset();
+    });
+  }
 
   tick(): LightsGroup {
     return this.lightsGroup;

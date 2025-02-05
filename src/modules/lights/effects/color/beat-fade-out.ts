@@ -97,7 +97,11 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
     this.props.colors = colors;
   }
 
-  destroy(): void {}
+  destroy(): void {
+    this.lightsGroup.fixtures.forEach((f) => {
+      f.fixture.resetColor();
+    });
+  }
 
   beat(event: BeatEvent): void {
     super.beat(event);

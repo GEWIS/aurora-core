@@ -70,7 +70,11 @@ export default class RandomColor extends LightsEffect<RandomColorProps> {
     this.props.colors = colors;
   }
 
-  destroy() {}
+  destroy() {
+    this.lightsGroup.fixtures.forEach((f) => {
+      f.fixture.resetColor();
+    });
+  }
 
   beat(event: BeatEvent) {
     super.beat(event);

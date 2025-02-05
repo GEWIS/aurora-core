@@ -19,7 +19,11 @@ export default class Fire extends LightsEffect<FireProps> {
 
   beat(): void {}
 
-  destroy(): void {}
+  destroy(): void {
+    this.lightsGroup.fixtures.forEach((f) => {
+      f.fixture.resetColor();
+    });
+  }
 
   tick(): LightsGroup {
     [...this.lightsGroup.pars, ...this.lightsGroup.movingHeadRgbs].forEach((p) => {

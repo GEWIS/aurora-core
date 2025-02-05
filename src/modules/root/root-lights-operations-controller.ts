@@ -211,7 +211,7 @@ export class RootLightsOperationsController extends Controller {
 
     logger.audit(req.user, `Reset lights par "${chosenPar.fixture.name}" (id: ${id}).`);
 
-    const success = chosenPar.fixture.reset();
+    const success = chosenPar.fixture.hardwareReset();
     if (!success) {
       this.setStatus(422);
     }
@@ -299,7 +299,7 @@ export class RootLightsOperationsController extends Controller {
 
     logger.audit(req.user, `Reset moving head RGB "${chosenMovingHead.fixture.name}" (id: ${id}).`);
 
-    const success = chosenMovingHead.fixture.reset();
+    const success = chosenMovingHead.fixture.hardwareReset();
     if (!success) {
       this.setStatus(422);
     }
@@ -396,7 +396,7 @@ export class RootLightsOperationsController extends Controller {
       `Reset moving head wheel "${chosenMovingHead.fixture.name}" (id: ${id}).`,
     );
 
-    const success = chosenMovingHead.fixture.reset();
+    const success = chosenMovingHead.fixture.hardwareReset();
     if (!success) {
       this.setStatus(422);
     }

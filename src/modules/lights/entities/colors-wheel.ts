@@ -80,6 +80,7 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
   }
 
   public reset(): void {
+    this.setBrightness(1);
     this.currentColor = undefined;
     this.currentValues = {
       goboChannel: 0,

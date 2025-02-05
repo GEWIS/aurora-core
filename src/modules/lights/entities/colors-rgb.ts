@@ -102,6 +102,7 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
   }
 
   public reset(): void {
+    this.setBrightness(1);
     this.currentValues = {
       redChannel: 0,
       greenChannel: 0,
