@@ -61,7 +61,11 @@ export default class Wave extends LightsEffect<WaveProps> {
     this.props.colors = colors;
   }
 
-  destroy(): void {}
+  destroy(): void {
+    this.lightsGroup.fixtures.forEach((f) => {
+      f.fixture.resetColor();
+    });
+  }
 
   beat(): void {}
 

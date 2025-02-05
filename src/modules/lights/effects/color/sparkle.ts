@@ -91,7 +91,11 @@ export default class Sparkle extends LightsEffect<SparkleProps> {
     this.previousTick = new Date();
   }
 
-  destroy(): void {}
+  destroy(): void {
+    this.lightsGroup.fixtures.forEach((f) => {
+      f.fixture.resetColor();
+    });
+  }
 
   beat(): void {
     if (!this.props.cycleTime) this.enableLights();

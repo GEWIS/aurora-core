@@ -56,8 +56,8 @@ export default class ClassicRotate extends BaseRotate<ClassicRotateProps> {
     progression: number,
     offset: number = 0,
   ) {
-    const pan = this.triangleFunction(progression + offset) * 128 + 128;
-    const tilt = this.triangleFunction(progression * 4 + offset) * 128 + 128;
-    movingHead.setPosition(pan, tilt);
+    const pan = this.triangleFunction(progression + offset) / 2 + 0.5;
+    const tilt = this.triangleFunction(progression * 4 + offset) / 2 + 0.5;
+    movingHead.setPositionRel(pan, tilt);
   }
 }

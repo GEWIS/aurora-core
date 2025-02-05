@@ -56,14 +56,12 @@ export default class ZigZag extends BaseRotate<ZigZagProps> {
     offset: number,
   ) {
     const hozRadiusFactor = this.props.horizontalRadius || DEFAULT_HOZ_RADIUS_FACTOR;
-    const horizontalRadius = hozRadiusFactor / 6;
+    const horizontalRadius = hozRadiusFactor / 4;
     const vertRadiusFactor = this.props.verticalRadius || DEFAULT_VERT_RADIUS_FACTOR;
-    const verticalRadius = 0.5 * vertRadiusFactor;
+    const verticalRadius = vertRadiusFactor / 2;
 
-    const panChannel =
-      Math.sin(progression * 2 * Math.PI + offset) * horizontalRadius + (1 - horizontalRadius / 6);
-    const tiltChannel =
-      Math.sin(progression * 24 * Math.PI + offset) * verticalRadius + (1 - vertRadiusFactor / 2);
+    const panChannel = Math.sin(progression * 2 * Math.PI + offset) * horizontalRadius + 0.5;
+    const tiltChannel = Math.sin(progression * 24 * Math.PI + offset) * verticalRadius + 0.5;
     movingHead.setPositionRel(panChannel, tiltChannel);
   }
 }

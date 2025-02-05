@@ -30,11 +30,7 @@ export default abstract class BaseRotate<T extends BaseRotateProps> extends Ligh
     progressionProps: BaseLightsEffectProgressionProps,
     cycleTime?: number,
   ) {
-    super(
-      lightsGroup,
-      new EffectProgressionTickStrategy(cycleTime ?? defaults.cycleTime),
-      new EffectProgressionMapFactory(lightsGroup).getMapper(progressionProps.pattern),
-    );
+    super(lightsGroup, new EffectProgressionTickStrategy(cycleTime ?? defaults.cycleTime));
   }
 
   /**
@@ -50,7 +46,11 @@ export default abstract class BaseRotate<T extends BaseRotateProps> extends Ligh
     offset: number,
   ): void;
 
-  destroy(): void {}
+  destroy(): void {
+    [...this.lightsGroup.movingHeadRgbs, ...this.lightsGroup.movingHeadWheels].forEach((f) => {
+      f.fixture.movement.reset();
+    });
+  }
 
   beat(event: BeatEvent): void {
     super.beat(event);

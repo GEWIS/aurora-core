@@ -9,7 +9,6 @@ import LightsFixtureShutterOptions, { ShutterOption } from './lights-fixture-shu
 import logger from '../../../logger';
 
 export interface IColorsWheel {
-  colorChannel: number;
   goboChannel: number;
   goboRotateChannel?: number | null;
 }
@@ -41,8 +40,9 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
 
   private strobePing = false;
 
+  private currentColor: LightsWheelColorChannelValue | undefined;
+
   private currentValues: IColorsWheel = {
-    colorChannel: 0,
     goboChannel: 0,
     goboRotateChannel: 0,
   };
@@ -60,11 +60,7 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
     }
 
     const wheelColor = spec.alternative;
-    const channelValueObj = this.colorChannelValues.find((v) => v.name === wheelColor);
-    this.currentValues = {
-      ...this.currentValues,
-      colorChannel: channelValueObj?.value ?? 0,
-    };
+    this.currentColor = this.colorChannelValues.find((v) => v.name === wheelColor);
   }
 
   public setGobo(gobo?: string) {
@@ -84,8 +80,9 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
   }
 
   public reset(): void {
+    this.setBrightness(1);
+    this.currentColor = undefined;
     this.currentValues = {
-      colorChannel: 0,
       goboChannel: 0,
       goboRotateChannel: 0,
     };
@@ -128,13 +125,14 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
     values: number[],
     shutterOptions: LightsFixtureShutterOptions[],
   ): number[] {
-    values[this.masterDimChannel - 1] = Math.round(
-      masterRelativeBrightness * this.currentBrightness * 255,
-    );
+    values[this.masterDimChannel - 1] =
+      this.currentColor !== undefined
+        ? Math.round(masterRelativeBrightness * this.currentBrightness * 255)
+        : 0;
     if (this.shutterChannel)
       values[this.shutterChannel - 1] =
         shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
-    values[this.colorChannel - 1] = this.channelValues.colorChannel;
+    values[this.colorChannel - 1] = this.currentColor?.value ?? 0;
     values[this.goboChannel - 1] = this.channelValues.goboChannel;
     if (this.goboRotateChannel != null) {
       values[this.goboRotateChannel - 1] = this.channelValues.goboRotateChannel || 0;

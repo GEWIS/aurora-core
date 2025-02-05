@@ -35,29 +35,24 @@ export type BaseLightsEffectCreateParams = {};
 export default abstract class LightsEffect<P = {}> {
   protected props: P;
 
-  private readonly progressionMapperStrategy: EffectProgressionMapStrategy;
-
   protected constructor(
     public readonly lightsGroup: LightsGroup,
     private readonly progressionStrategy?: EffectProgressionStrategy,
-    progressionMapperStrategy?: EffectProgressionMapStrategy,
+    private readonly progressionMapperStrategy?: EffectProgressionMapStrategy,
     private patternDirection = LightsEffectDirection.FORWARDS,
-  ) {
-    if (!progressionMapperStrategy) {
-      this.progressionMapperStrategy = new EffectProgressionMapFactory(this.lightsGroup).getMapper(
-        LightsEffectPattern.HORIZONTAL,
-      );
-    } else {
-      this.progressionMapperStrategy = progressionMapperStrategy;
-    }
-  }
+  ) {}
 
   public setNewProps(props: P) {
     this.props = props;
   }
 
   protected getEffectNrFixtures(): number {
-    return this.progressionMapperStrategy.getNrFixtures();
+    if (this.progressionMapperStrategy) return this.progressionMapperStrategy.getNrFixtures();
+    return (
+      this.lightsGroup.pars.length +
+      this.lightsGroup.movingHeadWheels.length +
+      this.lightsGroup.movingHeadRgbs.length
+    );
   }
 
   protected getProgression(currentTick: Date, fixture: LightsGroupFixture): number {
@@ -68,7 +63,10 @@ export default abstract class LightsEffect<P = {}> {
       progression = 1 - progression;
     }
 
-    return this.progressionMapperStrategy.getProgression(progression, fixture);
+    if (this.progressionMapperStrategy) {
+      return this.progressionMapperStrategy.getProgression(progression, fixture);
+    }
+    return this.progressionStrategy.getProgression(currentTick);
   }
 
   /**

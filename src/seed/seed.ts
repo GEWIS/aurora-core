@@ -118,6 +118,7 @@ export default async function seedDatabase() {
     finePanChannel: 2,
     tiltChannel: 3,
     fineTiltChannel: 4,
+    basePanValue: 42,
     colorRedChannel: 8,
     colorGreenChannel: 9,
     colorBlueChannel: 10,
@@ -397,6 +398,7 @@ export async function seedBorrelLights(
   const movingHeadStatic: FixedPositionCreateParams = {
     type: MovementEffects.FixedPosition,
     props: {
+      variant: 'Absolute',
       pan: 111,
       tilt: 18,
     },
@@ -794,8 +796,8 @@ export async function seedDiscoFloor(width: number, height: number) {
   return await service.createLightGroup(controller.id, {
     name: 'Disco floor',
     defaultHandler: '',
-    gridSizeX: width,
-    gridSizeY: height,
+    gridSizeX: width * 2,
+    gridSizeY: height * 2,
     pars,
     movingHeadWheels: [],
     movingHeadRgbs: [],

@@ -2,21 +2,43 @@ import LightsEffect, { BaseLightsEffectCreateParams, LightsEffectBuilder } from 
 import { LightsGroup } from '../../entities';
 import { MovementEffects } from './movement-effetcs';
 
-export interface FixedPositionProps {
+export type FixedPositionPropsAbs = {
+  variant: 'Absolute';
+
   /**
-   * Pan value of the moving heads. Any decimals are applied to the finePan if it exists.
+   * Absolute pan value of the moving heads. Any decimals are applied to the finePan if it exists.
    * @minimum 0
    * @maximum 256
    */
   pan: number;
 
   /**
-   * Tilt value of the moving heads. Any decimals are applied to the fineTilt if it exists.
+   * Relative tilt value of the moving heads. Any decimals are applied to the fineTilt if it exists.
    * @minimum 0
    * @maximum 256
    */
   tilt: number;
-}
+};
+
+export type FixedPositionPropsRel = {
+  variant: 'Relative';
+
+  /**
+   * Relative pan value of the moving heads. Any decimals are applied to the finePan if it exists.
+   * @minimum 0
+   * @maximum 1
+   */
+  pan: number;
+
+  /**
+   * Relative tilt value of the moving heads. Any decimals are applied to the fineTilt if it exists.
+   * @minimum 0
+   * @maximum 1
+   */
+  tilt: number;
+};
+
+export type FixedPositionProps = FixedPositionPropsAbs | FixedPositionPropsRel;
 
 export type FixedPositionCreateParams = BaseLightsEffectCreateParams & {
   type: MovementEffects.FixedPosition;
@@ -28,12 +50,21 @@ export default class FixedPosition extends LightsEffect<FixedPositionProps> {
     super(lightsGroup);
     this.props = props;
 
-    lightsGroup.movingHeadRgbs.forEach(({ fixture }) => {
-      fixture.setPosition(props.pan, props.tilt);
-    });
-    lightsGroup.movingHeadWheels.forEach(({ fixture }) => {
-      fixture.setPosition(props.pan, props.tilt);
-    });
+    if (props.variant === 'Absolute') {
+      lightsGroup.movingHeadRgbs.forEach(({ fixture }) => {
+        fixture.setPosition(props.pan, props.tilt);
+      });
+      lightsGroup.movingHeadWheels.forEach(({ fixture }) => {
+        fixture.setPosition(props.pan, props.tilt);
+      });
+    } else if (props.variant === 'Relative') {
+      lightsGroup.movingHeadRgbs.forEach(({ fixture }) => {
+        fixture.setPositionRel(props.pan, props.tilt);
+      });
+      lightsGroup.movingHeadWheels.forEach(({ fixture }) => {
+        fixture.setPositionRel(props.pan, props.tilt);
+      });
+    }
   }
 
   public static build(
@@ -44,7 +75,11 @@ export default class FixedPosition extends LightsEffect<FixedPositionProps> {
 
   beat(): void {}
 
-  destroy(): void {}
+  destroy(): void {
+    [...this.lightsGroup.movingHeadRgbs, ...this.lightsGroup.movingHeadWheels].forEach((f) => {
+      f.fixture.movement.reset();
+    });
+  }
 
   tick(): LightsGroup {
     return this.lightsGroup;

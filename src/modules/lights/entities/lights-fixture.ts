@@ -51,7 +51,7 @@ export default abstract class LightsFixture extends BaseEntity {
    * Reset the fixture if possible.
    * @return true if reset command can be sent. False otherwise
    */
-  reset(): boolean {
+  hardwareReset(): boolean {
     if (this.resetChannelAndValue == null || this.resetChannelAndValue.length < 2) return false;
     this.shouldReset = new Date();
     return true;

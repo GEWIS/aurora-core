@@ -34,7 +34,11 @@ export default class SingleFlood extends LightsEffect<SingleFloodProps> {
     this.props = props;
   }
 
-  destroy(): void {}
+  destroy(): void {
+    this.lightsGroup.fixtures.forEach((f) => {
+      f.fixture.resetColor();
+    });
+  }
 
   beat(): void {}
 

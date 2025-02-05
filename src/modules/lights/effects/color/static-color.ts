@@ -87,7 +87,11 @@ export default class StaticColor extends LightsEffect<StaticColorProps> {
     this.ping = (this.ping + 1) % 2;
   }
 
-  destroy(): void {}
+  destroy(): void {
+    this.lightsGroup.fixtures.forEach((f) => {
+      f.fixture.resetColor();
+    });
+  }
 
   private getDimProgression(durationMs: number) {
     return Math.min(1, (new Date().getTime() - this.cycleStartTick.getTime()) / durationMs);
