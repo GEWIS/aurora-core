@@ -1,8 +1,7 @@
 import { Column } from 'typeorm';
-import { RgbColor, rgbColorDefinitions } from '../color-definitions';
+import { hexToRgb, RgbColor, rgbColorDefinitions } from '../color-definitions';
 import LightsFixtureShutterOptions, { ShutterOption } from './lights-fixture-shutter-options';
 import Colors from './colors';
-import { IColorsWheel } from './colors-wheel';
 import logger from '../../../logger';
 
 export type ColorChannel = keyof ColorsRgb;
@@ -57,6 +56,16 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
     uvChannel: 0,
   };
 
+  /**
+   * Returns whether multiple LED colors can be used to mix colors, or whether only
+   * RGB can be used.
+   */
+  public hasExtendedColorPalette(): boolean {
+    return (
+      this.coldWhiteChannel != null || this.warmWhiteChannel != null || this.amberChannel != null
+    );
+  }
+
   public setColor(color?: RgbColor): void {
     if (!color) {
       this.reset();
@@ -68,7 +77,21 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
       this.reset();
       return;
     }
-    this.currentValues = spec.definition;
+
+    if (this.hasExtendedColorPalette()) {
+      this.currentValues = spec.definition;
+    } else {
+      const { r, g, b } = hexToRgb(spec.hex);
+      this.currentValues = {
+        redChannel: r,
+        greenChannel: g,
+        blueChannel: b,
+        coldWhiteChannel: 0,
+        warmWhiteChannel: 0,
+        amberChannel: 0,
+        uvChannel: 0,
+      };
+    }
   }
 
   public setCustomColor(color: IColorsRgb): void {

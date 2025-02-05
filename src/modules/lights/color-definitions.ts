@@ -35,11 +35,13 @@ export const wheelColors = Object.values(WheelColor);
 
 export const rgbColors = Object.values(RgbColor);
 
+export type HexColor = string;
+
 export type RgbColorSpecification = {
   definition: Required<IColorsRgb>;
   alternative: WheelColor;
   complementary: RgbColor[];
-  hex: string;
+  hex: HexColor;
 };
 
 export type RgbColorSet = {
@@ -49,6 +51,17 @@ export type RgbColorSet = {
 export type RgbColorAlternatives = {
   [color in RgbColor]: WheelColor;
 };
+
+export function hexToRgb(hex: HexColor): { r: number; g: number; b: number } {
+  const parts = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return parts
+    ? {
+        r: parseInt(parts[1], 16),
+        g: parseInt(parts[2], 16),
+        b: parseInt(parts[3], 16),
+      }
+    : { r: 0, g: 0, b: 0 };
+}
 
 export const rgbColorDefinitions: RgbColorSet = {
   [RgbColor.WHITE]: {
@@ -63,7 +76,7 @@ export const rgbColorDefinitions: RgbColorSet = {
     },
     alternative: WheelColor.WHITE,
     complementary: [],
-    hex: '#fff',
+    hex: '#ffffff',
   },
   [RgbColor.RED]: {
     definition: {

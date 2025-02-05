@@ -4,7 +4,12 @@ import LightsEffect, {
   LightsEffectBuilder,
 } from '../lights-effect';
 import { LightsGroup } from '../../entities';
-import { RgbColor, rgbColorDefinitions } from '../../color-definitions';
+import {
+  hexToRgb,
+  RgbColor,
+  rgbColorDefinitions,
+  RgbColorSpecification,
+} from '../../color-definitions';
 import { EffectProgressionTickStrategy } from '../progression-strategies';
 import { IColorsRgb } from '../../entities/colors-rgb';
 import { ColorEffects } from './color-effects';
@@ -71,7 +76,12 @@ export default class BackgroundPulse extends LightsEffect<BackgroundPulseProps> 
     this.props.colors = colors;
   }
 
-  destroy(): void {}
+  destroy(): void {
+    this.lightsGroup.fixtures.forEach((f) => {
+      f.fixture.setBrightness(1);
+      f.fixture.resetColor();
+    });
+  }
 
   /**
    * Whether we should start a new tick
@@ -129,31 +139,82 @@ export default class BackgroundPulse extends LightsEffect<BackgroundPulseProps> 
     return (1 - fixtureAbsoluteProgression) * 2;
   }
 
+  private rgbToIColorsRgb({ r, g, b }: { r: number; b: number; g: number }): Required<IColorsRgb> {
+    return {
+      redChannel: r,
+      greenChannel: g,
+      blueChannel: b,
+      coldWhiteChannel: 0,
+      warmWhiteChannel: 0,
+      amberChannel: 0,
+      uvChannel: 0,
+    };
+  }
+
+  /**
+   * Mix two colors together
+   * @param colorA
+   * @param colorB
+   * @param p factor B present in the new color
+   * @param rgbOnly Whether the output should be an RGB-only color
+   * @private
+   */
+  private mixColors(
+    colorA: RgbColorSpecification,
+    colorB: RgbColorSpecification,
+    p: number,
+    rgbOnly: boolean,
+  ): Required<IColorsRgb> {
+    if (!rgbOnly) {
+      return {
+        redChannel: colorA.definition.redChannel * (1 - p) + colorB.definition.redChannel * p,
+        greenChannel: colorA.definition.greenChannel * (1 - p) + colorB.definition.greenChannel * p,
+        blueChannel: colorA.definition.blueChannel * (1 - p) + colorB.definition.blueChannel * p,
+        warmWhiteChannel:
+          colorA.definition.warmWhiteChannel! * (1 - p) + colorB.definition.warmWhiteChannel! * p,
+        coldWhiteChannel:
+          colorA.definition.coldWhiteChannel! * (1 - p) + colorB.definition.coldWhiteChannel! * p,
+        amberChannel:
+          colorA.definition.amberChannel! * (1 - p) + colorB.definition.amberChannel! * p,
+        uvChannel: colorA.definition.uvChannel! * (1 - p) + colorB.definition.uvChannel! * p,
+      };
+    }
+
+    const rgbA = hexToRgb(colorA.hex);
+    const rgbB = hexToRgb(colorB.hex);
+
+    return this.rgbToIColorsRgb({
+      r: rgbA.r * (1 - p) + rgbB.r * p,
+      g: rgbA.g * (1 - p) + rgbB.g * p,
+      b: rgbA.b * (1 - p) + rgbB.b * p,
+    });
+  }
+
   /**
    * Get the mixed color for the given progression and the given color index
    * @param p progression, in range [0, 1]
    * @param colorIndex
+   * @param rgbOnly Whether only an RGB color should be returned, instead of an extensive palette
    * @private
    */
-  private getColor(p: number, colorIndex: number): Required<IColorsRgb> | undefined {
-    const baseColor = rgbColorDefinitions[this.props.colors[0]]?.definition;
-    if (p <= 0 || this.props.colors.length < 2) {
-      return baseColor;
+  private getColor(
+    p: number,
+    colorIndex: number,
+    rgbOnly: boolean,
+  ): Required<IColorsRgb> | undefined {
+    const baseColor = rgbColorDefinitions[this.props.colors[0]];
+    if (!baseColor) return undefined;
+
+    let compositeColor: RgbColorSpecification | undefined;
+    if (this.props.colors.length >= 2) {
+      compositeColor = rgbColorDefinitions[this.props.colors[colorIndex]];
     }
 
-    const compositeColor = rgbColorDefinitions[this.props.colors[colorIndex]]?.definition;
+    if (p <= 0 || !compositeColor) {
+      return rgbOnly ? this.rgbToIColorsRgb(hexToRgb(baseColor.hex)) : baseColor.definition;
+    }
 
-    return {
-      redChannel: baseColor.redChannel * (1 - p) + compositeColor.redChannel * p,
-      greenChannel: baseColor.greenChannel * (1 - p) + compositeColor.greenChannel * p,
-      blueChannel: baseColor.blueChannel * (1 - p) + compositeColor.blueChannel * p,
-      warmWhiteChannel:
-        baseColor.warmWhiteChannel! * (1 - p) + compositeColor.warmWhiteChannel! * p,
-      coldWhiteChannel:
-        baseColor.coldWhiteChannel! * (1 - p) + compositeColor.coldWhiteChannel! * p,
-      amberChannel: baseColor.amberChannel! * (1 - p) + compositeColor.amberChannel! * p,
-      uvChannel: baseColor.uvChannel! * (1 - p) + compositeColor.uvChannel! * p,
-    };
+    return this.mixColors(baseColor, compositeColor, p, rgbOnly);
   }
 
   tick(): LightsGroup {
@@ -171,7 +232,11 @@ export default class BackgroundPulse extends LightsEffect<BackgroundPulseProps> 
         p = this.getRelativeProgression(progressionStrategy.getProgression(tick));
       }
 
-      const color = this.getColor(p, this.colorIndices[i] + 1);
+      const color = this.getColor(
+        p,
+        this.colorIndices[i] + 1,
+        !f.fixture.color.hasExtendedColorPalette(),
+      );
       if (color) {
         f.fixture.setCustomColor(color);
       } else {

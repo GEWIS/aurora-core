@@ -796,8 +796,8 @@ export async function seedDiscoFloor(width: number, height: number) {
   return await service.createLightGroup(controller.id, {
     name: 'Disco floor',
     defaultHandler: '',
-    gridSizeX: width,
-    gridSizeY: height,
+    gridSizeX: width * 2,
+    gridSizeY: height * 2,
     pars,
     movingHeadWheels: [],
     movingHeadRgbs: [],
