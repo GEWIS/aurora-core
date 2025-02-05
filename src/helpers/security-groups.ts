@@ -59,6 +59,7 @@ const allSecuritySubscriberGroups = [
   SecurityGroup.AUDIO_SUBSCRIBER,
   SecurityGroup.SCREEN_SUBSCRIBER,
   SecurityGroup.LIGHTS_SUBSCRIBER,
+  SecurityGroup.INTEGRATION_USER,
 ];
 
 /**
@@ -73,7 +74,13 @@ export const securityGroups = {
     base: allSecurityGroups,
   },
   beats: {
-    base: baseSecurityGroups,
+    base: [
+      SecurityGroup.ADMIN,
+      SecurityGroup.BAC,
+      SecurityGroup.BOARD,
+      SecurityGroup.AVICO,
+      SecurityGroup.INTEGRATION_USER,
+    ],
   },
   gdrp: {
     base: [SecurityGroup.ADMIN],

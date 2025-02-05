@@ -17,7 +17,7 @@ passport.use(
 
     const identity = await database.getRepository(ApiKey).findOne({
       where: { key: req.body.key },
-      relations: { audio: true, lightsController: true, screen: true },
+      relations: { audio: true, lightsController: true, screen: true, integrationUser: true },
     });
     if (!identity) {
       callback(new HttpApiException(HttpStatusCode.NotFound, 'Key not found'), undefined);
@@ -42,6 +42,11 @@ passport.use(
       names.push(identity.lightsController.name);
       ids.push(`lightsController${identity.lightsController.id}`);
     }
+    if (identity.integrationUser) {
+      roles.push(SecurityGroup.INTEGRATION_USER);
+      names.push(identity.integrationUser.name);
+      ids.push(`integrationUser${identity.integrationUser.id}`);
+    }
 
     callback(null, {
       id: ids.join('-'),
@@ -50,6 +55,7 @@ passport.use(
       audioId: identity.audio?.id,
       screenId: identity.screen?.id,
       lightsControllerId: identity.lightsController?.id,
+      integrationUserId: identity.integrationUser?.id,
     } as AuthUser);
   }),
 );
