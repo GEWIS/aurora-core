@@ -11,7 +11,7 @@ async function createSeeder() {
   const [room, bar, lounge, movingHeadsGEWIS, movingHeadsRoy] = await seedDatabase();
   await seedBorrelLights(room!, bar!, lounge!, movingHeadsGEWIS!);
   await seedOpeningSequence(room!, bar!, movingHeadsGEWIS!, movingHeadsRoy!);
-  await seedDiscoFloor(12, 8);
+  await seedDiscoFloor(9, 4);
 }
 
 if (require.main === module) {
