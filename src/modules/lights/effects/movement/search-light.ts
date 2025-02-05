@@ -56,8 +56,8 @@ export default class SearchLight extends BaseRotate<SearchLightProps> {
     offset: number = 0,
   ) {
     const radiusFactor = this.props.radiusFactor ?? DEFAULT_RADIUS_FACTOR;
-    const pan = Math.cos(progression * 2 * Math.PI + offset) * 42 + 42;
-    const tilt = Math.sin(progression * 2 * Math.PI + offset) * 64 * radiusFactor + 128;
-    movingHead.setPosition(pan, tilt);
+    const pan = Math.cos(progression * 2 * Math.PI + offset) * 0.15 + 0.15;
+    const tilt = Math.sin(progression * 2 * Math.PI + offset) * 0.25 * radiusFactor + 0.5;
+    movingHead.setPositionRel(pan, tilt);
   }
 }

@@ -12,6 +12,9 @@ export default class Movement implements IMovement {
   @Column({ type: 'tinyint', unsigned: true })
   public panChannel: number;
 
+  @Column({ type: 'tinyint', unsigned: true, default: 0 })
+  public basePanValue: number;
+
   @Column({ type: 'tinyint', nullable: true, unsigned: true })
   public finePanChannel?: number | null;
 
@@ -33,16 +36,30 @@ export default class Movement implements IMovement {
   };
 
   /**
-   * @param pan value between [0, 1]
-   * @param tilt value between [0, 1]
+   * @param panFactor value between [0, 1]
+   * @param tiltFactor value between [0, 1]
    */
-  public setPositionRel(pan: number, tilt: number) {
-    this.setPositionAbs(pan * 255, tilt * 255);
+  public setPositionRel(panFactor: number, tiltFactor: number) {
+    const pan = panFactor * 170;
+    const tilt = tiltFactor * 255;
+    const panChannel = Math.floor(pan) + this.basePanValue;
+    const tiltChannel = Math.floor(tilt);
+    const finePanChannel = Math.floor((pan - panChannel) * 255);
+    const fineTiltChannel = Math.floor((tilt - tiltChannel) * 255);
+
+    this.currentValues = {
+      panChannel,
+      finePanChannel,
+      tiltChannel,
+      fineTiltChannel,
+      movingSpeedChannel: 0,
+    };
   }
 
   /**
    * @param pan value between [0, 255). Any decimals are applied to the finePan
    * @param tilt value between [0, 255). Any decimals are applied to the fineTilt
+   * @deprecated
    */
   public setPositionAbs(pan: number, tilt: number) {
     const panChannel = Math.floor(pan);

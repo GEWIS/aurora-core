@@ -42,12 +42,12 @@ export default class RandomPosition extends LightsEffect<RandomPositionProps> {
     this.lightsGroup.movingHeadRgbs.forEach((m, i) => {
       if (this.counters[i] > 0) return;
 
-      m.fixture.setPositionRel(Math.random() / 3, Math.random());
+      m.fixture.setPositionRel(Math.random() / 2, Math.random());
     });
     this.lightsGroup.movingHeadWheels.forEach((m, i) => {
       if (this.counters[nrMHRgbs + i] > 0) return;
 
-      m.fixture.setPositionRel(Math.random() / 3, Math.random());
+      m.fixture.setPositionRel(Math.random() / 2, Math.random());
     });
 
     this.counters = this.counters.map(

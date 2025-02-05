@@ -118,6 +118,7 @@ export default async function seedDatabase() {
     finePanChannel: 2,
     tiltChannel: 3,
     fineTiltChannel: 4,
+    basePanValue: 42,
     colorRedChannel: 8,
     colorGreenChannel: 9,
     colorBlueChannel: 10,
@@ -397,6 +398,7 @@ export async function seedBorrelLights(
   const movingHeadStatic: FixedPositionCreateParams = {
     type: MovementEffects.FixedPosition,
     props: {
+      variant: 'Absolute',
       pan: 111,
       tilt: 18,
     },

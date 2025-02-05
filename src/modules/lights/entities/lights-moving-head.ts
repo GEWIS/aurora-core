@@ -18,6 +18,7 @@ export default abstract class LightsMovingHead extends LightsFixture {
   /**
    * @param pan value between [0, 255). Any decimals are applied to the finePan
    * @param tilt value between [0, 255). Any decimals are applied to the fineTilt
+   * @deprecated
    */
   public setPosition(pan: number, tilt: number) {
     this.valuesUpdatedAt = new Date();

@@ -131,6 +131,7 @@ export interface LightsMovingHeadParams extends LightsFixtureParams {
   tiltChannel: number;
   fineTiltChannel?: number;
   movingSpeedChannel?: number;
+  basePanValue?: number;
 }
 
 export interface LightsMovingHeadRgbCreateParams extends LightsMovingHeadParams, ColorParams {}
@@ -510,6 +511,7 @@ export default class RootLightsService {
       tiltChannel: params.tiltChannel,
       fineTiltChannel: params.fineTiltChannel,
       movingSpeedChannel: params.movingSpeedChannel,
+      basePanValue: params.basePanValue ?? 0,
     } as Movement;
   }
 

@@ -30,11 +30,7 @@ export default abstract class BaseRotate<T extends BaseRotateProps> extends Ligh
     progressionProps: BaseLightsEffectProgressionProps,
     cycleTime?: number,
   ) {
-    super(
-      lightsGroup,
-      new EffectProgressionTickStrategy(cycleTime ?? defaults.cycleTime),
-      new EffectProgressionMapFactory(lightsGroup).getMapper(progressionProps.pattern),
-    );
+    super(lightsGroup, new EffectProgressionTickStrategy(cycleTime ?? defaults.cycleTime));
   }
 
   /**
