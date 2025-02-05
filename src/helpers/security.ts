@@ -9,6 +9,7 @@ export enum SecurityGroup {
   SCREEN_SUBSCRIBER = 'screen-subscriber',
   AUDIO_SUBSCRIBER = 'audio-subscriber',
   LIGHTS_SUBSCRIBER = 'lights-subscriber',
+  INTEGRATION_USER = 'integration-user',
 }
 
 export enum SecurityNames {

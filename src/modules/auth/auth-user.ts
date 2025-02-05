@@ -8,6 +8,7 @@ interface AuthUser {
   audioId?: number;
   lightsControllerId?: number;
   screenId?: number;
+  integrationUserId?: number;
 }
 
 /**

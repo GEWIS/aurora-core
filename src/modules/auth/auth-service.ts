@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import crypto from 'crypto';
-import { ApiKey } from './entities';
+import { ApiKey, IntegrationUser } from './entities';
 import dataSource from '../../database';
 import { Audio, LightsController, Screen } from '../root/entities';
 
@@ -13,25 +13,37 @@ export interface GenerateApiKeyParams {
   audio?: Audio | null;
   screen?: Screen | null;
   lightsController?: LightsController | null;
+  integrationUser?: IntegrationUser | null;
 }
+
+export interface IntegrationUserCreateParams extends Pick<IntegrationUser, 'name'> {}
 
 export default class AuthService {
   private apiKeyRepository: Repository<ApiKey>;
 
+  private integrationUserRepository: Repository<IntegrationUser>;
+
   constructor() {
     this.apiKeyRepository = dataSource.getRepository(ApiKey);
+    this.integrationUserRepository = dataSource.getRepository(IntegrationUser);
   }
 
   private generateKey(): string {
     return crypto.randomBytes(32).toString('hex');
   }
 
-  public async createApiKey({ audio, screen, lightsController }: GenerateApiKeyParams) {
+  public async createApiKey({
+    audio,
+    screen,
+    lightsController,
+    integrationUser,
+  }: GenerateApiKeyParams) {
     return this.apiKeyRepository.save({
       key: this.generateKey(),
       audio,
       screen,
       lightsController,
+      integrationUser,
     });
   }
 
@@ -47,6 +59,20 @@ export default class AuthService {
     return this.apiKeyRepository.findOne({
       where: { lightsController: { id: lightsController.id } },
     });
+  }
+
+  public async getIntegrationUserApiKey(integrationUser: IntegrationUser) {
+    return this.apiKeyRepository.findOne({
+      where: { integrationUser: { id: integrationUser.id } },
+    });
+  }
+
+  public async createIntegrationUser(
+    params: IntegrationUserCreateParams,
+  ): Promise<IntegrationUser> {
+    const integrationUser = await this.integrationUserRepository.save(params);
+    await this.createApiKey({ integrationUser });
+    return integrationUser;
   }
 
   public async getOIDCConfig(): Promise<OidcConfig> {
