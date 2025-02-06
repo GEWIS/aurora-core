@@ -4,13 +4,10 @@ on:
   push:
     branches: 
     - master
-  pull_request:
-    branches: 
-    - master
 
 jobs:
   versioning:
-    uses: GEWIS/actions/.github/workflows/typescript-lint-and-build.yml@v1
+    uses: GEWIS/actions/.github/workflows/versioning.yml@v1
 
   release:
     uses: GEWIS/actions/.github/workflows/docker-release.yml@v1
