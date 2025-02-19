@@ -2,11 +2,14 @@ import {
   AccessToken,
   ProvidedAccessTokenStrategy,
   SpotifyApi,
+  UserProfile,
 } from '@fostertheweb/spotify-web-sdk';
 import { Repository } from 'typeorm';
 import { SpotifyUser } from './entities';
 import dataSource from '../../database';
 import logger from '../../logger';
+
+export interface SpotifyUserProfile extends UserProfile {}
 
 export default class SpotifyApiHandler {
   private static instance: SpotifyApiHandler;
@@ -219,5 +222,9 @@ export default class SpotifyApiHandler {
 
   public get user() {
     return this.currentUser;
+  }
+
+  public async getSpotifyUserProfile(): Promise<SpotifyUserProfile | undefined> {
+    return this.client?.currentUser.profile();
   }
 }
