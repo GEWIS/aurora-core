@@ -2,7 +2,7 @@ import RootAudioService from '../modules/root/root-audio-service';
 import RootScreenService from '../modules/root/root-screen-service';
 import RootLightsService, { LightsInGroup } from '../modules/root/root-lights-service';
 import dataSource from '../database';
-import { LightsGroup, LightsMovingHeadWheel } from '../modules/lights/entities';
+import { LightsGroup, LightsMovingHeadWheel, LightsSwitch } from '../modules/lights/entities';
 import { RgbColor, WheelColor } from '../modules/lights/color-definitions';
 import { SparkleCreateParams } from '../modules/lights/effects/color/sparkle';
 import { StaticColorCreateParams } from '../modules/lights/effects/color/static-color';
@@ -347,6 +347,14 @@ export default async function seedDatabase() {
     }),
   ]);
 
+  const switchRepo = dataSource.getRepository(LightsSwitch);
+  const discoball = await switchRepo.save({
+    name: 'GEWIScobal',
+    controller,
+    dmxChannel: 145,
+    onValue: 255,
+  });
+
   return Promise.all(
     [gewisRoom, gewisBar, gewisLounge, gewisMHRoom, royMHs].map(
       (g) => dataSource.getRepository(LightsGroup).findOne({ where: { id: g!.id } })!,
@@ -399,7 +407,7 @@ export async function seedBorrelLights(
     type: MovementEffects.FixedPosition,
     props: {
       variant: 'Absolute',
-      pan: 111,
+      pan: 59,
       tilt: 18,
     },
   };
