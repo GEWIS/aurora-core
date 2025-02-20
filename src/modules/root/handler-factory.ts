@@ -22,6 +22,7 @@ import {
   HubblePosterScreenHandler,
   RoomResponsibleLegacyHandler,
   StageEffectsHandler,
+  StaticPosterHandler,
   TimeTrailRaceScreenHandler,
 } from '../handlers/screen';
 
@@ -94,6 +95,7 @@ export default class HandlerFactory {
         () => new HubbleLastcallPosterScreenHandler(socket),
       ),
       this.createHandler(StageEffectsHandler, () => new StageEffectsHandler(socket)),
+      this.createHandler(StaticPosterHandler, () => new StaticPosterHandler(socket)),
       this.createHandler(TimeTrailRaceScreenHandler, () => new TimeTrailRaceScreenHandler(socket)),
       this.createHandler(
         RoomResponsibleLegacyHandler,
