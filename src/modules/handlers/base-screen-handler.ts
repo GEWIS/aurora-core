@@ -19,10 +19,28 @@ export default abstract class BaseScreenHandler extends BaseHandler<Screen> {
     this.sendEvent('orders', event);
   }
 
+  /**
+   * Send an event with the given name and given arguments to the given screen
+   * @param screen
+   * @param eventName
+   * @param args
+   * @protected
+   */
+  protected sendEventToScreen(screen: Screen, eventName: string, ...args: EventParams<any, any>) {
+    const socketId = screen.getSocketId(this.socket.name as SocketioNamespaces);
+    this.socket.sockets.get(socketId || '')?.emit(eventName, args);
+  }
+
+  /**
+   * Send an event with the given name and given arguments to all screens
+   * using this handler
+   * @param eventName
+   * @param args
+   * @protected
+   */
   protected sendEvent(eventName: string, ...args: EventParams<any, any>) {
-    this.entities.forEach((e) => {
-      const socketId = e.getSocketId(this.socket.name as SocketioNamespaces);
-      this.socket.sockets.get(socketId || '')?.emit(eventName, args);
+    this.entities.forEach((screen) => {
+      this.sendEventToScreen(screen, eventName, ...args);
     });
   }
 }

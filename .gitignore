@@ -135,3 +135,4 @@ build
 
 # Local poster storage
 public/posters
+public/local-posters
