@@ -1,5 +1,5 @@
 import { Controller, TsoaResponse, UploadedFile } from '@tsoa/runtime';
-import { Delete, Get, Post, Request, Res, Route, Security, Tags } from 'tsoa';
+import { Body, Delete, Get, Post, Request, Res, Route, Security, Tags } from 'tsoa';
 import { StaticPosterHandler } from '../../index';
 import HandlerManager from '../../../../root/handler-manager';
 import { Screen } from '../../../../root/entities';
@@ -10,6 +10,11 @@ import { Request as ExpressRequest } from 'express';
 import logger from '../../../../../logger';
 import path from 'node:path';
 import { HttpStatusCode } from 'axios';
+import { StaticPosterHandlerState } from '../static-poster-handler';
+
+interface SetClockRequest {
+  visible: boolean;
+}
 
 @Route('handler/screen/poster/static')
 @Tags('Handlers')
@@ -24,10 +29,50 @@ export class LocalPosterController extends Controller {
   }
 
   /**
-   * Get all static posters from the database.
+   * Return the current state (or settings) of the static poster handler
    */
   @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Get('')
+  public async getStaticPosterHandlerState(): Promise<StaticPosterHandlerState> {
+    return this.screenHandler.getState();
+  }
+
+  /**
+   * Hide the static poster currently shown on screens. The subscribers should
+   * revert to their default view.
+   * @param req
+   */
+  @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
+  @Delete('')
+  public async hideStaticPoster(@Request() req: ExpressRequest): Promise<void> {
+    logger.audit(req.user, `Hide static poster.`);
+    this.screenHandler.removeActivePoster();
+  }
+
+  /**
+   * Chang the visibility of the clock on-screen
+   */
+  @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
+  @Post('clock')
+  public async setStaticPosterClock(
+    @Request() req: ExpressRequest,
+    @Body() body: SetClockRequest,
+  ): Promise<void> {
+    const { visible } = body;
+    if (visible) {
+      logger.audit(req.user, 'Make clock in StaticPosterHandler visible.');
+    } else {
+      logger.audit(req.user, 'Make clock in StaticPosterHandler invisible.');
+    }
+
+    this.screenHandler.setClockVisibility(visible);
+  }
+
+  /**
+   * Get all static posters from the database.
+   */
+  @Security(SecurityNames.LOCAL, securityGroups.poster.base)
+  @Get('items')
   public async getAllStaticPosters(): Promise<LocalPosterResponse[]> {
     const service = new LocalPosterService();
     const posters = await service.getAllLocalPosters();
@@ -40,7 +85,7 @@ export class LocalPosterController extends Controller {
    * @param invalidFileTypeResponse
    */
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
-  @Post('')
+  @Post('items')
   public async createStaticPoster(
     @UploadedFile() file: Express.Multer.File,
     @Res()
@@ -70,7 +115,7 @@ export class LocalPosterController extends Controller {
    * @param id
    */
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
-  @Delete('{id}')
+  @Delete('items/{id}')
   public async deleteStaticPoster(id: number): Promise<void> {
     const service = new LocalPosterService();
     await service.deleteLocalPoster(id);
@@ -82,7 +127,7 @@ export class LocalPosterController extends Controller {
    * @param req
    */
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
-  @Post('{id}/show')
+  @Post('items/{id}/show')
   public async showStaticPoster(id: number, @Request() req: ExpressRequest): Promise<void> {
     const service = new LocalPosterService();
     const poster = await service.getSingleLocalPoster(id);
@@ -90,17 +135,5 @@ export class LocalPosterController extends Controller {
 
     logger.audit(req.user, `Show static poster (id: ${id}).`);
     this.screenHandler.setActivePoster(posterResponse);
-  }
-
-  /**
-   * Hide the static poster currently shown on screens. The subscribers should
-   * revert to their default view.
-   * @param req
-   */
-  @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
-  @Delete('show')
-  public async hideStaticPoster(@Request() req: ExpressRequest): Promise<void> {
-    logger.audit(req.user, `Hide static poster.`);
-    this.screenHandler.removeActivePoster();
   }
 }

@@ -87,6 +87,12 @@ export default class DiskStorage extends FileStorage {
       // File is private
       return null;
     }
-    return path.join(this.urlPath, file.name);
+
+    let link = path.join(this.urlPath, file.name);
+    if (process.platform === 'win32') {
+      // Replace backslashes with forward slashes
+      link = link.split('\\').join('/');
+    }
+    return link;
   }
 }

@@ -1,16 +1,24 @@
 import BaseScreenHandler from '../../base-screen-handler';
 import { TrackChangeEvent } from '../../../events/music-emitter-events';
-import { Screen } from '../../../root/entities';
 import { LocalPosterResponse } from './local/local-poster-service';
 
-const UPDATE_POSTER_EVENT_NAME = 'update_poster';
+const UPDATE_POSTER_EVENT_NAME = 'update_static_poster';
+
+export interface StaticPosterHandlerState {
+  activePoster: LocalPosterResponse | null;
+  clockVisible: boolean;
+}
 
 export default class StaticPosterHandler extends BaseScreenHandler {
   private activePoster: LocalPosterResponse | null;
 
-  registerEntity(entity: Screen) {
-    super.registerEntity(entity);
-    this.sendEventToScreen(entity, UPDATE_POSTER_EVENT_NAME, this.activePoster);
+  private clockVisible = true;
+
+  getState(): StaticPosterHandlerState {
+    return {
+      activePoster: this.activePoster,
+      clockVisible: this.clockVisible,
+    };
   }
 
   /**
@@ -19,7 +27,7 @@ export default class StaticPosterHandler extends BaseScreenHandler {
    */
   setActivePoster(poster: LocalPosterResponse): void {
     this.activePoster = poster;
-    this.sendEvent(UPDATE_POSTER_EVENT_NAME, poster);
+    this.sendEvent(UPDATE_POSTER_EVENT_NAME, this.getState());
   }
 
   /**
@@ -27,7 +35,16 @@ export default class StaticPosterHandler extends BaseScreenHandler {
    */
   removeActivePoster(): void {
     this.activePoster = null;
-    this.sendEvent(UPDATE_POSTER_EVENT_NAME, null);
+    this.sendEvent(UPDATE_POSTER_EVENT_NAME, this.getState());
+  }
+
+  /**
+   * Change the visibility of the clock on-screen
+   * @param visible
+   */
+  setClockVisibility(visible: boolean): void {
+    this.clockVisible = visible;
+    this.sendEvent(UPDATE_POSTER_EVENT_NAME, this.getState());
   }
 
   beat(): void {}
