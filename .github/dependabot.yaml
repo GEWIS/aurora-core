@@ -9,3 +9,15 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+    open-pull-requests-limit: 15
+    groups:
+      dev-npm-patch-minor:
+        dependency-type: "development"
+        update-types:
+        - "minor"
+        - "patch"
+      prod-npm-patch-patch:
+        dependency-type: "production"
+        update-types:
+        - "patch"
+
