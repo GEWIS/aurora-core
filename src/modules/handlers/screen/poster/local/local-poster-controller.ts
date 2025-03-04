@@ -8,7 +8,6 @@ import { securityGroups } from '../../../../../helpers/security-groups';
 import LocalPosterService, { LocalPosterResponse } from './local-poster-service';
 import { Request as ExpressRequest } from 'express';
 import logger from '../../../../../logger';
-import path from 'node:path';
 import { HttpStatusCode } from 'axios';
 import { StaticPosterHandlerState } from '../static-poster-handler';
 import mime from 'mime';
@@ -86,7 +85,7 @@ export class LocalPosterController extends Controller {
    * @param invalidFileTypeResponse
    */
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
-  @Post('items')
+  @Post('items/file')
   public async createStaticPosterFile(
     @UploadedFile() file: Express.Multer.File,
     @Res()
@@ -95,7 +94,7 @@ export class LocalPosterController extends Controller {
       'Invalid file type, expected an image or a video.'
     >,
   ): Promise<LocalPosterResponse> {
-    const mimeType = mime.getType(file.originalname);
+    const mimeType = mime.lookup(file.originalname);
     if (!mimeType || !mimeType.startsWith('image/') || !mimeType.startsWith('video')) {
       return invalidFileTypeResponse(
         HttpStatusCode.BadRequest,
@@ -106,6 +105,20 @@ export class LocalPosterController extends Controller {
     const service = new LocalPosterService();
     const poster = await service.createLocalPoster({
       file: { name: file.originalname, data: file.buffer },
+    });
+    return service.toResponse(poster);
+  }
+
+  /**
+   * Create a new static poster based on a URL
+   * @param body
+   */
+  @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
+  @Post('items/url')
+  public async createStaticPosterUrl(@Body() body: { url: string }): Promise<LocalPosterResponse> {
+    const service = new LocalPosterService();
+    const poster = await service.createLocalPoster({
+      uri: body.url,
     });
     return service.toResponse(poster);
   }
