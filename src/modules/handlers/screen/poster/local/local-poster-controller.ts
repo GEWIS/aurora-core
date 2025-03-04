@@ -11,6 +11,7 @@ import logger from '../../../../../logger';
 import path from 'node:path';
 import { HttpStatusCode } from 'axios';
 import { StaticPosterHandlerState } from '../static-poster-handler';
+import mime from 'mime';
 
 interface SetClockRequest {
   visible: boolean;
@@ -86,7 +87,7 @@ export class LocalPosterController extends Controller {
    */
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Post('items')
-  public async createStaticPoster(
+  public async createStaticPosterFile(
     @UploadedFile() file: Express.Multer.File,
     @Res()
     invalidFileTypeResponse: TsoaResponse<
@@ -94,9 +95,8 @@ export class LocalPosterController extends Controller {
       'Invalid file type, expected an image or a video.'
     >,
   ): Promise<LocalPosterResponse> {
-    const ext = path.extname(file.originalname);
-    const allowedExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.mp4', '.avi', '.mkv'];
-    if (!allowedExtensions.includes(ext)) {
+    const mimeType = mime.getType(file.originalname);
+    if (!mimeType || !mimeType.startsWith('image/') || !mimeType.startsWith('video')) {
       return invalidFileTypeResponse(
         HttpStatusCode.BadRequest,
         'Invalid file type, expected an image or a video.',
