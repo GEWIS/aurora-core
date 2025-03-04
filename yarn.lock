@@ -3309,9 +3309,9 @@ multimatch@^4.0.0:
     minimatch "^3.0.4"
 
 mysql2@^3.11.3:
-  version "3.11.3"
-  resolved "https://registry.yarnpkg.com/mysql2/-/mysql2-3.11.3.tgz#8291e6069a0784310846f6437b8527050dfc10c4"
-  integrity sha512-Qpu2ADfbKzyLdwC/5d4W7+5Yz7yBzCU05YWt5npWzACST37wJsB23wgOSo00qi043urkiRwXtEvJc9UnuLX/MQ==
+  version "3.12.0"
+  resolved "https://registry.yarnpkg.com/mysql2/-/mysql2-3.12.0.tgz#db8fc770f8b76ebaba49dc4bbfe2a1754057d882"
+  integrity sha512-C8fWhVysZoH63tJbX8d10IAoYCyXy4fdRFz2Ihrt9jtPILYynFEKUUzpp1U7qxzDc3tMbotvaBH+sl6bFnGZiw==
   dependencies:
     aws-ssl-profiles "^1.1.1"
     denque "^2.1.0"
