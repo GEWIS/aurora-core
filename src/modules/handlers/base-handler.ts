@@ -60,4 +60,12 @@ export default abstract class BaseHandler<T extends SubscribeEntity> {
    * Only includes information about the future
    */
   abstract beat(event: BeatEvent): void;
+
+  /**
+   * Reset the handler to its initial state
+   */
+  public reset(): void {
+    // No implementation by default, each handler should override this method
+    // if it's applicable.
+  }
 }

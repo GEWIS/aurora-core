@@ -3,6 +3,7 @@ import { TrackChangeEvent } from '../../../events/music-emitter-events';
 import { LocalPosterResponse } from './local/local-poster-service';
 
 const UPDATE_POSTER_EVENT_NAME = 'update_static_poster';
+const DEFAULT_CLOCK_VISIBLE = true;
 
 export interface StaticPosterHandlerState {
   activePoster: LocalPosterResponse | null;
@@ -12,7 +13,7 @@ export interface StaticPosterHandlerState {
 export default class StaticPosterHandler extends BaseScreenHandler {
   private activePoster: LocalPosterResponse | null;
 
-  private clockVisible = true;
+  private clockVisible = DEFAULT_CLOCK_VISIBLE;
 
   getState(): StaticPosterHandlerState {
     return {
@@ -51,5 +52,11 @@ export default class StaticPosterHandler extends BaseScreenHandler {
 
   changeTrack(event: TrackChangeEvent[]): void {
     this.sendEvent('change_track', event);
+  }
+
+  reset() {
+    super.reset();
+    this.clockVisible = DEFAULT_CLOCK_VISIBLE;
+    this.removeActivePoster();
   }
 }
