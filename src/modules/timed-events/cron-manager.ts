@@ -7,6 +7,9 @@ import HandlerManager from '../root/handler-manager';
 import RootAudioService from '../root/root-audio-service';
 import RootLightsService from '../root/root-lights-service';
 import RootScreenService from '../root/root-screen-service';
+import LocalPosterService from '../handlers/screen/poster/local/local-poster-service';
+import { Screen } from '../root/entities';
+import { GewisPosterScreenHandler, StaticPosterHandler } from '../handlers/screen';
 
 export class CronExpressionError extends Error {}
 
@@ -152,6 +155,26 @@ export default class CronManager {
           );
 
           return;
+
+        case 'timed-event-set-static-poster': {
+          const service = new LocalPosterService();
+          const poster = await service.getSingleLocalPoster(spec.params.posterId);
+          const handler = HandlerManager.getInstance()
+            .getHandlers(Screen)
+            .filter(
+              (h) => h.constructor.name === StaticPosterHandler.name,
+            )[0] as StaticPosterHandler;
+          if (handler) {
+            handler.setActivePoster(service.toResponse(poster));
+            handler.setClockVisibility(spec.params.clockVisible);
+          } else {
+            logger.error(
+              `Timed event "${event.id}": could not find StaticPosterHandler in HandlerManager."`,
+            );
+          }
+
+          return;
+        }
 
         default:
           logger.error(`Timed event "${event.id}": unknown type "${(spec as any).type}".`);
