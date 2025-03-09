@@ -7,17 +7,23 @@ import {
   ScreenHandlerSettingsDefaults,
 } from '../handlers/screen/screen-handler-settings';
 import { OrderSettings, OrderSettingsDefault } from '../orders/order-settings';
+import {
+  PosterScreenHandlerSettings,
+  PosterScreenHandlerSettingsDefaults,
+} from '../handlers/screen/poster/poster-screen-handler-settings';
 
 export interface ISettings
   extends SudoSOSSettings,
     ModeSettings,
     ScreenHandlerSettings,
+    PosterScreenHandlerSettings,
     OrderSettings {}
 
 export const SettingsDefaults: ISettings = {
   ...SudoSOSSettingsDefault,
   ...ModeSettingsDefaults,
   ...ScreenHandlerSettingsDefaults,
+  ...PosterScreenHandlerSettingsDefaults,
   ...OrderSettingsDefault,
 };
 
