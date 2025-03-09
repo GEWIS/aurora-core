@@ -26,6 +26,9 @@ export default class HandlerService {
     screens.forEach((screen) => this.handlerManager.registerHandler(screen, screen.defaultHandler));
     lights.forEach((group) => this.handlerManager.registerHandler(group, group.defaultHandler));
 
+    // Reset handlers
+    this.handlerManager.resetHandlers();
+
     // Disable all modes
     this.modeManager.reset();
 

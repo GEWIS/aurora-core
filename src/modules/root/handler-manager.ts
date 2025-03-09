@@ -192,4 +192,14 @@ export default class HandlerManager {
       if (h instanceof BaseScreenHandler && h.showOrders) h.showOrders(event);
     });
   }
+
+  /**
+   * Resets all handlers to their initial state
+   */
+  public resetHandlers(): void {
+    const handlers = this.getHandlers();
+    handlers.forEach((h) => {
+      h.reset();
+    });
+  }
 }

@@ -41,6 +41,7 @@ export type LocalPosterType =
   | PosterType.BORREL_LOGO
   | PosterType.BORREL_PRICE_LIST
   | PosterType.BORREL_WALL_OF_SHAME
+  | PosterType.OLYMPICS
   | PosterType.UNKNOWN;
 
 export type LocalPoster = BasePoster & {
