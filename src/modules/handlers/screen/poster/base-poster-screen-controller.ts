@@ -24,7 +24,7 @@ export class BasePosterScreenController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
   @Get('settings')
-  public getSettings(): PosterScreenSettingsResponse {
+  public getPosterSettings(): PosterScreenSettingsResponse {
     const store = ServerSettingsStore.getInstance();
 
     const logo = store.getSetting('Poster.ProgressBarLogo') as ISettings['Poster.ProgressBarLogo'];

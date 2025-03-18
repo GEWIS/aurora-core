@@ -9,12 +9,17 @@ import { Request as ExpressRequest } from 'express';
 import NsTrainsService, { TrainResponse } from './ns-trains-service';
 import GEWISPosterService, { GEWISPhotoAlbumParams } from './gewis-poster-service';
 import OlympicsService from './olympics-service';
-import { FeatureEnabled } from '../../../server-settings';
+import { FeatureEnabled, ServerSettingsStore } from '../../../server-settings';
 import { Controller } from '@tsoa/runtime';
 import { Poster } from './poster';
+import { ISettings } from '../../../server-settings/server-setting';
 
 export interface BorrelModeParams {
   enabled: boolean;
+}
+
+export interface BorrelModeResponse extends BorrelModeParams {
+  present: boolean;
 }
 
 export interface PosterResponse {
@@ -70,12 +75,16 @@ export class CarouselPosterController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Get('borrel-mode')
-  public async getPosterBorrelMode(): Promise<BorrelModeParams> {
-    return { enabled: this.screenHandler.borrelMode };
+  public async getPosterBorrelMode(): Promise<BorrelModeResponse> {
+    return {
+      present: this.screenHandler.borrelModeIsPresent(),
+      enabled: this.screenHandler.borrelMode,
+    };
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Put('borrel-mode')
+  @FeatureEnabled('Poster.BorrelModePresent')
   public async setPosterBorrelMode(
     @Request() req: ExpressRequest,
     @Body() body: BorrelModeParams,

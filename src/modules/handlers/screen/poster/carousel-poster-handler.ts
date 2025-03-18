@@ -1,9 +1,10 @@
 import BaseScreenHandler from '../../base-screen-handler';
 import { Namespace } from 'socket.io';
-import { FeatureEnabled } from '../../../server-settings';
+import { FeatureEnabled, ServerSettingsStore } from '../../../server-settings';
 import { TrelloPosterManager } from './trello/trello-poster-manager';
 import { TrackChangeEvent } from '../../../events/music-emitter-events';
 import { PosterManager } from './poster-manager';
+import { ISettings } from '../../../server-settings/server-setting';
 
 @FeatureEnabled('Poster')
 export default class CarouselPosterHandler extends BaseScreenHandler {
@@ -11,13 +12,15 @@ export default class CarouselPosterHandler extends BaseScreenHandler {
 
   private borrelModeDay: number | undefined;
 
-  private borrelModeInterval: NodeJS.Timeout;
+  private borrelModeInterval: NodeJS.Timeout | undefined;
 
   constructor(socket: Namespace) {
     super(socket);
 
-    // Check whether we need to enable/disable borrel mode
-    this.borrelModeInterval = setInterval(this.checkBorrelMode.bind(this), 60 * 1000);
+    if (this.borrelModeIsPresent()) {
+      // Check whether we need to enable/disable borrel mode
+      this.borrelModeInterval = setInterval(this.checkBorrelMode.bind(this), 60 * 1000);
+    }
     this.posterManager = new TrelloPosterManager();
   }
 
@@ -36,7 +39,15 @@ export default class CarouselPosterHandler extends BaseScreenHandler {
     return this.borrelModeDay !== undefined;
   }
 
+  public borrelModeIsPresent(): boolean {
+    const settings = ServerSettingsStore.getInstance();
+    return settings.getSetting('Poster.BorrelModePresent') as ISettings['Poster.BorrelModePresent'];
+  }
+
+  @FeatureEnabled('Poster.BorrelModePresent')
   private checkBorrelMode() {
+    if (!this.borrelModeIsPresent()) return;
+
     const now = new Date();
 
     // If borrelmode is enabled, but we arrive at the next day, disable borrelmode again
@@ -56,6 +67,7 @@ export default class CarouselPosterHandler extends BaseScreenHandler {
     }
   }
 
+  @FeatureEnabled('Poster.BorrelModePresent')
   public setBorrelModeEnabled(enabled: boolean) {
     if (enabled) {
       this.borrelModeDay = new Date().getDay();
