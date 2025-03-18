@@ -1,9 +1,14 @@
-import BasePosterScreenHandler from '../base-poster-screen-handler';
+import BaseScreenHandler from '../../../base-screen-handler';
 import { Namespace } from 'socket.io';
 import { FeatureEnabled } from '../../../../server-settings';
+import { TrelloPosterManager } from '../trello/trello-poster-manager';
+import { TrackChangeEvent } from '../../../../events/music-emitter-events';
+import { PosterManager } from '../poster-manager';
 
 @FeatureEnabled('GewisPosterScreenHandler')
-export default class GewisPosterScreenHandler extends BasePosterScreenHandler {
+export default class GewisPosterScreenHandler extends BaseScreenHandler {
+  public posterManager: PosterManager;
+
   private borrelModeDay: number | undefined;
 
   public borrelModeInterval: NodeJS.Timeout;
@@ -13,6 +18,18 @@ export default class GewisPosterScreenHandler extends BasePosterScreenHandler {
 
     // Check whether we need to enable/disable borrel mode
     this.borrelModeInterval = setInterval(this.checkBorrelMode.bind(this), 60 * 1000);
+    this.posterManager = new TrelloPosterManager();
+  }
+
+  forceUpdate(): void {
+    this.sendEvent('update_posters');
+  }
+
+  // Do nothing
+  beat(): void {}
+
+  changeTrack(event: TrackChangeEvent[]): void {
+    this.sendEvent('change_track', event);
   }
 
   public get borrelMode() {

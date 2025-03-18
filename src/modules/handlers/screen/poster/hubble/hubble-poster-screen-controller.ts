@@ -1,4 +1,4 @@
-import { BasePosterResponse, BasePosterScreenController } from '../base-poster-screen-controller';
+import { BasePosterScreenController } from '../base-poster-screen-controller';
 import HandlerManager from '../../../../root/handler-manager';
 import { Screen } from '../../../../root/entities';
 import BasePosterScreenHandler from '../base-poster-screen-handler';
@@ -8,6 +8,7 @@ import { SecurityNames } from '../../../../../helpers/security';
 import { securityGroups } from '../../../../../helpers/security-groups';
 import { Request as ExpressRequest } from 'express';
 import { FeatureEnabled } from '../../../../server-settings';
+import { PosterResponse } from '../gewis/gewis-poster-screen-controller';
 
 @Route('handler/screen/hubble-poster')
 @Tags('Handlers')
@@ -24,13 +25,14 @@ export class HubblePosterScreenController extends BasePosterScreenController {
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Get('')
-  public async getHubblePosters(): Promise<BasePosterResponse> {
-    return super.getPosters();
+  public async getHubblePosters(): Promise<PosterResponse> {
+    return {
+      posters: [],
+      borrelMode: false,
+    };
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Post('force-update')
-  public async forceUpdateHubblePosters(@Request() req: ExpressRequest): Promise<void> {
-    super.forceUpdatePosters(req);
-  }
+  public async forceUpdateHubblePosters(@Request() req: ExpressRequest): Promise<void> {}
 }

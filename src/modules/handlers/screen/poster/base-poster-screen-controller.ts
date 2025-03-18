@@ -1,22 +1,13 @@
 import { Controller } from '@tsoa/runtime';
-import { Request } from 'tsoa';
-import { Request as ExpressRequest } from 'express';
+import { Get, Request, Route, Security, Tags } from 'tsoa';
+import express from 'express';
 import BasePosterScreenHandler from './base-poster-screen-handler';
-import { Poster } from './poster';
-import logger from '../../../../logger';
-import OlympicsService from './olympics-service';
-import NsTrainsService, { TrainResponse } from './ns-trains-service';
 import { HexColor } from '../../../lights/color-definitions';
 import { ServerSettingsStore } from '../../../server-settings';
 import { ISettings } from '../../../server-settings/server-setting';
-
-export interface BorrelModeParams {
-  enabled: boolean;
-}
-
-export interface BasePosterResponse {
-  posters: Poster[];
-}
+import { SecurityNames } from '../../../../helpers/security';
+import { securityGroups } from '../../../../helpers/security-groups';
+import { lookup } from 'mime-types';
 
 export interface PosterScreenSettingsResponse {
   defaultMinimal: boolean;
@@ -26,41 +17,13 @@ export interface PosterScreenSettingsResponse {
   clockShouldTick: boolean;
 }
 
-export abstract class BasePosterScreenController extends Controller {
+@Route('handler/screen/poster')
+@Tags('Handlers')
+export class BasePosterScreenController extends Controller {
   protected screenHandler: BasePosterScreenHandler;
 
-  protected constructor() {
-    super();
-  }
-
-  public async getPosters(): Promise<BasePosterResponse> {
-    if (!this.screenHandler.posterManager.posters) {
-      try {
-        await this.screenHandler.posterManager.fetchPosters();
-      } catch (e) {
-        logger.error(e);
-      }
-    }
-    const posters = this.screenHandler.posterManager.posters ?? [];
-    return {
-      posters: posters,
-    };
-  }
-
-  public async forceUpdatePosters(@Request() req: ExpressRequest): Promise<void> {
-    logger.audit(req.user, 'Force fetch posters from source.');
-    await this.screenHandler.posterManager.fetchPosters();
-    this.screenHandler.forceUpdate();
-  }
-
-  public async getTrains(): Promise<TrainResponse[]> {
-    return new NsTrainsService().getTrains();
-  }
-
-  public async getOlympicsMedalTable() {
-    return new OlympicsService().getMedalTable();
-  }
-
+  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
+  @Get('settings')
   public getSettings(): PosterScreenSettingsResponse {
     const store = ServerSettingsStore.getInstance();
 
@@ -84,7 +47,9 @@ export abstract class BasePosterScreenController extends Controller {
     };
   }
 
-  public async getProgressBarLogo(): Promise<{ name: string; data: Buffer } | null> {
+  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
+  @Get('settings/progress-bar-logo')
+  public async getSettingsProgressBarLogo(@Request() request: express.Request) {
     const settingsStore = ServerSettingsStore.getInstance();
     const fileStorage = settingsStore.getFileStorage();
 
@@ -93,16 +58,28 @@ export abstract class BasePosterScreenController extends Controller {
     ) as ISettings['Poster.ProgressBarLogo'];
 
     if (logo === '') {
-      return null;
+      return;
     }
 
-    return {
-      name: logo.originalName,
-      data: await fileStorage.getFile(logo),
-    };
+    const res = request?.res;
+    if (logo && res) {
+      const mimeType = lookup(logo.originalName);
+      let contentType: string;
+      if (!mimeType) {
+        contentType = 'application/octet-stream';
+      } else {
+        contentType = mimeType;
+      }
+
+      res.setHeader('Content-Disposition', 'attachment; filename=' + logo.originalName);
+      res.setHeader('Content-Type', contentType);
+      res.send(await fileStorage.getFile(logo));
+    }
   }
 
-  public async getStylesheet(): Promise<{ name: string; data: Buffer } | null> {
+  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
+  @Get('settings/custom-stylesheet')
+  public async getSettingsProgressBarStylesheet(@Request() request: express.Request) {
     const settingsStore = ServerSettingsStore.getInstance();
     const fileStorage = settingsStore.getFileStorage();
 
@@ -111,12 +88,22 @@ export abstract class BasePosterScreenController extends Controller {
     ) as ISettings['Poster.CustomStylesheet'];
 
     if (stylesheet === '') {
-      return null;
+      return;
     }
 
-    return {
-      name: stylesheet.originalName,
-      data: await fileStorage.getFile(stylesheet),
-    };
+    const res = request?.res;
+    if (stylesheet && res) {
+      const mimeType = lookup(stylesheet.originalName);
+      let contentType: string;
+      if (!mimeType) {
+        contentType = 'application/octet-stream';
+      } else {
+        contentType = mimeType;
+      }
+
+      res.setHeader('Content-Disposition', 'attachment; filename=' + stylesheet.originalName);
+      res.setHeader('Content-Type', contentType);
+      res.send(await fileStorage.getFile(stylesheet));
+    }
   }
 }
