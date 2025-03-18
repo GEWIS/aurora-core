@@ -1,6 +1,8 @@
 import { Repository } from 'typeorm';
 import ServerSetting, { ISettings, SettingsDefaults } from './server-setting';
 import dataSource from '../../database';
+import { FileStorage } from '../files/storage/file-storage';
+import { DiskStorage } from '../files/storage';
 
 export type FeatureFlagResponse = {
   key: string;
@@ -126,5 +128,12 @@ export default class ServerSettingsStore<T extends keyof ISettings = keyof ISett
     const result = await this.repo.save(setting!);
     this.settings[key] = value;
     return result;
+  }
+
+  /**
+   * Get the file storage for secrets
+   */
+  public getFileStorage(): FileStorage {
+    return new DiskStorage('server-settings', false);
   }
 }

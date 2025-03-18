@@ -73,7 +73,7 @@ export class ServerSettingsController extends Controller {
     @FormField() key: keyof ISettings,
   ): Promise<ServerSettingResponse> {
     const store = ServerSettingsStore.getInstance();
-    const storage = new DiskStorage('server-settings', false);
+    const storage = store.getFileStorage();
 
     const currentValue = store.getSetting(key);
     if (currentValue !== '') {
@@ -99,7 +99,7 @@ export class ServerSettingsController extends Controller {
     @Res() notFoundErrorResponse: TsoaResponse<404, string>,
   ): Promise<ServerSettingResponse> {
     const store = ServerSettingsStore.getInstance();
-    const storage = new DiskStorage('server-settings', false);
+    const storage = store.getFileStorage();
 
     const key = request.key as keyof ISettings;
     const currentValue = store.getSetting(key);

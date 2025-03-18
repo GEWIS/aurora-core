@@ -96,6 +96,7 @@ export const securityGroups = {
   poster: {
     base: allSecuritySubscriberGroups,
     privileged: privilegedSecurityGroups,
+    subscriber: [SecurityGroup.SCREEN_SUBSCRIBER],
   },
   roomresponsible: {
     base: [SecurityGroup.SCREEN_SUBSCRIBER],

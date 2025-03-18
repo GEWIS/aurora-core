@@ -133,6 +133,7 @@ render.experimental.xml
 build
 *.sqlite
 
-# Local poster storage
+# Local storage
+private
 public/posters
 public/local-posters

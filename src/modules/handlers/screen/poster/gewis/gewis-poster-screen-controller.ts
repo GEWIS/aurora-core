@@ -10,11 +10,12 @@ import { Body, Get, Post, Put, Query, Request, Route, Security, Tags } from 'tso
 import { SecurityNames } from '../../../../../helpers/security';
 import { securityGroups } from '../../../../../helpers/security-groups';
 import logger from '../../../../../logger';
-import { Request as ExpressRequest } from 'express';
+import express, { Request as ExpressRequest } from 'express';
 import { TrainResponse } from '../ns-trains-service';
 import GEWISPosterService, { GEWISPhotoAlbumParams } from './gewis-poster-service';
 import OlympicsService from '../olympics-service';
 import { FeatureEnabled } from '../../../../server-settings';
+import { lookup } from 'mime-types';
 
 interface GewisPosterResponse extends BasePosterResponse {
   borrelMode: boolean;
@@ -33,6 +34,52 @@ export class GewisPosterScreenController extends BasePosterScreenController {
       .filter(
         (h) => h.constructor.name === GewisPosterScreenHandler.name,
       )[0] as GewisPosterScreenHandler;
+  }
+
+  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
+  @Get('settings')
+  public getPosterCarouselSettings() {
+    return super.getSettings();
+  }
+
+  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
+  @Get('settings/progress-bar-logo')
+  public async getSettingsProgressBarLogo(@Request() request: express.Request) {
+    const logo = await super.getProgressBarLogo();
+    const res = request?.res;
+    if (logo && res) {
+      const mimeType = lookup(logo.name);
+      let contentType: string;
+      if (!mimeType) {
+        contentType = 'application/octet-stream';
+      } else {
+        contentType = mimeType;
+      }
+
+      res.setHeader('Content-Disposition', 'attachment; filename=' + logo.name);
+      res.setHeader('Content-Type', contentType);
+      res.send(logo.data);
+    }
+  }
+
+  @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
+  @Get('settings/custom-stylesheet')
+  public async getSettingsProgressBarStylesheet(@Request() request: express.Request) {
+    const stylesheet = await super.getStylesheet();
+    const res = request?.res;
+    if (stylesheet && res) {
+      const mimeType = lookup(stylesheet.name);
+      let contentType: string;
+      if (!mimeType) {
+        contentType = 'application/octet-stream';
+      } else {
+        contentType = mimeType;
+      }
+
+      res.setHeader('Content-Disposition', 'attachment; filename=' + stylesheet.name);
+      res.setHeader('Content-Type', contentType);
+      res.send(stylesheet.data);
+    }
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.base)
