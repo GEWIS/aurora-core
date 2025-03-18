@@ -11,7 +11,7 @@ export default class CarouselPosterHandler extends BaseScreenHandler {
 
   private borrelModeDay: number | undefined;
 
-  public borrelModeInterval: NodeJS.Timeout;
+  private borrelModeInterval: NodeJS.Timeout;
 
   constructor(socket: Namespace) {
     super(socket);
