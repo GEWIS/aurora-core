@@ -8,7 +8,7 @@ import { SecurityNames } from '../../../../../helpers/security';
 import { securityGroups } from '../../../../../helpers/security-groups';
 import { Request as ExpressRequest } from 'express';
 import { FeatureEnabled } from '../../../../server-settings';
-import { PosterResponse } from '../gewis/gewis-poster-screen-controller';
+import { PosterResponse } from '../carousel-poster-controller';
 
 @Route('handler/screen/hubble-poster')
 @Tags('Handlers')

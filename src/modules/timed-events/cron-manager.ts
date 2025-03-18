@@ -9,7 +9,7 @@ import RootLightsService from '../root/root-lights-service';
 import RootScreenService from '../root/root-screen-service';
 import LocalPosterService from '../handlers/screen/poster/local/local-poster-service';
 import { Screen } from '../root/entities';
-import { GewisPosterScreenHandler, StaticPosterHandler } from '../handlers/screen';
+import { StaticPosterHandler } from '../handlers/screen';
 
 export class CronExpressionError extends Error {}
 

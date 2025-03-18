@@ -1,17 +1,17 @@
-import HandlerManager from '../../../../root/handler-manager';
-import { Screen } from '../../../../root/entities';
-import { GewisPosterScreenHandler } from '../../index';
+import HandlerManager from '../../../root/handler-manager';
+import { Screen } from '../../../root/entities';
+import { CarouselPosterHandler } from '../index';
 import { Body, Get, Post, Put, Query, Request, Route, Security, Tags } from 'tsoa';
-import { SecurityNames } from '../../../../../helpers/security';
-import { securityGroups } from '../../../../../helpers/security-groups';
-import logger from '../../../../../logger';
+import { SecurityNames } from '../../../../helpers/security';
+import { securityGroups } from '../../../../helpers/security-groups';
+import logger from '../../../../logger';
 import { Request as ExpressRequest } from 'express';
-import NsTrainsService, { TrainResponse } from '../ns-trains-service';
+import NsTrainsService, { TrainResponse } from './ns-trains-service';
 import GEWISPosterService, { GEWISPhotoAlbumParams } from './gewis-poster-service';
-import OlympicsService from '../olympics-service';
-import { FeatureEnabled } from '../../../../server-settings';
+import OlympicsService from './olympics-service';
+import { FeatureEnabled } from '../../../server-settings';
 import { Controller } from '@tsoa/runtime';
-import { Poster } from '../poster';
+import { Poster } from './poster';
 
 export interface BorrelModeParams {
   enabled: boolean;
@@ -24,17 +24,15 @@ export interface PosterResponse {
 
 @Route('handler/screen/poster/carousel')
 @Tags('Handlers')
-@FeatureEnabled('GewisPosterScreenHandler')
-export class GewisPosterScreenController extends Controller {
-  protected screenHandler: GewisPosterScreenHandler;
+@FeatureEnabled('Poster')
+export class CarouselPosterController extends Controller {
+  protected screenHandler: CarouselPosterHandler;
 
   constructor() {
     super();
     this.screenHandler = HandlerManager.getInstance()
       .getHandlers(Screen)
-      .filter(
-        (h) => h.constructor.name === GewisPosterScreenHandler.name,
-      )[0] as GewisPosterScreenHandler;
+      .filter((h) => h.constructor.name === CarouselPosterHandler.name)[0] as CarouselPosterHandler;
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.base)

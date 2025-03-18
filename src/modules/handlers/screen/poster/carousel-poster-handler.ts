@@ -1,12 +1,12 @@
-import BaseScreenHandler from '../../../base-screen-handler';
+import BaseScreenHandler from '../../base-screen-handler';
 import { Namespace } from 'socket.io';
-import { FeatureEnabled } from '../../../../server-settings';
-import { TrelloPosterManager } from '../trello/trello-poster-manager';
-import { TrackChangeEvent } from '../../../../events/music-emitter-events';
-import { PosterManager } from '../poster-manager';
+import { FeatureEnabled } from '../../../server-settings';
+import { TrelloPosterManager } from './trello/trello-poster-manager';
+import { TrackChangeEvent } from '../../../events/music-emitter-events';
+import { PosterManager } from './poster-manager';
 
-@FeatureEnabled('GewisPosterScreenHandler')
-export default class GewisPosterScreenHandler extends BaseScreenHandler {
+@FeatureEnabled('Poster')
+export default class CarouselPosterHandler extends BaseScreenHandler {
   public posterManager: PosterManager;
 
   private borrelModeDay: number | undefined;
