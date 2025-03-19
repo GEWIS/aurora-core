@@ -1,7 +1,6 @@
 import { Controller } from '@tsoa/runtime';
 import { Get, Request, Route, Security, Tags } from 'tsoa';
 import express from 'express';
-import BasePosterScreenHandler from './base-poster-screen-handler';
 import { HexColor } from '../../../lights/color-definitions';
 import { ServerSettingsStore } from '../../../server-settings';
 import { ISettings } from '../../../server-settings/server-setting';
@@ -20,8 +19,6 @@ export interface PosterScreenSettingsResponse {
 @Route('handler/screen/poster')
 @Tags('Handlers')
 export class BasePosterScreenController extends Controller {
-  protected screenHandler: BasePosterScreenHandler;
-
   @Security(SecurityNames.LOCAL, securityGroups.poster.subscriber)
   @Get('settings')
   public getPosterSettings(): PosterScreenSettingsResponse {

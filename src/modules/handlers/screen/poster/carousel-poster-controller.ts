@@ -67,7 +67,7 @@ export class CarouselPosterController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Post('force-update')
-  public async forceUpdateGewisPosters(@Request() req: ExpressRequest): Promise<void> {
+  public async forceUpdatePosters(@Request() req: ExpressRequest): Promise<void> {
     logger.audit(req.user, 'Force fetch posters from source.');
     await this.screenHandler.posterManager.fetchPosters();
     this.screenHandler.forceUpdate();
