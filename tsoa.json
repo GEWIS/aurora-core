@@ -24,6 +24,18 @@
     "spec": {
       "components": {
         "schemas": {
+          "LocalParameters": {
+            "type": "object",
+            "properties": {
+              "userName": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
           "OidcParameters": {
             "type": "object",
             "properties": {
@@ -41,7 +53,9 @@
           },
           "ApiKeyParameters": {
             "type": "object",
-            "required": ["key"],
+            "required": [
+              "key"
+            ],
             "properties": {
               "key": {
                 "type": "string"
@@ -77,6 +91,37 @@
                 "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/AuthUser"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/auth/local": {
+          "post": {
+            "operationId": "AuthLocal",
+            "responses": {
+              "200": {
+                "description": "Success",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/AuthUser"
+                    }
+                  }
+                }
+              }
+            },
+            "security": [],
+            "parameters": [],
+            "tags": [
+              "Authentication"
+            ],
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/LocalParameters"
                   }
                 }
               }

@@ -3,6 +3,7 @@ import { AuthUser } from '../auth-user';
 import './oidc-strategy';
 import './api-key-strategy';
 import './mock-strategy';
+import './local-strategy';
 import { Request as ExRequest, Response as ExResponse } from 'express';
 
 passport.serializeUser((user, done) => {

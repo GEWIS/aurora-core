@@ -1,8 +1,10 @@
 import { Repository } from 'typeorm';
 import crypto from 'crypto';
-import { ApiKey, IntegrationUser } from './entities';
+import { ApiKey, IntegrationUser, LocalUser } from './entities';
 import dataSource from '../../database';
 import { Audio, LightsController, Screen } from '../root/entities';
+import { SecurityGroup } from '../../helpers/security';
+import { generateSalt, hashPassword } from './passport/local-strategy';
 
 export interface OidcConfig {
   authorization_endpoint: string;
@@ -14,6 +16,12 @@ export interface GenerateApiKeyParams {
   screen?: Screen | null;
   lightsController?: LightsController | null;
   integrationUser?: IntegrationUser | null;
+}
+
+export interface UserParams {
+  userName: string;
+  password: string;
+  roles: SecurityGroup[];
 }
 
 export interface IntegrationUserCreateParams extends Pick<IntegrationUser, 'name'> {}
@@ -78,5 +86,19 @@ export default class AuthService {
   public async getOIDCConfig(): Promise<OidcConfig> {
     const oidcConfigRes = await fetch(process.env.OIDC_CONFIG!);
     return oidcConfigRes.json();
+  }
+
+  async createUser(params: UserParams): Promise<LocalUser> {
+    const { roles, password, ...userParams } = params;
+    const userRepo = dataSource.getRepository(LocalUser);
+    const salt = generateSalt();
+    const user = userRepo.create({
+      ...userParams,
+      roles: roles.join(','),
+      hash: hashPassword(password, salt),
+      salt: salt,
+    });
+    await userRepo.save(user);
+    return user;
   }
 }

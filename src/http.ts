@@ -65,6 +65,7 @@ export default async function createHttp() {
 
   RegisterRoutes(app);
 
+  app.post('/api/auth/local', passport.authenticate('local'), authResponse);
   app.post('/api/auth/oidc', passport.authenticate('oidc'), authResponse);
   app.post('/api/auth/key', passport.authenticate('apikey'), authResponse);
 

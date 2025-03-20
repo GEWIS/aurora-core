@@ -1,6 +1,5 @@
 import { Strategy as CustomStrategy } from 'passport-custom';
 import passport from 'passport';
-import { Request as ExRequest, Response as ExResponse } from 'express';
 import { SecurityGroup } from '../../../helpers/security';
 
 passport.use(

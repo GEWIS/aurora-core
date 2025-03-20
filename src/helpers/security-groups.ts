@@ -69,6 +69,7 @@ const allSecuritySubscriberGroups = [
 export const securityGroups = {
   user: {
     base: allSecuritySubscriberGroups,
+    privileged: [SecurityGroup.ADMIN],
   },
   audit: {
     base: allSecurityGroups,
