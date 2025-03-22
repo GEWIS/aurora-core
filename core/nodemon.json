@@ -1,0 +1,6 @@
+{
+  "exec": "ts-node aurora.config.ts",
+  "watch": ["aurora.config.ts"],
+  "ext": "ts",
+  "delay": 500
+}

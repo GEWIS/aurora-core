@@ -1,0 +1,38 @@
+{
+  "name": "aurora-core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "aurora.config.ts",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"nodemon\"",
+    "build": "tsoa spec-and-routes && tsc",
+    "start": "node dist/src/index.js",
+    "tsoa": "tsoa spec-and-routes",
+    "gen-client": "yarn gen-client-backoffice && yarn gen-client-client",
+    "gen-client-backoffice": "openapi-ts -o ../aurora-backoffice/src/api/",
+    "gen-client-client": "openapi-ts -o ../aurora-client/src/api/",
+    "lint": "eslint ./src --max-warnings=0",
+    "lint-fix": "eslint ./src --fix",
+    "format": "prettier --ignore-path .gitignore --check ./src/",
+    "format-fix": "prettier --ignore-path .gitignore --write ./src",
+    "seed": "ts-node src/seed/index.ts",
+    "prepare-husky": "husky"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@gewis/aurora-core": "workspace:^"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "yarn@4.5.1"
+}
