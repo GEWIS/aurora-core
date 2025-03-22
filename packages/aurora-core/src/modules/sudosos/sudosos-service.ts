@@ -8,7 +8,7 @@ import { SudoSOSClient } from './sudosos-api-service';
 import { ServerSettingsStore, FeatureEnabled } from '../server-settings';
 import { SudoSOSSettings } from './sudosos-settings';
 
-interface SudoSOSDebtorResponse {
+export interface SudoSOSDebtorResponse {
   userId: number;
   firstName: string;
   nickName?: string;
@@ -98,7 +98,7 @@ export default class SudoSOSService {
         undefined,
         undefined,
         undefined,
-        userTypes as any,
+        userTypes as never,
         'amount',
         'ASC',
         undefined,

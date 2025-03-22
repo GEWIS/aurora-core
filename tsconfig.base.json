@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig.json",
+  "extends": "@gewis/tsconfig",
+  "compilerOptions": {
+    "outDir": "dist",
+    "types": ["node"],
+    "lib": ["es2022", "DOM"],
+    "esModuleInterop": true,
+    "module": "commonjs",
+
+    // TODO "strict" and others should be set to true again and issues should be fixed
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitOverride": false,
+    "strictPropertyInitialization": false,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+  },
+  "ts-node": {
+    "files": true
+  },
+  "exclude": ["node_modules", "dist"]
+}

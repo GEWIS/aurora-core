@@ -1,5 +1,5 @@
 import bodyParser from 'body-parser';
-import express from 'express';
+import express, { Express } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -35,7 +35,7 @@ export function customOrigin(
  * HTTP is only used for the end user to interact with the software,
  * i.e. changing settings or modes.
  */
-export default async function createHttp() {
+export default async function createHttp(): Promise<express.Express> {
   const app = express();
 
   app.use(

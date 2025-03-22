@@ -226,6 +226,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@gewis/tsconfig@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "@gewis/tsconfig@npm:2.3.1"
+  checksum: 10c0/1142bf15bf908d94cb5ca8a4696290457cb8309952571478a0253e37203aa719e51fe59b98df1fab31eb5b6988d47db6a8fe998a67d07a3b75de092fb02d18a2
+  languageName: node
+  linkType: hard
+
 "@hapi/accept@npm:^6.0.3":
   version: 6.0.3
   resolution: "@hapi/accept@npm:6.0.3"
@@ -5841,6 +5848,8 @@ __metadata:
 "root@workspace:.":
   version: 0.0.0-use.local
   resolution: "root@workspace:."
+  dependencies:
+    "@gewis/tsconfig": "npm:^2.3.1"
   languageName: unknown
   linkType: soft
 

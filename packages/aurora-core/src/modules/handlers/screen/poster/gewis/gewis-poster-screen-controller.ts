@@ -24,7 +24,7 @@ interface GewisPosterResponse extends BasePosterResponse {
 @Tags('Handlers')
 @FeatureEnabled('GewisPosterScreenHandler')
 export class GewisPosterScreenController extends BasePosterScreenController {
-  protected screenHandler: GewisPosterScreenHandler;
+  protected declare screenHandler: GewisPosterScreenHandler;
 
   constructor() {
     super();
