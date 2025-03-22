@@ -5,16 +5,14 @@ import { Repository } from 'typeorm';
 import dataSource from '../../../../../database';
 import { HttpApiException } from '../../../../../helpers/custom-error';
 import { HttpStatusCode } from 'axios';
-import { BaseFile, File } from '../../../../files/entities';
+import { File } from '../../../../files/entities';
+import FileResponse from '../../../../files/entities/file-response';
 
 export interface LocalPosterResponse {
   id: number;
   createdAt: string;
   updatedAt: string;
-  file?: {
-    location: string;
-    name: string;
-  };
+  file?: FileResponse;
   uri?: string;
 }
 

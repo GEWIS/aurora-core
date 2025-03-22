@@ -1,6 +1,7 @@
 import BaseScreenHandler from '../../base-screen-handler';
 import { TrackChangeEvent } from '../../../events/music-emitter-events';
 import { LocalPosterResponse } from './local/local-poster-service';
+import { FeatureEnabled } from '../../../server-settings';
 
 const UPDATE_POSTER_EVENT_NAME = 'update_static_poster';
 const DEFAULT_CLOCK_VISIBLE = true;
@@ -10,6 +11,7 @@ export interface StaticPosterHandlerState {
   clockVisible: boolean;
 }
 
+@FeatureEnabled('Poster')
 export default class StaticPosterHandler extends BaseScreenHandler {
   private activePoster: LocalPosterResponse | null;
 

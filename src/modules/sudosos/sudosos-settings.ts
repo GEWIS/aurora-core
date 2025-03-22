@@ -1,6 +1,12 @@
 export interface SudoSOSSettings {
   SudoSOS: boolean;
+  /**
+   * @isInt
+   */
   'SudoSOS.BorrelmodePOSID': number;
+  /**
+   * @isInt
+   */
   'SudoSOS.BACGroupID': number;
 }
 

@@ -10,7 +10,7 @@ import { Request as ExpressRequest } from 'express';
 import logger from '../../../../../logger';
 import { HttpStatusCode } from 'axios';
 import { StaticPosterHandlerState } from '../static-poster-handler';
-import mime from 'mime';
+import { lookup } from 'mime-types';
 
 interface SetClockRequest {
   visible: boolean;
@@ -94,8 +94,8 @@ export class LocalPosterController extends Controller {
       'Invalid file type, expected an image or a video.'
     >,
   ): Promise<LocalPosterResponse> {
-    const mimeType = mime.lookup(file.originalname);
-    if (!mimeType || !mimeType.startsWith('image/') || !mimeType.startsWith('video')) {
+    const mimeType = lookup(file.originalname);
+    if (!mimeType || !(mimeType.startsWith('image/') || mimeType.startsWith('video'))) {
       return invalidFileTypeResponse(
         HttpStatusCode.BadRequest,
         'Invalid file type, expected an image or a video.',

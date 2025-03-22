@@ -24,9 +24,15 @@ export default class DiskStorage extends FileStorage {
       this.relativeWorkdir = path.join('private', relativeDirectory);
     }
 
-    if (!fs.existsSync(this.workdir)) {
-      fs.mkdirSync(this.workdir);
+    const dirsToCreate: string[] = [];
+    let currentDir = this.workdir;
+    // In the given path, find all directories in the path that do not exist
+    while (!fs.existsSync(currentDir)) {
+      dirsToCreate.push(currentDir);
+      currentDir = path.join(currentDir, '../');
     }
+    // Create all directories from lowest to highest level (one directory at a time)
+    dirsToCreate.reverse().forEach((dir) => fs.mkdirSync(dir));
   }
 
   private get workdir(): string {
