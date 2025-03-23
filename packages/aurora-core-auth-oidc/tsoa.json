@@ -1,0 +1,30 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": [
+    "src/**/*-controller.ts"
+  ],
+  "spec": {
+    "basePath": "/api",
+    "securityDefinitions": {
+      "local": {
+        "type": "http",
+        "name": "connect.sid",
+        "in": "cookie"
+      }
+    },
+    "outputDirectory": "build",
+    "host": "",
+    "specVersion": 3,
+    "schemes": [
+      "http",
+      "https"
+    ]
+  },
+  "routes": {
+    "authenticationModule": "src/authentication.ts",
+    "basePath": "/api",
+    "routesDir": "build",
+    "middleware": "express"
+  }
+}

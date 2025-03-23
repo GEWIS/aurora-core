@@ -3,9 +3,10 @@ import { Server as HttpServer } from 'http';
 import { NextFunction, Response } from 'express';
 import passport from 'passport';
 import { DefaultEventsMap, EventsMap } from 'socket.io/dist/typed-events';
-import { SessionMiddleware, AuthUser } from './modules/auth';
+import { SessionMiddleware } from './modules/auth';
 import { customOrigin, enableCors } from './http';
 import { SECURE_NAMESPACES } from './socketio-namespaces';
+import { AuthUser } from '@gewis/aurora-core-util';
 
 const devEnv = process.env.NODE_ENV === 'development';
 

@@ -8,7 +8,7 @@
     "basePath": "/api",
     "securityDefinitions": {
       "local": {
-        "type": "apiKey",
+        "type": "http",
         "name": "connect.sid",
         "in": "cookie"
       }
@@ -24,21 +24,6 @@
     "spec": {
       "components": {
         "schemas": {
-          "OidcParameters": {
-            "type": "object",
-            "properties": {
-              "state": {
-                "type": "string"
-              },
-              "session_state": {
-                "type": "string"
-              },
-              "code": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false
-          },
           "ApiKeyParameters": {
             "type": "object",
             "required": ["key"],
@@ -52,69 +37,6 @@
         }
       },
       "paths": {
-        "/auth/mock": {
-          "post": {
-            "operationId": "AuthMock",
-            "responses": {
-              "200": {
-                "description": "Success",
-                "content": {
-                  "application/json": {
-                    "schema": {
-                      "$ref": "#/components/schemas/AuthUser"
-                    }
-                  }
-                }
-              }
-            },
-            "security": [],
-            "parameters": [],
-            "tags": [
-              "Authentication"
-            ],
-            "requestBody": {
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/AuthUser"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "/auth/oidc": {
-          "post": {
-            "operationId": "AuthOIDC",
-            "responses": {
-              "200": {
-                "description": "Success",
-                "content": {
-                  "application/json": {
-                    "schema": {
-                      "$ref": "#/components/schemas/AuthUser"
-                    }
-                  }
-                }
-              }
-            },
-            "security": [],
-            "parameters": [],
-            "tags": [
-              "Authentication"
-            ],
-            "requestBody": {
-              "required": true,
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/OidcParameters"
-                  }
-                }
-              }
-            }
-          }
-        },
         "/auth/key": {
           "post": {
             "operationId": "AuthKey",

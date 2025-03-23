@@ -1,7 +1,6 @@
 import logger from '@gewis/aurora-core-logger';
 import AuditService from './audit-service';
-import { AuthUser } from '../auth';
-import { isAuthUser } from '../auth/auth-user';
+import {AuthUser, isAuthUser} from '@gewis/aurora-core-util';
 
 /**
  * Log an audit message

@@ -1,11 +1,10 @@
 import passport from 'passport';
 import { Strategy as CustomStrategy } from 'passport-custom';
 import { HttpStatusCode } from 'axios';
-import { HttpApiException } from '@gewis/aurora-core-util';
+import {AuthUser, HttpApiException} from '@gewis/aurora-core-util';
 import database from '../../../database';
 import { ApiKey } from '../entities';
 import { SecurityGroup } from '@gewis/aurora-core-util';
-import { AuthUser } from '../auth-user';
 
 passport.use(
   'apikey',

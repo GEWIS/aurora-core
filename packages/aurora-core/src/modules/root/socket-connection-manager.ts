@@ -2,7 +2,6 @@ import { Server } from 'socket.io';
 import { Repository } from 'typeorm';
 import AsyncLock from 'async-lock';
 import HandlerManager from './handler-manager';
-import { AuthUser } from '../auth';
 import dataSource from '../../database';
 import { Audio, LightsController, Screen } from './entities';
 import BaseLightsHandler from '../handlers/base-lights-handler';
@@ -13,6 +12,7 @@ import BaseHandler from '../handlers/base-handler';
 import logger from '@gewis/aurora-core-logger';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 import LightsSwitchManager from './lights-switch-manager';
+import { AuthUser } from '@gewis/aurora-core-util';
 
 export default class SocketConnectionManager {
   /**

@@ -23,7 +23,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@gewis/aurora-core": "workspace:^"
+    "@gewis/aurora-core": "workspace:^",
+    "@tsoa/cli": "^6.5.1",
+    "@tsoa/runtime": "^6.5.1",
+    "tsoa": "^6.5.1"
   },
   "devDependencies": {
     "concurrently": "^9.0.1",

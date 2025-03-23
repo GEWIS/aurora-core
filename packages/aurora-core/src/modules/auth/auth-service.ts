@@ -4,11 +4,6 @@ import { ApiKey, IntegrationUser } from './entities';
 import dataSource from '../../database';
 import { Audio, LightsController, Screen } from '../root/entities';
 
-export interface OidcConfig {
-  authorization_endpoint: string;
-  token_endpoint: string;
-}
-
 export interface GenerateApiKeyParams {
   audio?: Audio | null;
   screen?: Screen | null;
@@ -73,10 +68,5 @@ export default class AuthService {
     const integrationUser = await this.integrationUserRepository.save(params);
     await this.createApiKey({ integrationUser });
     return integrationUser;
-  }
-
-  public async getOIDCConfig(): Promise<OidcConfig> {
-    const oidcConfigRes = await fetch(process.env.OIDC_CONFIG!);
-    return oidcConfigRes.json();
   }
 }
