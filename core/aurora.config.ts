@@ -1,14 +1,16 @@
-import { createApp } from '@gewis/aurora-core';
+import { start } from '@gewis/aurora-core';
+import {AuroraConfig} from '@gewis/aurora-core-util';
+import OidcPlugin from '@gewis/aurora-core-auth-oidc';
+import MockPlugin from '@gewis/aurora-core-auth-mock';
 
-if (require.main === module) {
-  process.on('SIGINT', () => {
-    // this is only called on ctrl+c, not restart
-    process.kill(process.pid, 'SIGINT');
-  });
+const config = {
+  auth: [
+    OidcPlugin,
+    {
+      ...MockPlugin,
+      devOnly: true,
+    }
+  ]
+} as AuroraConfig;
 
-  // Only execute the application directly if this is the main execution file.
-  createApp().catch((e) => {
-    console.error(e);
-  });
-
-}
+start(config);

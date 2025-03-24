@@ -22,8 +22,9 @@ import Types from './types';
 import { OrderManager } from './modules/orders';
 import TimedEventsService from './modules/timed-events/timed-events-service';
 import LightsSwitchManager from './modules/root/lights-switch-manager';
+import { AuroraConfig } from '@gewis/aurora-core-util'
 
-export async function createApp(): Promise<void> {
+async function createApp(config: AuroraConfig): Promise<void> {
   // Fix for production issue where a Docker volume overwrites the contents of a folder instead of merging them
   if (process.env.STATIC_FILES_LOCATION) {
     const audioFromPath = path.join(__dirname, '../public/audio');
@@ -43,7 +44,7 @@ export async function createApp(): Promise<void> {
   const featureFlagManager = new FeatureFlagManager();
   await TimedEventsService.getInstance().registerAllDatabaseEvents();
 
-  const app = await createHttp();
+  const app = await createHttp(config);
   const httpServer = createServer(app);
   const io = createWebsocket(httpServer);
 
@@ -93,14 +94,14 @@ export async function createApp(): Promise<void> {
   httpServer.listen(port, () => logger.info(`Listening at http://localhost:${port}`));
 }
 
-if (require.main === module) {
+export function start(config: AuroraConfig) {
   process.on('SIGINT', () => {
     // this is only called on ctrl+c, not restart
     process.kill(process.pid, 'SIGINT');
   });
 
   // Only execute the application directly if this is the main execution file.
-  createApp().catch((e) => {
+  createApp(config).catch((e) => {
     logger.fatal(e);
   });
 }
