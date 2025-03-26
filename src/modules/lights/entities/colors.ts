@@ -2,6 +2,8 @@ import { RgbColor } from '../color-definitions';
 import LightsFixtureShutterOptions from './lights-fixture-shutter-options';
 
 export default abstract class Colors {
+  protected valuesUpdatedAt = new Date();
+
   protected currentBrightness: number = 1;
 
   protected strobe: boolean = false;
@@ -16,6 +18,7 @@ export default abstract class Colors {
    * @param brightness Value between [0, 1]
    */
   public setBrightness(brightness: number) {
+    this.valuesUpdatedAt = new Date();
     // Set upper and lower bounds to 1 and 0 respectively
     this.currentBrightness = Math.max(0, Math.min(1, brightness));
   }
@@ -26,6 +29,7 @@ export default abstract class Colors {
    * be disabled.
    */
   public enableStrobe(milliseconds?: number): void {
+    this.valuesUpdatedAt = new Date();
     this.strobe = true;
 
     // Stop an existing stop strobe timeout if it exists
@@ -44,6 +48,7 @@ export default abstract class Colors {
    * Stop strobe if strobing
    */
   public disableStrobe(): void {
+    this.valuesUpdatedAt = new Date();
     this.strobe = false;
 
     if (this.strobeDisableEvent) {
@@ -57,6 +62,13 @@ export default abstract class Colors {
    */
   public strobeEnabled(): boolean {
     return this.strobe;
+  }
+
+  /**
+   * When the colors have changed
+   */
+  public lastUpdate(): Date {
+    return this.valuesUpdatedAt;
   }
 
   /**

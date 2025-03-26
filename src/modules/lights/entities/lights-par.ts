@@ -13,18 +13,19 @@ export default class LightsPar extends LightsFixture {
   @Column(() => ColorsRgb)
   public color: ColorsRgb;
 
+  public lastUpdate(): Date {
+    return this.getMaxDate(this.valuesUpdatedAt, this.color.lastUpdate());
+  }
+
   public setColor(color?: RgbColor) {
-    this.valuesUpdatedAt = new Date();
     this.color.setColor(color);
   }
 
   public setCustomColor(color: IColorsRgb) {
-    this.valuesUpdatedAt = new Date();
     this.color.setCustomColor(color);
   }
 
   public resetColor() {
-    this.valuesUpdatedAt = new Date();
     this.color.reset();
   }
 
@@ -34,17 +35,14 @@ export default class LightsPar extends LightsFixture {
   }
 
   public enableStrobe(milliseconds?: number): void {
-    this.valuesUpdatedAt = new Date();
     this.color.enableStrobe(milliseconds);
   }
 
   public disableStrobe(): void {
-    this.valuesUpdatedAt = new Date();
     this.color.disableStrobe();
   }
 
   public setBrightness(brightness: number): void {
-    this.valuesUpdatedAt = new Date();
     this.color.setBrightness(brightness);
   }
 

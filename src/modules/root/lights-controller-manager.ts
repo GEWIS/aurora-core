@@ -172,7 +172,7 @@ export default class LightsControllerManager {
    * @param valuesUpdatedAt
    * @private
    */
-  private hasUpdated(valuesUpdatedAt?: Date) {
+  private hasUpdated(valuesUpdatedAt?: Date): boolean {
     if (valuesUpdatedAt === undefined) return true;
     return valuesUpdatedAt > this.previousTick;
   }
@@ -202,7 +202,7 @@ export default class LightsControllerManager {
 
       g.pars.forEach((p) => {
         // Only update fixture in packet if it is in a new state (and thus needs to be updated)
-        if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
+        if (this.hasUpdated(p.fixture.lastUpdate())) {
           newValues = this.calculateNewDmxValues(p, newValues);
         } else {
           newValues = this.reuseOldDmxValues(p, oldValues, newValues);
@@ -211,7 +211,7 @@ export default class LightsControllerManager {
 
       g.movingHeadRgbs.forEach((p) => {
         // Only update fixture in packet if it is in a new state (and thus needs to be updated)
-        if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
+        if (this.hasUpdated(p.fixture.lastUpdate())) {
           newValues = this.calculateNewDmxValues(p, newValues);
         } else {
           newValues = this.reuseOldDmxValues(p, oldValues, newValues);
@@ -220,7 +220,7 @@ export default class LightsControllerManager {
 
       g.movingHeadWheels.forEach((p) => {
         // Only update fixture in packet if it is in a new state (and thus needs to be updated)
-        if (this.hasUpdated(p.fixture.valuesUpdatedAt)) {
+        if (this.hasUpdated(p.fixture.lastUpdate())) {
           newValues = this.calculateNewDmxValues(p, newValues);
         } else {
           newValues = this.reuseOldDmxValues(p, oldValues, newValues);

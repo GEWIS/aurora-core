@@ -57,6 +57,13 @@ export default abstract class LightsFixture extends BaseEntity {
     return true;
   }
 
+  protected getMaxDate(...dates: Date[]): Date {
+    const times = dates.map((d) => d.getTime());
+    const maxTime = Math.max(...times);
+    return new Date(maxTime);
+  }
+  public abstract lastUpdate(): Date;
+
   public abstract setColor(color: RgbColor): void;
   public abstract resetColor(): void;
 

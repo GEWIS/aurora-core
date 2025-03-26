@@ -12,23 +12,27 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
   @Column(() => ColorsWheel)
   public wheel: ColorsWheel;
 
+  public lastUpdate(): Date {
+    return this.getMaxDate(
+      this.valuesUpdatedAt,
+      this.wheel.lastUpdate(),
+      this.movement.lastUpdate(),
+    );
+  }
+
   public setColor(color?: RgbColor) {
-    this.valuesUpdatedAt = new Date();
     this.wheel.setColor(color);
   }
 
   public resetColor(): void {
-    this.valuesUpdatedAt = new Date();
     this.wheel.reset();
   }
 
   public setGobo(gobo?: string) {
-    this.valuesUpdatedAt = new Date();
     this.wheel.setGobo(gobo);
   }
 
   public setGoboRotate(rotate?: string) {
-    this.valuesUpdatedAt = new Date();
     this.wheel.setGoboRotate(rotate);
   }
 
@@ -38,17 +42,14 @@ export default class LightsMovingHeadWheel extends LightsMovingHead {
   }
 
   public enableStrobe(milliseconds?: number): void {
-    this.valuesUpdatedAt = new Date();
     this.wheel.enableStrobe(milliseconds);
   }
 
   public disableStrobe(): void {
-    this.valuesUpdatedAt = new Date();
     this.wheel.disableStrobe();
   }
 
   public setBrightness(brightness: number): void {
-    this.valuesUpdatedAt = new Date();
     this.wheel.setBrightness(brightness);
   }
 

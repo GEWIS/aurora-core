@@ -48,6 +48,8 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
   };
 
   public setColor(color?: RgbColor): void {
+    this.valuesUpdatedAt = new Date();
+
     if (!color) {
       this.reset();
       return;
@@ -64,6 +66,8 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
   }
 
   public setGobo(gobo?: string) {
+    this.valuesUpdatedAt = new Date();
+
     const channelValueObj = this.goboChannelValues.find((v) => v.name === gobo);
     this.currentValues = {
       ...this.currentValues,
@@ -72,6 +76,8 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
   }
 
   public setGoboRotate(rotate?: string) {
+    this.valuesUpdatedAt = new Date();
+
     const channelValueObj = this.goboRotateChannelValues.find((v) => v.name === rotate);
     this.currentValues = {
       ...this.currentValues,
@@ -80,6 +86,8 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
   }
 
   public reset(): void {
+    this.valuesUpdatedAt = new Date();
+
     this.setBrightness(1);
     this.currentColor = undefined;
     this.currentValues = {

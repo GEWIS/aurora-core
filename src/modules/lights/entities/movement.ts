@@ -27,6 +27,8 @@ export default class Movement implements IMovement {
   @Column({ type: 'tinyint', nullable: true, unsigned: true })
   public movingSpeedChannel?: number | null;
 
+  private valuesUpdatedAt = new Date();
+
   private currentValues: Required<IMovement> = {
     panChannel: 0,
     finePanChannel: 0,
@@ -36,10 +38,19 @@ export default class Movement implements IMovement {
   };
 
   /**
+   * When the moving head's position has last changed
+   */
+  public lastUpdate(): Date {
+    return this.valuesUpdatedAt;
+  }
+
+  /**
    * @param panFactor value between [0, 1]
    * @param tiltFactor value between [0, 1]
    */
   public setPositionRel(panFactor: number, tiltFactor: number) {
+    this.valuesUpdatedAt = new Date();
+
     const pan = panFactor * 170;
     const tilt = tiltFactor * 255;
     const panChannel = Math.floor(pan) + this.basePanValue;
@@ -62,6 +73,8 @@ export default class Movement implements IMovement {
    * @deprecated
    */
   public setPositionAbs(pan: number, tilt: number) {
+    this.valuesUpdatedAt = new Date();
+
     const panChannel = Math.floor(pan);
     const tiltChannel = Math.floor(tilt);
     const finePanChannel = Math.floor((pan - panChannel) * 255);
@@ -80,6 +93,8 @@ export default class Movement implements IMovement {
    * Reset the moving head to its initial position
    */
   public reset() {
+    this.valuesUpdatedAt = new Date();
+
     this.currentValues = {
       panChannel: 0,
       finePanChannel: 0,
