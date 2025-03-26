@@ -34,7 +34,8 @@ export type EffectData = {
    */
   random?: boolean;
   /**
-   * Set custom effects
+   * Set custom effects. If an attribute is absent, this type of effect will not be applied.
+   * If an attribute is present with an empty array, this type of effect will be disabled.
    */
   effects: {
     pars?: LightsEffectBuilder[];
@@ -42,6 +43,10 @@ export type EffectData = {
     movingHeadRgbMovement?: LightsEffectBuilder[];
     movingHeadWheelColor?: LightsEffectBuilder[];
     movingHeadWheelMovement?: LightsEffectBuilder[];
+    /**
+     * Whether the disco ball should be enabled. Will be disabled by default
+     */
+    discoBall?: true;
   };
 };
 
