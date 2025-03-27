@@ -7,7 +7,7 @@ import LightsGroupPars from './lights-group-pars';
 import LightsGroupMovingHeadWheels from './lights-group-moving-head-wheels';
 // eslint-disable-next-line import/no-cycle
 import LightsGroupMovingHeadRgbs from './lights-group-moving-head-rgbs';
-import SubscribeEntity from '../../root/entities/subscribe-entity';
+import { SubscribeEntity } from '@gewis/aurora-core-util';
 
 @Entity()
 export default class LightsGroup extends SubscribeEntity {

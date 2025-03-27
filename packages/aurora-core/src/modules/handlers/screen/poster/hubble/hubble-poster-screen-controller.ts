@@ -7,11 +7,9 @@ import { Get, Post, Request, Route, Security, Tags } from 'tsoa';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import { securityGroups } from '@gewis/aurora-core-util';
 import { Request as ExpressRequest } from 'express';
-import { FeatureEnabled } from '../../../../server-settings';
 
 @Route('handler/screen/hubble-poster')
 @Tags('Handlers')
-@FeatureEnabled('HubblePosterScreenHandler')
 export class HubblePosterScreenController extends BasePosterScreenController {
   constructor() {
     super();

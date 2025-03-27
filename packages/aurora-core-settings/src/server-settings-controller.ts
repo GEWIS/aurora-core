@@ -1,8 +1,7 @@
 import { Controller, TsoaResponse } from '@tsoa/runtime';
 import { Body, Get, Post, Res, Route, Security, Tags } from 'tsoa';
-import { SecurityGroup, SecurityNames } from '@gewis/aurora-core-util';
+import { SecurityNames } from '@gewis/aurora-core-util';
 import ServerSettingsStore from './server-settings-store';
-import { ISettings } from './server-setting';
 import FeatureFlagManager from './feature-flag-manager';
 import { securityGroups } from '@gewis/aurora-core-util';
 
@@ -13,7 +12,7 @@ type SetServerSettingRequest = {
 
 @Tags('ServerSettings')
 @Route('settings')
-export class ServerSettingsController extends Controller {
+export class ServerSettingsController<V> extends Controller {
   /**
    * Get all server settings. NOTE: this can include secrets
    * like private keys!
@@ -40,7 +39,7 @@ export class ServerSettingsController extends Controller {
       return validationErrorResponse(400, `Setting with key "${request.key}" not found.`);
     }
 
-    const key = request.key as keyof ISettings;
+    const key = request.key as keyof V;
     const currentValue = store.getSetting(key);
     const currentType = typeof currentValue;
     const newType = typeof request.value;

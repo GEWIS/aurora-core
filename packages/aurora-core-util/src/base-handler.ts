@@ -1,9 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
-import SubscribeEntity from '../root/entities/subscribe-entity';
-import { BeatEvent } from '../events/music-emitter-events';
+import { SubscribeEntity } from '../../aurora-core-database-util/src/subscribe-entity';
 import logger from '@gewis/aurora-core-logger';
 
-export default abstract class BaseHandler<T extends SubscribeEntity> {
+export abstract class BaseHandler<T extends SubscribeEntity> {
   /**
    * Used to distinguish multiple instances of the same handler type
    */
@@ -53,13 +52,6 @@ export default abstract class BaseHandler<T extends SubscribeEntity> {
   public get entities() {
     return this._entities;
   }
-
-  /**
-   * Beat of the currently playing song
-   * @param event Metadata about the beat and the currently playing song.
-   * Only includes information about the future
-   */
-  abstract beat(event: BeatEvent): void;
 
   /**
    * Reset the handler to its initial state

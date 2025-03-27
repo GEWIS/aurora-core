@@ -4,7 +4,6 @@ import * as fs from 'fs';
 import path from 'node:path';
 import logger from '@gewis/aurora-core-logger';
 import createHttp from './http';
-import dataSource from './database';
 import HandlerManager from './modules/root/handler-manager';
 import createWebsocket from './socketio';
 import './modules/audit/audit-logger';
@@ -13,16 +12,27 @@ import LightsControllerManager from './modules/root/lights-controller-manager';
 import ModeManager from './modules/modes/mode-manager';
 import { ArtificialBeatGenerator } from './modules/beats/artificial-beat-generator';
 import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
-import { SocketioNamespaces } from './socketio-namespaces';
+import { SocketioNamespaces } from '@gewis/aurora-core-util';
 import SocketConnectionManager from './modules/root/socket-connection-manager';
-import { FeatureFlagManager, ServerSettingsStore } from './modules/server-settings';
 import EmitterStore from './modules/events/emitter-store';
 // do not remove; used for extending existing types
 import Types from './types';
-import { OrderManager } from './modules/orders';
+import {OrderManager, OrderSettingsDefault} from './modules/orders';
 import TimedEventsService from './modules/timed-events/timed-events-service';
 import LightsSwitchManager from './modules/root/lights-switch-manager';
 import { AuroraConfig } from '@gewis/aurora-core-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { Entities as BaseEntities } from './modules/root/entities';
+import { Entities as AuthEntities } from './modules/auth/entities';
+import { Entities as FileEntities } from './modules/files/entities';
+import { Entities as AuditEntities } from './modules/audit/entities';
+import { Entities as SpotifyEntities } from './modules/spotify/entities';
+import { Entities as LightsEntities } from './modules/lights/entities';
+import { Entities as TimedEventsEntities } from './modules/timed-events/entities';
+import LocalPoster from './modules/handlers/screen/poster/local/local-poster';
+import {ScreenHandlerSettings, ScreenHandlerSettingsDefaults} from "./modules/handlers/screen/screen-handler-settings";
+import {OrderSettings} from "./modules/orders";
+import { ServerSettingsStore, ServerSetting } from '@gewis/aurora-core-server-settings';
 
 async function createApp(config: AuroraConfig): Promise<void> {
   // Fix for production issue where a Docker volume overwrites the contents of a folder instead of merging them
@@ -38,10 +48,21 @@ async function createApp(config: AuroraConfig): Promise<void> {
     fs.cpSync(audioFromPath, audioToPath, { recursive: true });
   }
 
-  await dataSource.initialize();
+  await DataSourceSingleton.getInstance().initialize([
+    ServerSetting,
+    ...TimedEventsEntities,
+    ...BaseEntities,
+    ...AuthEntities,
+    ...FileEntities,
+    ...AuditEntities,
+    ...SpotifyEntities,
+    ...LightsEntities,
+    LocalPoster
+  ])
 
-  await ServerSettingsStore.getInstance().initialize();
-  const featureFlagManager = new FeatureFlagManager();
+  await ServerSettingsStore.getInstance().initialize<ScreenHandlerSettings>('screenHandler', ScreenHandlerSettingsDefaults)
+  await ServerSettingsStore.getInstance().initialize<OrderSettings>('orders', OrderSettingsDefault)
+
   await TimedEventsService.getInstance().registerAllDatabaseEvents();
 
   const app = await createHttp(config);
@@ -84,9 +105,7 @@ async function createApp(config: AuroraConfig): Promise<void> {
     await SpotifyTrackHandler.getInstance().init(emitterStore.musicEmitter);
   }
 
-  if (featureFlagManager.flagIsEnabled('Orders')) {
     OrderManager.getInstance().init(emitterStore.orderEmitter);
-  }
 
   initBackofficeSynchronizer(io.of('/backoffice'), emitterStore);
 
@@ -105,3 +124,5 @@ export function start(config: AuroraConfig) {
     logger.fatal(e);
   });
 }
+
+export { DataSourceSingleton }

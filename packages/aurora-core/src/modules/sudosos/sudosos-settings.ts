@@ -1,3 +1,5 @@
+export const SudoSOSSettingsName= 'SUDOSOS'
+
 export interface SudoSOSSettings {
   SudoSOS: boolean;
   'SudoSOS.BorrelmodePOSID': number;

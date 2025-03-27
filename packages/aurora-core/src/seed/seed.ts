@@ -1,7 +1,6 @@
 import RootAudioService from '../modules/root/root-audio-service';
 import RootScreenService from '../modules/root/root-screen-service';
 import RootLightsService, { LightsInGroup } from '../modules/root/root-lights-service';
-import dataSource from '../database';
 import { LightsGroup, LightsMovingHeadWheel, LightsSwitch } from '../modules/lights/entities';
 import { RgbColor, WheelColor } from '../modules/lights/color-definitions';
 import { SparkleCreateParams } from '../modules/lights/effects/color/sparkle';
@@ -21,9 +20,10 @@ import { ColorEffects } from '../modules/lights/effects/color/color-effects';
 import { MovementEffects } from '../modules/lights/effects/movement/movement-effetcs';
 import { TimedEvent } from '../modules/timed-events/entities';
 import AuthService from '../modules/auth/auth-service';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
 
 export default async function seedDatabase() {
-  const timedEventsRepo = dataSource.getRepository(TimedEvent);
+  const timedEventsRepo = DataSourceSingleton.getInstance().get().getRepository(TimedEvent);
   await timedEventsRepo.save([
     {
       cronExpression: '39 5 * * *',
@@ -102,7 +102,7 @@ export default async function seedDatabase() {
     goboRotateChannelValues: [],
   });
   eurolite_LED_TMH_S30.resetChannelAndValue = [12, 255];
-  await dataSource.getRepository(LightsMovingHeadWheel).save(eurolite_LED_TMH_S30);
+  await DataSourceSingleton.getInstance().get().getRepository(LightsMovingHeadWheel).save(eurolite_LED_TMH_S30);
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const ayra_ERO_506 = await rootLightsService.createMovingHeadRgb({
@@ -223,7 +223,7 @@ export default async function seedDatabase() {
     movingHeadWheels: [],
   });
 
-  const colorRepo = dataSource.getRepository(LightsWheelColorChannelValue);
+  const colorRepo = DataSourceSingleton.getInstance().get().getRepository(LightsWheelColorChannelValue);
   await Promise.all([
     colorRepo.save({ id: 1, name: WheelColor.WHITE, value: 1, movingHead: eurolite_LED_TMH_S30 }),
     colorRepo.save({ id: 2, name: WheelColor.RED, value: 11, movingHead: eurolite_LED_TMH_S30 }),
@@ -274,7 +274,7 @@ export default async function seedDatabase() {
       movingHead: showtec_Kanjo_Spot10,
     }),
   ]);
-  const goboRepo = dataSource.getRepository(LightsWheelGoboChannelValue);
+  const goboRepo = DataSourceSingleton.getInstance().get().getRepository(LightsWheelGoboChannelValue);
   await Promise.all([
     goboRepo.save({ id: 1, name: 'Open', value: 0, movingHead: eurolite_LED_TMH_S30 }),
     goboRepo.save({ id: 2, name: 'Blender', value: 11, movingHead: eurolite_LED_TMH_S30 }),
@@ -294,7 +294,7 @@ export default async function seedDatabase() {
   await Promise.all([
     goboRepo.save({ id: 10, name: 'Open', value: 0, movingHead: showtec_Kanjo_Spot10 }),
   ]);
-  const goboRotateRepo = dataSource.getRepository(LightsWheelRotateChannelValue);
+  const goboRotateRepo = DataSourceSingleton.getInstance().get().getRepository(LightsWheelRotateChannelValue);
   await Promise.all([
     goboRotateRepo.save({ id: 1, name: 'None', value: 0, movingHead: eurolite_LED_TMH_S30 }),
     goboRotateRepo.save({
@@ -347,7 +347,7 @@ export default async function seedDatabase() {
     }),
   ]);
 
-  const switchRepo = dataSource.getRepository(LightsSwitch);
+  const switchRepo = DataSourceSingleton.getInstance().get().getRepository(LightsSwitch);
   const discoball = await switchRepo.save({
     name: 'GEWIScobal',
     controller,
@@ -357,7 +357,7 @@ export default async function seedDatabase() {
 
   return Promise.all(
     [gewisRoom, gewisBar, gewisLounge, gewisMHRoom, royMHs].map(
-      (g) => dataSource.getRepository(LightsGroup).findOne({ where: { id: g!.id } })!,
+      (g) => DataSourceSingleton.getInstance().get().getRepository(LightsGroup).findOne({ where: { id: g!.id } })!,
     ),
   );
 }
@@ -383,8 +383,8 @@ export async function seedBorrelLights(
   lounge: LightsGroup,
   movingHeadsGEWIS: LightsGroup,
 ) {
-  const sceneRepo = dataSource.getRepository(LightsScene);
-  const sceneEffectRepo = dataSource.getRepository(LightsSceneEffect);
+  const sceneRepo = DataSourceSingleton.getInstance().get().getRepository(LightsScene);
+  const sceneEffectRepo = DataSourceSingleton.getInstance().get().getRepository(LightsSceneEffect);
 
   const borrelScene = await sceneRepo.save({
     name: 'BAC Borrel',
@@ -504,7 +504,7 @@ export async function seedOpeningSequence(
   movingHeadsGEWIS: LightsGroup,
   movingHeadsRoy?: LightsGroup,
 ) {
-  const repo = dataSource.getRepository(LightsTrackEffect);
+  const repo = DataSourceSingleton.getInstance().get().getRepository(LightsTrackEffect);
   const trackUri = 'spotify:track:22L7bfCiAkJo5xGSQgmiIO';
 
   const addStep = async (

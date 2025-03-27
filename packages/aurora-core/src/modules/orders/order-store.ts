@@ -1,6 +1,6 @@
-import { FeatureEnabled, ServerSettingsStore } from '../server-settings';
-import { ISettings } from '../server-settings/server-setting';
 import { Order } from './entities';
+import { OrderSettings, OrderSettingsName } from './order-settings';
+import { ServerSettingsStore } from '@gewis/aurora-core-server-settings';
 
 /**
  * In memory store of all orders that should be propagated using Aurora.
@@ -8,7 +8,6 @@ import { Order } from './entities';
  * by for example a more persistent database store of orders in the future
  * if desired.
  */
-@FeatureEnabled('Orders')
 export default class OrderStore {
   private settingsStore: ServerSettingsStore;
 
@@ -44,11 +43,13 @@ export default class OrderStore {
    */
   public async addOrder(orderNumber: number, timeoutSeconds?: number): Promise<void> {
     const index = this._orders.findIndex((o) => o.number === orderNumber);
+    const defaultTimeoutKey = 'Orders.DefaultTimeoutSeconds';
     const timeout =
       timeoutSeconds ??
-      (this.settingsStore.getSetting(
-        'Orders.DefaultTimeoutSeconds',
-      ) as ISettings['Orders.DefaultTimeoutSeconds']);
+      this.settingsStore.getSetting<OrderSettings, typeof defaultTimeoutKey>(
+        OrderSettingsName,
+        defaultTimeoutKey,
+      );
 
     if (index >= 0) {
       this._orders[index].startTime = new Date();

@@ -1,4 +1,4 @@
-import BaseHandler from './base-handler';
+import { BaseHandler } from '@gewis/aurora-core-util';
 import { LightsGroup } from '../lights/entities';
 
 export default abstract class BaseLightsHandler extends BaseHandler<LightsGroup> {

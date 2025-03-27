@@ -2,13 +2,13 @@ import { Server } from 'socket.io';
 import { Repository } from 'typeorm';
 import AsyncLock from 'async-lock';
 import HandlerManager from './handler-manager';
-import dataSource from '../../database';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
 import { Audio, LightsController, Screen } from './entities';
 import BaseLightsHandler from '../handlers/base-lights-handler';
 import { LightsGroup } from '../lights/entities';
-import { SECURE_NAMESPACES, SocketioNamespaces } from '../../socketio-namespaces';
-import SubscribeEntity from './entities/subscribe-entity';
-import BaseHandler from '../handlers/base-handler';
+import { SECURE_NAMESPACES, SocketioNamespaces } from '@gewis/aurora-core-util';
+import { SubscribeEntity } from '@gewis/aurora-core-util';
+import { BaseHandler } from '@gewis/aurora-core-util';
 import logger from '@gewis/aurora-core-logger';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 import LightsSwitchManager from './lights-switch-manager';
@@ -52,9 +52,9 @@ export default class SocketConnectionManager {
    * crashed and is now restarted.
    */
   public async clearSavedSocketIds() {
-    await dataSource.getRepository(Audio).update({}, { socketIds: null });
-    await dataSource.getRepository(Screen).update({}, { socketIds: null });
-    await dataSource.getRepository(LightsController).update({}, { socketIds: null });
+    await DataSourceSingleton.getInstance().get().getRepository(Audio).update({}, { socketIds: null });
+    await DataSourceSingleton.getInstance().get().getRepository(Screen).update({}, { socketIds: null });
+    await DataSourceSingleton.getInstance().get().getRepository(LightsController).update({}, { socketIds: null });
   }
 
   private async updateSocketIdForEntity<T extends SubscribeEntity>(
@@ -127,7 +127,7 @@ export default class SocketConnectionManager {
       }
       if (user.audioId) {
         await this.updateSocketIdForEntity(
-          dataSource.getRepository(Audio),
+          DataSourceSingleton.getInstance().get().getRepository(Audio),
           user.audioId,
           this.handlerManager.getHandlers(Audio),
           namespace,
@@ -137,7 +137,7 @@ export default class SocketConnectionManager {
       }
       if (user.screenId) {
         await this.updateSocketIdForEntity(
-          dataSource.getRepository(Screen),
+          DataSourceSingleton.getInstance().get().getRepository(Screen),
           user.screenId,
           this.handlerManager.getHandlers(Screen),
           namespace,
@@ -147,7 +147,7 @@ export default class SocketConnectionManager {
       }
       if (user.lightsControllerId) {
         const controller = await this.updateSocketIdForEntity(
-          dataSource.getRepository(LightsController),
+          DataSourceSingleton.getInstance().get().getRepository(LightsController),
           user.lightsControllerId,
           [],
           namespace,

@@ -1,6 +1,6 @@
 import { LessThanOrEqual, Repository } from 'typeorm';
 import AuditLogEntry from './entities/audit-log-entry';
-import dataSource from '../../database';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
 import EmitterStore from '../events/emitter-store';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 
@@ -59,7 +59,7 @@ export default class AuditService {
   private backofficeEmitter: BackofficeSyncEmitter;
 
   constructor() {
-    this.repo = dataSource.getRepository(AuditLogEntry);
+    this.repo = DataSourceSingleton.getInstance().get().getRepository(AuditLogEntry);
 
     this.backofficeEmitter = EmitterStore.getInstance().backofficeSyncEmitter;
   }

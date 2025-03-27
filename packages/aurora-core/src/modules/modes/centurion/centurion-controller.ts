@@ -8,7 +8,6 @@ import MixTape, { HornData, SongData } from './tapes/mix-tape';
 import tapes from './tapes';
 import ModeDisabledError from '../mode-disabled-error';
 import logger from '@gewis/aurora-core-logger';
-import { FeatureEnabled } from '../../server-settings';
 import { RgbColor } from '../../lights/color-definitions';
 import { securityGroups } from '@gewis/aurora-core-util';
 
@@ -55,7 +54,6 @@ interface MixTapeResponse extends Pick<MixTape, 'name' | 'artist' | 'coverUrl'> 
 
 @Route('modes/centurion')
 @Tags('Modes')
-@FeatureEnabled('Centurion')
 export class CenturionController extends Controller {
   private modeManager: ModeManager;
 

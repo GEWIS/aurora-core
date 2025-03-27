@@ -1,4 +1,4 @@
-import BaseEntity from '../../root/entities/base-entity';
+import { BaseEntity } from '@gewis/aurora-core-util';
 import { Column, Entity } from 'typeorm';
 import EventSpec from '../event-spec';
 

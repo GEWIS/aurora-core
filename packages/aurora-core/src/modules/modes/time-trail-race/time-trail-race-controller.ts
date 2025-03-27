@@ -8,12 +8,10 @@ import { RegisterPlayerParams } from './time-trail-race-entities';
 import ModeDisabledError from '../mode-disabled-error';
 import { InvalidStateError } from './time-trail-race-invalid-state-error';
 import logger from '@gewis/aurora-core-logger';
-import { FeatureEnabled } from '../../server-settings';
 import { securityGroups } from '@gewis/aurora-core-util';
 
 @Route('modes/time-trail-race')
 @Tags('Modes')
-@FeatureEnabled('TimeTrailRace')
 export class TimeTrailRaceController extends Controller {
   private modeManager: ModeManager;
 

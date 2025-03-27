@@ -1,5 +1,5 @@
 import { Entity } from 'typeorm';
-import SubscribeEntity from './subscribe-entity';
+import { SubscribeEntity } from '@gewis/aurora-core-util';
 
 @Entity()
 export default class Audio extends SubscribeEntity {

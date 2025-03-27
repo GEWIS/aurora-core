@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { Screen } from './entities';
-import dataSource from '../../database';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
 import AuthService from '../auth/auth-service';
 
 export interface ScreenResponse
@@ -12,7 +12,7 @@ export default class RootScreenService {
   private repository: Repository<Screen>;
 
   constructor() {
-    this.repository = dataSource.getRepository(Screen);
+    this.repository = DataSourceSingleton.getInstance().get().getRepository(Screen);
   }
 
   public static toScreenResponse(screen: Screen): ScreenResponse {

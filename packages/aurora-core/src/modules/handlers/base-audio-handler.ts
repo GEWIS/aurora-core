@@ -1,4 +1,4 @@
-import BaseHandler from './base-handler';
+import { BaseHandler } from '@gewis/aurora-core-util';
 import Audio from '../root/entities/audio';
 // eslint-disable-next-line import/no-cycle -- TODO fix cyclic dependency
 import { MusicEmitter } from '../events';

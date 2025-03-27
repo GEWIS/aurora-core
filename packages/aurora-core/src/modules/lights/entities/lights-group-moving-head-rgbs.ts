@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import BaseEntity from '../../root/entities/base-entity';
+import { BaseEntity } from '@gewis/aurora-core-util';
 // eslint-disable-next-line import/no-cycle
 import LightsGroup from './lights-group';
 import LightsMovingHeadRgb from './lights-moving-head-rgb';

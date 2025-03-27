@@ -2,7 +2,7 @@ import { FileStorage } from '../../../../files/storage/file-storage';
 import { DiskStorage } from '../../../../files/storage';
 import LocalPoster from './local-poster';
 import { Repository } from 'typeorm';
-import dataSource from '../../../../../database';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
 import { HttpApiException } from '@gewis/aurora-core-util';
 import { HttpStatusCode } from 'axios';
 import { BaseFile, File } from '../../../../files/entities';
@@ -35,8 +35,8 @@ export default class LocalPosterService {
 
   constructor() {
     this.storage = new DiskStorage('local-posters');
-    this.repo = dataSource.getRepository(LocalPoster);
-    this.fileRepo = dataSource.getRepository(File);
+    this.repo = DataSourceSingleton.getInstance().get().getRepository(LocalPoster);
+    this.fileRepo = DataSourceSingleton.getInstance().get().getRepository(File);
   }
 
   public toResponse(poster: LocalPoster): LocalPosterResponse {

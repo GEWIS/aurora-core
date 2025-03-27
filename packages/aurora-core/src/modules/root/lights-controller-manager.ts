@@ -10,7 +10,7 @@ import {
   LightsSwitch,
 } from '../lights/entities';
 import HandlerManager from './handler-manager';
-import { SocketioNamespaces } from '../../socketio-namespaces';
+import { SocketioNamespaces } from '@gewis/aurora-core-util';
 import LightsSwitchManager from './lights-switch-manager';
 
 const DMX_VALUES_LENGTH = 512;

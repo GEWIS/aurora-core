@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import LightsPredefinedEffect, {
   LightsPredefinedEffectProperties,
 } from '../../lights/entities/scenes/lights-predefined-effect';
-import dataSource from '../../../database';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
 import { HttpApiException } from '@gewis/aurora-core-util';
 import { HttpStatusCode } from 'axios';
 
@@ -26,7 +26,7 @@ export default class SetEffectsService {
   private repo: Repository<LightsPredefinedEffect>;
 
   constructor(repo?: Repository<LightsPredefinedEffect>) {
-    this.repo = repo ?? dataSource.getRepository(LightsPredefinedEffect);
+    this.repo = repo ?? DataSourceSingleton.getInstance().get().getRepository(LightsPredefinedEffect);
   }
 
   public static toLightsEffectPredefinedEffectResponse(

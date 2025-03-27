@@ -3,8 +3,8 @@ import { TypeormStore } from 'connect-typeorm';
 import { RequestHandler } from 'express';
 import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
-import dataSource from '../../database';
 import { Session } from './entities';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
 
 export default class SessionMiddleware {
   private static instance: SessionMiddleware;
@@ -24,7 +24,7 @@ export default class SessionMiddleware {
       saveUninitialized: false,
       store: new TypeormStore({
         limitSubquery: false, // MariaDB
-      }).connect(dataSource.getRepository(Session)),
+      }).connect(DataSourceSingleton.getInstance().get().getRepository(Session)),
     });
   }
 

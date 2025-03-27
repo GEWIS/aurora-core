@@ -1,7 +1,7 @@
 import { Entity, OneToMany } from 'typeorm';
 // eslint-disable-next-line import/no-cycle
 import { LightsGroup, LightsSwitch } from '../../lights/entities';
-import SubscribeEntity from './subscribe-entity';
+import { SubscribeEntity } from '@gewis/aurora-core-util';
 
 @Entity()
 export default class LightsController extends SubscribeEntity {

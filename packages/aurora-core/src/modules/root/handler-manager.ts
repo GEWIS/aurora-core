@@ -2,10 +2,10 @@ import { Server } from 'socket.io';
 import BaseAudioHandler from '../handlers/base-audio-handler';
 import BaseLightsHandler from '../handlers/base-lights-handler';
 import BaseScreenHandler from '../handlers/base-screen-handler';
-import SubscribeEntity from './entities/subscribe-entity';
-import BaseHandler from '../handlers/base-handler';
+import { SubscribeEntity } from '@gewis/aurora-core-util';
+import { BaseHandler } from '@gewis/aurora-core-util';
 import SimpleAudioHandler from '../handlers/audio/simple-audio-handler';
-import dataSource from '../../database';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
 import { Audio, Screen } from './entities';
 import { LightsGroup } from '../lights/entities';
 import { RandomEffectsHandler } from '../handlers/lights';
@@ -18,7 +18,7 @@ import { ScenesHandler } from '../handlers/lights/scenes-handler';
 import EffectSequenceHandler from '../handlers/lights/effect-sequence-handler';
 import { MusicEmitter } from '../events';
 import StageEffectsHandler from '../handlers/screen/stage-effects-handler';
-import { SocketioNamespaces } from '../../socketio-namespaces';
+import { SocketioNamespaces } from '@gewis/aurora-core-util';
 import logger from '@gewis/aurora-core-logger';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 import TimeTrailRaceScreenHandler from '../handlers/screen/time-trail-race-screen-handler';
@@ -62,7 +62,7 @@ export default class HandlerManager {
     if (this.initialized) throw new Error('HandlerManager already initialized.');
     await Promise.all(
       Array.from(this._handlers.keys()).map(async (entity) => {
-        const entities = await dataSource.manager.find(entity);
+        const entities = await DataSourceSingleton.getInstance().get().manager.find(entity);
         entities.forEach((instance) => {
           const handlers = this._handlers.get(instance.constructor as typeof SubscribeEntity);
           if (handlers === undefined)
@@ -80,7 +80,7 @@ export default class HandlerManager {
     private io: Server,
     private emitterStore: EmitterStore,
   ) {
-    this.emitterStore.musicEmitter.on('beat', this.beat.bind(this));
+    // this.emitterStore.musicEmitter.on('beat', this.beat.bind(this));
     this.emitterStore.musicEmitter.on('change_track', this.changeTrack.bind(this));
     this.emitterStore.orderEmitter.on('orders', this.showOrders.bind(this));
 
@@ -160,15 +160,15 @@ export default class HandlerManager {
     return true;
   }
 
-  /**
-   * Transmit a beat to all handlers. They can decide what to do with it
-   * @param event
-   */
-  public beat(event: BeatEvent) {
-    this.getHandlers().forEach((h) => {
-      if (h.beat) h.beat(event);
-    });
-  }
+  // /**
+  //  * Transmit a beat to all handlers. They can decide what to do with it
+  //  * @param event
+  //  */
+  // public beat(event: BeatEvent) {
+  //   this.getHandlers().forEach((h) => {
+  //     if (h.beat) h.beat(event);
+  //   });
+  // }
 
   /**
    * Transmit a track change to all screen handlers,

@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { Audio } from './entities';
-import dataSource from '../../database';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
 import AuthService from '../auth/auth-service';
 
 export interface AudioResponse
@@ -12,7 +12,7 @@ export default class RootAudioService {
   private repository: Repository<Audio>;
 
   constructor() {
-    this.repository = dataSource.getRepository(Audio);
+    this.repository = DataSourceSingleton.getInstance().get().getRepository(Audio);
   }
 
   public static toAudioResponse(audio: Audio): AudioResponse {

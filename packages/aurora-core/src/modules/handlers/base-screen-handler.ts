@@ -1,11 +1,10 @@
 import { Namespace } from 'socket.io';
 import { EventParams } from 'socket.io/dist/typed-events';
-import BaseHandler from './base-handler';
+import { BaseHandler } from '@gewis/aurora-core-util';
 import Screen from '../root/entities/screen';
 import { TrackChangeEvent } from '../events/music-emitter-events';
-import { SocketioNamespaces } from '../../socketio-namespaces';
+import { SocketioNamespaces } from '@gewis/aurora-core-util';
 import { ShowOrdersEvent } from '../events/order-emitter-events';
-import { FeatureEnabled } from '../server-settings';
 
 export default abstract class BaseScreenHandler extends BaseHandler<Screen> {
   constructor(private socket: Namespace) {
@@ -14,7 +13,6 @@ export default abstract class BaseScreenHandler extends BaseHandler<Screen> {
 
   abstract changeTrack(event: TrackChangeEvent[]): void;
 
-  @FeatureEnabled('Orders')
   public showOrders(event: ShowOrdersEvent): void {
     this.sendEvent('orders', event);
   }

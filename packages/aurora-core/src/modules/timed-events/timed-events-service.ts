@@ -1,7 +1,7 @@
 import CronManager, { CronExpressionError } from './cron-manager';
 import { Repository } from 'typeorm';
 import { HttpApiException, HttpStatusCode } from '@gewis/aurora-core-util';
-import dataSource from '../../database';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
 import { TimedEvent } from './entities';
 import logger from '@gewis/aurora-core-logger';
 
@@ -20,7 +20,7 @@ export default class TimedEventsService {
 
   constructor() {
     this.cronManager = new CronManager(this.eventIsSkipped.bind(this));
-    this.repo = dataSource.getRepository(TimedEvent);
+    this.repo = DataSourceSingleton.getInstance().get().getRepository(TimedEvent);
   }
 
   public static getInstance() {

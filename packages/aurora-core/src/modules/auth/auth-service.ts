@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import crypto from 'crypto';
 import { ApiKey, IntegrationUser } from './entities';
-import dataSource from '../../database';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
 import { Audio, LightsController, Screen } from '../root/entities';
 
 export interface GenerateApiKeyParams {
@@ -19,8 +19,8 @@ export default class AuthService {
   private integrationUserRepository: Repository<IntegrationUser>;
 
   constructor() {
-    this.apiKeyRepository = dataSource.getRepository(ApiKey);
-    this.integrationUserRepository = dataSource.getRepository(IntegrationUser);
+    this.apiKeyRepository = DataSourceSingleton.getInstance().get().getRepository(ApiKey);
+    this.integrationUserRepository = DataSourceSingleton.getInstance().get().getRepository(IntegrationUser);
   }
 
   private generateKey(): string {

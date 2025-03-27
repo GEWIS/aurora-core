@@ -1,3 +1,5 @@
+export const OrderSettingsName = 'ORDERS';
+
 export interface OrderSettings {
   Orders: boolean;
   'Orders.DefaultTimeoutSeconds': number;

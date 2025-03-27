@@ -1,5 +1,5 @@
 import { Column, Entity } from 'typeorm';
-import BaseEntity from '../../root/entities/base-entity';
+import { BaseEntity } from '@gewis/aurora-core-util';
 
 export interface IFile {
   /**

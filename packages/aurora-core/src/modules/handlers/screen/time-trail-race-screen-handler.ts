@@ -7,9 +7,7 @@ import {
   RaceScoreboardEvent,
   RaceStartedEvent,
 } from '../../modes/time-trail-race/time-trail-race-events';
-import { FeatureEnabled } from '../../server-settings';
 
-@FeatureEnabled('TimeTrailRace')
 export default class TimeTrailRaceScreenHandler extends BaseScreenHandler {
   changeTrack(): void {}
 

@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany } from 'typeorm';
-import BaseEntity from '../../../root/entities/base-entity';
+import { BaseEntity } from '@gewis/aurora-core-util';
 // eslint-disable-next-line import/no-cycle -- cross reference
 import LightsSceneEffect from './lights-scene-effect';
 

@@ -1,4 +1,4 @@
-import BaseEntity from '../../../../root/entities/base-entity';
+import { BaseEntity } from '@gewis/aurora-core-util';
 import { File } from '../../../../files/entities';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 

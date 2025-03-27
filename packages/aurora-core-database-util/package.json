@@ -1,0 +1,19 @@
+{
+  "name": "@gewis/aurora-core-database-util",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@gewis/aurora-core-util": "workspace:^"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "yarn@4.5.1"
+}

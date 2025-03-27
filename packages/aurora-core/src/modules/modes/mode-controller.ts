@@ -3,17 +3,16 @@ import { Controller, Response } from '@tsoa/runtime';
 import { In } from 'typeorm';
 import { Request as ExpressRequest } from 'express';
 import ModeManager from './mode-manager';
-import SubscribeEntity from '../root/entities/subscribe-entity';
+import { SubscribeEntity } from '@gewis/aurora-core-util';
 import { LightsGroup } from '../lights/entities';
 import { Audio, Screen } from '../root/entities';
 import CenturionMode from './centurion/centurion-mode';
 import tapes from './centurion/tapes';
-import dataSource from '../../database';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
 import { SecurityNames } from '@gewis/aurora-core-util';
 import { HttpStatusCode } from '@gewis/aurora-core-util';
 import TimeTrailRaceMode from './time-trail-race/time-trail-race-mode';
 import logger from '@gewis/aurora-core-logger';
-import { FeatureEnabled } from '../server-settings';
 import { securityGroups } from '@gewis/aurora-core-util';
 
 interface EnableModeParams {
@@ -45,7 +44,7 @@ export class ModeController extends Controller {
     entity: typeof SubscribeEntity,
     ids: number[],
   ): Promise<SubscribeEntity[]> {
-    return dataSource.getRepository(entity).find({ where: { id: In(ids) } });
+    return DataSourceSingleton.getInstance().get().getRepository(entity).find({ where: { id: In(ids) } });
   }
 
   private async mapBodyToEntities(params: EnableModeParams) {
@@ -72,8 +71,6 @@ export class ModeController extends Controller {
    */
   @Security(SecurityNames.LOCAL, securityGroups.centurion.privileged)
   @Post('centurion')
-  @FeatureEnabled('Centurion')
-  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @SuccessResponse(HttpStatusCode.NoContent)
   public async enableCenturion(
     @Request() req: ExpressRequest,
@@ -101,8 +98,6 @@ export class ModeController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.centurion.privileged)
   @Delete('centurion')
-  @FeatureEnabled('Centurion')
-  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @SuccessResponse(HttpStatusCode.Ok)
   public disableCenturion(@Request() req: ExpressRequest) {
     logger.audit(req.user, 'Disable Centurion mode.');
@@ -114,8 +109,6 @@ export class ModeController extends Controller {
    */
   @Security(SecurityNames.LOCAL, securityGroups.timetrail.base)
   @Post('time-trail-race')
-  @FeatureEnabled('TimeTrailRace')
-  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @SuccessResponse(HttpStatusCode.NoContent)
   public async enableTimeTrailRace(
     @Request() req: ExpressRequest,
@@ -135,8 +128,6 @@ export class ModeController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.timetrail.base)
   @Delete('time-trail-race')
-  @FeatureEnabled('TimeTrailRace')
-  @Response<string>(409, 'Endpoint is disabled in the server settings')
   @SuccessResponse(HttpStatusCode.Ok)
   public disableTimeTrailRacing(@Request() req: ExpressRequest) {
     logger.audit(req.user, 'Disable Spoelbakkenrace mode.');

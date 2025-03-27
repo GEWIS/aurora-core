@@ -13,7 +13,7 @@ import { StrobeProps } from '../lights/effects/color/strobe';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import logger from '@gewis/aurora-core-logger';
 import { securityGroups } from '@gewis/aurora-core-util';
-import dataSource from '../../database';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
 import LightsSwitchManager from './lights-switch-manager';
 import { HttpStatusCode } from 'axios';
 import RootLightsOperationsService from './root-lights-operations-service';
@@ -45,7 +45,7 @@ export class RootLightsOperationsController extends Controller {
   }
 
   private async getLightsSwitch(id: number): Promise<LightsSwitch | null> {
-    return dataSource.getRepository(LightsSwitch).findOne({ where: { id } });
+    return DataSourceSingleton.getInstance().get().getRepository(LightsSwitch).findOne({ where: { id } });
   }
 
   /**
@@ -129,7 +129,7 @@ export class RootLightsOperationsController extends Controller {
     @Body() params: GroupFixtureDimmingParams,
     @Res() notFoundResponse: TsoaResponse<HttpStatusCode.NotFound, { message: string }>,
   ) {
-    const dbLightsGroup = await dataSource.getRepository(LightsGroup).findOne({
+    const dbLightsGroup = await DataSourceSingleton.getInstance().get().getRepository(LightsGroup).findOne({
       where: { id },
       relations: { pars: true, movingHeadRgbs: true, movingHeadWheels: true },
     });
@@ -157,7 +157,7 @@ export class RootLightsOperationsController extends Controller {
     id: number,
     @Res() notFoundResponse: TsoaResponse<HttpStatusCode.NotFound, { message: string }>,
   ) {
-    const dbLightsGroup = await dataSource.getRepository(LightsGroup).findOne({
+    const dbLightsGroup = await DataSourceSingleton.getInstance().get().getRepository(LightsGroup).findOne({
       where: { id },
       relations: { pars: true, movingHeadRgbs: true, movingHeadWheels: true },
     });

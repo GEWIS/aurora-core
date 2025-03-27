@@ -1,11 +1,12 @@
 import { Controller, Header, Response, TsoaResponse } from '@tsoa/runtime';
 import { createVerify } from 'crypto';
-import { FeatureEnabled, ServerSettingsStore } from '../server-settings';
+import { ServerSettingsStore } from '@gewis/aurora-core-server-settings'
 import { Body, Delete, Get, Post, Res, Route, Security, Tags } from 'tsoa';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import { securityGroups } from '@gewis/aurora-core-util';
 import OrderManager from './order-manager';
 import { OrderSettings } from './order-settings';
+import {Order} from "./entities";
 
 interface OrderRequest {
   orderNumber: number;
@@ -14,7 +15,6 @@ interface OrderRequest {
 
 @Tags('Orders')
 @Route('/orders')
-@FeatureEnabled('Orders')
 export class OrderController extends Controller {
   private static webhookPublicKey: string;
 
@@ -37,15 +37,14 @@ export class OrderController extends Controller {
   }
 
   @Post('webhook')
-  @FeatureEnabled('Orders.WebhookPublicKeyURL')
-  @Response<string>(409, 'Endpoint is disabled in the server settings')
   public async addOrderWebhook(
     @Body() orderRequest: OrderRequest,
     @Header('X-Signature') signature: string,
     @Res() invalidSignatureResponse: TsoaResponse<400, { message: string }>,
   ) {
     const settingsStore = ServerSettingsStore.getInstance();
-    const expiryTimeSeconds = settingsStore.getSetting(
+    const expiryTimeSeconds = settingsStore.getSetting<OrderSettings>(
+      'orders',
       'Orders.DefaultTimeoutSeconds',
     ) as OrderSettings['Orders.DefaultTimeoutSeconds'];
 
@@ -54,7 +53,8 @@ export class OrderController extends Controller {
       new Date().getTime() - OrderController.webhookKeyLastUpdate.getTime() >
         1000 * expiryTimeSeconds
     ) {
-      const webhookKeyUrl = settingsStore.getSetting(
+      const webhookKeyUrl = settingsStore.getSetting<OrderSettings>(
+        'orders',
         'Orders.WebhookPublicKeyURL',
       ) as OrderSettings['Orders.WebhookPublicKeyURL'];
 

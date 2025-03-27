@@ -1,13 +1,11 @@
 import { Controller, Get, Route, Security, Tags } from 'tsoa';
 import { Response } from '@tsoa/runtime';
 import SudoSOSService from './sudosos-service';
-import { FeatureEnabled } from '../server-settings';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import { securityGroups } from '@gewis/aurora-core-util';
 
 @Tags('Handlers')
 @Route('handler/screen/poster/sudosos')
-@FeatureEnabled('SudoSOS')
 export class SudoSOSController extends Controller {
   @Security(SecurityNames.LOCAL, securityGroups.sudosos.subscriber)
   @Get('wall-of-shame')

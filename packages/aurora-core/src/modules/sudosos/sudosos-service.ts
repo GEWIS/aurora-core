@@ -5,8 +5,8 @@ import {
   UserResponse,
 } from '@sudosos/sudosos-client';
 import { SudoSOSClient } from './sudosos-api-service';
-import { ServerSettingsStore, FeatureEnabled } from '../server-settings';
-import { SudoSOSSettings } from './sudosos-settings';
+import { SudoSOSSettings, SudoSOSSettingsName } from './sudosos-settings';
+import { ServerSettingsStore } from '@gewis/aurora-core-server-settings';
 
 export interface SudoSOSDebtorResponse {
   userId: number;
@@ -20,9 +20,8 @@ export interface SudoSOSDebtorResponse {
   isLongstanding: boolean;
 }
 
-@FeatureEnabled('SudoSOS')
 export default class SudoSOSService {
-  private url: string;
+  private readonly url: string;
 
   private client: SudoSOSClient;
 
@@ -114,9 +113,7 @@ export default class SudoSOSService {
       userMap.set(user.id, user);
     });
 
-    const bacGroupId = ServerSettingsStore.getInstance().getSetting(
-      'SudoSOS.BACGroupID',
-    ) as SudoSOSSettings['SudoSOS.BACGroupID'];
+    const bacGroupId = ServerSettingsStore.getInstance().getSetting<SudoSOSSettings, 'SudoSOS.BACGroupID'>(SudoSOSSettingsName, 'SudoSOS.BACGroupID');
 
     const bac =
       bacGroupId > 0
@@ -150,9 +147,10 @@ export default class SudoSOSService {
   }
 
   public async getPriceList() {
-    const posID = ServerSettingsStore.getInstance().getSetting(
-      'SudoSOS.BorrelmodePOSID',
-    ) as SudoSOSSettings['SudoSOS.BorrelmodePOSID'];
+    const posID = ServerSettingsStore.getInstance().getSetting<SudoSOSSettings, 'SudoSOS.BorrelmodePOSID'>(
+      SudoSOSSettingsName,
+      'SudoSOS.BorrelmodePOSID'
+    )
     const response = await this.client.pos.getAllPointOfSaleProducts(posID);
     return response.data.filter((p) => p.priceList);
   }
