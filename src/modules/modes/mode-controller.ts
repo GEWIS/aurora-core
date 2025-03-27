@@ -50,8 +50,8 @@ export class ModeController extends Controller {
 
   private async mapBodyToEntities(params: EnableModeParams) {
     const lights = (await this.findEntities(LightsGroup, params.lightsGroupIds)) as LightsGroup[];
-    const screens = (await this.findEntities(Screen, params.lightsGroupIds)) as Screen[];
-    const audios = (await this.findEntities(Audio, params.lightsGroupIds)) as Audio[];
+    const screens = (await this.findEntities(Screen, params.screenIds)) as Screen[];
+    const audios = (await this.findEntities(Audio, params.audioIds)) as Audio[];
 
     return { lights, screens, audios };
   }

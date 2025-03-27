@@ -585,6 +585,21 @@ const centurion2Original: MixTape = {
       ],
     },
     {
+      timestamp: 1752.01,
+      type: 'effect',
+      data: {
+        effects: {
+          // Turn on only the disco ball; all other lights should be off.
+          discoBall: true,
+          pars: [],
+          movingHeadRgbColor: [],
+          movingHeadRgbMovement: [],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
+      },
+    },
+    {
       timestamp: 1815.7,
       type: 'horn',
       data: {
@@ -598,6 +613,39 @@ const centurion2Original: MixTape = {
         artist: 'Pitbull feat. John Ryan',
         title: 'Fireball',
         bpm: 124,
+      },
+    },
+    {
+      timestamp: 1816.01,
+      type: 'effect',
+      data: {
+        effects: {
+          // Override the random change of effects when song changes to
+          // keep on the disco ball turned on
+          discoBall: true,
+          pars: [],
+          movingHeadRgbColor: [],
+          movingHeadRgbMovement: [],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
+      },
+    },
+    {
+      timestamp: 1839.4,
+      type: 'effect',
+      data: {
+        effects: {
+          discoBall: false,
+        },
+      },
+    },
+    {
+      timestamp: 1841.07,
+      type: 'effect',
+      data: {
+        random: true,
+        effects: {},
       },
     },
     {
@@ -1329,6 +1377,16 @@ const centurion2Original: MixTape = {
       },
     },
     {
+      timestamp: 4100.1,
+      type: 'effect',
+      data: {
+        effects: {
+          // Turn on the disco ball; leave other effects intact.
+          discoBall: true,
+        },
+      },
+    },
+    {
       timestamp: 4155.7,
       type: 'horn',
       data: {
@@ -1351,6 +1409,16 @@ const centurion2Original: MixTape = {
         artist: 'Jody Bernal',
         title: 'Que Si, Que No',
         bpm: 135,
+      },
+    },
+    {
+      timestamp: 4178.7,
+      type: 'effect',
+      data: {
+        effects: {
+          // Turn off only the disco ball
+          discoBall: false,
+        },
       },
     },
     {
@@ -1575,6 +1643,31 @@ const centurion2Original: MixTape = {
       },
     },
     {
+      timestamp: 4740.0,
+      type: 'effect',
+      data: {
+        effects: {
+          // Turn on only the disco ball
+          discoBall: true,
+          pars: [],
+          movingHeadRgbColor: [],
+          movingHeadRgbMovement: [],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
+      },
+    },
+    {
+      timestamp: 4796.0,
+      type: 'effect',
+      data: {
+        effects: {
+          // Turn off the disco ball. The room is now completely black
+          discoBall: false,
+        },
+      },
+    },
+    {
       timestamp: 4796.2,
       type: 'horn',
       data: {
@@ -1689,10 +1782,44 @@ const centurion2Original: MixTape = {
       },
     },
     {
+      timestamp: 5132.0,
+      type: 'effect',
+      data: {
+        effects: {
+          // Turn on only the disco ball
+          discoBall: true,
+          pars: [],
+          movingHeadRgbColor: [],
+          movingHeadRgbMovement: [],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
+      },
+    },
+    {
       timestamp: 5158.9,
       type: 'horn',
       data: {
         counter: 84,
+      },
+    },
+    {
+      timestamp: 5159.0,
+      type: 'effect',
+      data: {
+        // Turn on a random effect. Note that the disco ball is still on
+        random: true,
+        effects: {},
+      },
+    },
+    {
+      timestamp: 5181.6,
+      type: 'effect',
+      data: {
+        effects: {
+          // Turn off the disco ball
+          discoBall: false,
+        },
       },
     },
     {

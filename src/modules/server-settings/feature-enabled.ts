@@ -74,7 +74,7 @@ export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator
             throw new Error(`Class "${constr.name}" is disabled by setting "${setting}"`);
           }
 
-          super(constructorArgs);
+          super(...constructorArgs);
         }
       };
     }
