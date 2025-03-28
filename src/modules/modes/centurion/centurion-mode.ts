@@ -336,6 +336,10 @@ export default class CenturionMode extends BaseMode<
         }
         if (event.data.random) {
           this.setRandomLightEffects();
+          if (this.beatGenerator.bpm) {
+            // Restart the beat generator to ensure no quick successive beats when the lights change
+            this.beatGenerator.start(this.beatGenerator.bpm);
+          }
           return;
         }
         if (event.data.effects.discoBall && isEffectDisableAll && !this.hasDiscoBall()) {
