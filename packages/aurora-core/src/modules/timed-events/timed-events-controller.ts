@@ -3,10 +3,7 @@ import { Body, Delete, Get, Post, Put, Route, Security, Tags } from 'tsoa';
 import EventSpec from './event-spec';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import { securityGroups } from '@gewis/aurora-core-util';
-import TimedEventsService, {
-  CreateTimedEventRequest,
-  UpdateTimedEventRequest,
-} from './timed-events-service';
+import TimedEventsService, { CreateTimedEventRequest, UpdateTimedEventRequest } from './timed-events-service';
 import { TimedEvent } from './entities';
 
 interface TimedEventResponse {
@@ -55,9 +52,7 @@ export class TimedEventsController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.timedEvents.privileged)
   @Post('')
-  public async createTimedEvent(
-    @Body() timedEventRequest: CreateTimedEventRequest,
-  ): Promise<TimedEventResponse> {
+  public async createTimedEvent(@Body() timedEventRequest: CreateTimedEventRequest): Promise<TimedEventResponse> {
     const timedEvent = await this.service.createEvent(timedEventRequest);
     return this.toTimedEventResponse(timedEvent);
   }

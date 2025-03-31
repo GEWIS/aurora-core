@@ -26,9 +26,7 @@ export type Enterprise = {
   organizationPrefs?: {
     boardVisibilityRestrict?: Record<string, any>;
     boardDeleteRestrict?: Record<string, any>;
-    attachmentRestrictions?: Array<
-      'computer' | 'trello' | 'google-drive' | 'box' | 'onedrive' | 'link'
-    >;
+    attachmentRestrictions?: Array<'computer' | 'trello' | 'google-drive' | 'box' | 'onedrive' | 'link'>;
   };
   ssoActivationFailed?: boolean;
   idAdmins?: Array<TrelloID>;

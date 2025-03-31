@@ -5,10 +5,7 @@ import { Wave } from '../../lights/effects/color';
 import TableRotate from '../../lights/effects/movement/table-rotate';
 import logger from '@gewis/aurora-core-logger';
 import { ArtificialBeatGenerator } from '../../beats/artificial-beat-generator';
-import {
-  LightsEffectDirection,
-  LightsEffectPattern,
-} from '../../lights/effects/lights-effect-pattern';
+import { LightsEffectDirection, LightsEffectPattern } from '../../lights/effects/lights-effect-pattern';
 
 export default class DevelopEffectsHandler extends EffectsHandler {
   public registerEntity(entity: LightsGroup) {

@@ -10,9 +10,7 @@ import type { OnCancel } from './CancelablePromise';
 import type { OpenAPIConfig } from './OpenAPI';
 import logger from '@gewis/aurora-core-logger';
 
-export const isDefined = <T>(
-  value: T | null | undefined,
-): value is Exclude<T, null | undefined> => {
+export const isDefined = <T>(value: T | null | undefined): value is Exclude<T, null | undefined> => {
   return value !== undefined && value !== null;
 };
 
@@ -135,20 +133,14 @@ export const getFormData = (options: ApiRequestOptions): FormData | undefined =>
 
 type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
 
-export const resolve = async <T>(
-  options: ApiRequestOptions,
-  resolver?: T | Resolver<T>,
-): Promise<T | undefined> => {
+export const resolve = async <T>(options: ApiRequestOptions, resolver?: T | Resolver<T>): Promise<T | undefined> => {
   if (typeof resolver === 'function') {
     return (resolver as Resolver<T>)(options);
   }
   return resolver;
 };
 
-export const getHeaders = async (
-  config: OpenAPIConfig,
-  options: ApiRequestOptions,
-): Promise<Headers> => {
+export const getHeaders = async (config: OpenAPIConfig, options: ApiRequestOptions): Promise<Headers> => {
   const token = await resolve(options, config.TOKEN);
   const key = await resolve(options, config.KEY);
   const username = await resolve(options, config.USERNAME);
@@ -234,10 +226,7 @@ export const sendRequest = async (
   return await fetch(url, request);
 };
 
-export const getResponseHeader = (
-  response: Response,
-  responseHeader?: string,
-): string | undefined => {
+export const getResponseHeader = (response: Response, responseHeader?: string): string | undefined => {
   if (responseHeader) {
     const content = response.headers.get(responseHeader);
     if (isString(content)) {
@@ -310,10 +299,7 @@ export const catchErrorCodes = (options: ApiRequestOptions, result: ApiResult): 
  * @returns CancelablePromise<T>
  * @throws ApiError
  */
-export const request = <T>(
-  config: OpenAPIConfig,
-  options: ApiRequestOptions,
-): CancelablePromise<T> => {
+export const request = <T>(config: OpenAPIConfig, options: ApiRequestOptions): CancelablePromise<T> => {
   return new CancelablePromise(async (resolve, reject, onCancel) => {
     try {
       const url = getUrl(config, options);

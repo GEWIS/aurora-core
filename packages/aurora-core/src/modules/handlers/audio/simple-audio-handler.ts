@@ -24,9 +24,7 @@ export default class SimpleAudioHandler extends BaseAudioHandler {
    * Add an audio sync timing handler function
    * @param handler
    */
-  public addSyncAudioTimingHandler(
-    handler: (params: { startTime: number; timestamp: number }) => void,
-  ) {
+  public addSyncAudioTimingHandler(handler: (params: { startTime: number; timestamp: number }) => void) {
     this.onSyncAudioTimings.push(handler);
   }
 
@@ -34,9 +32,7 @@ export default class SimpleAudioHandler extends BaseAudioHandler {
    * Remove an audio sync timing handler function
    * @param handler
    */
-  public removeSyncAudioTimingHandler(
-    handler: (params: { startTime: number; timestamp: number }) => void,
-  ) {
+  public removeSyncAudioTimingHandler(handler: (params: { startTime: number; timestamp: number }) => void) {
     this.onSyncAudioTimings = this.onSyncAudioTimings.filter((h) => h === handler);
   }
 

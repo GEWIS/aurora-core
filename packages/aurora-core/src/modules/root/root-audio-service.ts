@@ -1,10 +1,9 @@
 import { Repository } from 'typeorm';
 import { Audio } from './entities';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import AuthService from '../auth/auth-service';
 
-export interface AudioResponse
-  extends Pick<Audio, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
+export interface AudioResponse extends Pick<Audio, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
 
 export interface AudioCreateParams extends Pick<Audio, 'name' | 'defaultHandler'> {}
 

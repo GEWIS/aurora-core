@@ -35,12 +35,7 @@ export interface ISecurityGroups {
  */
 const privilegedSecurityGroups = [SecurityGroup.ADMIN, SecurityGroup.BOARD, SecurityGroup.AVICO];
 
-const baseSecurityGroups = [
-  SecurityGroup.ADMIN,
-  SecurityGroup.BOARD,
-  SecurityGroup.AVICO,
-  SecurityGroup.BAC,
-];
+const baseSecurityGroups = [SecurityGroup.ADMIN, SecurityGroup.BOARD, SecurityGroup.AVICO, SecurityGroup.BAC];
 
 const allSecurityGroups = [
   SecurityGroup.ADMIN,

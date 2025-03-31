@@ -48,10 +48,7 @@ export class TimeTrailRaceController extends Controller {
       throw new ModeDisabledError('Time Trail Race not enabled');
     }
 
-    logger.audit(
-      req.user,
-      `Register player "${params.name}" for Spoelbakkenrace "${mode.sessionName}".`,
-    );
+    logger.audit(req.user, `Register player "${params.name}" for Spoelbakkenrace "${mode.sessionName}".`);
 
     return mode.registerPlayer(params);
   }
@@ -67,10 +64,7 @@ export class TimeTrailRaceController extends Controller {
       throw new ModeDisabledError('Time Trail Race not enabled');
     }
 
-    logger.audit(
-      req.user,
-      `Ready player "${mode.playerParams.name}" for Spoelbakkenrace "${mode.sessionName}".`,
-    );
+    logger.audit(req.user, `Ready player "${mode.playerParams.name}" for Spoelbakkenrace "${mode.sessionName}".`);
 
     return mode.ready();
   }
@@ -86,10 +80,7 @@ export class TimeTrailRaceController extends Controller {
       throw new ModeDisabledError('Time Trail Race not enabled');
     }
 
-    logger.audit(
-      req.user,
-      `Start player "${mode.playerParams.name}" for Spoelbakkenrace "${mode.sessionName}".`,
-    );
+    logger.audit(req.user, `Start player "${mode.playerParams.name}" for Spoelbakkenrace "${mode.sessionName}".`);
 
     return mode.start();
   }
@@ -105,10 +96,7 @@ export class TimeTrailRaceController extends Controller {
       throw new ModeDisabledError('Time Trail Race not enabled');
     }
 
-    logger.audit(
-      req.user,
-      `Finish player "${mode.playerParams.name}" for Spoelbakkenrace "${mode.sessionName}".`,
-    );
+    logger.audit(req.user, `Finish player "${mode.playerParams.name}" for Spoelbakkenrace "${mode.sessionName}".`);
 
     return mode.finish();
   }

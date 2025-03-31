@@ -1,4 +1,4 @@
-import { DataSourceSingleton } from "@gewis/aurora-core-database-util";
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import { ServerSetting } from './server-setting';
 
 /**
@@ -15,7 +15,7 @@ export default class ServerSettingsStore {
    * This is used to have various modules use the same settings store
    * @private
    */
-  private initializedSettings = Map<string, boolean>
+  private initializedSettings = Map<string, boolean>;
   private settings: Record<string, any>;
 
   /**
@@ -51,7 +51,9 @@ export default class ServerSettingsStore {
       throw new Error(`ServerSettingsStore already initialized for ${settingName}`);
     }
 
-    const repo = DataSourceSingleton.getInstance().get().getRepository(ServerSetting<T>);
+    const repo = DataSourceSingleton.getInstance()
+      .get()
+      .getRepository(ServerSetting<T>);
     const settings = await repo.find();
     const promises: Promise<ServerSetting<T>>[] = [];
 
@@ -80,7 +82,7 @@ export default class ServerSettingsStore {
     // Add to existing settings
     this.settings = {
       ...this.settings,
-      ...Object.fromEntries(map)
+      ...Object.fromEntries(map),
     };
     this.initializedSettings[settingName] = true;
   }
@@ -97,7 +99,7 @@ export default class ServerSettingsStore {
    * Get all server settings.
    */
   public getSettings<T>(settingName: string): T {
-    this.throwIfNotInitialized(settingName)
+    this.throwIfNotInitialized(settingName);
     return this.settings as T;
   }
 
@@ -107,7 +109,7 @@ export default class ServerSettingsStore {
    * @param key
    */
   public getSetting<T, K extends keyof T = keyof T>(settingName: string, key: K): T[K] {
-    this.throwIfNotInitialized(settingName)
+    this.throwIfNotInitialized(settingName);
     return (this.settings as T)[key];
   }
 
@@ -119,7 +121,9 @@ export default class ServerSettingsStore {
    */
   public async setSetting<T, K extends keyof T = keyof T>(settingsName: string, key: K, value: T[K]) {
     this.throwIfNotInitialized(settingsName);
-    const repo = DataSourceSingleton.getInstance().get().getRepository(ServerSetting<T>);
+    const repo = DataSourceSingleton.getInstance()
+      .get()
+      .getRepository(ServerSetting<T>);
     // @ts-ignore - this works fine, but the compiler complains
     const setting = await repo.findOne({ where: { key: key } });
     setting!.value = value;

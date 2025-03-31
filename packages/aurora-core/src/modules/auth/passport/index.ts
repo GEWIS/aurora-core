@@ -1,7 +1,7 @@
 import passport from 'passport';
 import './api-key-strategy';
 import { Request as ExRequest, Response as ExResponse } from 'express';
-import { AuthUser } from '@gewis/aurora-core-util'
+import { AuthUser } from '@gewis/aurora-core-util';
 
 passport.serializeUser((user, done) => {
   done(null, JSON.stringify(user));

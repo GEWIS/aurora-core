@@ -22,15 +22,9 @@ export default class EffectProgressionMapFactory {
       case LightsEffectPattern.VERTICAL:
         return new EffectProgressionMapVerticalStrategy(this.lightsGroup, multiplier);
       case LightsEffectPattern.DIAGONAL_BOTTOM_LEFT_TO_TOP_RIGHT:
-        return new EffectProgressionMapDiagonalBottomLeftTopRightStrategy(
-          this.lightsGroup,
-          multiplier,
-        );
+        return new EffectProgressionMapDiagonalBottomLeftTopRightStrategy(this.lightsGroup, multiplier);
       case LightsEffectPattern.DIAGONAL_TOP_LEFT_TO_BOTTOM_RIGHT:
-        return new EffectProgressionMapDiagonalTopLeftBottomRightStrategy(
-          this.lightsGroup,
-          multiplier,
-        );
+        return new EffectProgressionMapDiagonalTopLeftBottomRightStrategy(this.lightsGroup, multiplier);
       case LightsEffectPattern.CENTERED_SQUARED:
         return new EffectProgressionMapCenteredSquaredStrategy(this.lightsGroup, multiplier);
       case LightsEffectPattern.CENTERED_CIRCULAR:

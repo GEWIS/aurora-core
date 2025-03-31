@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 import { Repository } from 'typeorm';
 import AsyncLock from 'async-lock';
 import HandlerManager from './handler-manager';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import { Audio, LightsController, Screen } from './entities';
 import BaseLightsHandler from '../handlers/base-lights-handler';
 import { LightsGroup } from '../lights/entities';
@@ -35,13 +35,9 @@ export default class SocketConnectionManager {
 
     Object.values(SocketioNamespaces).forEach((namespace) => {
       ioServer.of(namespace).on('connect', (socket) => {
-        this.updateSocketId((socket.request as any).user, namespace, socket.id).catch((e) =>
-          logger.error(e),
-        );
+        this.updateSocketId((socket.request as any).user, namespace, socket.id).catch((e) => logger.error(e));
         socket.on('disconnect', () => {
-          this.updateSocketId((socket.request as any).user, namespace).catch((e) =>
-            logger.error(e),
-          );
+          this.updateSocketId((socket.request as any).user, namespace).catch((e) => logger.error(e));
         });
       });
     });
@@ -83,10 +79,7 @@ export default class SocketConnectionManager {
         if (e.id === id) {
           e.socketIds = entity.socketIds;
           if (socketId !== undefined) {
-            this.ioServer
-              .of(namespace)
-              .sockets.get(socketId)
-              ?.emit('handler_set', h.constructor.name);
+            this.ioServer.of(namespace).sockets.get(socketId)?.emit('handler_set', h.constructor.name);
           }
         }
       });

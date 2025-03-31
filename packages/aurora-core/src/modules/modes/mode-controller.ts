@@ -8,7 +8,7 @@ import { LightsGroup } from '../lights/entities';
 import { Audio, Screen } from '../root/entities';
 import CenturionMode from './centurion/centurion-mode';
 import tapes from './centurion/tapes';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import { HttpStatusCode } from '@gewis/aurora-core-util';
 import TimeTrailRaceMode from './time-trail-race/time-trail-race-mode';
@@ -40,11 +40,11 @@ export class ModeController extends Controller {
     this.modeManager = ModeManager.getInstance();
   }
 
-  private async findEntities(
-    entity: typeof SubscribeEntity,
-    ids: number[],
-  ): Promise<SubscribeEntity[]> {
-    return DataSourceSingleton.getInstance().get().getRepository(entity).find({ where: { id: In(ids) } });
+  private async findEntities(entity: typeof SubscribeEntity, ids: number[]): Promise<SubscribeEntity[]> {
+    return DataSourceSingleton.getInstance()
+      .get()
+      .getRepository(entity)
+      .find({ where: { id: In(ids) } });
   }
 
   private async mapBodyToEntities(params: EnableModeParams) {
@@ -72,10 +72,7 @@ export class ModeController extends Controller {
   @Security(SecurityNames.LOCAL, securityGroups.centurion.privileged)
   @Post('centurion')
   @SuccessResponse(HttpStatusCode.NoContent)
-  public async enableCenturion(
-    @Request() req: ExpressRequest,
-    @Body() params: CenturionParams,
-  ): Promise<string> {
+  public async enableCenturion(@Request() req: ExpressRequest, @Body() params: CenturionParams): Promise<string> {
     logger.audit(req.user, `Enable Centurion mode with tape "${params.centurionName}".`);
 
     const { lights, screens, audios } = await this.mapBodyToEntities(params);

@@ -1,20 +1,35 @@
 {
   "name": "root",
   "version": "0.0.0",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
   "description": "",
   "private": true,
   "workspaces": [
     "packages/*",
     "core"
   ],
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "lint": "eslint packages",
+    "lint:fix": "eslint packages --fix",
+    "format": "prettier --ignore-path .gitignore --check .",
+    "format:fix": "prettier --ignore-path .gitignore --write ."
+  },
+  "dependencies": {
+    "@gewis/tsconfig": "^2.3.1"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.2.7",
+    "@gewis/prettier-config": "^2.2.2",
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "@typescript-eslint/parser": "^8.29.0",
+    "eslint": "^9.21.0",
+    "eslint-plugin-import": "^2.31.0",
+    "prettier": "^3.5.3"
+  },
   "engines": {
     "node": ">=22.0.0"
   },
-  "packageManager": "yarn@4.5.1",
-  "dependencies": {
-    "@gewis/tsconfig": "^2.3.1"
-  }
+  "packageManager": "yarn@4.5.1"
 }

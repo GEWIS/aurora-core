@@ -1,10 +1,10 @@
 import passport from 'passport';
 import { Strategy as CustomStrategy } from 'passport-custom';
 import { HttpStatusCode } from 'axios';
-import {AuthUser, HttpApiException} from '@gewis/aurora-core-util';
+import { AuthUser, HttpApiException } from '@gewis/aurora-core-util';
 import { ApiKey } from '../entities';
 import { SecurityGroup } from '@gewis/aurora-core-util';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 
 passport.use(
   'apikey',
@@ -13,10 +13,13 @@ passport.use(
       callback(new HttpApiException(HttpStatusCode.BadRequest, 'Missing API Key'), undefined);
     }
 
-    const identity = await DataSourceSingleton.getInstance().get().getRepository(ApiKey).findOne({
-      where: { key: req.body.key },
-      relations: { audio: true, lightsController: true, screen: true, integrationUser: true },
-    });
+    const identity = await DataSourceSingleton.getInstance()
+      .get()
+      .getRepository(ApiKey)
+      .findOne({
+        where: { key: req.body.key },
+        relations: { audio: true, lightsController: true, screen: true, integrationUser: true },
+      });
     if (!identity) {
       callback(new HttpApiException(HttpStatusCode.NotFound, 'Key not found'), undefined);
       return;

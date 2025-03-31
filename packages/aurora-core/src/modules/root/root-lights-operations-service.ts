@@ -1,4 +1,4 @@
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import {
   LightsGroup,
   LightsGroupMovingHeadRgbs,
@@ -36,28 +36,40 @@ export default class RootLightsOperationsService {
       });
     }
 
-    const dbLightsGroup = await DataSourceSingleton.getInstance().get().getRepository(LightsGroup).findOne({
-      where: { id },
-      relations: { pars: true, movingHeadRgbs: true, movingHeadWheels: true },
-    });
+    const dbLightsGroup = await DataSourceSingleton.getInstance()
+      .get()
+      .getRepository(LightsGroup)
+      .findOne({
+        where: { id },
+        relations: { pars: true, movingHeadRgbs: true, movingHeadWheels: true },
+      });
     if (!dbLightsGroup) return;
 
     // Store the master brightness in the database, in case a lights group switches handlers
     if (dbLightsGroup.pars.length > 0)
-      await DataSourceSingleton.getInstance().get().getRepository(LightsGroupPars).update(
-        dbLightsGroup.pars.map((p) => p.id),
-        { masterRelativeBrightness },
-      );
+      await DataSourceSingleton.getInstance()
+        .get()
+        .getRepository(LightsGroupPars)
+        .update(
+          dbLightsGroup.pars.map((p) => p.id),
+          { masterRelativeBrightness },
+        );
     if (dbLightsGroup.movingHeadRgbs.length > 0)
-      await DataSourceSingleton.getInstance().get().getRepository(LightsGroupMovingHeadRgbs).update(
-        dbLightsGroup.movingHeadRgbs.map((p) => p.id),
-        { masterRelativeBrightness },
-      );
+      await DataSourceSingleton.getInstance()
+        .get()
+        .getRepository(LightsGroupMovingHeadRgbs)
+        .update(
+          dbLightsGroup.movingHeadRgbs.map((p) => p.id),
+          { masterRelativeBrightness },
+        );
     if (dbLightsGroup.movingHeadWheels.length > 0)
-      await DataSourceSingleton.getInstance().get().getRepository(LightsGroupMovingHeadWheels).update(
-        dbLightsGroup.movingHeadWheels.map((p) => p.id),
-        { masterRelativeBrightness },
-      );
+      await DataSourceSingleton.getInstance()
+        .get()
+        .getRepository(LightsGroupMovingHeadWheels)
+        .update(
+          dbLightsGroup.movingHeadWheels.map((p) => p.id),
+          { masterRelativeBrightness },
+        );
   }
 
   /**

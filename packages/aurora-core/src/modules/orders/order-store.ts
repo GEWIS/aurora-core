@@ -46,10 +46,7 @@ export default class OrderStore {
     const defaultTimeoutKey = 'Orders.DefaultTimeoutSeconds';
     const timeout =
       timeoutSeconds ??
-      this.settingsStore.getSetting<OrderSettings, typeof defaultTimeoutKey>(
-        OrderSettingsName,
-        defaultTimeoutKey,
-      );
+      this.settingsStore.getSetting<OrderSettings, typeof defaultTimeoutKey>(OrderSettingsName, defaultTimeoutKey);
 
     if (index >= 0) {
       this._orders[index].startTime = new Date();

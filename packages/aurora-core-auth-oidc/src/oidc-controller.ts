@@ -1,9 +1,9 @@
-import {Controller, Post} from '@tsoa/runtime';
-import {Body, Get, Request, Route, Tags} from 'tsoa';
-import OidcService, {OidcConfig, OpenIdConfig} from './oidc-service';
-import {AuthUser, HttpApiException, HttpStatusCode} from '@gewis/aurora-core-util';
-import {Request as ExRequest} from "express";
-import passport from "passport";
+import { Controller, Post } from '@tsoa/runtime';
+import { Body, Get, Request, Route, Tags } from 'tsoa';
+import OidcService, { OidcConfig, OpenIdConfig } from './oidc-service';
+import { AuthUser, HttpApiException, HttpStatusCode } from '@gewis/aurora-core-util';
+import { Request as ExRequest } from 'express';
+import passport from 'passport';
 
 interface OidcParameters {
   state: string;
@@ -24,10 +24,7 @@ export class OidcController extends Controller {
     try {
       oidcConfig = await new OidcService().getOIDCConfig();
     } catch (e) {
-      throw new HttpApiException(
-        HttpStatusCode.InternalServerError,
-        'Cannot get OIDC configuration.',
-      );
+      throw new HttpApiException(HttpStatusCode.InternalServerError, 'Cannot get OIDC configuration.');
     }
 
     return {
@@ -41,9 +38,9 @@ export class OidcController extends Controller {
   public async authMock(@Request() req: ExRequest, @Body() _: OidcParameters) {
     return new Promise((resolve, reject) => {
       passport.authenticate('oidc')(req, req.res!, (err: Error) => {
-        if (err) reject(err)
-        resolve(req.user)
-      })
-    })
+        if (err) reject(err);
+        resolve(req.user);
+      });
+    });
   }
 }

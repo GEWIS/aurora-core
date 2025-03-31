@@ -460,8 +460,7 @@ export function getTwoComplementaryRgbColors(): {
   const baseColor = rgbColorDefinitions[baseColorName];
   if (baseColor.complementary.length === 0)
     throw new Error(`Selected color ${baseColorName}, which has no complements`);
-  const complementaryName =
-    baseColor.complementary[Math.floor(Math.random() * baseColor.complementary.length)];
+  const complementaryName = baseColor.complementary[Math.floor(Math.random() * baseColor.complementary.length)];
   const complementaryColor = rgbColorDefinitions[complementaryName];
 
   return {

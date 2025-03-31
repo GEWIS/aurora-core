@@ -87,10 +87,7 @@ export default class RandomColor extends LightsEffect<RandomColorProps> {
   tick(): LightsGroup {
     super.tick();
 
-    if (
-      this.props.customCycleTime &&
-      new Date().getTime() - this.startTick.getTime() > this.props.customCycleTime
-    ) {
+    if (this.props.customCycleTime && new Date().getTime() - this.startTick.getTime() > this.props.customCycleTime) {
       this.startTick = new Date();
       this.assignNewColorPermutation();
     }

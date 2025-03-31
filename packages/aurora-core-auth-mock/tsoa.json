@@ -1,9 +1,7 @@
 {
   "entryFile": "src/index.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
-  "controllerPathGlobs": [
-    "src/**/*-controller.ts"
-  ],
+  "controllerPathGlobs": ["src/**/*-controller.ts"],
   "spec": {
     "basePath": "/api",
     "securityDefinitions": {
@@ -16,10 +14,7 @@
     "outputDirectory": "build",
     "host": "",
     "specVersion": 3,
-    "schemes": [
-      "http",
-      "https"
-    ]
+    "schemes": ["http", "https"]
   },
   "routes": {
     "authenticationModule": "src/authentication.ts",

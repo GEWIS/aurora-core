@@ -44,9 +44,7 @@ export default class SearchLight extends BaseRotate<SearchLightProps> {
     this.props = props;
   }
 
-  public static build(
-    props: SearchLightProps = {},
-  ): LightsEffectBuilder<SearchLightProps, SearchLight> {
+  public static build(props: SearchLightProps = {}): LightsEffectBuilder<SearchLightProps, SearchLight> {
     return (lightsGroup) => new SearchLight(lightsGroup, props);
   }
 

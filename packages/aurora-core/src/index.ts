@@ -17,11 +17,11 @@ import SocketConnectionManager from './modules/root/socket-connection-manager';
 import EmitterStore from './modules/events/emitter-store';
 // do not remove; used for extending existing types
 import Types from './types';
-import {OrderManager, OrderSettingsDefault} from './modules/orders';
+import { OrderManager, OrderSettingsDefault } from './modules/orders';
 import TimedEventsService from './modules/timed-events/timed-events-service';
 import LightsSwitchManager from './modules/root/lights-switch-manager';
-import { AuroraConfig } from '@gewis/aurora-core-util'
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { AuroraConfig } from '@gewis/aurora-core-util';
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import { Entities as BaseEntities } from './modules/root/entities';
 import { Entities as AuthEntities } from './modules/auth/entities';
 import { Entities as FileEntities } from './modules/files/entities';
@@ -30,8 +30,11 @@ import { Entities as SpotifyEntities } from './modules/spotify/entities';
 import { Entities as LightsEntities } from './modules/lights/entities';
 import { Entities as TimedEventsEntities } from './modules/timed-events/entities';
 import LocalPoster from './modules/handlers/screen/poster/local/local-poster';
-import {ScreenHandlerSettings, ScreenHandlerSettingsDefaults} from "./modules/handlers/screen/screen-handler-settings";
-import {OrderSettings} from "./modules/orders";
+import {
+  ScreenHandlerSettings,
+  ScreenHandlerSettingsDefaults,
+} from './modules/handlers/screen/screen-handler-settings';
+import { OrderSettings } from './modules/orders';
 import { ServerSettingsStore, ServerSetting } from '@gewis/aurora-core-server-settings';
 
 async function createApp(config: AuroraConfig): Promise<void> {
@@ -57,11 +60,14 @@ async function createApp(config: AuroraConfig): Promise<void> {
     ...AuditEntities,
     ...SpotifyEntities,
     ...LightsEntities,
-    LocalPoster
-  ])
+    LocalPoster,
+  ]);
 
-  await ServerSettingsStore.getInstance().initialize<ScreenHandlerSettings>('screenHandler', ScreenHandlerSettingsDefaults)
-  await ServerSettingsStore.getInstance().initialize<OrderSettings>('orders', OrderSettingsDefault)
+  await ServerSettingsStore.getInstance().initialize<ScreenHandlerSettings>(
+    'screenHandler',
+    ScreenHandlerSettingsDefaults,
+  );
+  await ServerSettingsStore.getInstance().initialize<OrderSettings>('orders', OrderSettingsDefault);
 
   await TimedEventsService.getInstance().registerAllDatabaseEvents();
 
@@ -105,7 +111,7 @@ async function createApp(config: AuroraConfig): Promise<void> {
     await SpotifyTrackHandler.getInstance().init(emitterStore.musicEmitter);
   }
 
-    OrderManager.getInstance().init(emitterStore.orderEmitter);
+  OrderManager.getInstance().init(emitterStore.orderEmitter);
 
   initBackofficeSynchronizer(io.of('/backoffice'), emitterStore);
 
@@ -125,4 +131,4 @@ export function start(config: AuroraConfig) {
   });
 }
 
-export { DataSourceSingleton }
+export { DataSourceSingleton };

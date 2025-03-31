@@ -4,18 +4,12 @@ import { RequestHandler } from 'express';
 import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
 import { Session } from './entities';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 
 export default class SessionMiddleware {
   private static instance: SessionMiddleware;
 
-  private readonly middleware: RequestHandler<
-    ParamsDictionary,
-    any,
-    any,
-    ParsedQs,
-    Record<string, any>
-  >;
+  private readonly middleware: RequestHandler<ParamsDictionary, any, any, ParsedQs, Record<string, any>>;
 
   constructor() {
     this.middleware = session({

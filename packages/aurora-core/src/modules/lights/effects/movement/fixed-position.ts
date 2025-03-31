@@ -67,9 +67,7 @@ export default class FixedPosition extends LightsEffect<FixedPositionProps> {
     }
   }
 
-  public static build(
-    props: FixedPositionProps,
-  ): LightsEffectBuilder<FixedPositionProps, FixedPosition> {
+  public static build(props: FixedPositionProps): LightsEffectBuilder<FixedPositionProps, FixedPosition> {
     return (lightsGroup) => new FixedPosition(lightsGroup, props);
   }
 

@@ -33,11 +33,7 @@ export class TrelloPosterManager extends PosterManager {
    * @param listType
    * @private
    */
-  private async parseLists(
-    list: TrelloList,
-    board: Board,
-    listType?: PosterType,
-  ): Promise<Poster[]> {
+  private async parseLists(list: TrelloList, board: Board, listType?: PosterType): Promise<Poster[]> {
     const { cards: allCards, lists: allLists, checklists: allChecklists } = board;
     const cards = allCards?.filter((card) => card.idList === list.id) || [];
 
@@ -46,8 +42,7 @@ export class TrelloPosterManager extends PosterManager {
     const posters = await Promise.all(
       cards.map(async (card) => {
         const labels = card.labels?.map((l) => l.name ?? '') ?? [];
-        const checklists =
-          allChecklists?.filter((checklist) => card.idChecklists?.includes(checklist.id)) ?? [];
+        const checklists = allChecklists?.filter((checklist) => card.idChecklists?.includes(checklist.id)) ?? [];
 
         // A card can be two things: a poster, or a reference to a new list of cards.
         // If it has the correct label ("Posterlist"), it means the card is a reference to a list
@@ -107,9 +102,7 @@ export class TrelloPosterManager extends PosterManager {
   private parseBasePoster(card: Card, checklists: Checklist[], borrelMode: boolean): BasePoster {
     // Find the index of the "timeout" checklist if it exists
     // @ts-ignore
-    const indexTimeout = checklists.findIndex(
-      (checklist) => checklist.name.toLowerCase() === 'timeout',
-    );
+    const indexTimeout = checklists.findIndex((checklist) => checklist.name.toLowerCase() === 'timeout');
     // If it does exist, take the value of the first checkbox and make it the timeout value
     let timeout: number = DEFAULT_POSTER_TIMEOUT;
     if (indexTimeout !== undefined && indexTimeout > -1) {
@@ -119,9 +112,7 @@ export class TrelloPosterManager extends PosterManager {
 
     const labels = card.labels?.map((l) => l.name ?? '') ?? [];
     const hideBorder = labels.includes('HIDE_BORDER');
-    const footers = labels.filter(
-      (l) => !['HIDE_BORDER', 'BorrelMode'].includes(l) && !l.startsWith('#'),
-    );
+    const footers = labels.filter((l) => !['HIDE_BORDER', 'BorrelMode'].includes(l) && !l.startsWith('#'));
 
     let color = labels.find((l) => l.startsWith('#'));
 
@@ -185,11 +176,7 @@ export class TrelloPosterManager extends PosterManager {
    * @param borrelMode
    * @private
    */
-  private async parsePhotoPoster(
-    card: Card,
-    checklists: Checklist[],
-    borrelMode = false,
-  ): Promise<Poster> {
+  private async parsePhotoPoster(card: Card, checklists: Checklist[], borrelMode = false): Promise<Poster> {
     // Find the checklist called "photos", that should contain the album ids
     const index = checklists.findIndex((checklist) => checklist.name.toLowerCase() === 'photos');
     // If such list cannot be found, it does not exist. Throw an error because we cannot continue
@@ -219,11 +206,7 @@ export class TrelloPosterManager extends PosterManager {
    * @param borrelMode
    * @private
    */
-  private async parseExternalPoster(
-    card: Card,
-    checklists: Checklist[],
-    borrelMode = false,
-  ): Promise<Poster> {
+  private async parseExternalPoster(card: Card, checklists: Checklist[], borrelMode = false): Promise<Poster> {
     const isUrl = (url: string): boolean => {
       try {
         const parsedUrl = new URL(url);

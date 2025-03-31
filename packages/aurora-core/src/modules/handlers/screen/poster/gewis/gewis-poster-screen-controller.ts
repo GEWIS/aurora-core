@@ -1,8 +1,4 @@
-import {
-  BasePosterResponse,
-  BasePosterScreenController,
-  BorrelModeParams,
-} from '../base-poster-screen-controller';
+import { BasePosterResponse, BasePosterScreenController, BorrelModeParams } from '../base-poster-screen-controller';
 import HandlerManager from '../../../../root/handler-manager';
 import { Screen } from '../../../../root/entities';
 import { GewisPosterScreenHandler } from '../../index';
@@ -22,22 +18,18 @@ interface GewisPosterResponse extends BasePosterResponse {
 @Route('handler/screen/gewis-poster')
 @Tags('Handlers')
 export class GewisPosterScreenController extends BasePosterScreenController {
-  protected declare screenHandler: GewisPosterScreenHandler;
+  declare protected screenHandler: GewisPosterScreenHandler;
 
   constructor() {
     super();
     this.screenHandler = HandlerManager.getInstance()
       .getHandlers(Screen)
-      .filter(
-        (h) => h.constructor.name === GewisPosterScreenHandler.name,
-      )[0] as GewisPosterScreenHandler;
+      .filter((h) => h.constructor.name === GewisPosterScreenHandler.name)[0] as GewisPosterScreenHandler;
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Get('')
-  public async getGewisPosters(
-    @Query() alwaysReturnBorrelPosters?: boolean,
-  ): Promise<GewisPosterResponse> {
+  public async getGewisPosters(@Query() alwaysReturnBorrelPosters?: boolean): Promise<GewisPosterResponse> {
     const postersRes = await super.getPosters();
     if (alwaysReturnBorrelPosters || this.screenHandler.borrelMode) {
       return {
@@ -65,14 +57,8 @@ export class GewisPosterScreenController extends BasePosterScreenController {
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Put('borrel-mode')
-  public async setPosterBorrelMode(
-    @Request() req: ExpressRequest,
-    @Body() body: BorrelModeParams,
-  ): Promise<void> {
-    logger.audit(
-      req.user,
-      `Set poster screen borrel mode to "${body.enabled ? 'true' : 'false'}".`,
-    );
+  public async setPosterBorrelMode(@Request() req: ExpressRequest, @Body() body: BorrelModeParams): Promise<void> {
+    logger.audit(req.user, `Set poster screen borrel mode to "${body.enabled ? 'true' : 'false'}".`);
     this.screenHandler.setBorrelModeEnabled(body.enabled);
   }
 

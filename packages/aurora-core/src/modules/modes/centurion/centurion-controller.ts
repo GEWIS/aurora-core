@@ -172,9 +172,7 @@ export class CenturionController extends Controller {
       name: t.name,
       artist: t.artist,
       coverUrl: t.coverUrl,
-      events: t.feed
-        .filter((e) => ['horn', 'song'].includes(e.type))
-        .map((e) => e as HornEvent | SongEvent),
+      events: t.feed.filter((e) => ['horn', 'song'].includes(e.type)).map((e) => e as HornEvent | SongEvent),
       horns: t.feed.filter((e) => e.type === 'horn').length,
       duration: t.duration,
     }));

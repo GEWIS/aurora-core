@@ -61,9 +61,7 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
    * RGB can be used.
    */
   public hasExtendedColorPalette(): boolean {
-    return (
-      this.coldWhiteChannel != null || this.warmWhiteChannel != null || this.amberChannel != null
-    );
+    return this.coldWhiteChannel != null || this.warmWhiteChannel != null || this.amberChannel != null;
   }
 
   public setColor(color?: RgbColor): void {
@@ -173,9 +171,7 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
     shutterOptions: LightsFixtureShutterOptions[],
   ): number[] {
     if (this.masterDimChannel)
-      values[this.masterDimChannel - 1] = Math.round(
-        this.currentBrightness * masterRelativeBrightness * 255,
-      );
+      values[this.masterDimChannel - 1] = Math.round(this.currentBrightness * masterRelativeBrightness * 255);
     if (this.shutterChannel)
       values[this.shutterChannel - 1] =
         shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;

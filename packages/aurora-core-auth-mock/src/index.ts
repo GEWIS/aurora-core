@@ -2,16 +2,16 @@ import { RegisterStrategy } from './mock-strategy';
 import { RegisterRoutes as test } from '../build/routes';
 import Specs from '../build/swagger.json';
 import { AuroraPlugin } from '@gewis/aurora-core-util';
-import {Router} from "express";
+import { Router } from 'express';
 
 export default {
-    RegisterEntities(): void {},
+  RegisterEntities(): void {},
 
-    RegisterRoutes: test,
+  RegisterRoutes: test,
 
-    RegisterStrategy(): void {
-      RegisterStrategy()
-    },
+  RegisterStrategy(): void {
+    RegisterStrategy();
+  },
 
-    Specs: Specs,
-} as AuroraPlugin
+  Specs: Specs,
+} as AuroraPlugin;

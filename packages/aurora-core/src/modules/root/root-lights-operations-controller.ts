@@ -13,7 +13,7 @@ import { StrobeProps } from '../lights/effects/color/strobe';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import logger from '@gewis/aurora-core-logger';
 import { securityGroups } from '@gewis/aurora-core-util';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import LightsSwitchManager from './lights-switch-manager';
 import { HttpStatusCode } from 'axios';
 import RootLightsOperationsService from './root-lights-operations-service';
@@ -53,11 +53,7 @@ export class RootLightsOperationsController extends Controller {
    */
   @Security(SecurityNames.LOCAL, securityGroups.lightOperation.base)
   @Post('group/{id}/strobe/enable')
-  public async enableStrobeOnLightsGroup(
-    @Request() req: ExpressRequest,
-    id: number,
-    @Body() params: StrobeProps = {},
-  ) {
+  public async enableStrobeOnLightsGroup(@Request() req: ExpressRequest, id: number, @Body() params: StrobeProps = {}) {
     const lightsGroup = this.getGroups().find((g) => g.id === id);
     if (!lightsGroup) {
       this.setStatus(404);
@@ -129,10 +125,13 @@ export class RootLightsOperationsController extends Controller {
     @Body() params: GroupFixtureDimmingParams,
     @Res() notFoundResponse: TsoaResponse<HttpStatusCode.NotFound, { message: string }>,
   ) {
-    const dbLightsGroup = await DataSourceSingleton.getInstance().get().getRepository(LightsGroup).findOne({
-      where: { id },
-      relations: { pars: true, movingHeadRgbs: true, movingHeadWheels: true },
-    });
+    const dbLightsGroup = await DataSourceSingleton.getInstance()
+      .get()
+      .getRepository(LightsGroup)
+      .findOne({
+        where: { id },
+        relations: { pars: true, movingHeadRgbs: true, movingHeadWheels: true },
+      });
     if (!dbLightsGroup) {
       return notFoundResponse(HttpStatusCode.NotFound, { message: 'Lights group not found' });
     }
@@ -144,10 +143,7 @@ export class RootLightsOperationsController extends Controller {
       `Set lights group "${dbLightsGroup.name}" (id: ${id}) relative brightness to ${masterRelativeBrightness}.`,
     );
 
-    await new RootLightsOperationsService().applyLightsGroupRelativeBrightness(
-      id,
-      masterRelativeBrightness,
-    );
+    await new RootLightsOperationsService().applyLightsGroupRelativeBrightness(id, masterRelativeBrightness);
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.lightOperation.base)
@@ -157,18 +153,18 @@ export class RootLightsOperationsController extends Controller {
     id: number,
     @Res() notFoundResponse: TsoaResponse<HttpStatusCode.NotFound, { message: string }>,
   ) {
-    const dbLightsGroup = await DataSourceSingleton.getInstance().get().getRepository(LightsGroup).findOne({
-      where: { id },
-      relations: { pars: true, movingHeadRgbs: true, movingHeadWheels: true },
-    });
+    const dbLightsGroup = await DataSourceSingleton.getInstance()
+      .get()
+      .getRepository(LightsGroup)
+      .findOne({
+        where: { id },
+        relations: { pars: true, movingHeadRgbs: true, movingHeadWheels: true },
+      });
     if (!dbLightsGroup) {
       return notFoundResponse(HttpStatusCode.NotFound, { message: 'Lights group not found' });
     }
 
-    logger.audit(
-      req.user,
-      `Reset lights group "${dbLightsGroup.name}" (id: ${id}) relative brightness to default.`,
-    );
+    logger.audit(req.user, `Reset lights group "${dbLightsGroup.name}" (id: ${id}) relative brightness to default.`);
 
     await new RootLightsOperationsService().resetLightsGroupRelativeBrightness(id);
   }
@@ -274,10 +270,7 @@ export class RootLightsOperationsController extends Controller {
       return;
     }
 
-    logger.audit(
-      req.user,
-      `Override DMX for moving head RGB "${chosenMovingHead.fixture.name}" (id: ${id}).`,
-    );
+    logger.audit(req.user, `Override DMX for moving head RGB "${chosenMovingHead.fixture.name}" (id: ${id}).`);
 
     chosenMovingHead.fixture.setOverrideDmx(params.dmxValues);
   }
@@ -321,10 +314,7 @@ export class RootLightsOperationsController extends Controller {
       return;
     }
 
-    logger.audit(
-      req.user,
-      `Freeze moving head RGB "${chosenMovingHead.fixture.name}" (id: ${id}).`,
-    );
+    logger.audit(req.user, `Freeze moving head RGB "${chosenMovingHead.fixture.name}" (id: ${id}).`);
 
     chosenMovingHead.fixture.freezeDmx();
   }
@@ -344,10 +334,7 @@ export class RootLightsOperationsController extends Controller {
       return;
     }
 
-    logger.audit(
-      req.user,
-      `Unfreeze moving head RGB "${chosenMovingHead.fixture.name}" (id: ${id}).`,
-    );
+    logger.audit(req.user, `Unfreeze moving head RGB "${chosenMovingHead.fixture.name}" (id: ${id}).`);
 
     chosenMovingHead.fixture.unfreezeDmx();
   }
@@ -368,10 +355,7 @@ export class RootLightsOperationsController extends Controller {
       return;
     }
 
-    logger.audit(
-      req.user,
-      `Override DMX for moving head wheel "${chosenMovingHead.fixture.name}" (id: ${id}).`,
-    );
+    logger.audit(req.user, `Override DMX for moving head wheel "${chosenMovingHead.fixture.name}" (id: ${id}).`);
 
     chosenMovingHead.fixture.setOverrideDmx(params.dmxValues);
   }
@@ -391,10 +375,7 @@ export class RootLightsOperationsController extends Controller {
       return;
     }
 
-    logger.audit(
-      req.user,
-      `Reset moving head wheel "${chosenMovingHead.fixture.name}" (id: ${id}).`,
-    );
+    logger.audit(req.user, `Reset moving head wheel "${chosenMovingHead.fixture.name}" (id: ${id}).`);
 
     const success = chosenMovingHead.fixture.hardwareReset();
     if (!success) {
@@ -418,10 +399,7 @@ export class RootLightsOperationsController extends Controller {
       return;
     }
 
-    logger.audit(
-      req.user,
-      `Freeze moving head wheel "${chosenMovingHead.fixture.name}" (id: ${id}).`,
-    );
+    logger.audit(req.user, `Freeze moving head wheel "${chosenMovingHead.fixture.name}" (id: ${id}).`);
 
     chosenMovingHead.fixture.freezeDmx();
   }
@@ -441,10 +419,7 @@ export class RootLightsOperationsController extends Controller {
       return;
     }
 
-    logger.audit(
-      req.user,
-      `Unfreeze moving head wheel "${chosenMovingHead.fixture.name}" (id: ${id}).`,
-    );
+    logger.audit(req.user, `Unfreeze moving head wheel "${chosenMovingHead.fixture.name}" (id: ${id}).`);
 
     chosenMovingHead.fixture.unfreezeDmx();
   }

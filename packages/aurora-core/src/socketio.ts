@@ -23,18 +23,15 @@ interface SocketData {
  * @param httpServer Express.JS HttpServer instance
  */
 export default function createWebsocket(httpServer: HttpServer) {
-  const io = new SocketIoServer<DefaultEventsMap, EventsMap, DefaultEventsMap, SocketData>(
-    httpServer,
-    {
-      cookie: true,
-      cors: {
-        origin: enableCors ? customOrigin : undefined,
-        allowedHeaders: devEnv ? ['cookie', 'cookie_development'] : ['cookie'],
-      },
-      connectTimeout: 2000,
-      pingTimeout: 1000,
+  const io = new SocketIoServer<DefaultEventsMap, EventsMap, DefaultEventsMap, SocketData>(httpServer, {
+    cookie: true,
+    cors: {
+      origin: enableCors ? customOrigin : undefined,
+      allowedHeaders: devEnv ? ['cookie', 'cookie_development'] : ['cookie'],
     },
-  );
+    connectTimeout: 2000,
+    pingTimeout: 1000,
+  });
 
   /**
    * Set the "cookies" header to "cookie" in development to allow SocketIO auth without CORS

@@ -1,12 +1,7 @@
-import {
-  AccessToken,
-  ProvidedAccessTokenStrategy,
-  SpotifyApi,
-  UserProfile,
-} from '@fostertheweb/spotify-web-sdk';
+import { AccessToken, ProvidedAccessTokenStrategy, SpotifyApi, UserProfile } from '@fostertheweb/spotify-web-sdk';
 import { Repository } from 'typeorm';
 import { SpotifyUser } from './entities';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import logger from '@gewis/aurora-core-logger';
 
 export interface SpotifyUserProfile extends UserProfile {}
@@ -56,10 +51,7 @@ export default class SpotifyApiHandler {
    * @param accessToken
    * @private
    */
-  private static async refreshAccessToken(
-    clientId: string,
-    accessToken: AccessToken,
-  ): Promise<AccessToken> {
+  private static async refreshAccessToken(clientId: string, accessToken: AccessToken): Promise<AccessToken> {
     const content: { [key: string]: string } = {
       grant_type: 'refresh_token',
       refresh_token: accessToken.refresh_token,

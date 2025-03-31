@@ -4,12 +4,7 @@ import LightsEffect, {
   LightsEffectBuilder,
 } from '../lights-effect';
 import { LightsGroup } from '../../entities';
-import {
-  hexToRgb,
-  RgbColor,
-  rgbColorDefinitions,
-  RgbColorSpecification,
-} from '../../color-definitions';
+import { hexToRgb, RgbColor, rgbColorDefinitions, RgbColorSpecification } from '../../color-definitions';
 import { EffectProgressionTickStrategy } from '../progression-strategies';
 import { IColorsRgb } from '../../entities/colors-rgb';
 import { ColorEffects } from './color-effects';
@@ -66,9 +61,7 @@ export default class BackgroundPulse extends LightsEffect<BackgroundPulseProps> 
     this.props = props;
   }
 
-  public static build(
-    props: BackgroundPulseProps,
-  ): LightsEffectBuilder<BackgroundPulseProps, BackgroundPulse> {
+  public static build(props: BackgroundPulseProps): LightsEffectBuilder<BackgroundPulseProps, BackgroundPulse> {
     return (lightsGroup: LightsGroup) => new BackgroundPulse(lightsGroup, props);
   }
 
@@ -170,12 +163,9 @@ export default class BackgroundPulse extends LightsEffect<BackgroundPulseProps> 
         redChannel: colorA.definition.redChannel * (1 - p) + colorB.definition.redChannel * p,
         greenChannel: colorA.definition.greenChannel * (1 - p) + colorB.definition.greenChannel * p,
         blueChannel: colorA.definition.blueChannel * (1 - p) + colorB.definition.blueChannel * p,
-        warmWhiteChannel:
-          colorA.definition.warmWhiteChannel! * (1 - p) + colorB.definition.warmWhiteChannel! * p,
-        coldWhiteChannel:
-          colorA.definition.coldWhiteChannel! * (1 - p) + colorB.definition.coldWhiteChannel! * p,
-        amberChannel:
-          colorA.definition.amberChannel! * (1 - p) + colorB.definition.amberChannel! * p,
+        warmWhiteChannel: colorA.definition.warmWhiteChannel! * (1 - p) + colorB.definition.warmWhiteChannel! * p,
+        coldWhiteChannel: colorA.definition.coldWhiteChannel! * (1 - p) + colorB.definition.coldWhiteChannel! * p,
+        amberChannel: colorA.definition.amberChannel! * (1 - p) + colorB.definition.amberChannel! * p,
         uvChannel: colorA.definition.uvChannel! * (1 - p) + colorB.definition.uvChannel! * p,
       };
     }
@@ -197,11 +187,7 @@ export default class BackgroundPulse extends LightsEffect<BackgroundPulseProps> 
    * @param rgbOnly Whether only an RGB color should be returned, instead of an extensive palette
    * @private
    */
-  private getColor(
-    p: number,
-    colorIndex: number,
-    rgbOnly: boolean,
-  ): Required<IColorsRgb> | undefined {
+  private getColor(p: number, colorIndex: number, rgbOnly: boolean): Required<IColorsRgb> | undefined {
     const baseColor = rgbColorDefinitions[this.props.colors[0]];
     if (!baseColor) return undefined;
 
@@ -232,11 +218,7 @@ export default class BackgroundPulse extends LightsEffect<BackgroundPulseProps> 
         p = this.getRelativeProgression(progressionStrategy.getProgression(tick));
       }
 
-      const color = this.getColor(
-        p,
-        this.colorIndices[i] + 1,
-        !f.fixture.color.hasExtendedColorPalette(),
-      );
+      const color = this.getColor(p, this.colorIndices[i] + 1, !f.fixture.color.hasExtendedColorPalette());
       if (color) {
         f.fixture.setCustomColor(color);
       } else {

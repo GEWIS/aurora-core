@@ -1,6 +1,6 @@
 import logger from '@gewis/aurora-core-logger';
 import AuditService from './audit-service';
-import {AuthUser, isAuthUser} from '@gewis/aurora-core-util';
+import { AuthUser, isAuthUser } from '@gewis/aurora-core-util';
 
 /**
  * Log an audit message
@@ -13,17 +13,12 @@ export function logAudit(user: unknown, msg?: string, ...args: any[]): void {
   if (!msg) return;
   // Check if the provided user is valid, otherwise return
   if (!isAuthUser(user)) {
-    logger.error(
-      user,
-      `Ran into an issue when logging "${msg}": invalid user provided, no id/name present`,
-    );
+    logger.error(user, `Ran into an issue when logging "${msg}": invalid user provided, no id/name present`);
     return;
   }
   logger.trace<AuthUser>(user, msg, args);
 
-  new AuditService()
-    .addLog({ userId: user.id, userName: user.name, action: msg })
-    .catch((e) => logger.error(e));
+  new AuditService().addLog({ userId: user.id, userName: user.name, action: msg }).catch((e) => logger.error(e));
 }
 
 logger.audit = logAudit;

@@ -1,6 +1,6 @@
 import { LessThanOrEqual, Repository } from 'typeorm';
 import AuditLogEntry from './entities/audit-log-entry';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import EmitterStore from '../events/emitter-store';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 
@@ -35,14 +35,10 @@ export interface GetAuditLogEntryParams {
   skip?: number;
 }
 
-export interface CreateAuditLogEntryParams
-  extends Pick<AuditLogEntry, 'userId' | 'userName' | 'action'> {}
+export interface CreateAuditLogEntryParams extends Pick<AuditLogEntry, 'userId' | 'userName' | 'action'> {}
 
 export interface AuditLogEntryResponse
-  extends Pick<
-    AuditLogEntry,
-    'id' | 'createdAt' | 'updatedAt' | 'userId' | 'userName' | 'action'
-  > {}
+  extends Pick<AuditLogEntry, 'id' | 'createdAt' | 'updatedAt' | 'userId' | 'userName' | 'action'> {}
 
 export interface PaginatedAuditLogEntryResponse {
   records: AuditLogEntryResponse[];

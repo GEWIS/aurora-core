@@ -65,10 +65,7 @@ export default class CronManager {
 
       switch (spec.type) {
         case 'system-reset':
-          logger.audit(
-            { id: 'cron', name: 'Scheduled Task', roles: [] },
-            'Reset system state to default.',
-          );
+          logger.audit({ id: 'cron', name: 'Scheduled Task', roles: [] }, 'Reset system state to default.');
           await new HandlerService().resetToDefaults();
           break;
 
@@ -87,14 +84,9 @@ export default class CronManager {
             return;
           }
 
-          const foundAudio = HandlerManager.getInstance().registerHandler(
-            audio,
-            spec.params.handler,
-          );
+          const foundAudio = HandlerManager.getInstance().registerHandler(audio, spec.params.handler);
           if (!foundAudio) {
-            logger.error(
-              `Timed event "${event.id}": audio handler with name "${spec.params.handler}" not found.`,
-            );
+            logger.error(`Timed event "${event.id}": audio handler with name "${spec.params.handler}" not found.`);
           }
 
           logger.audit(
@@ -107,16 +99,11 @@ export default class CronManager {
         case 'switch-handler-lights':
           const lights = await new RootLightsService().getSingleLightsGroup(spec.params.id);
           if (lights == null) {
-            logger.error(
-              `Timed event "${event.id}": lightsGroup with ID "${spec.params.id}" not found.`,
-            );
+            logger.error(`Timed event "${event.id}": lightsGroup with ID "${spec.params.id}" not found.`);
             return;
           }
 
-          const foundLights = HandlerManager.getInstance().registerHandler(
-            lights,
-            spec.params.handler,
-          );
+          const foundLights = HandlerManager.getInstance().registerHandler(lights, spec.params.handler);
           if (!foundLights) {
             logger.error(
               `Timed event "${event.id}": lightsGroup handler with name "${spec.params.handler}" not found.`,
@@ -133,20 +120,13 @@ export default class CronManager {
         case 'switch-handler-screen':
           const screen = await new RootScreenService().getSingleScreen(spec.params.id);
           if (screen == null) {
-            logger.error(
-              `Timed event "${event.id}": screen with ID "${spec.params.id}" not found.`,
-            );
+            logger.error(`Timed event "${event.id}": screen with ID "${spec.params.id}" not found.`);
             return;
           }
 
-          const foundScreen = HandlerManager.getInstance().registerHandler(
-            screen,
-            spec.params.handler,
-          );
+          const foundScreen = HandlerManager.getInstance().registerHandler(screen, spec.params.handler);
           if (!foundScreen) {
-            logger.error(
-              `Timed event "${event.id}": screen handler with name "${spec.params.handler}" not found.`,
-            );
+            logger.error(`Timed event "${event.id}": screen handler with name "${spec.params.handler}" not found.`);
           }
 
           logger.audit(
@@ -161,16 +141,12 @@ export default class CronManager {
           const poster = await service.getSingleLocalPoster(spec.params.posterId);
           const handler = HandlerManager.getInstance()
             .getHandlers(Screen)
-            .filter(
-              (h) => h.constructor.name === StaticPosterHandler.name,
-            )[0] as StaticPosterHandler;
+            .filter((h) => h.constructor.name === StaticPosterHandler.name)[0] as StaticPosterHandler;
           if (handler) {
             handler.setActivePoster(service.toResponse(poster));
             handler.setClockVisibility(spec.params.clockVisible);
           } else {
-            logger.error(
-              `Timed event "${event.id}": could not find StaticPosterHandler in HandlerManager."`,
-            );
+            logger.error(`Timed event "${event.id}": could not find StaticPosterHandler in HandlerManager."`);
           }
 
           return;

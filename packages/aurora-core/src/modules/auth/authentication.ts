@@ -1,3 +1,3 @@
-import { expressAuthentication} from '@gewis/aurora-core-util'
+import { expressAuthentication } from '@gewis/aurora-core-util';
 
-export { expressAuthentication }
+export { expressAuthentication };

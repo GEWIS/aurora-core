@@ -1,5 +1,5 @@
 import HandlerManager from './handler-manager';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import { Audio, Screen } from './entities';
 import { LightsGroup } from '../lights/entities';
 import ModeManager from '../modes/mode-manager';
@@ -34,8 +34,6 @@ export default class HandlerService {
 
     // Set all master dimmers back to their defaults
     const rootLightsOpsService = new RootLightsOperationsService();
-    await Promise.all(
-      lights.map((l) => rootLightsOpsService.resetLightsGroupRelativeBrightness(l.id)),
-    );
+    await Promise.all(lights.map((l) => rootLightsOpsService.resetLightsGroupRelativeBrightness(l.id)));
   }
 }

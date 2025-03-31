@@ -4,25 +4,22 @@ import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
-import {pinoHttp} from 'pino-http';
-import {RegisterRoutes} from '../build/routes';
+import { pinoHttp } from 'pino-http';
+import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
-import {SessionMiddleware} from './modules/auth';
-import {setupErrorHandler} from './error';
-import {authResponse} from './modules/auth/passport';
-import {merge, isErrorResult, MergeResult} from 'openapi-merge';
-import {Swagger} from 'atlassian-openapi';
-import {AuroraConfig} from '@gewis/aurora-core-util';
+import { SessionMiddleware } from './modules/auth';
+import { setupErrorHandler } from './error';
+import { authResponse } from './modules/auth/passport';
+import { merge, isErrorResult, MergeResult } from 'openapi-merge';
+import { Swagger } from 'atlassian-openapi';
+import { AuroraConfig } from '@gewis/aurora-core-util';
 
 const origins = process.env.CORS_ORIGINS?.split(', ');
 export const enableCors = origins !== undefined && origins.length > 0;
 
 export function customOrigin(
   requestOrigin: string | undefined,
-  callback: (
-    err: Error | null,
-    origin?: boolean | string | RegExp | (boolean | string | RegExp)[],
-  ) => void,
+  callback: (err: Error | null, origin?: boolean | string | RegExp | (boolean | string | RegExp)[]) => void,
 ) {
   if (origins && origins.length > 0) {
     callback(null, origins);
@@ -84,10 +81,7 @@ export default async function createHttp(config: AuroraConfig): Promise<express.
   let currentSpecs = apiDocs as Swagger.SwaggerV3;
   for (const plugin of config.auth) {
     if ((plugin.devOnly && process.env.NODE_ENV === 'development') || !plugin.devOnly) {
-      mergedSpecs = merge([
-        {oas: currentSpecs},
-        {oas: plugin.Specs as Swagger.SwaggerV3}
-      ]);
+      mergedSpecs = merge([{ oas: currentSpecs }, { oas: plugin.Specs as Swagger.SwaggerV3 }]);
 
       if (isErrorResult(mergedSpecs)) {
         throw new Error('Overlapping routes found.');

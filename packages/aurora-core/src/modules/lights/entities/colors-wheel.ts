@@ -100,8 +100,7 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
     if (this.shutterChannel)
       values[this.shutterChannel - 1] =
         shutterOptions.find((o) => o.shutterOption === ShutterOption.STROBE)?.channelValue ?? 0;
-    values[this.colorChannel - 1] =
-      this.colorChannelValues.find((o) => o.name === WheelColor.WHITE)?.value ?? 0;
+    values[this.colorChannel - 1] = this.colorChannelValues.find((o) => o.name === WheelColor.WHITE)?.value ?? 0;
 
     if (this.shutterChannel || this.strobePing) {
       // If we have a shutter channel or we should manually strobe,
@@ -126,9 +125,7 @@ export default class ColorsWheel extends Colors implements IColorsWheel {
     shutterOptions: LightsFixtureShutterOptions[],
   ): number[] {
     values[this.masterDimChannel - 1] =
-      this.currentColor !== undefined
-        ? Math.round(masterRelativeBrightness * this.currentBrightness * 255)
-        : 0;
+      this.currentColor !== undefined ? Math.round(masterRelativeBrightness * this.currentBrightness * 255) : 0;
     if (this.shutterChannel)
       values[this.shutterChannel - 1] =
         shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;

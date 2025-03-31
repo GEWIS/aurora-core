@@ -21,11 +21,7 @@ const AUDIO_HANDLER = 'SimpleAudioHandler';
 const SCREEN_HANDLER = 'CenturionScreenHandler';
 const STROBE_TIME = 1500; // Milliseconds
 
-export default class CenturionMode extends BaseMode<
-  SetEffectsHandler,
-  CenturionScreenHandler,
-  SimpleAudioHandler
-> {
+export default class CenturionMode extends BaseMode<SetEffectsHandler, CenturionScreenHandler, SimpleAudioHandler> {
   public tape: MixTape;
 
   private musicEmitter: MusicEmitter;
@@ -268,12 +264,8 @@ export default class CenturionMode extends BaseMode<
       this.lastHornEvent = event;
       this.lights.forEach((l) => {
         l.pars.forEach((p) => p.fixture.enableStrobe(event.data.strobeTime ?? STROBE_TIME));
-        l.movingHeadRgbs.forEach((p) =>
-          p.fixture.enableStrobe(event.data.strobeTime ?? STROBE_TIME),
-        );
-        l.movingHeadWheels.forEach((p) =>
-          p.fixture.enableStrobe(event.data.strobeTime ?? STROBE_TIME),
-        );
+        l.movingHeadRgbs.forEach((p) => p.fixture.enableStrobe(event.data.strobeTime ?? STROBE_TIME));
+        l.movingHeadWheels.forEach((p) => p.fixture.enableStrobe(event.data.strobeTime ?? STROBE_TIME));
       });
       this.screenHandler.horn(event.data.strobeTime ?? STROBE_TIME, event.data.counter);
     } else if (event.type === 'song') {

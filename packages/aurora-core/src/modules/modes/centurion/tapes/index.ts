@@ -40,9 +40,7 @@ function validateTape(tape: MixTape) {
     },
   ];
   const isExcluded = (hornEvent: Horn) => {
-    return hornExceptions.some(
-      (h) => h.tapeName === tape.name && h.hornCount === hornEvent.data.counter,
-    );
+    return hornExceptions.some((h) => h.tapeName === tape.name && h.hornCount === hornEvent.data.counter);
   };
 
   tape.feed

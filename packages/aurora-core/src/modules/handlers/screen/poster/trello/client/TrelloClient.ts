@@ -15,10 +15,7 @@ export class TrelloClient {
 
   public readonly request: BaseHttpRequest;
 
-  constructor(
-    config?: Partial<OpenAPIConfig>,
-    HttpRequest: HttpRequestConstructor = FetchHttpRequest,
-  ) {
+  constructor(config?: Partial<OpenAPIConfig>, HttpRequest: HttpRequestConstructor = FetchHttpRequest) {
     this.request = new HttpRequest({
       BASE: config?.BASE ?? 'https://api.trello.com/1',
       VERSION: config?.VERSION ?? '0.0.1',

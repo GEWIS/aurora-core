@@ -29,10 +29,7 @@ export default class GewisPosterScreenHandler extends BasePosterScreenHandler {
     if (this.borrelMode) return;
 
     // By default, enable borrelmode on Thursdays 16:30 local time
-    if (
-      now.getDay() === 4 &&
-      ((now.getHours() === 16 && now.getMinutes() >= 30) || now.getHours() >= 17)
-    ) {
+    if (now.getDay() === 4 && ((now.getHours() === 16 && now.getMinutes() >= 30) || now.getHours() >= 17)) {
       this.borrelModeDay = now.getDay();
     }
   }

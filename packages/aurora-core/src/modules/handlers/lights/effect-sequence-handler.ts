@@ -3,7 +3,7 @@ import { BeatEvent, TrackChangeEvent } from '../../events/music-emitter-events';
 import { LightsGroup } from '../../lights/entities';
 import { LightsTrackEffect } from '../../lights/entities/sequences/lights-track-effect';
 import LightsEffect from '../../lights/effects/lights-effect';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import { MusicEmitter } from '../../events';
 import logger from '@gewis/aurora-core-logger';
 import { databaseEffectToObject } from './database-effects-helper';
@@ -74,9 +74,7 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
 
     // Get all effects that have passed the relative start time
     // but not the relative end time
-    const currentlyActiveEffects = this.events.filter(
-      (e) => e.startMs < progression && e.endMs > progression,
-    );
+    const currentlyActiveEffects = this.events.filter((e) => e.startMs < progression && e.endMs > progression);
     currentlyActiveEffects.forEach((e) => this.startEffect(e));
 
     return this.events;
@@ -89,9 +87,7 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
    */
   private startEffect(effectToActivate: LightsGroupEffect) {
     // Get the light groups this effect should apply to
-    const lightsGroups = this.entities.filter((e) =>
-      effectToActivate.lightsGroupIds.includes(e.id),
-    );
+    const lightsGroups = this.entities.filter((e) => effectToActivate.lightsGroupIds.includes(e.id));
 
     const effects = lightsGroups.map((g) =>
       databaseEffectToObject(g, effectToActivate.effectName, effectToActivate.effectProps),
@@ -170,7 +166,8 @@ export default class EffectSequenceHandler extends BaseLightsHandler {
 
     this.stopSequence(true);
 
-    DataSourceSingleton.getInstance().get()
+    DataSourceSingleton.getInstance()
+      .get()
       .getRepository(LightsTrackEffect)
       .find({
         where: { trackUri: event.trackURI },

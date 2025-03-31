@@ -1,12 +1,12 @@
 import { Controller, Header, Response, TsoaResponse } from '@tsoa/runtime';
 import { createVerify } from 'crypto';
-import { ServerSettingsStore } from '@gewis/aurora-core-server-settings'
+import { ServerSettingsStore } from '@gewis/aurora-core-server-settings';
 import { Body, Delete, Get, Post, Res, Route, Security, Tags } from 'tsoa';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import { securityGroups } from '@gewis/aurora-core-util';
 import OrderManager from './order-manager';
 import { OrderSettings } from './order-settings';
-import {Order} from "./entities";
+import { Order } from './entities';
 
 interface OrderRequest {
   orderNumber: number;
@@ -50,8 +50,7 @@ export class OrderController extends Controller {
 
     if (
       !OrderController.webhookPublicKey ||
-      new Date().getTime() - OrderController.webhookKeyLastUpdate.getTime() >
-        1000 * expiryTimeSeconds
+      new Date().getTime() - OrderController.webhookKeyLastUpdate.getTime() > 1000 * expiryTimeSeconds
     ) {
       const webhookKeyUrl = settingsStore.getSetting<OrderSettings>(
         'orders',

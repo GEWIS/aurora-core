@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import LightsPredefinedEffect, {
   LightsPredefinedEffectProperties,
 } from '../../lights/entities/scenes/lights-predefined-effect';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import { HttpApiException } from '@gewis/aurora-core-util';
 import { HttpStatusCode } from 'axios';
 
@@ -19,8 +19,7 @@ export interface LightsPredefinedEffectResponse {
 export interface LightsPredefinedEffectCreateParams
   extends Pick<LightsPredefinedEffect, 'buttonId' | 'properties' | 'icon' | 'name'> {}
 
-export interface LightsPredefinedEffectUpdateParams
-  extends Partial<LightsPredefinedEffectCreateParams> {}
+export interface LightsPredefinedEffectUpdateParams extends Partial<LightsPredefinedEffectCreateParams> {}
 
 export default class SetEffectsService {
   private repo: Repository<LightsPredefinedEffect>;
@@ -29,9 +28,7 @@ export default class SetEffectsService {
     this.repo = repo ?? DataSourceSingleton.getInstance().get().getRepository(LightsPredefinedEffect);
   }
 
-  public static toLightsEffectPredefinedEffectResponse(
-    e: LightsPredefinedEffect,
-  ): LightsPredefinedEffectResponse {
+  public static toLightsEffectPredefinedEffectResponse(e: LightsPredefinedEffect): LightsPredefinedEffectResponse {
     return {
       id: e.id,
       createdAt: e.createdAt.toISOString(),
@@ -57,9 +54,7 @@ export default class SetEffectsService {
     return this.repo.findOne({ where: { id, buttonId } });
   }
 
-  public async createPredefinedEffect(
-    params: LightsPredefinedEffectCreateParams,
-  ): Promise<LightsPredefinedEffect> {
+  public async createPredefinedEffect(params: LightsPredefinedEffectCreateParams): Promise<LightsPredefinedEffect> {
     const existing = await this.getSinglePredefinedEffect({ buttonId: params.buttonId });
     if (existing) {
       throw new HttpApiException(

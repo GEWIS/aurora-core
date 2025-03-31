@@ -1,9 +1,5 @@
 import BaseRotate, { BaseRotateProps } from './base-rotate';
-import {
-  BaseLightsEffectCreateParams,
-  BaseLightsEffectProgressionProps,
-  LightsEffectBuilder,
-} from '../lights-effect';
+import { BaseLightsEffectCreateParams, BaseLightsEffectProgressionProps, LightsEffectBuilder } from '../lights-effect';
 import { MovementEffects } from './movement-effetcs';
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../../entities';
 
@@ -50,11 +46,7 @@ export default class ZigZag extends BaseRotate<ZigZagProps> {
     return (lightsGroup: LightsGroup) => new ZigZag(lightsGroup, props);
   }
 
-  protected setPosition(
-    movingHead: LightsMovingHeadWheel | LightsMovingHeadRgb,
-    progression: number,
-    offset: number,
-  ) {
+  protected setPosition(movingHead: LightsMovingHeadWheel | LightsMovingHeadRgb, progression: number, offset: number) {
     const hozRadiusFactor = this.props.horizontalRadius || DEFAULT_HOZ_RADIUS_FACTOR;
     const horizontalRadius = hozRadiusFactor / 4;
     const vertRadiusFactor = this.props.verticalRadius || DEFAULT_VERT_RADIUS_FACTOR;

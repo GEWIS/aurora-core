@@ -44,11 +44,7 @@ export class HandlerController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.handler.privileged)
   @Post('audio/{id}')
-  public async setAudioHandler(
-    @Request() req: ExpressRequest,
-    @Path() id: number,
-    @Body() params: NewHandlerParams,
-  ) {
+  public async setAudioHandler(@Request() req: ExpressRequest, @Path() id: number, @Body() params: NewHandlerParams) {
     const audio = await new RootAudioService().getSingleAudio(id);
     if (audio == null) {
       this.setStatus(404);
@@ -69,29 +65,20 @@ export class HandlerController extends Controller {
     return this.handlersManager.getHandlers(LightsGroup).map((h) => ({
       name: h.constructor.name,
       id: h.identifier,
-      entities: h.entities.map((lightsGroup) =>
-        RootLightsService.toLightsGroupResponse(lightsGroup as LightsGroup),
-      ),
+      entities: h.entities.map((lightsGroup) => RootLightsService.toLightsGroupResponse(lightsGroup as LightsGroup)),
     }));
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.handler.privileged)
   @Post('lights/{id}')
-  public async setLightsHandler(
-    @Request() req: ExpressRequest,
-    @Path() id: number,
-    @Body() params: NewHandlerParams,
-  ) {
+  public async setLightsHandler(@Request() req: ExpressRequest, @Path() id: number, @Body() params: NewHandlerParams) {
     const group = await new RootLightsService().getSingleLightsGroup(id);
     if (group == null) {
       this.setStatus(404);
       return;
     }
 
-    logger.audit(
-      req.user,
-      `Change "${group.name}" (id: ${id}) lights group handler to "${params.name}".`,
-    );
+    logger.audit(req.user, `Change "${group.name}" (id: ${id}) lights group handler to "${params.name}".`);
 
     const found = this.handlersManager.registerHandler(group, params.name);
     if (!found) {
@@ -111,21 +98,14 @@ export class HandlerController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.handler.privileged)
   @Post('screen/{id}')
-  public async setScreenHandler(
-    @Request() req: ExpressRequest,
-    @Path() id: number,
-    @Body() params: NewHandlerParams,
-  ) {
+  public async setScreenHandler(@Request() req: ExpressRequest, @Path() id: number, @Body() params: NewHandlerParams) {
     const screen = await new RootScreenService().getSingleScreen(id);
     if (screen == null) {
       this.setStatus(404);
       return;
     }
 
-    logger.audit(
-      req.user,
-      `Change "${screen.name}" (id: ${id}) screen handler to "${params.name}".`,
-    );
+    logger.audit(req.user, `Change "${screen.name}" (id: ${id}) screen handler to "${params.name}".`);
 
     const found = this.handlersManager.registerHandler(screen, params.name);
     if (!found) {

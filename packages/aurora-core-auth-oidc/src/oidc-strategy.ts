@@ -4,7 +4,7 @@ import { Strategy as CustomStrategy } from 'passport-custom';
 import { HttpApiException, HttpStatusCode } from '@gewis/aurora-core-util';
 import logger from '@gewis/aurora-core-logger';
 import { parseRoles } from '@gewis/aurora-core-util';
-import OidcService, { OpenIdConfig} from './oidc-service';
+import OidcService, { OpenIdConfig } from './oidc-service';
 
 export interface AuthStoreToken {
   exp: number;
@@ -60,7 +60,7 @@ export function RegisterStrategy() {
       if (!Object.values(OidcProviders).includes(process.env.OIDC_PROVIDER as OidcProviders)) {
         logger.error(
           'The environment variable OIDC_PROVIDER is not a valid OIDC provider. Options are ' +
-          Object.values(OidcProviders).join('; '),
+            Object.values(OidcProviders).join('; '),
         );
         callback(new HttpApiException(HttpStatusCode.InternalServerError));
         return;

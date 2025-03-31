@@ -20,11 +20,4 @@ export type LightsEffectsMovementCreateParams =
   | FixedPositionCreateParams
   | ZigZagCreateParams;
 
-export const LIGHTS_EFFECTS_MOVEMENT = [
-  SearchLight,
-  TableRotate,
-  ClassicRotate,
-  RandomPosition,
-  FixedPosition,
-  ZigZag,
-];
+export const LIGHTS_EFFECTS_MOVEMENT = [SearchLight, TableRotate, ClassicRotate, RandomPosition, FixedPosition, ZigZag];

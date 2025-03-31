@@ -22,8 +22,7 @@ export default class GEWISPosterService {
     const albumId = params.albumIds[chosenAlbumIndex];
 
     try {
-      const returnObj = (await axios.get(`https://gewis.nl/api/photo/album/${albumId}`, config))
-        .data;
+      const returnObj = (await axios.get(`https://gewis.nl/api/photo/album/${albumId}`, config)).data;
       const nrOfPhotos = returnObj.photos.length;
       const photo = returnObj.photos[Math.floor(Math.random() * nrOfPhotos)];
 

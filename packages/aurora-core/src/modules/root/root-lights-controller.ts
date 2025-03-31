@@ -15,12 +15,7 @@ import RootLightsService, {
   ParResponse,
 } from './root-lights-service';
 import { LIGHTS_EFFECTS } from '../lights/effects';
-import {
-  RgbColor,
-  rgbColorDefinitions,
-  rgbColors,
-  RgbColorSpecification,
-} from '../lights/color-definitions';
+import { RgbColor, rgbColorDefinitions, rgbColors, RgbColorSpecification } from '../lights/color-definitions';
 import { SecurityGroup, SecurityNames } from '@gewis/aurora-core-util';
 import { securityGroups } from '@gewis/aurora-core-util';
 import { Request as ExpressRequest } from 'express';
@@ -43,9 +38,7 @@ export class RootLightsController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.light.base)
   @Get('controller/{id}')
-  public async getSingleLightsController(
-    id: number,
-  ): Promise<LightsControllerResponse | undefined> {
+  public async getSingleLightsController(id: number): Promise<LightsControllerResponse | undefined> {
     const controller = await new RootLightsService().getSingleController(id);
     if (!controller) {
       this.setStatus(404);
@@ -56,9 +49,7 @@ export class RootLightsController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.light.privileged)
   @Post('controller')
-  public async createLightsController(
-    @Body() params: LightsControllerCreateParams,
-  ): Promise<LightsControllerResponse> {
+  public async createLightsController(@Body() params: LightsControllerCreateParams): Promise<LightsControllerResponse> {
     return new RootLightsService().createController(params);
   }
 
@@ -93,10 +84,7 @@ export class RootLightsController extends Controller {
     @Request() req: ExpressRequest,
     id: number,
   ): Promise<LightsGroupResponse[] | undefined> {
-    if (
-      !req.user ||
-      (!req.user.roles.includes(SecurityGroup.ADMIN) && req.user.lightsControllerId !== id)
-    ) {
+    if (!req.user || (!req.user.roles.includes(SecurityGroup.ADMIN) && req.user.lightsControllerId !== id)) {
       this.setStatus(403);
       return undefined;
     }
@@ -127,10 +115,7 @@ export class RootLightsController extends Controller {
     @Request() req: ExpressRequest,
     id: number,
   ): Promise<LightsSwitchResponse[] | undefined> {
-    if (
-      !req.user ||
-      (!req.user.roles.includes(SecurityGroup.ADMIN) && req.user.lightsControllerId !== id)
-    ) {
+    if (!req.user || (!req.user.roles.includes(SecurityGroup.ADMIN) && req.user.lightsControllerId !== id)) {
       this.setStatus(403);
       return undefined;
     }

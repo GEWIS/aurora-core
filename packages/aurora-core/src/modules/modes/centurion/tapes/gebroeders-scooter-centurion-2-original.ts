@@ -38,9 +38,7 @@ const centurion2Original: MixTape = {
               dimTimeMs: (89.1 - 81.5) * 1000,
             }),
           ],
-          movingHeadWheelColor: [
-            StaticColor.build({ color: RgbColor.BLINDINGWHITE, dimTimeMs: (89.1 - 81.5) * 1000 }),
-          ],
+          movingHeadWheelColor: [StaticColor.build({ color: RgbColor.BLINDINGWHITE, dimTimeMs: (89.1 - 81.5) * 1000 })],
           movingHeadWheelMovement: [SearchLight.build()],
         },
       },

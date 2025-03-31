@@ -60,8 +60,7 @@ export default class NsTrainsService {
 
     const departures = (
       await axios.get(
-        'https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2/departures' +
-          '?station=EHV&maxJourneys=40',
+        'https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2/departures' + '?station=EHV&maxJourneys=40',
         config,
       )
     ).data.payload.departures as NsTrainResponse[];
@@ -76,9 +75,7 @@ export default class NsTrainsService {
       let delay = 0;
       const actualDepartTime = new Date(departure.actualDateTime);
       if (departure.plannedDateTime !== departure.actualDateTime) {
-        delay = new Date(
-          actualDepartTime.getTime() - new Date(departure.plannedDateTime).getTime(),
-        ).getMinutes();
+        delay = new Date(actualDepartTime.getTime() - new Date(departure.plannedDateTime).getTime()).getMinutes();
       }
 
       const routeStations: string[] = departure.routeStations.map((s) => s.mediumName);

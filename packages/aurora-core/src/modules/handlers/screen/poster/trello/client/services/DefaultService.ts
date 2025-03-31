@@ -251,10 +251,7 @@ export class DefaultService {
    * @returns Member Success
    * @throws ApiError
    */
-  public getActionsIdMembercreator(
-    id: TrelloID,
-    fields: MemberFields = 'all',
-  ): CancelablePromise<Member> {
+  public getActionsIdMembercreator(id: TrelloID, fields: MemberFields = 'all'): CancelablePromise<Member> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/actions/{id}/memberCreator',
@@ -275,10 +272,7 @@ export class DefaultService {
    * @returns Organization Success
    * @throws ApiError
    */
-  public getActionsIdOrganization(
-    id: TrelloID,
-    fields: OrganizationFields = 'all',
-  ): CancelablePromise<Organization> {
+  public getActionsIdOrganization(id: TrelloID, fields: OrganizationFields = 'all'): CancelablePromise<Organization> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/actions/{id}/organization',
@@ -417,10 +411,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public deleteActionsIdactionReactionsId(
-    idAction: TrelloID,
-    id: TrelloID,
-  ): CancelablePromise<any> {
+  public deleteActionsIdactionReactionsId(idAction: TrelloID, id: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/actions/{idAction}/reactions/{id}',
@@ -842,10 +833,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public getBoardsIdBoardstars(
-    boardId: string,
-    filter: string = 'mine',
-  ): CancelablePromise<Array<BoardStars>> {
+  public getBoardsIdBoardstars(boardId: string, filter: string = 'mine'): CancelablePromise<Array<BoardStars>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/boards/{boardId}/boardStars',
@@ -940,11 +928,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public getBoardsIdLabels(
-    id: TrelloID,
-    fields?: Label,
-    limit: number = 50,
-  ): CancelablePromise<any> {
+  public getBoardsIdLabels(id: TrelloID, fields?: Label, limit: number = 50): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/boards/{id}/labels',
@@ -1023,11 +1007,7 @@ export class DefaultService {
    * @returns TrelloList Success
    * @throws ApiError
    */
-  public postBoardsIdLists(
-    id: TrelloID,
-    name: string,
-    pos: string = 'top',
-  ): CancelablePromise<TrelloList> {
+  public postBoardsIdLists(id: TrelloID, name: string, pos: string = 'top'): CancelablePromise<TrelloList> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/boards/{id}/lists',
@@ -1211,10 +1191,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public putBoardsIdMyprefsEmailposition(
-    id: TrelloID,
-    value: 'bottom' | 'top',
-  ): CancelablePromise<any> {
+  public putBoardsIdMyprefsEmailposition(id: TrelloID, value: 'bottom' | 'top'): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/boards/{id}/myPrefs/emailPosition',
@@ -1295,10 +1272,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public putBoardsIdMyPrefsShowsidebaractivity(
-    id: TrelloID,
-    value: boolean,
-  ): CancelablePromise<any> {
+  public putBoardsIdMyPrefsShowsidebaractivity(id: TrelloID, value: boolean): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/boards/{id}/myPrefs/showSidebarActivity',
@@ -1318,10 +1292,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public putBoardsIdMyPrefsShowsidebarboardactions(
-    id: TrelloID,
-    value: boolean,
-  ): CancelablePromise<any> {
+  public putBoardsIdMyPrefsShowsidebarboardactions(id: TrelloID, value: boolean): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/boards/{id}/myPrefs/showSidebarBoardActions',
@@ -1341,10 +1312,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public putBoardsIdMyPrefsShowsidebarmembers(
-    id: TrelloID,
-    value: boolean,
-  ): CancelablePromise<any> {
+  public putBoardsIdMyPrefsShowsidebarmembers(id: TrelloID, value: boolean): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/boards/{id}/myPrefs/showSidebarMembers',
@@ -1394,16 +1362,7 @@ export class DefaultService {
     prefsInvitations: 'members' | 'admins' = 'members',
     prefsSelfJoin: boolean = true,
     prefsCardCovers: boolean = true,
-    prefsBackground:
-      | 'blue'
-      | 'orange'
-      | 'green'
-      | 'red'
-      | 'purple'
-      | 'pink'
-      | 'lime'
-      | 'sky'
-      | 'grey' = 'blue',
+    prefsBackground: 'blue' | 'orange' | 'green' | 'red' | 'purple' | 'pink' | 'lime' | 'sky' | 'grey' = 'blue',
     prefsCardAging: 'pirate' | 'regular' = 'regular',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
@@ -1566,10 +1525,7 @@ export class DefaultService {
    * @returns Plugin Success
    * @throws ApiError
    */
-  public getBoardIdPlugins(
-    id: TrelloID,
-    filter: 'enabled' | 'available' = 'enabled',
-  ): CancelablePromise<Plugin> {
+  public getBoardIdPlugins(id: TrelloID, filter: 'enabled' | 'available' = 'enabled'): CancelablePromise<Plugin> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/boards/{id}/plugins',
@@ -1800,17 +1756,7 @@ export class DefaultService {
         /**
          * One of: `pink, yellow, lime, blue, black, orange, red, purple, sky, green`
          */
-        color?:
-          | 'pink'
-          | 'yellow'
-          | 'lime'
-          | 'blue'
-          | 'black'
-          | 'orange'
-          | 'red'
-          | 'purple'
-          | 'sky'
-          | 'green';
+        color?: 'pink' | 'yellow' | 'lime' | 'blue' | 'black' | 'orange' | 'red' | 'purple' | 'sky' | 'green';
         /**
          * Determines whether the text on the cover should be dark or light. Setting it to `light` will make the text on the card cover dark. And vice versa, setting it to dark will make the text on the card cover light
          */
@@ -2224,10 +2170,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public deleteCardsIdCheckitemIdcheckitem(
-    id: TrelloID,
-    idCheckItem: TrelloID,
-  ): CancelablePromise<any> {
+  public deleteCardsIdCheckitemIdcheckitem(id: TrelloID, idCheckItem: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/cards/{id}/checkItem/{idCheckItem}',
@@ -2354,11 +2297,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public getCardsIdStickers(
-    id: TrelloID,
-    id: TrelloID,
-    fields: string = 'all',
-  ): CancelablePromise<any> {
+  public getCardsIdStickers(id: TrelloID, id: TrelloID, fields: string = 'all'): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/cards/{id}/stickers',
@@ -2499,11 +2438,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public putCardsIdActionsIdactionComments(
-    id: TrelloID,
-    idAction: TrelloID,
-    text: string,
-  ): CancelablePromise<any> {
+  public putCardsIdActionsIdactionComments(id: TrelloID, idAction: TrelloID, text: string): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/cards/{id}/actions/{idAction}/comments',
@@ -2784,10 +2719,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public deleteCardsIdMembersvotedIdmember(
-    id: TrelloID,
-    idMember: TrelloID,
-  ): CancelablePromise<any> {
+  public deleteCardsIdMembersvotedIdmember(id: TrelloID, idMember: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/cards/{id}/membersVoted/{idMember}',
@@ -2836,10 +2768,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public deleteCardsIdChecklistsIdchecklist(
-    id: TrelloID,
-    idChecklist: TrelloID,
-  ): CancelablePromise<any> {
+  public deleteCardsIdChecklistsIdchecklist(id: TrelloID, idChecklist: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/cards/{id}/checklists/{idChecklist}',
@@ -2927,11 +2856,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public putCheclistsId(
-    id: TrelloID,
-    name?: string,
-    pos?: posStringOrNumber,
-  ): CancelablePromise<any> {
+  public putCheclistsId(id: TrelloID, name?: string, pos?: posStringOrNumber): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/checklists/{id}',
@@ -3013,10 +2938,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public getChecklistsIdBoard(
-    id: TrelloID,
-    fields: 'all' | 'name' = 'all',
-  ): CancelablePromise<any> {
+  public getChecklistsIdBoard(id: TrelloID, fields: 'all' | 'name' = 'all'): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/checklists/{id}/board',
@@ -3161,10 +3083,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public deleteChecklistsIdCheckitemsIdcheckitem(
-    id: TrelloID,
-    idCheckItem: TrelloID,
-  ): CancelablePromise<any> {
+  public deleteChecklistsIdCheckitemsIdcheckitem(id: TrelloID, idCheckItem: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/checklists/{id}/checkItems/{idCheckItem}',
@@ -3968,10 +3887,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public enterprisesIdOrganizationsIdmember(
-    id: TrelloID,
-    idMember: TrelloID,
-  ): CancelablePromise<any> {
+  public enterprisesIdOrganizationsIdmember(id: TrelloID, idMember: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/enterprises/{id}/admins/{idMember}',
@@ -3990,10 +3906,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public deleteEnterprisesIdOrganizationsIdorg(
-    id: TrelloID,
-    idOrg: TrelloID,
-  ): CancelablePromise<any> {
+  public deleteEnterprisesIdOrganizationsIdorg(id: TrelloID, idOrg: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/enterprises/{id}/organizations/{idOrg}',
@@ -4103,11 +4016,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public putLabelsIdField(
-    id: string,
-    field: 'color' | 'name',
-    value: TrelloID,
-  ): CancelablePromise<any> {
+  public putLabelsIdField(id: string, field: 'color' | 'name', value: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/labels/{id}/{field}',
@@ -4150,10 +4059,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public getListsId(
-    id: string,
-    fields: string = 'name,closed,idBoard,pos',
-  ): CancelablePromise<any> {
+  public getListsId(id: string, fields: string = 'name,closed,idBoard,pos'): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/lists/{id}',
@@ -4256,11 +4162,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public postListsIdMoveallcards(
-    id: TrelloID,
-    idBoard: TrelloID,
-    idList: TrelloID,
-  ): CancelablePromise<any> {
+  public postListsIdMoveallcards(id: TrelloID, idBoard: TrelloID, idList: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/lists/{id}/moveAllCards',
@@ -4434,15 +4336,7 @@ export class DefaultService {
     actions?: string,
     boards?: string,
     boardBackgrounds: 'all' | 'custom' | 'default' | 'none' | 'premium' = 'none',
-    boardsInvited?:
-      | 'closed'
-      | 'members'
-      | 'open'
-      | 'organization'
-      | 'pinned'
-      | 'public'
-      | 'starred'
-      | 'unpinned',
+    boardsInvited?: 'closed' | 'members' | 'open' | 'organization' | 'pinned' | 'public' | 'starred' | 'unpinned',
     boardsInvitedFields: BoardFields = 'name,closed,idOrganization,pinned',
     boardStars: boolean = false,
     cards: string = 'none',
@@ -4608,10 +4502,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public postMembersIdBoardbackgrounds1(
-    id: TrelloID,
-    file: Blob,
-  ): CancelablePromise<Array<BoardBackground>> {
+  public postMembersIdBoardbackgrounds1(id: TrelloID, file: Blob): CancelablePromise<Array<BoardBackground>> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/members/{id}/boardBackgrounds',
@@ -4689,10 +4580,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public deleteMembersIdBoardbackgroundsIdbackground(
-    id: TrelloID,
-    idBackground: TrelloID,
-  ): CancelablePromise<any> {
+  public deleteMembersIdBoardbackgroundsIdbackground(id: TrelloID, idBackground: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/members/{id}/boardBackgrounds/{idBackground}',
@@ -4755,10 +4643,7 @@ export class DefaultService {
    * @returns BoardStars Success
    * @throws ApiError
    */
-  public getMembersIdBoardstarsIdstar(
-    id: TrelloID,
-    idStar: TrelloID,
-  ): CancelablePromise<BoardStars> {
+  public getMembersIdBoardstarsIdstar(id: TrelloID, idStar: TrelloID): CancelablePromise<BoardStars> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/boardStars/{idStar}',
@@ -4778,11 +4663,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public putMembersIdBoardstarsIdstar(
-    id: TrelloID,
-    idStar: TrelloID,
-    pos?: posStringOrNumber,
-  ): CancelablePromise<any> {
+  public putMembersIdBoardstarsIdstar(id: TrelloID, idStar: TrelloID, pos?: posStringOrNumber): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/members/{id}/boardStars/{idStar}',
@@ -4859,10 +4740,7 @@ export class DefaultService {
    * @returns Board Success
    * @throws ApiError
    */
-  public getMembersIdBoardsinvited(
-    id: TrelloID,
-    fields: BoardFields = 'all',
-  ): CancelablePromise<Array<Board>> {
+  public getMembersIdBoardsinvited(id: TrelloID, fields: BoardFields = 'all'): CancelablePromise<Array<Board>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/boardsInvited',
@@ -4906,9 +4784,7 @@ export class DefaultService {
    * @returns BoardBackground Success
    * @throws ApiError
    */
-  public getMembersIdCustomboardbackgrounds(
-    id: TrelloID,
-  ): CancelablePromise<Array<BoardBackground>> {
+  public getMembersIdCustomboardbackgrounds(id: TrelloID): CancelablePromise<Array<BoardBackground>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/customBoardBackgrounds',
@@ -4926,10 +4802,7 @@ export class DefaultService {
    * @returns BoardBackground Success
    * @throws ApiError
    */
-  public membersidcustomboardbackgrounds1(
-    id: TrelloID,
-    file: Blob,
-  ): CancelablePromise<BoardBackground> {
+  public membersidcustomboardbackgrounds1(id: TrelloID, file: Blob): CancelablePromise<BoardBackground> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/members/{id}/customBoardBackgrounds',
@@ -5042,11 +4915,7 @@ export class DefaultService {
    * @returns CustomEmoji Success
    * @throws ApiError
    */
-  public postMembersIdCustomemoji(
-    id: TrelloID,
-    file: Blob,
-    name: string,
-  ): CancelablePromise<CustomEmoji> {
+  public postMembersIdCustomemoji(id: TrelloID, file: Blob, name: string): CancelablePromise<CustomEmoji> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/members/{id}/customEmoji',
@@ -5160,10 +5029,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public deleteMembersIdCustomstickersIdsticker(
-    id: TrelloID,
-    idSticker: TrelloID,
-  ): CancelablePromise<any> {
+  public deleteMembersIdCustomstickersIdsticker(id: TrelloID, idSticker: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/members/{id}/customStickers/{idSticker}',
@@ -5337,10 +5203,7 @@ export class DefaultService {
    * @returns SavedSearch Success
    * @throws ApiError
    */
-  public getMembersIdSavedsearchesIdsearch(
-    id: string,
-    idSearch: string,
-  ): CancelablePromise<SavedSearch> {
+  public getMembersIdSavedsearchesIdsearch(id: string, idSearch: string): CancelablePromise<SavedSearch> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/savedSearches/{idSearch}',
@@ -5392,10 +5255,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public deleteMembersIdSavedsearchesIdsearch(
-    id: string,
-    idSearch: string,
-  ): CancelablePromise<any> {
+  public deleteMembersIdSavedsearchesIdsearch(id: string, idSearch: string): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/members/{id}/savedSearches/{idSearch}',
@@ -5414,10 +5274,7 @@ export class DefaultService {
    * @returns Token Success
    * @throws ApiError
    */
-  public getMembersIdTokens(
-    id: TrelloID,
-    webhooks: boolean = false,
-  ): CancelablePromise<Array<Token>> {
+  public getMembersIdTokens(id: TrelloID, webhooks: boolean = false): CancelablePromise<Array<Token>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/members/{id}/tokens',
@@ -5459,10 +5316,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public postMembersIdOnetimemessagesdismissed(
-    id: TrelloID,
-    value: TrelloID,
-  ): CancelablePromise<any> {
+  public postMembersIdOnetimemessagesdismissed(id: TrelloID, value: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/members/{id}/oneTimeMessagesDismissed',
@@ -5692,10 +5546,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public getNotificationsIdField(
-    id: TrelloID,
-    field: NotificationFields,
-  ): CancelablePromise<Notification> {
+  public getNotificationsIdField(id: TrelloID, field: NotificationFields): CancelablePromise<Notification> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/notifications/{id}/{field}',
@@ -5714,10 +5565,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public postNotificationsAllRead(
-    read: boolean = true,
-    ids?: Array<TrelloID>,
-  ): CancelablePromise<Notification> {
+  public postNotificationsAllRead(read: boolean = true, ids?: Array<TrelloID>): CancelablePromise<Notification> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/notifications/all/read',
@@ -5757,10 +5605,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public getNotificationsIdBoard(
-    id: TrelloID,
-    fields: BoardFields = 'all',
-  ): CancelablePromise<Board> {
+  public getNotificationsIdBoard(id: TrelloID, fields: BoardFields = 'all'): CancelablePromise<Board> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/notifications/{id}/board',
@@ -5802,10 +5647,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public getNotificationsIdList(
-    id: TrelloID,
-    fields: ListFields = 'all',
-  ): CancelablePromise<TrelloList> {
+  public getNotificationsIdList(id: TrelloID, fields: ListFields = 'all'): CancelablePromise<TrelloList> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/notifications/{id}/list',
@@ -5826,10 +5668,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public notificationsidmember(
-    id: TrelloID,
-    fields: MemberFields = 'all',
-  ): CancelablePromise<Member> {
+  public notificationsidmember(id: TrelloID, fields: MemberFields = 'all'): CancelablePromise<Member> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/notifications/{id}/member',
@@ -5850,10 +5689,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public getNotificationsIdMembercreator(
-    id: TrelloID,
-    fields: MemberFields = 'all',
-  ): CancelablePromise<Member> {
+  public getNotificationsIdMembercreator(id: TrelloID, fields: MemberFields = 'all'): CancelablePromise<Member> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/notifications/{id}/memberCreator',
@@ -6015,10 +5851,7 @@ export class DefaultService {
    * @returns Organization Success
    * @throws ApiError
    */
-  public getOrganizationsIdField(
-    id: TrelloID,
-    field: OrganizationFields,
-  ): CancelablePromise<Organization> {
+  public getOrganizationsIdField(id: TrelloID, field: OrganizationFields): CancelablePromise<Organization> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/organizations/{id}/{field}',
@@ -6081,10 +5914,7 @@ export class DefaultService {
    * @returns Export Success
    * @throws ApiError
    */
-  public postOrganizationsIdExports(
-    id: TrelloID,
-    attachments: boolean = true,
-  ): CancelablePromise<Export> {
+  public postOrganizationsIdExports(id: TrelloID, attachments: boolean = true): CancelablePromise<Export> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/organizations/{id}/exports',
@@ -6300,10 +6130,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public deleteOrganizationsIdMembers(
-    id: TrelloID | string,
-    idMember: TrelloID,
-  ): CancelablePromise<any> {
+  public deleteOrganizationsIdMembers(id: TrelloID | string, idMember: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/organizations/{id}/members/{idMember}',
@@ -6387,10 +6214,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public organizationsIdMembersIdmemberAll(
-    id: TrelloID,
-    idMember: TrelloID,
-  ): CancelablePromise<any> {
+  public organizationsIdMembersIdmemberAll(id: TrelloID, idMember: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/organizations/{id}/members/{idMember}/all',
@@ -6462,10 +6286,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public getOrganizationsIdNewbillableguestsIdboard(
-    id: TrelloID,
-    idBoard: TrelloID,
-  ): CancelablePromise<any> {
+  public getOrganizationsIdNewbillableguestsIdboard(id: TrelloID, idBoard: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/organizations/{id}/newBillableGuests/{idBoard}',
@@ -6754,10 +6575,7 @@ export class DefaultService {
    * @returns Member Success
    * @throws ApiError
    */
-  public getTokensTokenMember(
-    token: string,
-    fields: MemberFields = 'all',
-  ): CancelablePromise<Member> {
+  public getTokensTokenMember(token: string, fields: MemberFields = 'all'): CancelablePromise<Member> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/tokens/{token}/member',
@@ -6825,10 +6643,7 @@ export class DefaultService {
    * @returns Webhook Success
    * @throws ApiError
    */
-  public getTokensTokenWebhooksIdwebhook(
-    token: string,
-    idWebhook: TrelloID,
-  ): CancelablePromise<Webhook> {
+  public getTokensTokenWebhooksIdwebhook(token: string, idWebhook: TrelloID): CancelablePromise<Webhook> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/tokens/{token}/webhooks/{idWebhook}',
@@ -6847,10 +6662,7 @@ export class DefaultService {
    * @returns any Success
    * @throws ApiError
    */
-  public deleteTokensTokenWebhooksIdwebhook(
-    token: string,
-    idWebhook: TrelloID,
-  ): CancelablePromise<any> {
+  public deleteTokensTokenWebhooksIdwebhook(token: string, idWebhook: TrelloID): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/tokens/{token}/webhooks/{idWebhook}',
@@ -7016,13 +6828,7 @@ export class DefaultService {
    */
   public webhooksidfield(
     id: TrelloID,
-    field:
-      | 'active'
-      | 'callbackURL'
-      | 'description'
-      | 'idModel'
-      | 'consecutiveFailures'
-      | 'firstConsecutiveFailDate',
+    field: 'active' | 'callbackURL' | 'description' | 'idModel' | 'consecutiveFailures' | 'firstConsecutiveFailDate',
   ): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'GET',

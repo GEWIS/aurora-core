@@ -7,9 +7,7 @@ import EffectProgressionMapStrategy from './progression-strategies/mappers/effec
 import EffectProgressionMapFactory from './progression-strategies/mappers/effect-progression-map-factory';
 import { RgbColor } from '../color-definitions';
 
-export type LightsEffectBuilder<P = {}, T extends LightsEffect<P> = LightsEffect<P>> = (
-  lightsGroup: LightsGroup,
-) => T;
+export type LightsEffectBuilder<P = {}, T extends LightsEffect<P> = LightsEffect<P>> = (lightsGroup: LightsGroup) => T;
 
 export interface BaseLightsEffectProps {
   /**
@@ -49,9 +47,7 @@ export default abstract class LightsEffect<P = {}> {
   protected getEffectNrFixtures(): number {
     if (this.progressionMapperStrategy) return this.progressionMapperStrategy.getNrFixtures();
     return (
-      this.lightsGroup.pars.length +
-      this.lightsGroup.movingHeadWheels.length +
-      this.lightsGroup.movingHeadRgbs.length
+      this.lightsGroup.pars.length + this.lightsGroup.movingHeadWheels.length + this.lightsGroup.movingHeadRgbs.length
     );
   }
 

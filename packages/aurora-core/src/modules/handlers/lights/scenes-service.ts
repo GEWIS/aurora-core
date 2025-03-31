@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { LightsScene, LightsSceneEffect } from '../../lights/entities/scenes';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import { BaseLightsGroupResponse } from '../../root/root-lights-service';
 import { LightsEffectsColorCreateParams } from '../../lights/effects/color';
 import { LightsEffectsMovementCreateParams } from '../../lights/effects/movement';
@@ -86,30 +86,32 @@ export default class ScenesService {
   }
 
   public async createScene(params: CreateSceneParams): Promise<LightsScene> {
-    const lightsScene = await DataSourceSingleton.getInstance().get().transaction(async (manager) => {
-      const sceneRepo = manager.getRepository(LightsScene);
-      const sceneEffectRepo = manager.getRepository(LightsSceneEffect);
-      const scene: LightsScene = await sceneRepo.save({
-        name: params.name,
-        favorite: params.favorite,
+    const lightsScene = await DataSourceSingleton.getInstance()
+      .get()
+      .transaction(async (manager) => {
+        const sceneRepo = manager.getRepository(LightsScene);
+        const sceneEffectRepo = manager.getRepository(LightsSceneEffect);
+        const scene: LightsScene = await sceneRepo.save({
+          name: params.name,
+          favorite: params.favorite,
+        });
+
+        await Promise.all(
+          params.effects
+            .map(({ type: effectName, lightsGroups, props: effectProps }) =>
+              lightsGroups.map((groupId) =>
+                sceneEffectRepo.save({
+                  effectName,
+                  effectProps: JSON.stringify(effectProps),
+                  groupId,
+                }),
+              ),
+            )
+            .flat(),
+        );
+
+        return scene;
       });
-
-      await Promise.all(
-        params.effects
-          .map(({ type: effectName, lightsGroups, props: effectProps }) =>
-            lightsGroups.map((groupId) =>
-              sceneEffectRepo.save({
-                effectName,
-                effectProps: JSON.stringify(effectProps),
-                groupId,
-              }),
-            ),
-          )
-          .flat(),
-      );
-
-      return scene;
-    });
 
     const dbScene = await this.getSingleScene(lightsScene.id);
     if (!dbScene) throw new Error('Newly created scene does not exist in the database');

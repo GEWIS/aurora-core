@@ -39,18 +39,13 @@ export default class HandlerFactory {
    * @param creator
    * @private
    */
-  private createHandler<T extends BaseHandler<any>>(
-    creator: () => T,
-  ): T | null {
+  private createHandler<T extends BaseHandler<any>>(creator: () => T): T | null {
     return creator();
   }
 
   public createAudioHandlers(): BaseAudioHandler[] {
     const audioHandlers: (BaseAudioHandler | null)[] = [
-      this.createHandler(
-
-        () => new SimpleAudioHandler(this.io.of(SocketioNamespaces.AUDIO), this.musicEmitter),
-      ),
+      this.createHandler(() => new SimpleAudioHandler(this.io.of(SocketioNamespaces.AUDIO), this.musicEmitter)),
     ];
     return audioHandlers.filter((h) => h != null);
   }
@@ -71,28 +66,16 @@ export default class HandlerFactory {
   public createScreenHandlers(): BaseScreenHandler[] {
     const socket = this.io.of(SocketioNamespaces.SCREEN);
     const screenHandlers: (BaseScreenHandler | null)[] = [
-      this.createHandler(
-
-        () => new CurrentlyPlayingTrackHandler(socket),
-      ),
-      this.createHandler( () => new CenturionScreenHandler(socket)),
-      this.createHandler( () => new GewisPosterScreenHandler(socket)),
-      this.createHandler( () => new HubblePosterScreenHandler(socket)),
-      this.createHandler(
-
-        () => new HubbleClosedPosterScreenHandler(socket),
-      ),
-      this.createHandler(
-
-        () => new HubbleLastcallPosterScreenHandler(socket),
-      ),
-      this.createHandler( () => new StageEffectsHandler(socket)),
-      this.createHandler( () => new StaticPosterHandler(socket)),
-      this.createHandler( () => new TimeTrailRaceScreenHandler(socket)),
-      this.createHandler(
-
-        () => new RoomResponsibleLegacyHandler(socket),
-      ),
+      this.createHandler(() => new CurrentlyPlayingTrackHandler(socket)),
+      this.createHandler(() => new CenturionScreenHandler(socket)),
+      this.createHandler(() => new GewisPosterScreenHandler(socket)),
+      this.createHandler(() => new HubblePosterScreenHandler(socket)),
+      this.createHandler(() => new HubbleClosedPosterScreenHandler(socket)),
+      this.createHandler(() => new HubbleLastcallPosterScreenHandler(socket)),
+      this.createHandler(() => new StageEffectsHandler(socket)),
+      this.createHandler(() => new StaticPosterHandler(socket)),
+      this.createHandler(() => new TimeTrailRaceScreenHandler(socket)),
+      this.createHandler(() => new RoomResponsibleLegacyHandler(socket)),
     ];
     return screenHandlers.filter((h) => h != null);
   }

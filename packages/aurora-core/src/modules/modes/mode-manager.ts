@@ -25,11 +25,7 @@ export default class ModeManager {
     this.initialized = true;
   }
 
-  public enableMode(
-    modeClass: typeof BaseMode<any, any, any>,
-    mode: BaseMode<any, any, any>,
-    name: string,
-  ) {
+  public enableMode(modeClass: typeof BaseMode<any, any, any>, mode: BaseMode<any, any, any>, name: string) {
     // If an instance of this mode already exist, destroy it before creating a new one
     if (this.modes.has(modeClass)) this.disableMode(modeClass);
 

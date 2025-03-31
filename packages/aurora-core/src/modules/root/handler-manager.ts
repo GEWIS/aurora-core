@@ -5,7 +5,7 @@ import BaseScreenHandler from '../handlers/base-screen-handler';
 import { SubscribeEntity } from '@gewis/aurora-core-util';
 import { BaseHandler } from '@gewis/aurora-core-util';
 import SimpleAudioHandler from '../handlers/audio/simple-audio-handler';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import { Audio, Screen } from './entities';
 import { LightsGroup } from '../lights/entities';
 import { RandomEffectsHandler } from '../handlers/lights';
@@ -41,10 +41,7 @@ export default class HandlerManager {
 
   private _handlers: Map<typeof SubscribeEntity, BaseHandler<SubscribeEntity>[]> = new Map();
 
-  protected restoreHandlers<T extends SubscribeEntity, U extends BaseHandler<T>>(
-    entity: T,
-    handlers: U[],
-  ) {
+  protected restoreHandlers<T extends SubscribeEntity, U extends BaseHandler<T>>(entity: T, handlers: U[]) {
     handlers.forEach((handler) => {
       if (handler.constructor.name === entity.currentHandler) {
         handler.registerEntity(entity);
@@ -65,8 +62,7 @@ export default class HandlerManager {
         const entities = await DataSourceSingleton.getInstance().get().manager.find(entity);
         entities.forEach((instance) => {
           const handlers = this._handlers.get(instance.constructor as typeof SubscribeEntity);
-          if (handlers === undefined)
-            throw new Error(`Unknown entity: ${instance.constructor.name}`);
+          if (handlers === undefined) throw new Error(`Unknown entity: ${instance.constructor.name}`);
           this.restoreHandlers(instance, handlers);
         });
       }),
@@ -153,9 +149,7 @@ export default class HandlerManager {
       entity.currentHandler = '';
       entity.save().catch((e) => logger.error(e));
     }
-    this.emitterStore.backofficeSyncEmitter.emit(
-      `handler_${entity.constructor.name.toLowerCase()}_update`,
-    );
+    this.emitterStore.backofficeSyncEmitter.emit(`handler_${entity.constructor.name.toLowerCase()}_update`);
 
     return true;
   }

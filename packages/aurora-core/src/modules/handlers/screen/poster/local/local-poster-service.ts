@@ -2,7 +2,7 @@ import { FileStorage } from '../../../../files/storage/file-storage';
 import { DiskStorage } from '../../../../files/storage';
 import LocalPoster from './local-poster';
 import { Repository } from 'typeorm';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import { HttpApiException } from '@gewis/aurora-core-util';
 import { HttpStatusCode } from 'axios';
 import { BaseFile, File } from '../../../../files/entities';

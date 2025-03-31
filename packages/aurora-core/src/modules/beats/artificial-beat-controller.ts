@@ -1,10 +1,7 @@
 import { Controller } from '@tsoa/runtime';
 import { Body, Delete, Get, Post, Request, Route, Security, Tags } from 'tsoa';
 import { Request as ExpressRequest } from 'express';
-import {
-  ArtificialBeatGenerator,
-  ArtificialBeatGeneratorParams,
-} from './artificial-beat-generator';
+import { ArtificialBeatGenerator, ArtificialBeatGeneratorParams } from './artificial-beat-generator';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import logger from '@gewis/aurora-core-logger';
 import { securityGroups } from '@gewis/aurora-core-util';
@@ -24,10 +21,7 @@ export class ArtificialBeatController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.beats.base)
   @Post('')
-  public startArtificialBeatGenerator(
-    @Request() req: ExpressRequest,
-    @Body() params: ArtificialBeatGeneratorParams,
-  ) {
+  public startArtificialBeatGenerator(@Request() req: ExpressRequest, @Body() params: ArtificialBeatGeneratorParams) {
     logger.audit(req.user, `Set Artificial Beat Generator BPM to "${params.bpm}".`);
 
     const generator = ArtificialBeatGenerator.getInstance();

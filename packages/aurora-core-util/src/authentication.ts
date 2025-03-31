@@ -3,7 +3,6 @@ import { HttpApiException, HttpStatusCode } from '@gewis/aurora-core-util';
 import { SecurityGroup } from '@gewis/aurora-core-util';
 import passport from 'passport';
 
-
 /**
  * Check if the given object is an AuthUser
  * @param obj - The object to check
@@ -17,7 +16,6 @@ export function isAuthUser(obj: unknown): obj is AuthUser {
   );
 }
 
-
 export interface AuthUser {
   id: string;
   name: string;
@@ -28,7 +26,6 @@ export interface AuthUser {
   screenId?: number;
   integrationUserId?: number;
 }
-
 
 /**
  * Express middleware to authenticate the user

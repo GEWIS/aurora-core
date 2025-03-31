@@ -18,8 +18,8 @@ export class SubscribeEntity extends BaseEntity {
    * Mapping from namespace to ID, as a websocket has a different ID
    * for each namespace its in.
    */
-    // A copy should be kept in the database, because entities are only
-    // in memory when they are registered to a handler.
+  // A copy should be kept in the database, because entities are only
+  // in memory when they are registered to a handler.
   @Column({
     nullable: true,
     type: 'varchar',

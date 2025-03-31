@@ -1,9 +1,4 @@
-import {
-  BalanceResponse,
-  Configuration,
-  DineroObjectResponse,
-  UserResponse,
-} from '@sudosos/sudosos-client';
+import { BalanceResponse, Configuration, DineroObjectResponse, UserResponse } from '@sudosos/sudosos-client';
 import { SudoSOSClient } from './sudosos-api-service';
 import { SudoSOSSettings, SudoSOSSettingsName } from './sudosos-settings';
 import { ServerSettingsStore } from '@gewis/aurora-core-server-settings';
@@ -36,9 +31,7 @@ export default class SudoSOSService {
 
   constructor() {
     if (!SudoSOSService.apiAvailable())
-      throw new Error(
-        'SudoSOS Service cannot be initialized, because not all environment variables are set.',
-      );
+      throw new Error('SudoSOS Service cannot be initialized, because not all environment variables are set.');
     this.url = process.env.SUDOSOS_URL ?? '';
   }
 
@@ -70,8 +63,7 @@ export default class SudoSOSService {
     // eslint-disable-next-line no-constant-condition
     while (true) {
       // eslint-disable-next-line no-await-in-loop,@typescript-eslint/naming-convention
-      const { records, _pagination } = (await this.client.user.getAllUsers(10000, users.length))
-        .data;
+      const { records, _pagination } = (await this.client.user.getAllUsers(10000, users.length)).data;
       if (records.length === 0) {
         if (_pagination.count !== users.length) {
           throw new Error('Missing some users!!!');
@@ -113,12 +105,12 @@ export default class SudoSOSService {
       userMap.set(user.id, user);
     });
 
-    const bacGroupId = ServerSettingsStore.getInstance().getSetting<SudoSOSSettings, 'SudoSOS.BACGroupID'>(SudoSOSSettingsName, 'SudoSOS.BACGroupID');
+    const bacGroupId = ServerSettingsStore.getInstance().getSetting<SudoSOSSettings, 'SudoSOS.BACGroupID'>(
+      SudoSOSSettingsName,
+      'SudoSOS.BACGroupID',
+    );
 
-    const bac =
-      bacGroupId > 0
-        ? (await this.client.user.getOrganMembers(bacGroupId)).data.records
-        : undefined;
+    const bac = bacGroupId > 0 ? (await this.client.user.getOrganMembers(bacGroupId)).data.records : undefined;
 
     return balances
       .map((b): SudoSOSDebtorResponse | null => {
@@ -149,8 +141,8 @@ export default class SudoSOSService {
   public async getPriceList() {
     const posID = ServerSettingsStore.getInstance().getSetting<SudoSOSSettings, 'SudoSOS.BorrelmodePOSID'>(
       SudoSOSSettingsName,
-      'SudoSOS.BorrelmodePOSID'
-    )
+      'SudoSOS.BorrelmodePOSID',
+    );
     const response = await this.client.pos.getAllPointOfSaleProducts(posID);
     return response.data.filter((p) => p.priceList);
   }

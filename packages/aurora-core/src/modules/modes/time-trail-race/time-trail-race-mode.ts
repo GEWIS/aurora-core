@@ -94,10 +94,7 @@ export default class TimeTrailRaceMode extends BaseMode<
    * @param params
    */
   public registerPlayer(params: RegisterPlayerParams) {
-    if (
-      this._state !== TimeTrailRaceState.INITIALIZED &&
-      this._state !== TimeTrailRaceState.SCOREBOARD
-    ) {
+    if (this._state !== TimeTrailRaceState.INITIALIZED && this._state !== TimeTrailRaceState.SCOREBOARD) {
       throw new InvalidStateError('Time Trail Race not in INITIALIZED or SCOREBOARD state');
     }
 

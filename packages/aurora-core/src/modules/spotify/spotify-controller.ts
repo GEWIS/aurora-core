@@ -81,10 +81,7 @@ export class SpotifyController extends Controller {
     await SpotifyApiHandler.getInstance().bindSpotifyUser(code);
     const profile = await SpotifyApiHandler.getInstance().getSpotifyUserProfile();
     if (!profile) {
-      return profileNotFoundResponse(
-        HttpStatusCode.InternalServerError,
-        `Could not find Spotify user profile.`,
-      );
+      return profileNotFoundResponse(HttpStatusCode.InternalServerError, `Could not find Spotify user profile.`);
     }
 
     return profile;
@@ -150,10 +147,7 @@ export class SpotifyController extends Controller {
   ): Promise<void> {
     const user = await SpotifyUser.findOne({ where: { id } });
     if (!user) {
-      return notFoundResponse(
-        HttpStatusCode.NotFound,
-        `Could not find SpotifyUser with id "${id}".`,
-      );
+      return notFoundResponse(HttpStatusCode.NotFound, `Could not find SpotifyUser with id "${id}".`);
     }
 
     const api = SpotifyApiHandler.getInstance();

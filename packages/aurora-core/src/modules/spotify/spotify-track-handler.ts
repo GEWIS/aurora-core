@@ -53,8 +53,7 @@ export default class SpotifyTrackHandler {
    * Try to pause Spotify playback
    */
   public pausePlayback() {
-    if (!this.api.client || !this.playState || !this.playState.device || !this.playState.device.id)
-      return;
+    if (!this.api.client || !this.playState || !this.playState.device || !this.playState.device.id) return;
 
     try {
       this.api.client?.player.pausePlayback(this.playState.device.id);
@@ -67,8 +66,7 @@ export default class SpotifyTrackHandler {
    * Try to resume Spotify playback on the same device as used before
    */
   public resumePlayback() {
-    if (!this.api.client || !this.playState || !this.playState.device || !this.playState.device.id)
-      return;
+    if (!this.api.client || !this.playState || !this.playState.device || !this.playState.device.id) return;
 
     try {
       this.api.client?.player.startResumePlayback(this.playState.device.id);
@@ -84,10 +82,7 @@ export default class SpotifyTrackHandler {
       this.syncLoopTimer = undefined;
     }
 
-    this.syncLoopTimer = setTimeout(
-      this.syncLoop.bind(this),
-      state.item.duration_ms - state.progress_ms + 10,
-    );
+    this.syncLoopTimer = setTimeout(this.syncLoop.bind(this), state.item.duration_ms - state.progress_ms + 10);
   }
 
   /**
@@ -112,13 +107,9 @@ export default class SpotifyTrackHandler {
         this.setNextTrackEvent(state);
 
         const item = state.item as Track;
-        this.musicEmitter.emitSpotify('change_track', [
-          this.asTrackChangeEvent(item, state),
-        ] as TrackChangeEvent[]);
+        this.musicEmitter.emitSpotify('change_track', [this.asTrackChangeEvent(item, state)] as TrackChangeEvent[]);
 
-        logger.info(
-          `Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name} (${item.uri})`,
-        );
+        logger.info(`Now playing: ${item.artists.map((a) => a.name).join(', ')} - ${item.name} (${item.uri})`);
       }
 
       if ((!state || !state.is_playing) && this.playState && this.playState.is_playing) {

@@ -1,4 +1,4 @@
-export const SudoSOSSettingsName= 'SUDOSOS'
+export const SudoSOSSettingsName = 'SUDOSOS';
 
 export interface SudoSOSSettings {
   SudoSOS: boolean;

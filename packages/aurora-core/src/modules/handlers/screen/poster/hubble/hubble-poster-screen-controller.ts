@@ -15,9 +15,7 @@ export class HubblePosterScreenController extends BasePosterScreenController {
     super();
     this.screenHandler = HandlerManager.getInstance()
       .getHandlers(Screen)
-      .filter(
-        (h) => h.constructor.name === HubblePosterScreenHandler.name,
-      )[0] as BasePosterScreenHandler;
+      .filter((h) => h.constructor.name === HubblePosterScreenHandler.name)[0] as BasePosterScreenHandler;
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.base)

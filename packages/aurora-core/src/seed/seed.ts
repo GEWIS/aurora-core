@@ -20,7 +20,7 @@ import { ColorEffects } from '../modules/lights/effects/color/color-effects';
 import { MovementEffects } from '../modules/lights/effects/movement/movement-effetcs';
 import { TimedEvent } from '../modules/timed-events/entities';
 import AuthService from '../modules/auth/auth-service';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 
 export default async function seedDatabase() {
   const timedEventsRepo = DataSourceSingleton.getInstance().get().getRepository(TimedEvent);
@@ -291,9 +291,7 @@ export default async function seedDatabase() {
     goboRepo.save({ id: 8, name: 'Swoosh', value: 61, movingHead: eurolite_LED_TMH_S30 }),
     goboRepo.save({ id: 9, name: 'HalvePizza', value: 71, movingHead: eurolite_LED_TMH_S30 }),
   ]);
-  await Promise.all([
-    goboRepo.save({ id: 10, name: 'Open', value: 0, movingHead: showtec_Kanjo_Spot10 }),
-  ]);
+  await Promise.all([goboRepo.save({ id: 10, name: 'Open', value: 0, movingHead: showtec_Kanjo_Spot10 })]);
   const goboRotateRepo = DataSourceSingleton.getInstance().get().getRepository(LightsWheelRotateChannelValue);
   await Promise.all([
     goboRotateRepo.save({ id: 1, name: 'None', value: 0, movingHead: eurolite_LED_TMH_S30 }),
@@ -357,7 +355,11 @@ export default async function seedDatabase() {
 
   return Promise.all(
     [gewisRoom, gewisBar, gewisLounge, gewisMHRoom, royMHs].map(
-      (g) => DataSourceSingleton.getInstance().get().getRepository(LightsGroup).findOne({ where: { id: g!.id } })!,
+      (g) =>
+        DataSourceSingleton.getInstance()
+          .get()
+          .getRepository(LightsGroup)
+          .findOne({ where: { id: g!.id } })!,
     ),
   );
 }
@@ -582,36 +584,16 @@ export async function seedOpeningSequence(
   await registerDim(14000, 27500, 250);
 
   // Keep SearchLight animation on till the moving-head only blackout.
-  await addStep(
-    { type: MovementEffects.SearchLight, props: { radiusFactor: 1.5 } },
-    28000,
-    189000,
-    [movingHeadsGEWIS],
-  );
+  await addStep({ type: MovementEffects.SearchLight, props: { radiusFactor: 1.5 } }, 28000, 189000, [movingHeadsGEWIS]);
 
   // Refrein 1
   await addStep(movingHeadsWhite, 28000, 32000, [movingHeadsGEWIS]);
   await addStep(allOfTheLights, 27500, 1500, [room, bar]);
-  await addStep(
-    { type: 'Wave', props: { colors: [RgbColor.ROSERED] } } as WaveCreateParams,
-    29000,
-    4000,
-    spots,
-  );
+  await addStep({ type: 'Wave', props: { colors: [RgbColor.ROSERED] } } as WaveCreateParams, 29000, 4000, spots);
   await addStep(allOfTheLights, 33000, 2000, [room, bar]);
-  await addStep(
-    { type: 'Wave', props: { colors: [RgbColor.ROSERED] } } as WaveCreateParams,
-    35000,
-    5000,
-    spots,
-  );
+  await addStep({ type: 'Wave', props: { colors: [RgbColor.ROSERED] } } as WaveCreateParams, 35000, 5000, spots);
   await addStep(allOfTheLights, 40000, 1500, [room, bar]);
-  await addStep(
-    { type: 'Wave', props: { colors: [RgbColor.ROSERED] } } as WaveCreateParams,
-    41500,
-    13500,
-    spots,
-  );
+  await addStep({ type: 'Wave', props: { colors: [RgbColor.ROSERED] } } as WaveCreateParams, 41500, 13500, spots);
 
   // Couplet
   await addStep(
@@ -636,19 +618,9 @@ export async function seedOpeningSequence(
   await addStep(movingHeadsWhite, 63000, 155000, [movingHeadsGEWIS]);
 
   await addStep(allOfTheLights, 81500, 2000, spots);
-  await addStep(
-    { type: ColorEffects.Wave, props: { colors: [RgbColor.PINK] } },
-    83500,
-    4500,
-    spots,
-  );
+  await addStep({ type: ColorEffects.Wave, props: { colors: [RgbColor.PINK] } }, 83500, 4500, spots);
   await addStep(allOfTheLights, 88000, 2000, spots);
-  await addStep(
-    { type: ColorEffects.Wave, props: { colors: [RgbColor.PINK] } },
-    90000,
-    4800,
-    spots,
-  );
+  await addStep({ type: ColorEffects.Wave, props: { colors: [RgbColor.PINK] } }, 90000, 4800, spots);
   await addStep(allOfTheLights, 94800, 1600, spots);
   await addStep(
     { type: ColorEffects.Sparkle, props: { colors: [RgbColor.GREEN, RgbColor.BROWN] } },
@@ -669,19 +641,9 @@ export async function seedOpeningSequence(
 
   // Refrein
   await addStep(allOfTheLights, 135800, 1200, spots);
-  await addStep(
-    { type: ColorEffects.Wave, props: { colors: [RgbColor.YELLOW] } },
-    138000,
-    4000,
-    spots,
-  );
+  await addStep({ type: ColorEffects.Wave, props: { colors: [RgbColor.YELLOW] } }, 138000, 4000, spots);
   await addStep(allOfTheLights, 142000, 2000, spots);
-  await addStep(
-    { type: ColorEffects.Wave, props: { colors: [RgbColor.YELLOW] } },
-    144000,
-    4000,
-    spots,
-  );
+  await addStep({ type: ColorEffects.Wave, props: { colors: [RgbColor.YELLOW] } }, 144000, 4000, spots);
   await addStep(allOfTheLights, 148000, 2000, spots);
 
   await addStep(
@@ -713,9 +675,7 @@ export async function seedOpeningSequence(
   );
 
   await addStep(movingHeadsWhite, 218000, 26000, [movingHeadsGEWIS]);
-  await addStep({ type: MovementEffects.SearchLight, props: { cycleTime: 10000 } }, 218000, 26000, [
-    movingHeadsGEWIS,
-  ]);
+  await addStep({ type: MovementEffects.SearchLight, props: { cycleTime: 10000 } }, 218000, 26000, [movingHeadsGEWIS]);
 
   // Slowly turn on lights
   await registerDim(
@@ -727,18 +687,8 @@ export async function seedOpeningSequence(
     { type: ColorEffects.StaticColor, props: { color: RgbColor.UV } },
   );
 
-  await addStep(
-    { type: ColorEffects.SingleFlood, props: { dimMilliseconds: 5000 } },
-    244000,
-    7000,
-    spots,
-  );
-  await addStep(
-    { type: ColorEffects.SingleFlood, props: { dimMilliseconds: 5000 } },
-    251000,
-    7000,
-    spots,
-  );
+  await addStep({ type: ColorEffects.SingleFlood, props: { dimMilliseconds: 5000 } }, 244000, 7000, spots);
+  await addStep({ type: ColorEffects.SingleFlood, props: { dimMilliseconds: 5000 } }, 251000, 7000, spots);
   await addStep(allOfTheLights, 258000, 1000, spots);
   await addStep({ type: ColorEffects.Strobe, props: { durationMs: 3000 } }, 259000, 3000, spots);
 
@@ -749,12 +699,7 @@ export async function seedOpeningSequence(
     spots,
   );
   await addStep(movingHeadsWhite, 262000, 23000, [movingHeadsGEWIS]);
-  await addStep(
-    { type: MovementEffects.RandomPosition, props: { beatsToMove: 1 } },
-    262000,
-    23000,
-    [movingHeadsGEWIS],
-  );
+  await addStep({ type: MovementEffects.RandomPosition, props: { beatsToMove: 1 } }, 262000, 23000, [movingHeadsGEWIS]);
 
   await addStep(borrelRuimte, 285000, 15000, [room]);
   await addStep(borrelBar, 285000, 15000, [bar]);

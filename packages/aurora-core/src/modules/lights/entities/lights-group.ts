@@ -38,11 +38,7 @@ export default class LightsGroup extends SubscribeEntity {
   @Column({ type: 'real', unsigned: true, nullable: false, default: 0 })
   public gridSizeY: number;
 
-  public get fixtures(): (
-    | LightsGroupPars
-    | LightsGroupMovingHeadWheels
-    | LightsGroupMovingHeadRgbs
-  )[] {
+  public get fixtures(): (LightsGroupPars | LightsGroupMovingHeadWheels | LightsGroupMovingHeadRgbs)[] {
     return [...this.pars, ...this.movingHeadWheels, ...this.movingHeadRgbs];
   }
 

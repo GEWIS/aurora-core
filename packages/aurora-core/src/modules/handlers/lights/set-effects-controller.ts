@@ -46,10 +46,7 @@ export class SetEffectsController extends Controller {
     const lightsGroup = handler.entities.find((e) => e.id === id);
 
     const effectNames = effects.map((e) => `"${e.type}"`);
-    logger.audit(
-      req.user,
-      `Apply color effects ${effectNames} to lights group "${lightsGroup?.name}" (id: ${id}).`,
-    );
+    logger.audit(req.user, `Apply color effects ${effectNames} to lights group "${lightsGroup?.name}" (id: ${id}).`);
 
     if (lightsGroup === undefined) {
       this.setStatus(404);
@@ -88,10 +85,7 @@ export class SetEffectsController extends Controller {
       });
     }
 
-    logger.audit(
-      req.user,
-      `Change colors of lights group "${lightsGroup?.name}"'s effects (id: ${id}).`,
-    );
+    logger.audit(req.user, `Change colors of lights group "${lightsGroup?.name}"'s effects (id: ${id}).`);
 
     handler.updateColors(lightsGroup, colors.colors);
   }
@@ -118,10 +112,7 @@ export class SetEffectsController extends Controller {
     const lightsGroup = handler.entities.find((e) => e.id === id);
 
     const effectNames = effects.map((e) => `"${e.type}"`);
-    logger.audit(
-      req.user,
-      `Apply movement effects ${effectNames} to lights group "${lightsGroup?.name}" (id: ${id}).`,
-    );
+    logger.audit(req.user, `Apply movement effects ${effectNames} to lights group "${lightsGroup?.name}" (id: ${id}).`);
 
     if (lightsGroup === undefined) {
       this.setStatus(404);
@@ -175,10 +166,7 @@ export class SetEffectsController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.effects.privileged)
   @Delete('predefined/{id}')
-  public async deletePredefinedLightsEffect(
-    id: number,
-    @Request() req: ExpressRequest,
-  ): Promise<void> {
+  public async deletePredefinedLightsEffect(id: number, @Request() req: ExpressRequest): Promise<void> {
     await new SetEffectsService().deletePredefinedEffect(id);
 
     logger.audit(req.user, `Delete predefined effect with id "${id}"`);

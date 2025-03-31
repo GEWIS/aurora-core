@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import crypto from 'crypto';
 import { ApiKey, IntegrationUser } from './entities';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import { Audio, LightsController, Screen } from '../root/entities';
 
 export interface GenerateApiKeyParams {
@@ -27,12 +27,7 @@ export default class AuthService {
     return crypto.randomBytes(32).toString('hex');
   }
 
-  public async createApiKey({
-    audio,
-    screen,
-    lightsController,
-    integrationUser,
-  }: GenerateApiKeyParams) {
+  public async createApiKey({ audio, screen, lightsController, integrationUser }: GenerateApiKeyParams) {
     return this.apiKeyRepository.save({
       key: this.generateKey(),
       audio,
@@ -62,9 +57,7 @@ export default class AuthService {
     });
   }
 
-  public async createIntegrationUser(
-    params: IntegrationUserCreateParams,
-  ): Promise<IntegrationUser> {
+  public async createIntegrationUser(params: IntegrationUserCreateParams): Promise<IntegrationUser> {
     const integrationUser = await this.integrationUserRepository.save(params);
     await this.createApiKey({ integrationUser });
     return integrationUser;

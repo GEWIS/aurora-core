@@ -5,17 +5,9 @@ import LightsEffect, {
   LightsEffectBuilder,
 } from '../lights-effect';
 import { BeatEvent } from '../../../events/music-emitter-events';
-import {
-  LightsGroup,
-  LightsGroupMovingHeadRgbs,
-  LightsGroupMovingHeadWheels,
-  LightsGroupPars,
-} from '../../entities';
+import { LightsGroup, LightsGroupMovingHeadRgbs, LightsGroupMovingHeadWheels, LightsGroupPars } from '../../entities';
 import { ColorEffects } from './color-effects';
-import {
-  EffectProgressionBeatStrategy,
-  EffectProgressionTickStrategy,
-} from '../progression-strategies';
+import { EffectProgressionBeatStrategy, EffectProgressionTickStrategy } from '../progression-strategies';
 import EffectProgressionStrategy from '../progression-strategies/effect-progression-strategy';
 import LightsGroupFixture from '../../entities/lights-group-fixture';
 import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
@@ -59,18 +51,13 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
   constructor(lightsGroup: LightsGroup, props: BeatFadeOutProps) {
     const nrSteps = props.colors.length + (props.nrBlacks ?? 0);
 
-    const progressionMapperStrategy = new EffectProgressionMapFactory(lightsGroup).getMapper(
-      props.pattern,
-      nrSteps,
-    );
+    const progressionMapperStrategy = new EffectProgressionMapFactory(lightsGroup).getMapper(props.pattern, nrSteps);
 
     let progressionStrategy: EffectProgressionStrategy;
     if (props.customCycleTime) {
       progressionStrategy = new EffectProgressionTickStrategy(props.customCycleTime);
     } else {
-      progressionStrategy = new EffectProgressionBeatStrategy(
-        progressionMapperStrategy.getNrFixtures(),
-      );
+      progressionStrategy = new EffectProgressionBeatStrategy(progressionMapperStrategy.getNrFixtures());
     }
 
     super(lightsGroup, progressionStrategy, progressionMapperStrategy, props.direction);
@@ -118,11 +105,7 @@ export default class BeatFadeOut extends LightsEffect<BeatFadeOutProps> {
 
     const progressions: { id: number; value: string }[] = [];
 
-    [
-      ...this.lightsGroup.pars,
-      ...this.lightsGroup.movingHeadRgbs,
-      ...this.lightsGroup.movingHeadWheels,
-    ]
+    [...this.lightsGroup.pars, ...this.lightsGroup.movingHeadRgbs, ...this.lightsGroup.movingHeadWheels]
       .sort((a, b) => a.positionX - b.positionX)
       .forEach((p, i) => {
         const { enableFade } = this.props;

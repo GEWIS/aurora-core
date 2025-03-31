@@ -54,10 +54,7 @@ export class LocalPosterController extends Controller {
    */
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Post('clock')
-  public async setStaticPosterClock(
-    @Request() req: ExpressRequest,
-    @Body() body: SetClockRequest,
-  ): Promise<void> {
+  public async setStaticPosterClock(@Request() req: ExpressRequest, @Body() body: SetClockRequest): Promise<void> {
     const { visible } = body;
     if (visible) {
       logger.audit(req.user, 'Make clock in StaticPosterHandler visible.');
@@ -96,10 +93,7 @@ export class LocalPosterController extends Controller {
   ): Promise<LocalPosterResponse> {
     const mimeType = mime.lookup(file.originalname);
     if (!mimeType || !mimeType.startsWith('image/') || !mimeType.startsWith('video')) {
-      return invalidFileTypeResponse(
-        HttpStatusCode.BadRequest,
-        'Invalid file type, expected an image or a video.',
-      );
+      return invalidFileTypeResponse(HttpStatusCode.BadRequest, 'Invalid file type, expected an image or a video.');
     }
 
     const service = new LocalPosterService();

@@ -13,11 +13,7 @@ export default class SetEffectsHandler extends EffectsHandler {
    * @param effects
    * @param effectsMap
    */
-  private setEffect(
-    lightsGroup: LightsGroup,
-    effects: LightsEffectBuilder[],
-    effectsMap: GroupEffectsMap,
-  ) {
+  private setEffect(lightsGroup: LightsGroup, effects: LightsEffectBuilder[], effectsMap: GroupEffectsMap) {
     this.destroyEffect(effectsMap.get(lightsGroup));
     effectsMap.set(
       lightsGroup,
@@ -43,14 +39,9 @@ export default class SetEffectsHandler extends EffectsHandler {
    * @param effects
    * @param effectsMap
    */
-  private parseAndSetEffects(
-    id: number,
-    effects: LightsEffectsCreateParams[],
-    effectsMap: GroupEffectsMap,
-  ) {
+  private parseAndSetEffects(id: number, effects: LightsEffectsCreateParams[], effectsMap: GroupEffectsMap) {
     const lightsGroup = this.entities.find((e) => e.id === id);
-    if (lightsGroup === undefined)
-      throw new Error(`LightsGroup with ID ${id} is not registered to this handler.`);
+    if (lightsGroup === undefined) throw new Error(`LightsGroup with ID ${id} is not registered to this handler.`);
 
     if (effects.length === 0) {
       this.removeEffect(lightsGroup, effectsMap);

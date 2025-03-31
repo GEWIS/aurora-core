@@ -8,11 +8,7 @@ import { LightsGroup } from '../../lights/entities';
  * @param effectProps JSON-stringified props of the effect
  * @constructor
  */
-export function databaseEffectToObject(
-  lightsGroup: LightsGroup,
-  effectName: string,
-  effectProps: string,
-) {
+export function databaseEffectToObject(lightsGroup: LightsGroup, effectName: string, effectProps: string) {
   const props = JSON.parse(effectProps);
   return LIGHTS_EFFECTS.map((EFFECT) => {
     if (EFFECT.name === effectName) {

@@ -1,15 +1,13 @@
 import CronManager, { CronExpressionError } from './cron-manager';
 import { Repository } from 'typeorm';
 import { HttpApiException, HttpStatusCode } from '@gewis/aurora-core-util';
-import { DataSourceSingleton } from '@gewis/aurora-core-database-util'
+import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import { TimedEvent } from './entities';
 import logger from '@gewis/aurora-core-logger';
 
 export interface CreateTimedEventRequest extends Pick<TimedEvent, 'cronExpression' | 'eventSpec'> {}
 
-export interface UpdateTimedEventRequest
-  extends CreateTimedEventRequest,
-    Pick<TimedEvent, 'skipNext'> {}
+export interface UpdateTimedEventRequest extends CreateTimedEventRequest, Pick<TimedEvent, 'skipNext'> {}
 
 export default class TimedEventsService {
   private static instance: TimedEventsService;
@@ -58,10 +56,7 @@ export default class TimedEventsService {
    * @param onError
    * @private
    */
-  private async registerEventInCron(
-    timedEvent: TimedEvent,
-    onError: () => Promise<void>,
-  ): Promise<void> {
+  private async registerEventInCron(timedEvent: TimedEvent, onError: () => Promise<void>): Promise<void> {
     try {
       this.cronManager.registerEvent(timedEvent);
     } catch (e: unknown) {
@@ -97,10 +92,7 @@ export default class TimedEventsService {
    * @param id
    * @param timedEventRequest
    */
-  public async updateEvent(
-    id: number,
-    timedEventRequest: UpdateTimedEventRequest,
-  ): Promise<TimedEvent> {
+  public async updateEvent(id: number, timedEventRequest: UpdateTimedEventRequest): Promise<TimedEvent> {
     const timedEventOld = await this.getEvent(id);
 
     await this.repo.update(id, timedEventRequest);

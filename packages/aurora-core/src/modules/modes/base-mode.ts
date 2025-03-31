@@ -42,20 +42,17 @@ export default abstract class BaseMode<
     this.lightsHandler = this.handlerManager
       .getHandlers(LightsGroup)
       .find((h) => h.constructor.name === lightsHandlerName) as T;
-    if (!this.lightsHandler)
-      throw new Error(`LightsHandler with name "${lightsHandlerName}" not found.`);
+    if (!this.lightsHandler) throw new Error(`LightsHandler with name "${lightsHandlerName}" not found.`);
 
     this.screenHandler = this.handlerManager
       .getHandlers(Screen)
       .find((h) => h.constructor.name === screenHandlerName) as U;
-    if (!this.lightsHandler)
-      throw new Error(`ScreenHandler with name "${screenHandlerName}" not found.`);
+    if (!this.lightsHandler) throw new Error(`ScreenHandler with name "${screenHandlerName}" not found.`);
 
     this.audioHandler = this.handlerManager
       .getHandlers(Audio)
       .find((h) => h.constructor.name === audioHandlerName) as V;
-    if (!this.lightsHandler)
-      throw new Error(`AudioHandler with name "${audioHandlerName}" not found.`);
+    if (!this.lightsHandler) throw new Error(`AudioHandler with name "${audioHandlerName}" not found.`);
   }
 
   /**

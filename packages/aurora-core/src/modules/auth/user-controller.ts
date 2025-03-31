@@ -2,7 +2,7 @@ import { Controller } from '@tsoa/runtime';
 import { Get, Route, Tags, Response, Request, SuccessResponse, Security } from 'tsoa';
 import * as express from 'express';
 import { HttpStatusCode } from 'axios';
-import {AuthUser, HttpApiException} from '@gewis/aurora-core-util';
+import { AuthUser, HttpApiException } from '@gewis/aurora-core-util';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import { securityGroups } from '@gewis/aurora-core-util';
 

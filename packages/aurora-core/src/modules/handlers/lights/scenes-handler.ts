@@ -37,18 +37,14 @@ export class ScenesHandler extends EffectsHandler {
 
       const effectObjs = effects
         .filter(({ effectName }) => lightsEffectsColorNames.includes(effectName as any))
-        .map(({ effectName, effectProps }) =>
-          databaseEffectToObject(group, effectName, effectProps),
-        );
+        .map(({ effectName, effectProps }) => databaseEffectToObject(group, effectName, effectProps));
 
       this.groupColorEffects.set(group, effectObjs);
       this.groupMovementEffects.set(
         group,
         effects
           .filter(({ effectName }) => lightsEffectsMovementNames.includes(effectName as any))
-          .map(({ effectName, effectProps }) =>
-            databaseEffectToObject(group, effectName, effectProps),
-          ),
+          .map(({ effectName, effectProps }) => databaseEffectToObject(group, effectName, effectProps)),
       );
     });
   }
