@@ -6,7 +6,7 @@ import LightsEffect, {
 import { ColorEffects } from './color-effects';
 import { LightsGroup } from '../../entities';
 import { RgbColor } from '../../color-definitions';
-import { BeatEvent } from '../../../events/music-emitter-events';
+import { BeatEvent } from '@gewis/aurora-core-audio-handler';
 
 export interface RandomColorProps extends BaseLightsEffectProps {
   /**

@@ -1,6 +1,7 @@
 import { BaseEntity, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
-import { Audio, LightsController, Screen } from '../../root/entities';
+import { LightsController, Screen } from '../../root/entities';
 import IntegrationUser from './integration-user';
+import { Audio } from '@gewis/aurora-core-audio-handler';
 
 @Entity()
 export default class ApiKey extends BaseEntity {

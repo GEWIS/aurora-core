@@ -1,7 +1,7 @@
 import LightsEffect, { BaseLightsEffectProgressionProps } from '../lights-effect';
 import { LightsGroup, LightsMovingHeadRgb, LightsMovingHeadWheel } from '../../entities';
 import { EffectProgressionTickStrategy } from '../progression-strategies';
-import { BeatEvent } from '../../../events/music-emitter-events';
+import { BeatEvent } from '@gewis/aurora-core-audio-handler';
 import EffectProgressionMapFactory from '../progression-strategies/mappers/effect-progression-map-factory';
 
 export interface BaseRotateProps {

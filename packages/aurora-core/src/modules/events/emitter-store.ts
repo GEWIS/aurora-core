@@ -1,26 +1,28 @@
-import { BackofficeSyncEmitter } from './backoffice-sync-emitter';
-import { MusicEmitter } from './music-emitter';
-import { OrderEmitter } from './order-emitter';
+import { EventEmitter } from 'node:events';
+
+export const backofficeSyncEmitter = 'backoffice'
+export const orderEmitter = 'order'
+
 
 export default class EmitterStore {
   private static instance: EmitterStore;
 
-  public readonly backofficeSyncEmitter: BackofficeSyncEmitter;
+  private emitters: Map<string, EventEmitter> = new Map();
 
-  public readonly musicEmitter: MusicEmitter;
-
-  public readonly orderEmitter: OrderEmitter;
-
-  constructor() {
-    this.backofficeSyncEmitter = new BackofficeSyncEmitter();
-    this.musicEmitter = new MusicEmitter();
-    this.orderEmitter = new OrderEmitter();
-  }
+  constructor() {}
 
   public static getInstance() {
     if (!this.instance) {
       this.instance = new EmitterStore();
     }
     return this.instance;
+  }
+
+  public registerEmitter(name: string, emitter: EventEmitter) {
+    this.emitters.set(name, emitter);
+  }
+
+  public get<T>(name: string): T {
+    return this.emitters.get(name) as T;
   }
 }

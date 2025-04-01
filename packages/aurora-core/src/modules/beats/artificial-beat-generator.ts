@@ -1,5 +1,4 @@
-import { MusicEmitter } from '../events';
-import { BeatEvent } from '../events/music-emitter-events';
+import { MusicEmitter, BeatEvent } from '@gewis/aurora-core-audio-handler';
 import logger from '@gewis/aurora-core-logger';
 
 export interface ArtificialBeatGeneratorParams {

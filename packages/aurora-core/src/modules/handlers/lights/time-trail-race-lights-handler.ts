@@ -1,5 +1,5 @@
 import BaseLightsHandler from '../base-lights-handler';
-import { BeatEvent } from '../../events/music-emitter-events';
+import { BeatEvent } from '@gewis/aurora-core-audio-handler';
 import { LightsGroup } from '../../lights/entities';
 import SetEffectsHandler from './set-effects-handler';
 import RandomEffectsHandler from './random-effects-handler';

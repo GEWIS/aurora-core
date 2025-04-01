@@ -4,7 +4,7 @@ import LightsEffect, {
   BaseLightsEffectProps,
   LightsEffectBuilder,
 } from '../lights-effect';
-import { BeatEvent } from '../../../events/music-emitter-events';
+import { BeatEvent } from '@gewis/aurora-core-audio-handler';
 import { LightsGroup, LightsGroupMovingHeadRgbs, LightsGroupMovingHeadWheels, LightsGroupPars } from '../../entities';
 import { ColorEffects } from './color-effects';
 import { EffectProgressionBeatStrategy, EffectProgressionTickStrategy } from '../progression-strategies';

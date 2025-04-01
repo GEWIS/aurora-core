@@ -1,22 +1,25 @@
 import { Server } from 'socket.io';
-import BaseAudioHandler from '../handlers/base-audio-handler';
+// TODO side-effect (?)
+// import BaseAudioHandler from '../handlers/base-audio-handler';
 import BaseLightsHandler from '../handlers/base-lights-handler';
 import BaseScreenHandler from '../handlers/base-screen-handler';
 import { SubscribeEntity } from '@gewis/aurora-core-util';
 import { BaseHandler } from '@gewis/aurora-core-util';
-import SimpleAudioHandler from '../handlers/audio/simple-audio-handler';
+// TODO side-effect (?)
+// import SimpleAudioHandler from '../handlers/audio/simple-audio-handler';
 import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
-import { Audio, Screen } from './entities';
+import { Screen } from './entities';
 import { LightsGroup } from '../lights/entities';
 import { RandomEffectsHandler } from '../handlers/lights';
 import SetEffectsHandler from '../handlers/lights/set-effects-handler';
 import DevelopEffectsHandler from '../handlers/lights/develop-effects-handler';
-import { BeatEvent, TrackChangeEvent } from '../events/music-emitter-events';
+// TODO side-effect (?)
+// import { BeatEvent, TrackChangeEvent } from '../events/music-emitter-events';
 import { CurrentlyPlayingTrackHandler, CenturionScreenHandler } from '../handlers/screen';
 // eslint-disable-next-line import/no-cycle -- TODO fix cyclic dependency
 import { ScenesHandler } from '../handlers/lights/scenes-handler';
 import EffectSequenceHandler from '../handlers/lights/effect-sequence-handler';
-import { MusicEmitter } from '../events';
+import { MusicEmitter, musicEmitter, Audio, TrackChangeEvent } from '@gewis/aurora-core-audio-handler';
 import StageEffectsHandler from '../handlers/screen/stage-effects-handler';
 import { SocketioNamespaces } from '@gewis/aurora-core-util';
 import logger from '@gewis/aurora-core-logger';
@@ -25,7 +28,8 @@ import TimeTrailRaceScreenHandler from '../handlers/screen/time-trail-race-scree
 import TimeTrailRaceLightsHandler from '../handlers/lights/time-trail-race-lights-handler';
 import HandlerFactory from './handler-factory';
 import { ShowOrdersEvent } from '../events/order-emitter-events';
-import EmitterStore from '../events/emitter-store';
+import EmitterStore, { backofficeSyncEmitter, orderEmitter } from '../events/emitter-store';
+import { OrderEmitter } from '../events/order-emitter';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -76,11 +80,12 @@ export default class HandlerManager {
     private io: Server,
     private emitterStore: EmitterStore,
   ) {
+    // TODO get beat back and generalize
     // this.emitterStore.musicEmitter.on('beat', this.beat.bind(this));
-    this.emitterStore.musicEmitter.on('change_track', this.changeTrack.bind(this));
-    this.emitterStore.orderEmitter.on('orders', this.showOrders.bind(this));
+    this.emitterStore.get<MusicEmitter>(musicEmitter).on('change_track', this.changeTrack.bind(this));
+    this.emitterStore.get<OrderEmitter>(orderEmitter).on('orders', this.showOrders.bind(this));
 
-    const factory = new HandlerFactory(this.io, this.emitterStore.musicEmitter);
+    const factory = new HandlerFactory(this.io, this.emitterStore.get<MusicEmitter>(musicEmitter));
 
     // Register all handlers
     this._handlers.set(Audio, factory.createAudioHandlers());
@@ -149,11 +154,12 @@ export default class HandlerManager {
       entity.currentHandler = '';
       entity.save().catch((e) => logger.error(e));
     }
-    this.emitterStore.backofficeSyncEmitter.emit(`handler_${entity.constructor.name.toLowerCase()}_update`);
+    this.emitterStore.get<BackofficeSyncEmitter>(backofficeSyncEmitter).emit(`handler_${entity.constructor.name.toLowerCase()}_update`);
 
     return true;
   }
 
+  // TODO add this back
   // /**
   //  * Transmit a beat to all handlers. They can decide what to do with it
   //  * @param event
@@ -164,11 +170,12 @@ export default class HandlerManager {
   //   });
   // }
 
-  /**
-   * Transmit a track change to all screen handlers,
-   * as are the only ones who can do something with it
-   * @param event
-   */
+  // TODO how to generalize?
+  // /**
+  //  * Transmit a track change to all screen handlers,
+  //  * as are the only ones who can do something with it
+  //  * @param event
+  //  */
   public changeTrack(event: TrackChangeEvent[]) {
     const handlers = this.getHandlers();
     handlers.forEach((h) => {

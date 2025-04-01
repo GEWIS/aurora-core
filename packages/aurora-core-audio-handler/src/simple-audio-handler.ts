@@ -1,9 +1,9 @@
 import { Namespace } from 'socket.io';
-import BaseAudioHandler from '../base-audio-handler';
-import { MusicEmitter } from '../../events';
+import { BaseAudioHandler } from './base-audio-handler';
+import { MusicEmitter } from './music-emitter';
 import logger from '@gewis/aurora-core-logger';
 
-export default class SimpleAudioHandler extends BaseAudioHandler {
+export class SimpleAudioHandler extends BaseAudioHandler {
   private socket: Namespace;
 
   private onSyncAudioTimings: ((params: { startTime: number; timestamp: number }) => void)[] = [];

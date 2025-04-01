@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { SubscribeEntity } from '../../aurora-core-database-util/src/subscribe-entity';
+import { SubscribeEntity } from '@gewis/aurora-core-database-util';
 import logger from '@gewis/aurora-core-logger';
 
 export abstract class BaseHandler<T extends SubscribeEntity> {

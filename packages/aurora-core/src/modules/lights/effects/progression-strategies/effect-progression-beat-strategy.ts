@@ -1,6 +1,7 @@
-import { BeatEvent } from '../../../events/music-emitter-events';
+import { BeatEvent } from '@gewis/aurora-core-audio-handler';
 import EffectProgressionStrategy from './effect-progression-strategy';
 
+// TODO make separate effects for beats?
 export default class EffectProgressionBeatStrategy extends EffectProgressionStrategy {
   private phase = 0;
 

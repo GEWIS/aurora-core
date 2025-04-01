@@ -1,5 +1,5 @@
 import { LightsGroup } from '../../lights/entities';
-import { BeatEvent } from '../../events/music-emitter-events';
+import { BeatEvent } from '@gewis/aurora-core-audio-handler';
 import { BeatFadeOut, Sparkle, StaticColor, Wave } from '../../lights/effects/color';
 import { getTwoComplementaryRgbColors, RgbColor } from '../../lights/color-definitions';
 import EffectsHandler from './effects-handler';

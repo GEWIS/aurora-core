@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { Audio } from './entities';
+import { Audio } from '@gewis/aurora-core-audio-handler';
 import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import AuthService from '../auth/auth-service';
 

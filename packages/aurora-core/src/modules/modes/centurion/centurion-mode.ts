@@ -1,20 +1,19 @@
 import BaseMode from '../base-mode';
 import { LightsGroup } from '../../lights/entities';
-import { Audio, Screen } from '../../root/entities';
+import {  Screen } from '../../root/entities';
 import SetEffectsHandler from '../../handlers/lights/set-effects-handler';
-import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
+import {SimpleAudioHandler, MusicEmitter, TrackChangeEvent} from '@gewis/aurora-core-audio-handler';
 import MixTape, { FeedEvent, Horn, Song, SongData } from './tapes/mix-tape';
 import { BeatFadeOut, StaticColor } from '../../lights/effects/color';
 import { ClassicRotate, SearchLight } from '../../lights/effects/movement';
 import { getTwoComplementaryRgbColors, RgbColor } from '../../lights/color-definitions';
-import { MusicEmitter } from '../../events';
-import { TrackChangeEvent } from '../../events/music-emitter-events';
 import { CenturionScreenHandler } from '../../handlers/screen';
 import { LightsEffectBuilder } from '../../lights/effects/lights-effect';
 import Wave from '../../lights/effects/color/wave';
 import Sparkle from '../../lights/effects/color/sparkle';
 import { ArtificialBeatGenerator } from '../../beats/artificial-beat-generator';
 import logger from '@gewis/aurora-core-logger';
+import { Audio } from '@gewis/aurora-core-audio-handler';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';

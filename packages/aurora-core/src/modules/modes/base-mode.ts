@@ -1,9 +1,10 @@
 import { LightsGroup } from '../lights/entities';
-import { Audio, Screen } from '../root/entities';
+import { Screen } from '../root/entities';
 import HandlerManager from '../root/handler-manager';
 import BaseLightsHandler from '../handlers/base-lights-handler';
-import BaseAudioHandler from '../handlers/base-audio-handler';
+import {BaseAudioHandler} from '@gewis/aurora-core-audio-handler';
 import BaseScreenHandler from '../handlers/base-screen-handler';
+import { Audio } from '@gewis/aurora-core-audio-handler';
 
 export default abstract class BaseMode<
   T extends BaseLightsHandler,

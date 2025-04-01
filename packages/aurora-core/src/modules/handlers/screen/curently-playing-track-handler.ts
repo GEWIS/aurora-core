@@ -1,5 +1,5 @@
 import BaseScreenHandler from '../base-screen-handler';
-import { BeatEvent, TrackChangeEvent } from '../../events/music-emitter-events';
+import { BeatEvent, TrackChangeEvent } from '@gewis/aurora-core-audio-handler';
 
 export default class CurrentlyPlayingTrackHandler extends BaseScreenHandler {
   beat(event: BeatEvent): void {

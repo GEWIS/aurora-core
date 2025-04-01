@@ -1,7 +1,7 @@
 import BaseLightsHandler from '../base-lights-handler';
 import { LightsGroup } from '../../lights/entities';
 import LightsEffect from '../../lights/effects/lights-effect';
-import { BeatEvent } from '../../events/music-emitter-events';
+import { BeatEvent } from '@gewis/aurora-core-audio-handler';
 import { RgbColor } from '../../lights/color-definitions';
 
 export type GroupEffectsMap = Map<LightsGroup, LightsEffect | LightsEffect[] | null>;

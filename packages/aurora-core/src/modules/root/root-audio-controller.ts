@@ -4,7 +4,7 @@ import { Request as ExpressRequest } from 'express';
 import RootAudioService, { AudioCreateParams, AudioResponse } from './root-audio-service';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import HandlerManager from './handler-manager';
-import { Audio } from './entities';
+import { Audio } from '@gewis/aurora-core-audio-handler';
 import logger from '@gewis/aurora-core-logger';
 import { securityGroups } from '@gewis/aurora-core-util';
 

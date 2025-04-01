@@ -1,5 +1,5 @@
 import BaseScreenHandler from '../../base-screen-handler';
-import { TrackChangeEvent } from '../../../events/music-emitter-events';
+import { TrackChangeEvent } from '@gewis/aurora-core-audio-handler';
 import { LocalPosterResponse } from './local/local-poster-service';
 
 const UPDATE_POSTER_EVENT_NAME = 'update_static_poster';

@@ -1,6 +1,7 @@
 import HandlerManager from './handler-manager';
 import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
-import { Audio, Screen } from './entities';
+import { Screen } from './entities';
+import { Audio } from '@gewis/aurora-core-audio-handler';
 import { LightsGroup } from '../lights/entities';
 import ModeManager from '../modes/mode-manager';
 import RootLightsOperationsService from './root-lights-operations-service';

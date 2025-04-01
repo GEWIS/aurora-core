@@ -1,4 +1,4 @@
-import { BeatEvent } from '../../events/music-emitter-events';
+import { BeatEvent } from '@gewis/aurora-core-audio-handler';
 import { LightsGroup } from '../entities';
 import EffectProgressionStrategy from './progression-strategies/effect-progression-strategy';
 import LightsGroupFixture from '../entities/lights-group-fixture';
@@ -87,6 +87,7 @@ export default abstract class LightsEffect<P = {}> {
   }
 
   /**
+   * TODO; heavily coupled to MusicHandler, can this be moved to a separate service (MusicLightService)?
    * Process the beat in the effect's progression
    * @param event
    */

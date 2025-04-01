@@ -1,5 +1,5 @@
 import BaseScreenHandler from '../base-screen-handler';
-import { BeatEvent, TrackChangeEvent } from '../../events/music-emitter-events';
+import { BeatEvent, TrackChangeEvent } from '@gewis/aurora-core-audio-handler';
 import MixTape from '../../modes/centurion/tapes/mix-tape';
 import { RgbColor } from '../../lights/color-definitions';
 

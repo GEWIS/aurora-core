@@ -1,10 +1,10 @@
 import BaseLightsHandler from '../base-lights-handler';
-import { BeatEvent, TrackChangeEvent } from '../../events/music-emitter-events';
+import { BeatEvent, TrackChangeEvent } from '@gewis/aurora-core-audio-handler';
 import { LightsGroup } from '../../lights/entities';
 import { LightsTrackEffect } from '../../lights/entities/sequences/lights-track-effect';
 import LightsEffect from '../../lights/effects/lights-effect';
 import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
-import { MusicEmitter } from '../../events';
+import { MusicEmitter } from '@gewis/aurora-core-audio-handler';
 import logger from '@gewis/aurora-core-logger';
 import { databaseEffectToObject } from './database-effects-helper';
 

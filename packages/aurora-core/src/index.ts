@@ -14,7 +14,7 @@ import { ArtificialBeatGenerator } from './modules/beats/artificial-beat-generat
 import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
 import { SocketioNamespaces } from '@gewis/aurora-core-util';
 import SocketConnectionManager from './modules/root/socket-connection-manager';
-import EmitterStore from './modules/events/emitter-store';
+import EmitterStore, { backofficeSyncEmitter, orderEmitter } from './modules/events/emitter-store';
 // do not remove; used for extending existing types
 import Types from './types';
 import { OrderManager, OrderSettingsDefault } from './modules/orders';
@@ -36,6 +36,9 @@ import {
 } from './modules/handlers/screen/screen-handler-settings';
 import { OrderSettings } from './modules/orders';
 import { ServerSettingsStore, ServerSetting } from '@gewis/aurora-core-server-settings';
+import { BackofficeSyncEmitter } from './modules/events/backoffice-sync-emitter';
+import { OrderEmitter } from './modules/events/order-emitter';
+import { MusicEmitter, musicEmitter } from '@gewis/aurora-core-audio-handler';
 
 async function createApp(config: AuroraConfig): Promise<void> {
   // Fix for production issue where a Docker volume overwrites the contents of a folder instead of merging them
@@ -76,8 +79,12 @@ async function createApp(config: AuroraConfig): Promise<void> {
   const io = createWebsocket(httpServer);
 
   const emitterStore = EmitterStore.getInstance();
+  // TODO generalize this for all emitters
+  emitterStore.registerEmitter(backofficeSyncEmitter, new BackofficeSyncEmitter());
+  emitterStore.registerEmitter(musicEmitter, new MusicEmitter());
+  emitterStore.registerEmitter(orderEmitter, new OrderEmitter());
 
-  ArtificialBeatGenerator.getInstance().init(emitterStore.musicEmitter);
+  ArtificialBeatGenerator.getInstance().init(emitterStore.get<MusicEmitter>(musicEmitter));
 
   const lightsSwitchManager = LightsSwitchManager.getInstance();
   const handlerManager = HandlerManager.getInstance(io, emitterStore);
@@ -86,7 +93,7 @@ async function createApp(config: AuroraConfig): Promise<void> {
     handlerManager,
     lightsSwitchManager,
     io,
-    emitterStore.backofficeSyncEmitter,
+    emitterStore.get<BackofficeSyncEmitter>(backofficeSyncEmitter),
   );
   await socketConnectionManager.clearSavedSocketIds();
 
@@ -95,7 +102,7 @@ async function createApp(config: AuroraConfig): Promise<void> {
     io.of(SocketioNamespaces.LIGHTS),
     handlerManager,
     lightsSwitchManager,
-    emitterStore.musicEmitter,
+    emitterStore.get<MusicEmitter>(musicEmitter),
   );
 
   ModeManager.getInstance().init(emitterStore);
@@ -108,10 +115,10 @@ async function createApp(config: AuroraConfig): Promise<void> {
   ) {
     logger.info('Initialize Spotify...');
     await SpotifyApiHandler.getInstance().init();
-    await SpotifyTrackHandler.getInstance().init(emitterStore.musicEmitter);
+    await SpotifyTrackHandler.getInstance().init(emitterStore.get<MusicEmitter>(musicEmitter));
   }
 
-  OrderManager.getInstance().init(emitterStore.orderEmitter);
+  OrderManager.getInstance().init(emitterStore.get<OrderEmitter>(orderEmitter));
 
   initBackofficeSynchronizer(io.of('/backoffice'), emitterStore);
 

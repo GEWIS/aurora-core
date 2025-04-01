@@ -1,4 +1,4 @@
-import { TrackChangeEvent, BeatEvent } from '../../events/music-emitter-events';
+import { TrackChangeEvent, BeatEvent } from '@gewis/aurora-core-audio-handler';
 import BaseScreenHandler from '../base-screen-handler';
 
 export default class StageEffectsHandler extends BaseScreenHandler {

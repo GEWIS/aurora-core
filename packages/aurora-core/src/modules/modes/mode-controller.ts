@@ -1,11 +1,12 @@
 import { Body, Delete, Post, Request, Route, Security, SuccessResponse, Tags } from 'tsoa';
-import { Controller, Response } from '@tsoa/runtime';
+import { Controller } from '@tsoa/runtime';
 import { In } from 'typeorm';
 import { Request as ExpressRequest } from 'express';
 import ModeManager from './mode-manager';
 import { SubscribeEntity } from '@gewis/aurora-core-util';
 import { LightsGroup } from '../lights/entities';
-import { Audio, Screen } from '../root/entities';
+import {  Screen } from '../root/entities';
+import { Audio } from '@gewis/aurora-core-audio-handler';
 import CenturionMode from './centurion/centurion-mode';
 import tapes from './centurion/tapes';
 import { DataSourceSingleton } from '@gewis/aurora-core-database-util';

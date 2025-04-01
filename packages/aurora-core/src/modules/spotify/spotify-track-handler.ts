@@ -1,7 +1,7 @@
 import { PlaybackState, Track } from '@fostertheweb/spotify-web-sdk';
 import SpotifyApiHandler from './spotify-api-handler';
-import { MusicEmitter } from '../events';
-import { TrackChangeEvent } from '../events/music-emitter-events';
+import { MusicEmitter } from '@gewis/aurora-core-audio-handler';
+import { TrackChangeEvent } from '@gewis/aurora-core-audio-handler';
 import logger from '@gewis/aurora-core-logger';
 
 export default class SpotifyTrackHandler {

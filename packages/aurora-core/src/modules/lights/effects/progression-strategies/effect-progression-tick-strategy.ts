@@ -1,4 +1,4 @@
-import { BeatEvent } from '../../../events/music-emitter-events';
+import { BeatEvent } from '@gewis/aurora-core-audio-handler';
 import EffectProgressionStrategy from './effect-progression-strategy';
 
 export default class EffectProgressionTickStrategy extends EffectProgressionStrategy {

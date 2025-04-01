@@ -1,7 +1,7 @@
 import BaseMode from './base-mode';
-import { MusicEmitter } from '../events';
+import { MusicEmitter, musicEmitter } from '@gewis/aurora-core-audio-handler';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
-import EmitterStore from '../events/emitter-store';
+import EmitterStore, { backofficeSyncEmitter} from '../events/emitter-store';
 
 export default class ModeManager {
   private static instance: ModeManager;
@@ -30,7 +30,7 @@ export default class ModeManager {
     if (this.modes.has(modeClass)) this.disableMode(modeClass);
 
     this.modes.set(modeClass, mode);
-    this._emitterStore.backofficeSyncEmitter.emit(`mode_${name}_update`);
+    this._emitterStore.get<BackofficeSyncEmitter>(backofficeSyncEmitter).emit(`mode_${name}_update`);
   }
 
   public getMode(modeClass: typeof BaseMode<any, any, any>) {
@@ -40,16 +40,18 @@ export default class ModeManager {
   public disableMode(modeClass: typeof BaseMode<any, any, any>, name?: string) {
     const instance = this.modes.get(modeClass);
     if (instance) instance.destroy();
-    if (name) this._emitterStore.backofficeSyncEmitter.emit(`mode_${name}_update`);
+    if (name) this._emitterStore.get<BackofficeSyncEmitter>(backofficeSyncEmitter).emit(`mode_${name}_update`);
     return this.modes.delete(modeClass);
   }
 
+  // TODO this should be defined per plugin, and registered here, in some way
   public get musicEmitter() {
-    return this._emitterStore.musicEmitter;
+    return this._emitterStore.get<MusicEmitter>(musicEmitter);
   }
 
+  // TODO this should be defined per plugin, and registered here, in some way
   public get backofficeSyncEmitter() {
-    return this._emitterStore.backofficeSyncEmitter;
+    return this._emitterStore.get<BackofficeSyncEmitter>(backofficeSyncEmitter);
   }
 
   /**

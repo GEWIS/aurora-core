@@ -1,5 +1,5 @@
 import { LightsGroup } from '../../entities';
-import { BeatEvent } from '../../../events/music-emitter-events';
+import { BeatEvent } from '@gewis/aurora-core-audio-handler';
 
 export default abstract class EffectProgressionStrategy {
   /**

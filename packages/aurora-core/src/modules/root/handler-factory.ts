@@ -1,6 +1,6 @@
 import BaseLightsHandler from '../handlers/base-lights-handler';
 import { Server } from 'socket.io';
-import { MusicEmitter } from '../events';
+import { MusicEmitter } from '@gewis/aurora-core-audio-handler';
 import { RandomEffectsHandler } from '../handlers/lights';
 import SetEffectsHandler from '../handlers/lights/set-effects-handler';
 import DevelopEffectsHandler from '../handlers/lights/develop-effects-handler';
@@ -8,8 +8,7 @@ import { ScenesHandler } from '../handlers/lights/scenes-handler';
 import EffectSequenceHandler from '../handlers/lights/effect-sequence-handler';
 import TimeTrailRaceLightsHandler from '../handlers/lights/time-trail-race-lights-handler';
 import { BaseHandler } from '@gewis/aurora-core-util';
-import BaseAudioHandler from '../handlers/base-audio-handler';
-import SimpleAudioHandler from '../handlers/audio/simple-audio-handler';
+import {BaseAudioHandler, SimpleAudioHandler } from '@gewis/aurora-core-audio-handler';
 import { SocketioNamespaces } from '@gewis/aurora-core-util';
 import BaseScreenHandler from '../handlers/base-screen-handler';
 import {
