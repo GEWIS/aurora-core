@@ -120,10 +120,10 @@ async function createApp(config: AuroraConfig): Promise<void> {
 
   const sync = BackofficeSynchronizer.getInstance();
   // TODO fetch this information from plugins
-  sync.registerEmitter(musicEmitter, 'beat')
-  sync.registerEmitter(musicEmitter, 'change_track')
-  sync.registerEmitter(backofficeSyncEmitter, '*')
-  sync.registerEmitter(orderEmitter, 'orders')
+  sync.registerEmitter(musicEmitter, 'beat');
+  sync.registerEmitter(musicEmitter, 'change_track');
+  sync.registerEmitter(backofficeSyncEmitter, '*');
+  sync.registerEmitter(orderEmitter, 'orders');
   sync.init(io.of('/backoffice'));
 
   const port = process.env.PORT || 3000;

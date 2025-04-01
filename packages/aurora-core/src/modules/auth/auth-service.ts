@@ -2,8 +2,9 @@ import { Repository } from 'typeorm';
 import crypto from 'crypto';
 import { ApiKey, IntegrationUser } from './entities';
 import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
-import { LightsController, Screen } from '../root/entities';
+import { LightsController } from '../root/entities';
 import { Audio } from '@gewis/aurora-core-audio-handler';
+import { ScreenEntity as Screen } from '@gewis/aurora-core-screen';
 
 export interface GenerateApiKeyParams {
   audio?: Audio | null;

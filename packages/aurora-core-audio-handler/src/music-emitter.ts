@@ -1,5 +1,5 @@
 import { EventEmitter } from 'node:events';
-import {BaseAudioHandler} from './base-audio-handler';
+import { BaseAudioHandler } from './base-audio-handler';
 import { TrackChangeEvent } from './music-emitter-events';
 
 export class MusicEmitter extends EventEmitter {

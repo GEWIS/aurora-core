@@ -1,6 +1,6 @@
 import { BasePosterResponse, BasePosterScreenController, BorrelModeParams } from '../base-poster-screen-controller';
 import HandlerManager from '../../../../root/handler-manager';
-import { Screen } from '../../../../root/entities';
+import { ScreenEntity as Screen } from '@gewis/aurora-core-screen';
 import { GewisPosterScreenHandler } from '../../index';
 import { Body, Get, Post, Put, Query, Request, Route, Security, Tags } from 'tsoa';
 import { SecurityNames } from '@gewis/aurora-core-util';

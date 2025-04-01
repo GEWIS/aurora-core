@@ -2,13 +2,12 @@ import { Server } from 'socket.io';
 // TODO side-effect (?)
 // import BaseAudioHandler from '../handlers/base-audio-handler';
 import BaseLightsHandler from '../handlers/base-lights-handler';
-import BaseScreenHandler from '../handlers/base-screen-handler';
 import { SubscribeEntity } from '@gewis/aurora-core-util';
 import { BaseHandler } from '@gewis/aurora-core-util';
 // TODO side-effect (?)
 // import SimpleAudioHandler from '../handlers/audio/simple-audio-handler';
 import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
-import { Screen } from './entities';
+import { BaseScreenHandler, ScreenEntity as Screen } from '@gewis/aurora-core-screen';
 import { LightsGroup } from '../lights/entities';
 import { RandomEffectsHandler } from '../handlers/lights';
 import SetEffectsHandler from '../handlers/lights/set-effects-handler';
@@ -154,7 +153,9 @@ export default class HandlerManager {
       entity.currentHandler = '';
       entity.save().catch((e) => logger.error(e));
     }
-    this.emitterStore.get<BackofficeSyncEmitter>(backofficeSyncEmitter).emit(`handler_${entity.constructor.name.toLowerCase()}_update`);
+    this.emitterStore
+      .get<BackofficeSyncEmitter>(backofficeSyncEmitter)
+      .emit(`handler_${entity.constructor.name.toLowerCase()}_update`);
 
     return true;
   }

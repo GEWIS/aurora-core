@@ -1,7 +1,7 @@
 import BaseMode from './base-mode';
 import { MusicEmitter, musicEmitter } from '@gewis/aurora-core-audio-handler';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
-import EmitterStore, { backofficeSyncEmitter} from '../events/emitter-store';
+import EmitterStore, { backofficeSyncEmitter } from '../events/emitter-store';
 
 export default class ModeManager {
   private static instance: ModeManager;

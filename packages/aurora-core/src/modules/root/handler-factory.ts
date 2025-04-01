@@ -8,9 +8,8 @@ import { ScenesHandler } from '../handlers/lights/scenes-handler';
 import EffectSequenceHandler from '../handlers/lights/effect-sequence-handler';
 import TimeTrailRaceLightsHandler from '../handlers/lights/time-trail-race-lights-handler';
 import { BaseHandler } from '@gewis/aurora-core-util';
-import {BaseAudioHandler, SimpleAudioHandler } from '@gewis/aurora-core-audio-handler';
+import { BaseAudioHandler, SimpleAudioHandler } from '@gewis/aurora-core-audio-handler';
 import { SocketioNamespaces } from '@gewis/aurora-core-util';
-import BaseScreenHandler from '../handlers/base-screen-handler';
 import {
   CenturionScreenHandler,
   CurrentlyPlayingTrackHandler,
@@ -18,11 +17,13 @@ import {
   HubbleClosedPosterScreenHandler,
   HubbleLastcallPosterScreenHandler,
   HubblePosterScreenHandler,
-  RoomResponsibleLegacyHandler,
   StageEffectsHandler,
   StaticPosterHandler,
   TimeTrailRaceScreenHandler,
 } from '../handlers/screen';
+
+import { Handler as RoomResponsibleLegacyHandler } from '@gewis/aurora-core-screen-handler-room-responsible';
+import { BaseScreenHandler } from '@gewis/aurora-core-screen';
 
 /**
  * Object to create the set of all handlers belonging to each listener
@@ -72,7 +73,9 @@ export default class HandlerFactory {
       this.createHandler(() => new HubbleClosedPosterScreenHandler(socket)),
       this.createHandler(() => new HubbleLastcallPosterScreenHandler(socket)),
       this.createHandler(() => new StageEffectsHandler(socket)),
+      // TODO needs to be move
       this.createHandler(() => new StaticPosterHandler(socket)),
+      // TODO needs to be moved as full module
       this.createHandler(() => new TimeTrailRaceScreenHandler(socket)),
       this.createHandler(() => new RoomResponsibleLegacyHandler(socket)),
     ];

@@ -1,4 +1,4 @@
-import BaseScreenHandler from '../base-screen-handler';
+import { BaseScreenHandler } from '@gewis/aurora-core-screen';
 import {
   RaceFinishedEvent,
   RaceInitializedEvent,

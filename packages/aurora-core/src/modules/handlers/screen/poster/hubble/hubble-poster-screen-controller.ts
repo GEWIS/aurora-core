@@ -1,6 +1,6 @@
 import { BasePosterResponse, BasePosterScreenController } from '../base-poster-screen-controller';
 import HandlerManager from '../../../../root/handler-manager';
-import { Screen } from '../../../../root/entities';
+import { ScreenEntity as Screen } from '@gewis/aurora-core-screen';
 import BasePosterScreenHandler from '../base-poster-screen-handler';
 import { HubblePosterScreenHandler } from '../../index';
 import { Get, Post, Request, Route, Security, Tags } from 'tsoa';

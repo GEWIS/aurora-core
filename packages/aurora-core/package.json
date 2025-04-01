@@ -28,6 +28,8 @@
     "@gewis/aurora-core-auth-oidc": "workspace:^",
     "@gewis/aurora-core-logger": "workspace:^",
     "@gewis/aurora-core-order-plugin": "workspace:^",
+    "@gewis/aurora-core-screen": "workspace:^",
+    "@gewis/aurora-core-screen-handler-room-responsible": "workspace:^",
     "@gewis/aurora-core-util": "workspace:^",
     "@sudosos/sudosos-client": "github:GEWIS/sudosos-client",
     "async-lock": "^1.4.1",

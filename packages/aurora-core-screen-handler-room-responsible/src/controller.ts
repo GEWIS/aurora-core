@@ -3,7 +3,12 @@ import { Controller } from '@tsoa/runtime';
 import { ServerSettingsStore } from '@gewis/aurora-core-server-settings';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import { securityGroups } from '@gewis/aurora-core-util';
-import { ScreenHandlerSettings } from './screen-handler-settings';
+
+export interface ScreenHandlerSettings {
+  RoomResponsibleLegacyScreenURL: string;
+  HubblePosterScreenHandler: boolean;
+  GewisPosterScreenHandler: boolean;
+}
 
 @Route('handler/screen/poster')
 @Tags('Handlers')

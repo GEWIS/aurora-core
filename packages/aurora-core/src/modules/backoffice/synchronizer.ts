@@ -7,8 +7,7 @@ export class BackofficeSynchronizer {
 
   private emitters: Map<string, string> = new Map();
 
-  constructor() {
-  }
+  constructor() {}
 
   public static getInstance() {
     if (!this.instance) {
@@ -22,20 +21,19 @@ export class BackofficeSynchronizer {
   }
 
   public init(socket: Namespace) {
-    const emitterStore = EmitterStore.getInstance()
+    const emitterStore = EmitterStore.getInstance();
     for (const [name, eventName] of this.emitters) {
       if (eventName == '*') {
         // In case of a wildcard, we need to listen to all events
         emitterStore.get<EventEmitter>(name).on('*', (eventName: string, ...args: any[]) => {
           socket.emit(eventName, ...args);
-        })
+        });
       } else {
         // Otherwise, just emit the given event
         emitterStore.get<EventEmitter>(name).on(eventName, (event) => {
           socket.emit(eventName, event);
-        })
+        });
       }
     }
   }
 }
-

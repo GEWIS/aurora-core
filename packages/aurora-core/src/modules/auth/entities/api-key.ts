@@ -1,6 +1,7 @@
 import { BaseEntity, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
-import { LightsController, Screen } from '../../root/entities';
+import { LightsController } from '../../root/entities';
 import IntegrationUser from './integration-user';
+import { ScreenEntity as Screen } from '@gewis/aurora-core-screen';
 import { Audio } from '@gewis/aurora-core-audio-handler';
 
 @Entity()

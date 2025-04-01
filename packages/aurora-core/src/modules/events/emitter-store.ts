@@ -1,8 +1,7 @@
 import { EventEmitter } from 'node:events';
 
-export const backofficeSyncEmitter = 'backoffice'
-export const orderEmitter = 'order'
-
+export const backofficeSyncEmitter = 'backoffice';
+export const orderEmitter = 'order';
 
 export default class EmitterStore {
   private static instance: EmitterStore;

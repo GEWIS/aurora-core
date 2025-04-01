@@ -1,8 +1,8 @@
 import BaseMode from '../base-mode';
 import { LightsGroup } from '../../lights/entities';
-import {  Screen } from '../../root/entities';
+import { ScreenEntity as Screen } from '@gewis/aurora-core-screen';
 import SetEffectsHandler from '../../handlers/lights/set-effects-handler';
-import {SimpleAudioHandler, MusicEmitter, TrackChangeEvent} from '@gewis/aurora-core-audio-handler';
+import { SimpleAudioHandler, MusicEmitter, TrackChangeEvent } from '@gewis/aurora-core-audio-handler';
 import MixTape, { FeedEvent, Horn, Song, SongData } from './tapes/mix-tape';
 import { BeatFadeOut, StaticColor } from '../../lights/effects/color';
 import { ClassicRotate, SearchLight } from '../../lights/effects/movement';

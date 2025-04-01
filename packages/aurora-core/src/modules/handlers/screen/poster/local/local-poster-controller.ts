@@ -2,7 +2,7 @@ import { Controller, TsoaResponse, UploadedFile } from '@tsoa/runtime';
 import { Body, Delete, Get, Post, Request, Res, Route, Security, Tags } from 'tsoa';
 import { StaticPosterHandler } from '../../index';
 import HandlerManager from '../../../../root/handler-manager';
-import { Screen } from '../../../../root/entities';
+import { ScreenEntity as Screen } from '@gewis/aurora-core-screen';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import { securityGroups } from '@gewis/aurora-core-util';
 import LocalPosterService, { LocalPosterResponse } from './local-poster-service';

@@ -2,7 +2,7 @@ import { Controller, Path } from '@tsoa/runtime';
 import { Body, Get, Post, Request, Route, Security, Tags } from 'tsoa';
 import { Request as ExpressRequest } from 'express';
 import HandlerManager from './handler-manager';
-import {  Screen } from './entities';
+import { ScreenEntity as Screen } from '@gewis/aurora-core-screen';
 import { Audio } from '@gewis/aurora-core-audio-handler';
 import RootAudioService, { AudioResponse } from './root-audio-service';
 import { LightsGroup } from '../lights/entities';

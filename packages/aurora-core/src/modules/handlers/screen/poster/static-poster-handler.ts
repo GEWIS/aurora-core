@@ -1,6 +1,6 @@
-import BaseScreenHandler from '../../base-screen-handler';
 import { TrackChangeEvent } from '@gewis/aurora-core-audio-handler';
 import { LocalPosterResponse } from './local/local-poster-service';
+import { BaseScreenHandler } from '@gewis/aurora-core-screen';
 
 const UPDATE_POSTER_EVENT_NAME = 'update_static_poster';
 const DEFAULT_CLOCK_VISIBLE = true;

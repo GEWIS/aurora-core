@@ -5,7 +5,7 @@ import { Request as ExpressRequest } from 'express';
 import ModeManager from './mode-manager';
 import { SubscribeEntity } from '@gewis/aurora-core-util';
 import { LightsGroup } from '../lights/entities';
-import {  Screen } from '../root/entities';
+import { ScreenEntity as Screen } from '@gewis/aurora-core-screen';
 import { Audio } from '@gewis/aurora-core-audio-handler';
 import CenturionMode from './centurion/centurion-mode';
 import tapes from './centurion/tapes';

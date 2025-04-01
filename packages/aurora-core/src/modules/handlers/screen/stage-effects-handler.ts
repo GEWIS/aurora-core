@@ -1,5 +1,5 @@
 import { TrackChangeEvent, BeatEvent } from '@gewis/aurora-core-audio-handler';
-import BaseScreenHandler from '../base-screen-handler';
+import { BaseScreenHandler } from '@gewis/aurora-core-screen';
 
 export default class StageEffectsHandler extends BaseScreenHandler {
   changeTrack(event: TrackChangeEvent[]): void {

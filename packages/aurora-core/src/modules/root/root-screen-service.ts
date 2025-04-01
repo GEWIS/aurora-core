@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { Screen } from './entities';
+import { ScreenEntity as Screen } from '@gewis/aurora-core-screen';
 import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import AuthService from '../auth/auth-service';
 

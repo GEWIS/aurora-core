@@ -1,9 +1,9 @@
 import crypto from 'crypto';
 import BaseMode from '../base-mode';
-import {SimpleAudioHandler } from '@gewis/aurora-core-audio-handler';
+import { SimpleAudioHandler } from '@gewis/aurora-core-audio-handler';
 import TimeTrailRaceScreenHandler from '../../handlers/screen/time-trail-race-screen-handler';
 import { LightsGroup } from '../../lights/entities';
-import { Screen } from '../../root/entities';
+import { ScreenEntity as Screen } from '@gewis/aurora-core-screen';
 import { Audio } from '@gewis/aurora-core-audio-handler';
 import { TimeTrailRaceState } from './time-trail-race-state';
 import { BackofficeSyncEmitter } from '../../events/backoffice-sync-emitter';

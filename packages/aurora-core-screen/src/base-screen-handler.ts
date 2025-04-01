@@ -1,7 +1,7 @@
 import { Namespace } from 'socket.io';
 import { EventParams } from 'socket.io/dist/typed-events';
 import { BaseHandler } from '@gewis/aurora-core-util';
-import Screen from '../root/entities/screen';
+import { ScreenEntity as Screen } from '@gewis/aurora-core-screen';
 import { TrackChangeEvent } from '@gewis/aurora-core-audio-handler';
 import { SocketioNamespaces } from '@gewis/aurora-core-util';
 import { ShowOrdersEvent } from '@gewis/aurora-core-order-plugin';

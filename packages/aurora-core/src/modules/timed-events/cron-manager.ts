@@ -8,7 +8,7 @@ import RootAudioService from '../root/root-audio-service';
 import RootLightsService from '../root/root-lights-service';
 import RootScreenService from '../root/root-screen-service';
 import LocalPosterService from '../handlers/screen/poster/local/local-poster-service';
-import { Screen } from '../root/entities';
+import { ScreenEntity as Screen } from '@gewis/aurora-core-screen';
 import { GewisPosterScreenHandler, StaticPosterHandler } from '../handlers/screen';
 
 export class CronExpressionError extends Error {}
