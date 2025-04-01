@@ -82,7 +82,7 @@ export default class CenturionMode extends BaseMode<
       discoballIds.includes(s.id),
     );
 
-    // Disable the disco balls if they are enabled
+    // Disable the disco ball if they are enabled
     this.lightsSwitchManager.getEnabledSwitches().forEach((s) => {
       if (discoballIds.includes(s.id)) {
         this.lightsSwitchManager.disableSwitch(s);
@@ -125,6 +125,14 @@ export default class CenturionMode extends BaseMode<
     this.audioHandler.setPlayback(seconds);
 
     if (this.playing) {
+      // Lazy solution for figuring out whether the discoball should be on:
+      // let's just disable it by default
+      if (this.hasDiscoBall()) {
+        this.discoballs.forEach((s) => {
+          this.lightsSwitchManager.disableSwitch(s);
+        });
+      }
+
       this.registerFeedEvents(seconds);
       this.fireLastFeedEvent(seconds);
     }
@@ -316,18 +324,34 @@ export default class CenturionMode extends BaseMode<
       this.emitSong(event.data);
     } else if (event.type === 'effect') {
       const isEffectDisableAll =
-        event.data.effects.pars &&
-        event.data.effects.pars.length === 0 &&
-        event.data.effects.movingHeadRgbColor &&
-        event.data.effects.movingHeadRgbColor.length === 0 &&
-        event.data.effects.movingHeadRgbMovement &&
-        event.data.effects.movingHeadRgbMovement.length === 0 &&
-        event.data.effects.movingHeadWheelColor &&
-        event.data.effects.movingHeadWheelColor.length === 0 &&
-        event.data.effects.movingHeadWheelMovement &&
-        event.data.effects.movingHeadWheelMovement.length === 0;
+        event.data.reset ||
+        (event.data.effects.pars &&
+          event.data.effects.pars.length === 0 &&
+          event.data.effects.movingHeadRgbColor &&
+          event.data.effects.movingHeadRgbColor.length === 0 &&
+          event.data.effects.movingHeadRgbMovement &&
+          event.data.effects.movingHeadRgbMovement.length === 0 &&
+          event.data.effects.movingHeadWheelColor &&
+          event.data.effects.movingHeadWheelColor.length === 0 &&
+          event.data.effects.movingHeadWheelMovement &&
+          event.data.effects.movingHeadWheelMovement.length === 0);
 
       this.lights.forEach((l) => {
+        if (event.data.discoBall && isEffectDisableAll && !this.hasDiscoBall()) {
+          // If we want to only have the disco ball turned on, but our setup does not have one,
+          // we should just do random light effects
+          event.data.random = true;
+        } else if (event.data.discoBall && this.hasDiscoBall()) {
+          // Enable disco ball
+          this.discoballs.forEach((s) => {
+            this.lightsSwitchManager.enableSwitch(s);
+          });
+        } else if (this.hasDiscoBall()) {
+          // Disable all disco ball if they should not be enabled
+          this.discoballs.forEach((s) => {
+            this.lightsSwitchManager.disableSwitch(s);
+          });
+        }
         if (event.data.reset) {
           // Reset effect
           this.lightsHandler.removeColorEffect(l);
@@ -341,22 +365,6 @@ export default class CenturionMode extends BaseMode<
             this.beatGenerator.start(this.beatGenerator.bpm);
           }
           return;
-        }
-        if (event.data.effects.discoBall && isEffectDisableAll && !this.hasDiscoBall()) {
-          // If we want to only have the disco ball turned on, but our setup does not have one,
-          // we should just do random light effects
-          this.setRandomLightEffects();
-          return;
-        }
-        if (event.data.effects.discoBall) {
-          this.discoballs.forEach((s) => {
-            this.lightsSwitchManager.enableSwitch(s);
-          });
-        } else if (this.hasDiscoBall()) {
-          // Disable all disco balls if they should not be enabled
-          this.discoballs.forEach((s) => {
-            this.lightsSwitchManager.disableSwitch(s);
-          });
         }
         if (l.pars.length > 0 && event.data.effects.pars) {
           // Color effect for pars

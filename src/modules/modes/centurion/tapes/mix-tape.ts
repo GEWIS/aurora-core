@@ -26,6 +26,11 @@ export type Song = {
 
 export type EffectData = {
   /**
+   * Whether the disco ball should be enabled. Must be manually turned off, this will not
+   * happen when changing to a random effect. Defaults to false (turn off the disco ball).
+   */
+  discoBall?: boolean;
+  /**
    * Disable all lights (overrides effects and random)
    */
   reset?: boolean;
@@ -43,11 +48,6 @@ export type EffectData = {
     movingHeadRgbMovement?: LightsEffectBuilder[];
     movingHeadWheelColor?: LightsEffectBuilder[];
     movingHeadWheelMovement?: LightsEffectBuilder[];
-    /**
-     * Whether the disco ball should be enabled. Must be manually turned off, this will not
-     * happen when changing to a random effect. Defaults to false (turn off the disco ball).
-     */
-    discoBall?: boolean;
   };
 };
 

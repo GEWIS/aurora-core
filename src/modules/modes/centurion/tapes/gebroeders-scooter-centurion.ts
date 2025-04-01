@@ -286,30 +286,6 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 757.01,
-      type: 'effect',
-      data: {
-        effects: {
-          // Turn on only the disco ball; all other lights should be off.
-          discoBall: true,
-          pars: [],
-          movingHeadRgbColor: [],
-          movingHeadRgbMovement: [],
-          movingHeadWheelColor: [],
-          movingHeadWheelMovement: [],
-        },
-      },
-    },
-    {
-      timestamp: 811.5,
-      type: 'effect',
-      data: {
-        effects: {
-          discoBall: false,
-        },
-      },
-    },
-    {
       timestamp: 811.5,
       type: 'horn',
       data: {
@@ -482,19 +458,17 @@ const centurion: MixTape = {
       timestamp: 1288.0,
       type: 'effect',
       data: {
-        effects: {
-          // Add the disco ball
-          discoBall: true,
-        },
+        // Add the disco ball
+        discoBall: true,
+        effects: {},
       },
     },
     {
       timestamp: 1348.4,
       type: 'effect',
       data: {
-        effects: {
-          discoBall: false,
-        },
+        discoBall: false,
+        effects: {},
       },
     },
     {
@@ -1084,9 +1058,9 @@ const centurion: MixTape = {
       timestamp: 3279.0,
       type: 'effect',
       data: {
+        // Turn on only the disco ball; all other lights should be off.
+        discoBall: true,
         effects: {
-          // Turn on only the disco ball; all other lights should be off.
-          discoBall: true,
           pars: [],
           movingHeadRgbColor: [],
           movingHeadRgbMovement: [],
@@ -1123,9 +1097,8 @@ const centurion: MixTape = {
       timestamp: 3369.8,
       type: 'effect',
       data: {
-        effects: {
-          discoBall: false,
-        },
+        discoBall: false,
+        effects: {},
       },
     },
     {
@@ -1705,9 +1678,9 @@ const centurion: MixTape = {
       timestamp: 5237.01,
       type: 'effect',
       data: {
+        // Turn on only the disco ball; all other lights should be off.
+        discoBall: true,
         effects: {
-          // Turn on only the disco ball; all other lights should be off.
-          discoBall: true,
           pars: [],
           movingHeadRgbColor: [],
           movingHeadRgbMovement: [],
@@ -1736,9 +1709,9 @@ const centurion: MixTape = {
       timestamp: 5278.01,
       type: 'effect',
       data: {
+        // Keep the disco ball turned on; all other lights should be off.
+        discoBall: true,
         effects: {
-          // Keep the disco ball turned on; all other lights should be off.
-          discoBall: true,
           pars: [],
           movingHeadRgbColor: [],
           movingHeadRgbMovement: [],
@@ -1767,9 +1740,9 @@ const centurion: MixTape = {
       timestamp: 5331.01,
       type: 'effect',
       data: {
+        // Keep the disco ball turned on; all other lights should be off.
+        discoBall: true,
         effects: {
-          // Keep the disco ball turned on; all other lights should be off.
-          discoBall: true,
           pars: [],
           movingHeadRgbColor: [],
           movingHeadRgbMovement: [],
@@ -1789,9 +1762,8 @@ const centurion: MixTape = {
       timestamp: 5373.85,
       type: 'effect',
       data: {
-        effects: {
-          discoBall: false,
-        },
+        discoBall: false,
+        effects: {},
       },
     },
     {
@@ -2005,9 +1977,9 @@ const centurion: MixTape = {
       timestamp: 5970.0,
       type: 'effect',
       data: {
+        discoBall: true,
         effects: {
           // Keep the disco ball turned on; all other lights should be off.
-          discoBall: true,
           pars: [],
           movingHeadRgbColor: [],
           movingHeadRgbMovement: [],
@@ -2028,8 +2000,8 @@ const centurion: MixTape = {
       timestamp: 6021,
       type: 'effect',
       data: {
+        discoBall: false,
         effects: {
-          discoBall: false,
           pars: [Fire.build()],
           movingHeadWheelColor: [StaticColor.build({ color: RgbColor.BLINDINGWHITE })],
           movingHeadWheelMovement: [SearchLight.build({ cycleTime: 20000, radiusFactor: 1.5 })],

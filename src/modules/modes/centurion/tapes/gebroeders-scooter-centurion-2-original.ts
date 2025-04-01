@@ -588,9 +588,9 @@ const centurion2Original: MixTape = {
       timestamp: 1752.01,
       type: 'effect',
       data: {
+        // Turn on only the disco ball; all other lights should be off.
+        discoBall: true,
         effects: {
-          // Turn on only the disco ball; all other lights should be off.
-          discoBall: true,
           pars: [],
           movingHeadRgbColor: [],
           movingHeadRgbMovement: [],
@@ -619,10 +619,10 @@ const centurion2Original: MixTape = {
       timestamp: 1816.01,
       type: 'effect',
       data: {
+        // Override the random change of effects when song changes to
+        // keep on the disco ball turned on
+        discoBall: true,
         effects: {
-          // Override the random change of effects when song changes to
-          // keep on the disco ball turned on
-          discoBall: true,
           pars: [],
           movingHeadRgbColor: [],
           movingHeadRgbMovement: [],
@@ -635,9 +635,8 @@ const centurion2Original: MixTape = {
       timestamp: 1839.4,
       type: 'effect',
       data: {
-        effects: {
-          discoBall: false,
-        },
+        discoBall: false,
+        effects: {},
       },
     },
     {
@@ -1380,10 +1379,9 @@ const centurion2Original: MixTape = {
       timestamp: 4100.1,
       type: 'effect',
       data: {
-        effects: {
-          // Turn on the disco ball; leave other effects intact.
-          discoBall: true,
-        },
+        // Turn on the disco ball; leave other effects intact.
+        discoBall: true,
+        effects: {},
       },
     },
     {
@@ -1415,10 +1413,9 @@ const centurion2Original: MixTape = {
       timestamp: 4178.7,
       type: 'effect',
       data: {
-        effects: {
-          // Turn off only the disco ball
-          discoBall: false,
-        },
+        // Turn off only the disco ball
+        discoBall: false,
+        effects: {},
       },
     },
     {
@@ -1646,9 +1643,9 @@ const centurion2Original: MixTape = {
       timestamp: 4740.0,
       type: 'effect',
       data: {
+        // Turn on only the disco ball
+        discoBall: true,
         effects: {
-          // Turn on only the disco ball
-          discoBall: true,
           pars: [],
           movingHeadRgbColor: [],
           movingHeadRgbMovement: [],
@@ -1661,10 +1658,9 @@ const centurion2Original: MixTape = {
       timestamp: 4796.0,
       type: 'effect',
       data: {
-        effects: {
-          // Turn off the disco ball. The room is now completely black
-          discoBall: false,
-        },
+        // Turn off the disco ball. The room is now completely black
+        discoBall: false,
+        effects: {},
       },
     },
     {
@@ -1785,9 +1781,9 @@ const centurion2Original: MixTape = {
       timestamp: 5132.0,
       type: 'effect',
       data: {
+        // Turn on only the disco ball
+        discoBall: true,
         effects: {
-          // Turn on only the disco ball
-          discoBall: true,
           pars: [],
           movingHeadRgbColor: [],
           movingHeadRgbMovement: [],
@@ -1816,10 +1812,9 @@ const centurion2Original: MixTape = {
       timestamp: 5181.6,
       type: 'effect',
       data: {
-        effects: {
-          // Turn off the disco ball
-          discoBall: false,
-        },
+        // Turn off the disco ball
+        discoBall: false,
+        effects: {},
       },
     },
     {
