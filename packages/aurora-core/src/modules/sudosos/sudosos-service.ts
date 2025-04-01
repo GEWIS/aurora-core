@@ -1,7 +1,7 @@
 import { BalanceResponse, Configuration, DineroObjectResponse, UserResponse } from '@sudosos/sudosos-client';
 import { SudoSOSClient } from './sudosos-api-service';
 import { SudoSOSSettings, SudoSOSSettingsName } from './sudosos-settings';
-import { ServerSettingsStore } from '@gewis/aurora-core-server-settings';
+import { ServerSettingsStore } from '@gewis/aurora-core-settings';
 
 export interface SudoSOSDebtorResponse {
   userId: number;

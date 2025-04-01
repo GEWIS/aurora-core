@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { PosterManager } from '../poster-manager';
+import { PosterManager } from '@gewis/aurora-core-poster-plugin';
 import {
   BasePoster,
   ErrorPoster,
@@ -9,7 +9,7 @@ import {
   MediaPoster,
   Poster,
   PosterType,
-} from '../poster';
+} from '@gewis/aurora-core-poster-plugin';
 import { Board, Card, Checklist, TrelloClient, TrelloList } from './client';
 import { TrelloPosterStorage } from './trello-poster-storage';
 

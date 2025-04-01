@@ -3,7 +3,8 @@ import { ValidateError } from 'tsoa';
 import { AxiosError } from 'axios';
 import { HttpApiException, HttpStatusCode } from '@gewis/aurora-core-util';
 import logger from '@gewis/aurora-core-logger';
-import { ApiError as TrelloAPIError } from './modules/handlers/screen/poster/trello/client';
+// TODO TrelloApiError should not necessarily be here - should be treated in the plugin
+import { ApiError as TrelloAPIError } from '@gewis/aurora-core-poster-trello';
 import ModeDisabledError from './modules/modes/mode-disabled-error';
 import { InvalidStateError } from './modules/modes/time-trail-race/time-trail-race-invalid-state-error';
 

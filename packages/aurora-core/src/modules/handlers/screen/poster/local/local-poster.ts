@@ -1,5 +1,5 @@
 import { BaseEntity } from '@gewis/aurora-core-util';
-import { File } from '../../../../files/entities';
+import { File } from '@gewis/aurora-core-files';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
 @Entity()

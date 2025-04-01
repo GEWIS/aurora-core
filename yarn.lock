@@ -215,6 +215,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@gewis/aurora-core-files@workspace:packages/aurora-core-files":
+  version: 0.0.0-use.local
+  resolution: "@gewis/aurora-core-files@workspace:packages/aurora-core-files"
+  dependencies:
+    pino: "npm:^9.5.0"
+    pino-http: "npm:^10.3.0"
+    pino-pretty: "npm:^11.3.0"
+  languageName: unknown
+  linkType: soft
+
 "@gewis/aurora-core-logger@workspace:^, @gewis/aurora-core-logger@workspace:packages/aurora-core-logger":
   version: 0.0.0-use.local
   resolution: "@gewis/aurora-core-logger@workspace:packages/aurora-core-logger"
@@ -228,6 +238,26 @@ __metadata:
 "@gewis/aurora-core-order-plugin@workspace:^, @gewis/aurora-core-order-plugin@workspace:packages/aurora-core-order-plugin":
   version: 0.0.0-use.local
   resolution: "@gewis/aurora-core-order-plugin@workspace:packages/aurora-core-order-plugin"
+  dependencies:
+    pino: "npm:^9.5.0"
+    pino-http: "npm:^10.3.0"
+    pino-pretty: "npm:^11.3.0"
+  languageName: unknown
+  linkType: soft
+
+"@gewis/aurora-core-poster-plugin@workspace:^, @gewis/aurora-core-poster-plugin@workspace:packages/aurora-core-poster-plugin":
+  version: 0.0.0-use.local
+  resolution: "@gewis/aurora-core-poster-plugin@workspace:packages/aurora-core-poster-plugin"
+  dependencies:
+    pino: "npm:^9.5.0"
+    pino-http: "npm:^10.3.0"
+    pino-pretty: "npm:^11.3.0"
+  languageName: unknown
+  linkType: soft
+
+"@gewis/aurora-core-poster-trello@workspace:packages/aurora-core-poster-trello":
+  version: 0.0.0-use.local
+  resolution: "@gewis/aurora-core-poster-trello@workspace:packages/aurora-core-poster-trello"
   dependencies:
     pino: "npm:^9.5.0"
     pino-http: "npm:^10.3.0"
@@ -262,9 +292,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gewis/aurora-core-server-settings@workspace:packages/aurora-core-settings":
+"@gewis/aurora-core-settings@workspace:packages/aurora-core-settings":
   version: 0.0.0-use.local
-  resolution: "@gewis/aurora-core-server-settings@workspace:packages/aurora-core-settings"
+  resolution: "@gewis/aurora-core-settings@workspace:packages/aurora-core-settings"
   dependencies:
     "@gewis/aurora-core-database-util": "workspace:^"
     "@gewis/aurora-core-util": "workspace:^"
@@ -303,6 +333,7 @@ __metadata:
     "@gewis/aurora-core-auth-oidc": "workspace:^"
     "@gewis/aurora-core-logger": "workspace:^"
     "@gewis/aurora-core-order-plugin": "workspace:^"
+    "@gewis/aurora-core-poster-plugin": "workspace:^"
     "@gewis/aurora-core-screen": "workspace:^"
     "@gewis/aurora-core-screen-handler-room-responsible": "workspace:^"
     "@gewis/aurora-core-util": "workspace:^"

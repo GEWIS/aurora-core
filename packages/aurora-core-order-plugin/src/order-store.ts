@@ -1,6 +1,6 @@
 import { Order } from './entities';
 import { OrderSettings, OrderSettingsName } from './order-settings';
-import { ServerSettingsStore } from '@gewis/aurora-core-server-settings';
+import { ServerSettingsStore } from '@gewis/aurora-core-settings';
 
 /**
  * In memory store of all orders that should be propagated using Aurora.

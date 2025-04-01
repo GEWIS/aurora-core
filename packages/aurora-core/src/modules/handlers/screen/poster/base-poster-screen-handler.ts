@@ -1,13 +1,13 @@
 import { Namespace } from 'socket.io';
 import { TrackChangeEvent } from '@gewis/aurora-core-audio-handler';
-import { PosterManager } from './poster-manager';
-import { TrelloPosterManager } from './trello/trello-poster-manager';
+import { PosterManager } from '@gewis/aurora-core-poster-plugin';
+import { TrelloPosterManager } from '@gewis/aurora-core-poster-trello';
 import { BaseScreenHandler } from '@gewis/aurora-core-screen';
 
 export default abstract class BasePosterScreenHandler extends BaseScreenHandler {
   public posterManager: PosterManager;
 
-  // TODO pass poster manager as option
+  // TODO pass poster manager as option -- people should decide themselves which manager to use
   constructor(socket: Namespace) {
     super(socket);
     this.posterManager = new TrelloPosterManager();

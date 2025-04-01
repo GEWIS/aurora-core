@@ -2,7 +2,7 @@ import { Controller } from '@tsoa/runtime';
 import { Request } from 'tsoa';
 import { Request as ExpressRequest } from 'express';
 import BasePosterScreenHandler from './base-poster-screen-handler';
-import { Poster } from './poster';
+import { Poster } from '@gewis/aurora-core-poster-plugin';
 import logger from '@gewis/aurora-core-logger';
 import OlympicsService from './olympics-service';
 import NsTrainsService, { TrainResponse } from './ns-trains-service';

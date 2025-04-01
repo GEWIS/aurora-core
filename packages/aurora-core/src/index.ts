@@ -24,7 +24,7 @@ import { AuroraConfig } from '@gewis/aurora-core-util';
 import { DataSourceSingleton } from '@gewis/aurora-core-database-util';
 import { Entities as BaseEntities } from './modules/root/entities';
 import { Entities as AuthEntities } from './modules/auth/entities';
-import { Entities as FileEntities } from './modules/files/entities';
+import { Entities as FileEntities } from '@gewis/aurora-core-files';
 import { Entities as AuditEntities } from './modules/audit/entities';
 import { Entities as SpotifyEntities } from './modules/spotify/entities';
 import { Entities as LightsEntities } from './modules/lights/entities';
@@ -34,7 +34,7 @@ import {
   ScreenHandlerSettings,
   ScreenHandlerSettingsDefaults,
 } from './modules/handlers/screen/screen-handler-settings';
-import { ServerSettingsStore, ServerSetting } from '@gewis/aurora-core-server-settings';
+import { ServerSettingsStore, ServerSetting } from '@gewis/aurora-core-settings';
 import { BackofficeSyncEmitter } from './modules/events/backoffice-sync-emitter';
 import { MusicEmitter, musicEmitter } from '@gewis/aurora-core-audio-handler';
 

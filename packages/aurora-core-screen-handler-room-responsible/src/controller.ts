@@ -1,6 +1,6 @@
 import { Get, Route, Security, Tags } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
-import { ServerSettingsStore } from '@gewis/aurora-core-server-settings';
+import { ServerSettingsStore } from '@gewis/aurora-core-settings';
 import { SecurityNames } from '@gewis/aurora-core-util';
 import { securityGroups } from '@gewis/aurora-core-util';
 
