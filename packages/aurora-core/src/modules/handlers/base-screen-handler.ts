@@ -4,15 +4,17 @@ import { BaseHandler } from '@gewis/aurora-core-util';
 import Screen from '../root/entities/screen';
 import { TrackChangeEvent } from '@gewis/aurora-core-audio-handler';
 import { SocketioNamespaces } from '@gewis/aurora-core-util';
-import { ShowOrdersEvent } from '../events/order-emitter-events';
+import { ShowOrdersEvent } from '@gewis/aurora-core-order-plugin';
 
 export default abstract class BaseScreenHandler extends BaseHandler<Screen> {
   constructor(private socket: Namespace) {
     super();
   }
 
+  // TODO this should not be here?
   abstract changeTrack(event: TrackChangeEvent[]): void;
 
+  // TODO this should not be used?
   public showOrders(event: ShowOrdersEvent): void {
     this.sendEvent('orders', event);
   }

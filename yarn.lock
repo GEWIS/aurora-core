@@ -225,6 +225,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@gewis/aurora-core-order-plugin@workspace:^, @gewis/aurora-core-order-plugin@workspace:packages/aurora-core-order-plugin":
+  version: 0.0.0-use.local
+  resolution: "@gewis/aurora-core-order-plugin@workspace:packages/aurora-core-order-plugin"
+  dependencies:
+    pino: "npm:^9.5.0"
+    pino-http: "npm:^10.3.0"
+    pino-pretty: "npm:^11.3.0"
+  languageName: unknown
+  linkType: soft
+
 "@gewis/aurora-core-server-settings@workspace:packages/aurora-core-settings":
   version: 0.0.0-use.local
   resolution: "@gewis/aurora-core-server-settings@workspace:packages/aurora-core-settings"
@@ -265,6 +275,7 @@ __metadata:
     "@gewis/aurora-core-auth-mock": "workspace:^"
     "@gewis/aurora-core-auth-oidc": "workspace:^"
     "@gewis/aurora-core-logger": "workspace:^"
+    "@gewis/aurora-core-order-plugin": "workspace:^"
     "@gewis/aurora-core-util": "workspace:^"
     "@hey-api/openapi-ts": "npm:^0.54.2"
     "@sudosos/sudosos-client": "github:GEWIS/sudosos-client"

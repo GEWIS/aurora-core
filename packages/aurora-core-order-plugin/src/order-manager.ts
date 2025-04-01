@@ -1,4 +1,4 @@
-import { OrderEmitter } from '../events/order-emitter';
+import { OrderEmitter } from './order-emitter';
 import OrderStore from './order-store';
 
 export default class OrderManager {

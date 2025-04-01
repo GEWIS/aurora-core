@@ -11,13 +11,13 @@ import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
 import LightsControllerManager from './modules/root/lights-controller-manager';
 import ModeManager from './modules/modes/mode-manager';
 import { ArtificialBeatGenerator } from './modules/beats/artificial-beat-generator';
-import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
+import { BackofficeSynchronizer } from './modules/backoffice/synchronizer';
 import { SocketioNamespaces } from '@gewis/aurora-core-util';
 import SocketConnectionManager from './modules/root/socket-connection-manager';
 import EmitterStore, { backofficeSyncEmitter, orderEmitter } from './modules/events/emitter-store';
 // do not remove; used for extending existing types
 import Types from './types';
-import { OrderManager, OrderSettingsDefault } from './modules/orders';
+import { OrderManager, OrderSettingsDefault, OrderSettings, OrderEmitter } from '@gewis/aurora-core-order-plugin';
 import TimedEventsService from './modules/timed-events/timed-events-service';
 import LightsSwitchManager from './modules/root/lights-switch-manager';
 import { AuroraConfig } from '@gewis/aurora-core-util';
@@ -34,10 +34,8 @@ import {
   ScreenHandlerSettings,
   ScreenHandlerSettingsDefaults,
 } from './modules/handlers/screen/screen-handler-settings';
-import { OrderSettings } from './modules/orders';
 import { ServerSettingsStore, ServerSetting } from '@gewis/aurora-core-server-settings';
 import { BackofficeSyncEmitter } from './modules/events/backoffice-sync-emitter';
-import { OrderEmitter } from './modules/events/order-emitter';
 import { MusicEmitter, musicEmitter } from '@gewis/aurora-core-audio-handler';
 
 async function createApp(config: AuroraConfig): Promise<void> {
@@ -120,7 +118,13 @@ async function createApp(config: AuroraConfig): Promise<void> {
 
   OrderManager.getInstance().init(emitterStore.get<OrderEmitter>(orderEmitter));
 
-  initBackofficeSynchronizer(io.of('/backoffice'), emitterStore);
+  const sync = BackofficeSynchronizer.getInstance();
+  // TODO fetch this information from plugins
+  sync.registerEmitter(musicEmitter, 'beat')
+  sync.registerEmitter(musicEmitter, 'change_track')
+  sync.registerEmitter(backofficeSyncEmitter, '*')
+  sync.registerEmitter(orderEmitter, 'orders')
+  sync.init(io.of('/backoffice'));
 
   const port = process.env.PORT || 3000;
   httpServer.listen(port, () => logger.info(`Listening at http://localhost:${port}`));

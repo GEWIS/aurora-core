@@ -1,4 +1,4 @@
-import { Order } from '../orders/entities';
+import { Order } from './entities';
 
 export interface ShowOrdersEvent {
   orders: Order[];

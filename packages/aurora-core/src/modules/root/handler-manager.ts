@@ -27,9 +27,8 @@ import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 import TimeTrailRaceScreenHandler from '../handlers/screen/time-trail-race-screen-handler';
 import TimeTrailRaceLightsHandler from '../handlers/lights/time-trail-race-lights-handler';
 import HandlerFactory from './handler-factory';
-import { ShowOrdersEvent } from '../events/order-emitter-events';
+import { ShowOrdersEvent, OrderEmitter } from '@gewis/aurora-core-order-plugin';
 import EmitterStore, { backofficeSyncEmitter, orderEmitter } from '../events/emitter-store';
-import { OrderEmitter } from '../events/order-emitter';
 
 /**
  * Main broker for managing handlers. This object registers entities to their
@@ -83,6 +82,7 @@ export default class HandlerManager {
     // TODO get beat back and generalize
     // this.emitterStore.musicEmitter.on('beat', this.beat.bind(this));
     this.emitterStore.get<MusicEmitter>(musicEmitter).on('change_track', this.changeTrack.bind(this));
+    // TODO how to generically bind this?
     this.emitterStore.get<OrderEmitter>(orderEmitter).on('orders', this.showOrders.bind(this));
 
     const factory = new HandlerFactory(this.io, this.emitterStore.get<MusicEmitter>(musicEmitter));
@@ -183,6 +183,7 @@ export default class HandlerManager {
     });
   }
 
+  // TODO how to generically import this?
   /**
    * Transmit an order change to all screen handlers
    * (like changeTrack())
