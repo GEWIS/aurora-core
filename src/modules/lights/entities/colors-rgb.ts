@@ -67,6 +67,8 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
   }
 
   public setColor(color?: RgbColor): void {
+    this.valuesUpdatedAt = new Date();
+
     if (!color) {
       this.reset();
       return;
@@ -95,6 +97,8 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
   }
 
   public setCustomColor(color: IColorsRgb): void {
+    this.valuesUpdatedAt = new Date();
+
     const givenColors = Object.keys(color) as (keyof IColorsRgb)[];
     givenColors.forEach((key: keyof IColorsRgb) => {
       this.currentValues[key] = color[key]!;
@@ -102,6 +106,8 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
   }
 
   public reset(): void {
+    this.valuesUpdatedAt = new Date();
+
     this.setBrightness(1);
     this.currentValues = {
       redChannel: 0,

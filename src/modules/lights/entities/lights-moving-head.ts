@@ -11,7 +11,6 @@ export default abstract class LightsMovingHead extends LightsFixture {
    * @param tilt value between [0, 1]
    */
   public setPositionRel(pan: number, tilt: number) {
-    this.valuesUpdatedAt = new Date();
     this.movement.setPositionRel(pan, tilt);
   }
 
@@ -21,12 +20,10 @@ export default abstract class LightsMovingHead extends LightsFixture {
    * @deprecated
    */
   public setPosition(pan: number, tilt: number) {
-    this.valuesUpdatedAt = new Date();
     this.movement.setPositionAbs(pan, tilt);
   }
 
   protected setPositionInDmx(values: number[]): number[] {
-    this.valuesUpdatedAt = new Date();
     return this.movement.setPositionInDmx(values);
   }
 

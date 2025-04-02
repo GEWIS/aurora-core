@@ -1,5 +1,5 @@
 import BaseMode from '../base-mode';
-import { LightsGroup } from '../../lights/entities';
+import { LightsGroup, LightsSwitch } from '../../lights/entities';
 import { Audio, Screen } from '../../root/entities';
 import SetEffectsHandler from '../../handlers/lights/set-effects-handler';
 import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
@@ -15,18 +15,25 @@ import Wave from '../../lights/effects/color/wave';
 import Sparkle from '../../lights/effects/color/sparkle';
 import { ArtificialBeatGenerator } from '../../beats/artificial-beat-generator';
 import logger from '../../../logger';
+import LightsSwitchManager from '../../root/lights-switch-manager';
+import { FeatureEnabled, ServerSettingsStore } from '../../server-settings';
+import { ISettings } from '../../server-settings/server-setting';
+import RootLightsService from '../../root/root-lights-service';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
 const SCREEN_HANDLER = 'CenturionScreenHandler';
 const STROBE_TIME = 1500; // Milliseconds
 
+@FeatureEnabled('Centurion')
 export default class CenturionMode extends BaseMode<
   SetEffectsHandler,
   CenturionScreenHandler,
   SimpleAudioHandler
 > {
   public tape: MixTape;
+
+  private discoballs: LightsSwitch[] = [];
 
   private musicEmitter: MusicEmitter;
 
@@ -47,6 +54,8 @@ export default class CenturionMode extends BaseMode<
 
   private beatGenerator: ArtificialBeatGenerator;
 
+  private lightsSwitchManager: LightsSwitchManager;
+
   private initialized = false;
 
   public get playing(): boolean {
@@ -61,9 +70,24 @@ export default class CenturionMode extends BaseMode<
     this.beatGenerator = ArtificialBeatGenerator.getInstance();
   }
 
-  public initialize(musicEmitter: MusicEmitter) {
+  public async initialize(musicEmitter: MusicEmitter) {
     if (this.initialized) throw new Error('CenturionMode already initialized!');
     this.musicEmitter = musicEmitter;
+    this.lightsSwitchManager = LightsSwitchManager.getInstance();
+
+    const discoballIds = ServerSettingsStore.getInstance().getSetting(
+      'Centurion.DiscoballLightsSwitchIds',
+    ) as ISettings['Centurion.DiscoballLightsSwitchIds'];
+    this.discoballs = (await new RootLightsService().getAllLightsSwitches()).filter((s) =>
+      discoballIds.includes(s.id),
+    );
+
+    // Disable the disco ball if they are enabled
+    this.lightsSwitchManager.getEnabledSwitches().forEach((s) => {
+      if (discoballIds.includes(s.id)) {
+        this.lightsSwitchManager.disableSwitch(s);
+      }
+    });
   }
 
   public loadTape(tape: MixTape) {
@@ -101,6 +125,14 @@ export default class CenturionMode extends BaseMode<
     this.audioHandler.setPlayback(seconds);
 
     if (this.playing) {
+      // Lazy solution for figuring out whether the discoball should be on:
+      // let's just disable it by default
+      if (this.hasDiscoBall()) {
+        this.discoballs.forEach((s) => {
+          this.lightsSwitchManager.disableSwitch(s);
+        });
+      }
+
       this.registerFeedEvents(seconds);
       this.fireLastFeedEvent(seconds);
     }
@@ -118,6 +150,14 @@ export default class CenturionMode extends BaseMode<
     logger.info('Paused centurion playback.');
 
     this.timestamp = (new Date().getTime() - this.startTime.getTime()) / 1000;
+  }
+
+  /**
+   * Returns whether a disco ball is present in the centurion lights setup
+   * @private
+   */
+  private hasDiscoBall(): boolean {
+    return this.discoballs.length > 0;
   }
 
   /**
@@ -283,7 +323,35 @@ export default class CenturionMode extends BaseMode<
       this.setRandomLightEffects();
       this.emitSong(event.data);
     } else if (event.type === 'effect') {
+      const isEffectDisableAll =
+        event.data.reset ||
+        (event.data.effects.pars &&
+          event.data.effects.pars.length === 0 &&
+          event.data.effects.movingHeadRgbColor &&
+          event.data.effects.movingHeadRgbColor.length === 0 &&
+          event.data.effects.movingHeadRgbMovement &&
+          event.data.effects.movingHeadRgbMovement.length === 0 &&
+          event.data.effects.movingHeadWheelColor &&
+          event.data.effects.movingHeadWheelColor.length === 0 &&
+          event.data.effects.movingHeadWheelMovement &&
+          event.data.effects.movingHeadWheelMovement.length === 0);
+
       this.lights.forEach((l) => {
+        if (event.data.discoBall && isEffectDisableAll && !this.hasDiscoBall()) {
+          // If we want to only have the disco ball turned on, but our setup does not have one,
+          // we should just do random light effects
+          event.data.random = true;
+        } else if (event.data.discoBall && this.hasDiscoBall()) {
+          // Enable disco ball
+          this.discoballs.forEach((s) => {
+            this.lightsSwitchManager.enableSwitch(s);
+          });
+        } else if (this.hasDiscoBall()) {
+          // Disable all disco ball if they should not be enabled
+          this.discoballs.forEach((s) => {
+            this.lightsSwitchManager.disableSwitch(s);
+          });
+        }
         if (event.data.reset) {
           // Reset effect
           this.lightsHandler.removeColorEffect(l);
@@ -292,6 +360,10 @@ export default class CenturionMode extends BaseMode<
         }
         if (event.data.random) {
           this.setRandomLightEffects();
+          if (this.beatGenerator.bpm) {
+            // Restart the beat generator to ensure no quick successive beats when the lights change
+            this.beatGenerator.start(this.beatGenerator.bpm);
+          }
           return;
         }
         if (l.pars.length > 0 && event.data.effects.pars) {

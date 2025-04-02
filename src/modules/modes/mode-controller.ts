@@ -50,8 +50,8 @@ export class ModeController extends Controller {
 
   private async mapBodyToEntities(params: EnableModeParams) {
     const lights = (await this.findEntities(LightsGroup, params.lightsGroupIds)) as LightsGroup[];
-    const screens = (await this.findEntities(Screen, params.lightsGroupIds)) as Screen[];
-    const audios = (await this.findEntities(Audio, params.lightsGroupIds)) as Audio[];
+    const screens = (await this.findEntities(Screen, params.screenIds)) as Screen[];
+    const audios = (await this.findEntities(Audio, params.audioIds)) as Audio[];
 
     return { lights, screens, audios };
   }
@@ -84,7 +84,7 @@ export class ModeController extends Controller {
     const { lights, screens, audios } = await this.mapBodyToEntities(params);
 
     const centurionMode = new CenturionMode(lights, screens, audios);
-    centurionMode.initialize(this.modeManager.musicEmitter);
+    await centurionMode.initialize(this.modeManager.musicEmitter);
     const tape = tapes.find((t) => {
       return t.name === params.centurionName && t.artist === params.centurionArtist;
     });

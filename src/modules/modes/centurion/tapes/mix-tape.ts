@@ -26,6 +26,11 @@ export type Song = {
 
 export type EffectData = {
   /**
+   * Whether the disco ball should be enabled. Must be manually turned off, this will not
+   * happen when changing to a random effect. Defaults to false (turn off the disco ball).
+   */
+  discoBall?: boolean;
+  /**
    * Disable all lights (overrides effects and random)
    */
   reset?: boolean;
@@ -34,7 +39,8 @@ export type EffectData = {
    */
   random?: boolean;
   /**
-   * Set custom effects
+   * Set custom effects. If an attribute is absent, this type of effect will not be applied.
+   * If an attribute is present with an empty array, this type of effect will be disabled.
    */
   effects: {
     pars?: LightsEffectBuilder[];

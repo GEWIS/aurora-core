@@ -293,7 +293,7 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 814.0,
+      timestamp: 812.0,
       type: 'song',
       data: {
         artist: 'Guus Meeuwis',
@@ -452,6 +452,23 @@ const centurion: MixTape = {
       type: 'horn',
       data: {
         counter: 21,
+      },
+    },
+    {
+      timestamp: 1288.0,
+      type: 'effect',
+      data: {
+        // Add the disco ball
+        discoBall: true,
+        effects: {},
+      },
+    },
+    {
+      timestamp: 1348.4,
+      type: 'effect',
+      data: {
+        discoBall: false,
+        effects: {},
       },
     },
     {
@@ -1038,6 +1055,29 @@ const centurion: MixTape = {
       },
     },
     {
+      timestamp: 3279.0,
+      type: 'effect',
+      data: {
+        // Turn on only the disco ball; all other lights should be off.
+        discoBall: true,
+        effects: {
+          pars: [],
+          movingHeadRgbColor: [],
+          movingHeadRgbMovement: [],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
+      },
+    },
+    {
+      timestamp: 3318.5,
+      type: 'effect',
+      data: {
+        random: true,
+        effects: {},
+      },
+    },
+    {
       timestamp: 3340.8,
       type: 'horn',
       data: {
@@ -1051,6 +1091,22 @@ const centurion: MixTape = {
         artist: 'Tom Waes',
         title: 'Dos cervezas',
         bpm: 136,
+      },
+    },
+    {
+      timestamp: 3369.8,
+      type: 'effect',
+      data: {
+        discoBall: false,
+        effects: {},
+      },
+    },
+    {
+      timestamp: 3369.8,
+      type: 'effect',
+      data: {
+        random: true,
+        effects: {},
       },
     },
     {
@@ -1619,6 +1675,21 @@ const centurion: MixTape = {
       },
     },
     {
+      timestamp: 5237.01,
+      type: 'effect',
+      data: {
+        // Turn on only the disco ball; all other lights should be off.
+        discoBall: true,
+        effects: {
+          pars: [],
+          movingHeadRgbColor: [],
+          movingHeadRgbMovement: [],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
+      },
+    },
+    {
       timestamp: 5242.8,
       type: 'horn',
       data: {
@@ -1632,6 +1703,21 @@ const centurion: MixTape = {
         artist: 'Enrique Iglesias',
         title: 'Hero',
         bpm: 76,
+      },
+    },
+    {
+      timestamp: 5278.01,
+      type: 'effect',
+      data: {
+        // Keep the disco ball turned on; all other lights should be off.
+        discoBall: true,
+        effects: {
+          pars: [],
+          movingHeadRgbColor: [],
+          movingHeadRgbMovement: [],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
       },
     },
     {
@@ -1651,6 +1737,21 @@ const centurion: MixTape = {
       },
     },
     {
+      timestamp: 5331.01,
+      type: 'effect',
+      data: {
+        // Keep the disco ball turned on; all other lights should be off.
+        discoBall: true,
+        effects: {
+          pars: [],
+          movingHeadRgbColor: [],
+          movingHeadRgbMovement: [],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
+      },
+    },
+    {
       timestamp: 5373.85,
       type: 'horn',
       data: {
@@ -1658,12 +1759,28 @@ const centurion: MixTape = {
       },
     },
     {
-      timestamp: 5380.0,
+      timestamp: 5373.85,
+      type: 'effect',
+      data: {
+        discoBall: false,
+        effects: {},
+      },
+    },
+    {
+      timestamp: 5373.9,
       type: 'song',
       data: {
         artist: 'Mariah Carey',
         title: 'All I Want For Christmas',
         bpm: 151,
+      },
+    },
+    {
+      timestamp: 5380.0,
+      type: 'effect',
+      data: {
+        random: true,
+        effects: {},
       },
     },
     {
@@ -1857,6 +1974,21 @@ const centurion: MixTape = {
       },
     },
     {
+      timestamp: 5970.0,
+      type: 'effect',
+      data: {
+        discoBall: true,
+        effects: {
+          // Keep the disco ball turned on; all other lights should be off.
+          pars: [],
+          movingHeadRgbColor: [],
+          movingHeadRgbMovement: [],
+          movingHeadWheelColor: [],
+          movingHeadWheelMovement: [],
+        },
+      },
+    },
+    {
       timestamp: 6020.3,
       type: 'horn',
       data: {
@@ -1868,6 +2000,7 @@ const centurion: MixTape = {
       timestamp: 6021,
       type: 'effect',
       data: {
+        discoBall: false,
         effects: {
           pars: [Fire.build()],
           movingHeadWheelColor: [StaticColor.build({ color: RgbColor.BLINDINGWHITE })],
