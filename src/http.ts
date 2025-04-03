@@ -7,7 +7,7 @@ import passport from 'passport';
 import { pinoHttp } from 'pino-http';
 import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
-import { SessionMiddleware } from './modules/auth';
+import { SessionMiddleware, apiKeyMiddleware } from './modules/auth';
 import { setupErrorHandler } from './error';
 import { authResponse } from './modules/auth/passport';
 
@@ -59,6 +59,7 @@ export default async function createHttp() {
   app.use(bodyParser.json());
   app.use(cookieParser(process.env.COOKIE_SECRET));
   app.use(SessionMiddleware.getInstance().get());
+  app.use(apiKeyMiddleware);
 
   app.use(passport.initialize());
   app.use(passport.session());

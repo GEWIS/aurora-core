@@ -2,6 +2,8 @@ import * as express from 'express';
 import { HttpApiException, HttpStatusCode } from '../../helpers/custom-error';
 import { AuthUser } from './auth-user';
 import { SecurityGroup } from '../../helpers/security';
+import dataSource from '../../database';
+import { IntegrationUser } from './entities';
 
 /**
  * Express middleware to authenticate the user
@@ -25,6 +27,22 @@ export async function expressAuthentication(
     }
     // Should have one overlapping role/scope
     if (scopes.some((scope) => request.user!.roles.includes(scope as SecurityGroup))) {
+      return request.user;
+    }
+
+    throw new HttpApiException(HttpStatusCode.Forbidden);
+  } else if (securityName === 'integration') {
+    if (!request.isAuthenticated() || !request.user) {
+      throw new HttpApiException(HttpStatusCode.Unauthorized, 'You are not logged in.');
+    }
+
+    // User should be an integration user and should have endpoints assigned
+    if (request.user.integrationUserId !== undefined && !request.user.endpoints) {
+      throw new HttpApiException(HttpStatusCode.Forbidden);
+    }
+
+    // Should have one overlapping scope
+    if (scopes.some((scope) => request.user!.endpoints!.includes(scope))) {
       return request.user;
     }
 

@@ -1,11 +1,12 @@
 import { Controller, Header, Response, TsoaResponse } from '@tsoa/runtime';
 import { createVerify } from 'crypto';
 import { FeatureEnabled, ServerSettingsStore } from '../server-settings';
-import { Body, Delete, Get, Post, Res, Route, Security, Tags } from 'tsoa';
+import { Body, Delete, Get, Post, Res, Route, Tags } from 'tsoa';
 import { SecurityNames } from '../../helpers/security';
 import { securityGroups } from '../../helpers/security-groups';
 import OrderManager from './order-manager';
 import { OrderSettings } from './order-settings';
+import { Security } from '../auth';
 
 interface OrderRequest {
   orderNumber: number;
@@ -28,6 +29,7 @@ export class OrderController extends Controller {
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.orders.privileged)
+  @Security(SecurityNames.INTEGRATION, ['addOrder'])
   @Post('')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   public async addOrder(@Body() orderRequest: OrderRequest) {

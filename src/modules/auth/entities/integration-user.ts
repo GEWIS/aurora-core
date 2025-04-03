@@ -9,4 +9,23 @@ import { Column, Entity } from 'typeorm';
 export default class IntegrationUser extends BaseEntity {
   @Column({ nullable: false })
   name: string;
+
+  /**
+   * List of endpoints (operationIds) this user can access
+   */
+  @Column({
+    nullable: true,
+    type: 'varchar',
+    transformer: {
+      from(value: string | null): string[] {
+        if (value == null) return [];
+        return JSON.parse(value);
+      },
+      to(value: string[]): string | null {
+        if (value.length === 0) return null;
+        return JSON.stringify(value);
+      },
+    },
+  })
+  endpoints: string[];
 }
