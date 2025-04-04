@@ -4,7 +4,7 @@ import IntegrationEndpointManager from './integration/integration-endpoint-manag
 
 /**
  * Add TSOA Authorization to a controller or a controller endpoint.
- * In case of SecurityNames.Integration
+ * In case of SecurityNames.Integration, register the endpoint for integration users.
  * @param name
  * @param scopes
  * @constructor
