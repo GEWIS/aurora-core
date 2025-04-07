@@ -7,7 +7,9 @@ import IntegrationEndpointManager from './integration-endpoint-manager';
 import AuthService from '../auth-service';
 
 export interface IntegrationUserResponse
-  extends Pick<IntegrationUser, 'id' | 'name' | 'endpoints'> {}
+  extends Pick<IntegrationUser, 'id' | 'name' | 'endpoints'> {
+  lastSeen: string | null;
+}
 
 export interface IntegrationUserCreateRequest extends Pick<IntegrationUser, 'name' | 'endpoints'> {}
 
@@ -25,6 +27,7 @@ export default class IntegrationUserService {
       id: user.id,
       name: user.name,
       endpoints: user.endpoints,
+      lastSeen: user.lastSeen?.toISOString() ?? null,
     };
   }
 

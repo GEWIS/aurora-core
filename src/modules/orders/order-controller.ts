@@ -28,6 +28,9 @@ export class OrderController extends Controller {
     return OrderManager.getInstance().getOrders();
   }
 
+  /**
+   * Add a new order to be propagated to all connected screens.
+   */
   @Security(SecurityNames.LOCAL, securityGroups.orders.privileged)
   @Security(SecurityNames.INTEGRATION, ['addOrder'])
   @Post('')

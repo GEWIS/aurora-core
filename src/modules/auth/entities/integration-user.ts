@@ -11,6 +11,25 @@ export default class IntegrationUser extends BaseEntity {
   name: string;
 
   /**
+   * When this integration has last made an API call
+   */
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    transformer: {
+      from(value: string | null): Date | null {
+        if (value == null) return null;
+        return new Date(value);
+      },
+      to(value: Date | null): string | null {
+        if (value == null) return null;
+        return value.toISOString();
+      },
+    },
+  })
+  lastSeen: Date | null;
+
+  /**
    * List of endpoints (operationIds) this user can access
    */
   @Column({
