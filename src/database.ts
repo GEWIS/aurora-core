@@ -3,6 +3,7 @@ import fs from 'fs';
 import ServerSetting from './modules/server-settings/server-setting';
 import { Entities as BaseEntities } from './modules/root/entities';
 import { Entities as AuthEntities } from './modules/auth/entities';
+import { Entities as IntegrationEntities } from './modules/auth/integration/entities';
 import { Entities as FileEntities } from './modules/files/entities';
 import { Entities as AuditEntities } from './modules/audit/entities';
 import { Entities as SpotifyEntities } from './modules/spotify/entities';
@@ -36,6 +37,7 @@ const dataSource = new DataSource({
     ...TimedEventsEntities,
     ...BaseEntities,
     ...AuthEntities,
+    ...IntegrationEntities,
     ...FileEntities,
     ...AuditEntities,
     ...SpotifyEntities,

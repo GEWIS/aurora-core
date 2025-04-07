@@ -9,8 +9,6 @@ import IntegrationUserService, {
   IntegrationUserUpdateRequest,
 } from './integration-user-service';
 import AuthService from '../auth-service';
-import { HttpApiException } from '../../../helpers/custom-error';
-import { HttpStatusCode } from 'axios';
 
 @Tags('User')
 @Route('user/integration')

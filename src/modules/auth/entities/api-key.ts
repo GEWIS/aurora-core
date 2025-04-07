@@ -1,6 +1,6 @@
 import { BaseEntity, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Audio, LightsController, Screen } from '../../root/entities';
-import IntegrationUser from './integration-user';
+import { IntegrationUser } from '../integration/entities';
 import { AuthUser } from '../auth-user';
 import { SecurityGroup } from '../../../helpers/security';
 

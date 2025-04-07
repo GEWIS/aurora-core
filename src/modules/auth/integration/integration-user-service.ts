@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { IntegrationUser } from '../entities';
+import IntegrationUser from './entities/integration-user';
 import dataSource from '../../../database';
 import { HttpApiException } from '../../../helpers/custom-error';
 import { HttpStatusCode } from 'axios';

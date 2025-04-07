@@ -2,8 +2,6 @@ import * as express from 'express';
 import { HttpApiException, HttpStatusCode } from '../../helpers/custom-error';
 import { AuthUser } from './auth-user';
 import { SecurityGroup } from '../../helpers/security';
-import dataSource from '../../database';
-import { IntegrationUser } from './entities';
 
 /**
  * Express middleware to authenticate the user

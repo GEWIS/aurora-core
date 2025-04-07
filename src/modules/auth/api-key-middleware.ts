@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import dataSource from '../../database';
-import { ApiKey, IntegrationUser } from './entities';
+import { ApiKey } from './entities';
 import logger from '../../logger';
+import { IntegrationUser } from './integration/entities';
 
 async function updateLastSeen(integrationUser: IntegrationUser) {
   const repo = dataSource.getRepository(IntegrationUser);
