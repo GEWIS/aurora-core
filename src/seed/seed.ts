@@ -21,6 +21,7 @@ import { ColorEffects } from '../modules/lights/effects/color/color-effects';
 import { MovementEffects } from '../modules/lights/effects/movement/movement-effetcs';
 import { TimedEvent } from '../modules/timed-events/entities';
 import AuthService from '../modules/auth/auth-service';
+import { IntegrationUserService } from '../modules/auth/integration';
 
 export default async function seedDatabase() {
   const timedEventsRepo = dataSource.getRepository(TimedEvent);
@@ -56,7 +57,14 @@ export default async function seedDatabase() {
     name: 'PCGEWISINFO',
     defaultHandler: CarouselPosterHandler.name,
   });
-  await new AuthService().createIntegrationUser({ name: 'BPM-script' });
+  await new IntegrationUserService().createIntegrationUser({
+    name: 'BPM-script',
+    endpoints: [
+      'startArtificialBeatGenerator',
+      'stopArtificialBeatGenerator',
+      'getArtificialBeatGenerator',
+    ],
+  });
 
   const rootLightsService = new RootLightsService();
   const controller = await rootLightsService.createController({ name: 'GEWIS-BAR' });

@@ -68,14 +68,6 @@ export default class AuthService {
     });
   }
 
-  public async createIntegrationUser(
-    params: IntegrationUserCreateParams,
-  ): Promise<IntegrationUser> {
-    const integrationUser = await this.integrationUserRepository.save(params);
-    await this.createApiKey({ integrationUser });
-    return integrationUser;
-  }
-
   public async getOIDCConfig(): Promise<OidcConfig> {
     const oidcConfigRes = await fetch(process.env.OIDC_CONFIG!);
     return oidcConfigRes.json();

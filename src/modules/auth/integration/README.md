@@ -20,4 +20,5 @@ For security purposes, each integration gets assigned a specific subset of endpo
 To use an endpoint, the endpoint needs to be marked in Aurora Core first. By adding the
 `@Security(SecurityNames.INTEGRATION, <endpoint name>)` decorator to a controller method, this endpoint is marked as
 both being accessible for integrations with access to that endpoint, and as an endpoint that integrations can use
-(so both sides of the arrow). In the backoffice, admins can assign endpoints to integrations.
+(so both sides of the arrow). **Make sure that you use the custom @Security() decorator from the `auth` module and NOT
+the TSOA version!** In the backoffice, admins can assign endpoints to integrations.

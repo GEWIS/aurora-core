@@ -1,5 +1,5 @@
 import { Controller } from '@tsoa/runtime';
-import { Body, Delete, Get, Post, Request, Route, Security, Tags } from 'tsoa';
+import { Body, Delete, Get, Post, Request, Route, Tags } from 'tsoa';
 import { Request as ExpressRequest } from 'express';
 import {
   ArtificialBeatGenerator,
@@ -8,13 +8,15 @@ import {
 import { SecurityNames } from '../../helpers/security';
 import logger from '../../logger';
 import { securityGroups } from '../../helpers/security-groups';
+import { Security } from '../auth';
 
 @Tags('Artificial Beat Generator')
 @Route('beat-generator')
 export class ArtificialBeatController extends Controller {
   @Security(SecurityNames.LOCAL, securityGroups.beats.base)
+  @Security(SecurityNames.INTEGRATION, ['getArtificialBeatGenerator'])
   @Get('')
-  public getArtificalBeatGenerator(): ArtificialBeatGeneratorParams | null {
+  public getArtificialBeatGenerator(): ArtificialBeatGeneratorParams | null {
     const generator = ArtificialBeatGenerator.getInstance();
     if (!generator.active || !generator.bpm) return null;
     return {
@@ -23,6 +25,7 @@ export class ArtificialBeatController extends Controller {
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.beats.base)
+  @Security(SecurityNames.INTEGRATION, ['startArtificialBeatGenerator'])
   @Post('')
   public startArtificialBeatGenerator(
     @Request() req: ExpressRequest,
@@ -35,6 +38,7 @@ export class ArtificialBeatController extends Controller {
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.beats.base)
+  @Security(SecurityNames.INTEGRATION, ['stopArtificialBeatGenerator'])
   @Delete('')
   public stopArtificialBeatGenerator(@Request() req: ExpressRequest) {
     logger.audit(req.user, 'Stop Artificial Beat Generator.');
