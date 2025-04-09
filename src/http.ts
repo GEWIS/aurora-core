@@ -10,6 +10,7 @@ import apiDocs from '../build/swagger.json';
 import { SessionMiddleware, apiKeyMiddleware } from './modules/auth';
 import { setupErrorHandler } from './error';
 import { authResponse } from './modules/auth/passport';
+import { IntegrationUserActivityMiddleware } from './modules/auth/integration';
 
 const origins = process.env.CORS_ORIGINS?.split(', ');
 export const enableCors = origins !== undefined && origins.length > 0;
@@ -59,10 +60,12 @@ export default async function createHttp() {
   app.use(bodyParser.json());
   app.use(cookieParser(process.env.COOKIE_SECRET));
   app.use(SessionMiddleware.getInstance().get());
-  app.use(apiKeyMiddleware);
 
   app.use(passport.initialize());
   app.use(passport.session());
+
+  app.use(apiKeyMiddleware);
+  app.use(IntegrationUserActivityMiddleware);
 
   RegisterRoutes(app);
 

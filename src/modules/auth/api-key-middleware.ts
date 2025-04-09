@@ -2,14 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import dataSource from '../../database';
 import { ApiKey } from './entities';
 import logger from '../../logger';
-import { IntegrationUser } from './integration/entities';
-
-async function updateLastSeen(integrationUser: IntegrationUser) {
-  const repo = dataSource.getRepository(IntegrationUser);
-  await repo.update(integrationUser.id, {
-    lastSeen: new Date(),
-  });
-}
 
 export default async function apiKeyMiddleware(req: Request, res: Response, next: NextFunction) {
   // User already found, so nothing for us to do here
@@ -38,9 +30,6 @@ export default async function apiKeyMiddleware(req: Request, res: Response, next
     const identity = await dataSource.getRepository(ApiKey).findOne({ where: { key } });
     if (identity) {
       req.user = identity.asAuthUser();
-      if (identity.integrationUser) {
-        void updateLastSeen(identity.integrationUser);
-      }
     }
   } catch (e) {
     logger.error(e);
