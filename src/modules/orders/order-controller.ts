@@ -41,6 +41,10 @@ export class OrderController extends Controller {
     return manager.getOrders();
   }
 
+  /**
+   * @deprecated Please migrate to the new IntegrationUsers-based approach. See
+   * https://github.com/GEWIS/aurora-core/blob/develop/src/modules/auth/integration/README.md.
+   */
   @Post('webhook')
   @FeatureEnabled('Orders.WebhookPublicKeyURL')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
