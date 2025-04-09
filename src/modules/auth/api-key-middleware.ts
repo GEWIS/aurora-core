@@ -5,7 +5,10 @@ import logger from '../../logger';
 
 export default async function apiKeyMiddleware(req: Request, res: Response, next: NextFunction) {
   // User already found, so nothing for us to do here
-  if (req.user) next();
+  if (req.user) {
+    next();
+    return;
+  }
 
   const rawKey = req.headers['X-API-Key'];
   if (!rawKey) {

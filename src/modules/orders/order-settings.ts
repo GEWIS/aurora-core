@@ -1,7 +1,15 @@
 export interface OrderSettings {
   Orders: boolean;
   'Orders.DefaultTimeoutSeconds': number;
+  /**
+   * @deprecated Please migrate to the new IntegrationUsers-based approach. See
+   * https://github.com/GEWIS/aurora-core/blob/develop/src/modules/auth/integration/README.md.
+   */
   'Orders.WebhookPublicKeyURL': string;
+  /**
+   * @deprecated Please migrate to the new IntegrationUsers-based approach. See
+   * https://github.com/GEWIS/aurora-core/blob/develop/src/modules/auth/integration/README.md.
+   */
   'Orders.WebhookPublicKeyExpirySeconds': number;
 }
 
