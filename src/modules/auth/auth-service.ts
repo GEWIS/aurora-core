@@ -1,6 +1,7 @@
 import { Repository } from 'typeorm';
 import crypto from 'crypto';
-import { ApiKey, IntegrationUser } from './entities';
+import { ApiKey } from './entities';
+import { IntegrationUser } from './integration/entities';
 import dataSource from '../../database';
 import { Audio, LightsController, Screen } from '../root/entities';
 
@@ -65,14 +66,6 @@ export default class AuthService {
     return this.apiKeyRepository.findOne({
       where: { integrationUser: { id: integrationUser.id } },
     });
-  }
-
-  public async createIntegrationUser(
-    params: IntegrationUserCreateParams,
-  ): Promise<IntegrationUser> {
-    const integrationUser = await this.integrationUserRepository.save(params);
-    await this.createApiKey({ integrationUser });
-    return integrationUser;
   }
 
   public async getOIDCConfig(): Promise<OidcConfig> {

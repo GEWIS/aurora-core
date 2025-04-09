@@ -11,6 +11,11 @@
         "type": "apiKey",
         "name": "connect.sid",
         "in": "cookie"
+      },
+      "integration": {
+        "type": "apiKey",
+        "name": "X-API-Key",
+        "in": "header"
       }
     },
     "outputDirectory": "build",

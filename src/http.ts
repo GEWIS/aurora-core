@@ -7,9 +7,10 @@ import passport from 'passport';
 import { pinoHttp } from 'pino-http';
 import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
-import { SessionMiddleware } from './modules/auth';
+import { SessionMiddleware, apiKeyMiddleware } from './modules/auth';
 import { setupErrorHandler } from './error';
 import { authResponse } from './modules/auth/passport';
+import { IntegrationUserActivityMiddleware } from './modules/auth/integration';
 
 const origins = process.env.CORS_ORIGINS?.split(', ');
 export const enableCors = origins !== undefined && origins.length > 0;
@@ -62,6 +63,9 @@ export default async function createHttp() {
 
   app.use(passport.initialize());
   app.use(passport.session());
+
+  app.use(apiKeyMiddleware);
+  app.use(IntegrationUserActivityMiddleware);
 
   RegisterRoutes(app);
 

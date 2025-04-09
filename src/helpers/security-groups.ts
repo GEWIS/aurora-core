@@ -28,6 +28,7 @@ export interface ISecurityGroups {
   serverSettings: ISecuritySections;
   orders: ISecuritySections;
   timedEvents: ISecuritySections;
+  integrationUsers: ISecuritySections;
 }
 
 /**
@@ -150,6 +151,9 @@ export const securityGroups = {
   },
   timedEvents: {
     base: allSecurityGroups,
+    privileged: [SecurityGroup.ADMIN],
+  },
+  integrationUsers: {
     privileged: [SecurityGroup.ADMIN],
   },
 };

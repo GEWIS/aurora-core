@@ -29,6 +29,22 @@ export async function expressAuthentication(
     }
 
     throw new HttpApiException(HttpStatusCode.Forbidden);
+  } else if (securityName === 'integration') {
+    if (!request.isAuthenticated() || !request.user) {
+      throw new HttpApiException(HttpStatusCode.Unauthorized, 'You are not logged in.');
+    }
+
+    // User should be an integration user and should have endpoints assigned
+    if (request.user.integrationUserId !== undefined && !request.user.endpoints) {
+      throw new HttpApiException(HttpStatusCode.Forbidden);
+    }
+
+    // Should have one overlapping scope
+    if (scopes.some((scope) => request.user!.endpoints!.includes(scope))) {
+      return request.user;
+    }
+
+    throw new HttpApiException(HttpStatusCode.Forbidden);
   }
   throw new HttpApiException(HttpStatusCode.InternalServerError, 'Unknown security scheme.');
 }

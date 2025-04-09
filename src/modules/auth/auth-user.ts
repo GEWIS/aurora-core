@@ -4,6 +4,10 @@ interface AuthUser {
   id: string;
   name: string;
   roles: SecurityGroup[];
+  /**
+   * List of accessible endpoints if integration user
+   */
+  endpoints?: string[];
 
   audioId?: number;
   lightsControllerId?: number;
