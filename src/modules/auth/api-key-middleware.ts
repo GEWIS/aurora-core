@@ -7,7 +7,7 @@ export default async function apiKeyMiddleware(req: Request, res: Response, next
   // User already found, so nothing for us to do here
   if (req.user) next();
 
-  const rawKey = req.headers['x-authorization'];
+  const rawKey = req.headers['X-API-Key'];
   if (!rawKey) {
     next();
     return;

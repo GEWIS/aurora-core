@@ -14,7 +14,7 @@
       },
       "integration": {
         "type": "apiKey",
-        "name": "X-Authorization",
+        "name": "X-API-Key",
         "in": "header"
       }
     },
