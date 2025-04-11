@@ -11,7 +11,7 @@ import './modules/audit/audit-logger';
 import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
 import LightsControllerManager from './modules/root/lights-controller-manager';
 import ModeManager from './modules/modes/mode-manager';
-import { ArtificialBeatGenerator } from './modules/beats/artificial-beat-generator';
+import { BeatManager } from './modules/beats';
 import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
 import { SocketioNamespaces } from './socketio-namespaces';
 import SocketConnectionManager from './modules/root/socket-connection-manager';
@@ -48,8 +48,7 @@ async function createApp(): Promise<void> {
   const io = createWebsocket(httpServer);
 
   const emitterStore = EmitterStore.getInstance();
-
-  ArtificialBeatGenerator.getInstance().init(emitterStore.musicEmitter);
+  BeatManager.getInstance().init(emitterStore.musicEmitter);
 
   const lightsSwitchManager = LightsSwitchManager.getInstance();
   const handlerManager = HandlerManager.getInstance(io, emitterStore);

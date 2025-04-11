@@ -9,8 +9,6 @@ export class MusicEmitter extends EventEmitter {
 
   private currentlyPlaying: TrackChangeEvent[] | null;
 
-  public artificialBeatGeneratorEnabled = false;
-
   public registerAudioHandler(handler: BaseAudioHandler) {
     this.audioHandlers.push(handler);
   }
@@ -22,8 +20,6 @@ export class MusicEmitter extends EventEmitter {
    * @param args
    */
   public emitSpotify(eventName: string, ...args: any[]) {
-    // Do not forward a beat from Spotify if the artifical beat generator is enabled
-    if (eventName === 'beat' && this.artificialBeatGeneratorEnabled) return;
     this.forwardOnAudioNotPlaying(eventName, ...args);
   }
 

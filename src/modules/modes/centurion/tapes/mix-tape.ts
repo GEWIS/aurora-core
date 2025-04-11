@@ -15,7 +15,7 @@ export type SongData = {
   /** Performing artists, comma-separated if multiple */
   artist: string;
   title: string;
-  /** Tempo of the song. Defaults to 130 beats per minute */
+  /** Tempo of the song. Defaults to 130 beats per minute for this song if undefined */
   bpm?: number;
 };
 

@@ -4,16 +4,44 @@ import { RgbColor } from '../../lights/color-definitions';
 import { Wave } from '../../lights/effects/color';
 import TableRotate from '../../lights/effects/movement/table-rotate';
 import logger from '../../../logger';
-import { ArtificialBeatGenerator } from '../../beats/artificial-beat-generator';
+import { ArtificialBeatGenerator, BeatManager, BeatPriorities } from '../../beats';
 import {
   LightsEffectDirection,
   LightsEffectPattern,
 } from '../../lights/effects/lights-effect-pattern';
 
 export default class DevelopEffectsHandler extends EffectsHandler {
+  private beatManager: BeatManager;
+
+  private backgroundBeatGenerator: ArtificialBeatGenerator | undefined;
+
+  constructor() {
+    super();
+    this.beatManager = BeatManager.getInstance();
+  }
+
+  private startBeats() {
+    this.backgroundBeatGenerator = new ArtificialBeatGenerator(
+      'develop-effects',
+      'DevelopEffectsHandler',
+      120,
+    );
+    this.beatManager.add(
+      this.backgroundBeatGenerator,
+      BeatPriorities.DEVELOP_EFFECTS_HANDLER_BEAT_GENERATOR,
+    );
+  }
+
+  private stopBeats() {
+    if (this.backgroundBeatGenerator) {
+      this.beatManager.remove(this.backgroundBeatGenerator.getId());
+      this.backgroundBeatGenerator = undefined;
+    }
+  }
+
   public registerEntity(entity: LightsGroup) {
-    if (this.entities.length === 0) {
-      ArtificialBeatGenerator.getInstance().start(120);
+    if (this.entities.length === 0 && !this.backgroundBeatGenerator) {
+      this.startBeats();
     }
 
     super.registerEntity(entity);
@@ -45,7 +73,7 @@ export default class DevelopEffectsHandler extends EffectsHandler {
     super.removeEntity(entityCopy);
 
     if (this.entities.length === 0) {
-      ArtificialBeatGenerator.getInstance().stop();
+      this.stopBeats();
     }
   }
 }
