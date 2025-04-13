@@ -1,8 +1,18 @@
 import { BeatGenerator } from './beat-generator';
-import { MusicEmitter } from '../events';
+import { BeatEmitter, BeatEvent, GeneratorBeatEvent } from '../events';
 import BeatPropagator from './beat-propagator';
-import { BeatEvent } from '../events/music-emitter-events';
 import logger from '../../logger';
+
+export interface BeatGeneratorResponse {
+  id: string;
+  name: string;
+  /**
+   * Whether this beat generator overrides the beats of all other generators.
+   * This means that only these beats are acted upon by Aurora and propagated
+   * to all clients that listen to them.
+   */
+  hasPrecedence: boolean;
+}
 
 /**
  * External interface class responsible for holding all beat generator instances and
@@ -11,14 +21,17 @@ import logger from '../../logger';
 export default class BeatManager {
   private static instance: BeatManager;
 
-  private musicEmitter: MusicEmitter;
+  private beatEmitter: BeatEmitter;
 
   private readonly propagator: BeatPropagator;
 
   private generators: BeatGenerator[] = [];
 
   constructor() {
-    this.propagator = new BeatPropagator(this.emitBeat.bind(this));
+    this.propagator = new BeatPropagator(
+      this.emitPrecedenceBeat.bind(this),
+      this.emitBeat.bind(this),
+    );
   }
 
   public static getInstance() {
@@ -26,6 +39,14 @@ export default class BeatManager {
       BeatManager.instance = new BeatManager();
     }
     return BeatManager.instance;
+  }
+
+  public asResponse(generator: BeatGenerator): BeatGeneratorResponse {
+    return {
+      id: generator.getId(),
+      name: generator.getName(),
+      hasPrecedence: this.propagator.isHighestPriority(generator),
+    };
   }
 
   /**
@@ -62,6 +83,13 @@ export default class BeatManager {
   }
 
   /**
+   * Get all beat detectors from storage.
+   */
+  public getAll(): BeatGenerator[] {
+    return this.generators;
+  }
+
+  /**
    * Returns whether the manager has a beat generator with the given ID.
    * @param id
    */
@@ -69,16 +97,26 @@ export default class BeatManager {
     return this.get(id) !== undefined;
   }
 
-  public init(musicEmitter: MusicEmitter) {
-    if (this.musicEmitter) {
+  public init(beatEmitter: BeatEmitter) {
+    if (this.beatEmitter) {
       throw new Error('Beat Manager already initialized');
     }
-    this.musicEmitter = musicEmitter;
+    this.beatEmitter = beatEmitter;
   }
 
-  public emitBeat(event: BeatEvent) {
-    if (this.musicEmitter) {
-      this.musicEmitter.emitAudio('beat', event);
+  public emitPrecedenceBeat(event: BeatEvent): void {
+    if (this.beatEmitter) {
+      this.beatEmitter.beatPrecedence(event);
+    } else {
+      logger.warn(
+        'BeatManager tries to emit precedence beat, but class instance is not initialized!',
+      );
+    }
+  }
+
+  public emitBeat(event: GeneratorBeatEvent) {
+    if (this.beatEmitter) {
+      this.beatEmitter.beat(event);
     } else {
       logger.warn('BeatManager tries to emit beat, but class instance is not initialized!');
     }

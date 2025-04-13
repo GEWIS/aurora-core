@@ -12,11 +12,14 @@ import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
 import LightsControllerManager from './modules/root/lights-controller-manager';
 import ModeManager from './modules/modes/mode-manager';
 import { BeatManager } from './modules/beats';
-import initBackofficeSynchronizer from './modules/backoffice/synchronizer';
+import {
+  initBackofficeSynchronizer,
+  initBackofficeBeatSynchronizer,
+} from './modules/backoffice/synchronizer';
 import { SocketioNamespaces } from './socketio-namespaces';
 import SocketConnectionManager from './modules/root/socket-connection-manager';
 import { FeatureFlagManager, ServerSettingsStore } from './modules/server-settings';
-import EmitterStore from './modules/events/emitter-store';
+import { EmitterStore } from './modules/events';
 // do not remove; used for extending existing types
 import Types from './types';
 import { OrderManager } from './modules/orders';
@@ -48,7 +51,7 @@ async function createApp(): Promise<void> {
   const io = createWebsocket(httpServer);
 
   const emitterStore = EmitterStore.getInstance();
-  BeatManager.getInstance().init(emitterStore.musicEmitter);
+  BeatManager.getInstance().init(emitterStore.beatEmitter);
 
   const lightsSwitchManager = LightsSwitchManager.getInstance();
   const handlerManager = HandlerManager.getInstance(io, emitterStore);
@@ -86,7 +89,10 @@ async function createApp(): Promise<void> {
     OrderManager.getInstance().init(emitterStore.orderEmitter);
   }
 
-  initBackofficeSynchronizer(io.of('/backoffice'), emitterStore);
+  initBackofficeSynchronizer(io.of(SocketioNamespaces.BACKOFFICE), emitterStore);
+  // Separate namespace, so clients are not obligated to receive multiple incoming
+  // beat streams from different (non-important) beat generators.
+  initBackofficeBeatSynchronizer(io.of(SocketioNamespaces.BACKOFFICE_BEAT), emitterStore);
 
   const port = process.env.PORT || 3000;
   httpServer.listen(port, () => logger.info(`Listening at http://localhost:${port}`));

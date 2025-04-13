@@ -2,13 +2,17 @@ import { BeatGenerator } from './beat-generator';
 import { BeatEvent } from '../events/music-emitter-events';
 import IBeatPropagator from './i-beat-propagator';
 import logger from '../../logger';
+import { GeneratorBeatEvent } from '../events';
 
 export default class BeatPropagator implements IBeatPropagator {
   private priorities: Map<BeatGenerator, number> = new Map();
 
   private ping: boolean;
 
-  constructor(private emitBeat: (event: BeatEvent) => void) {}
+  constructor(
+    private emitPrecedenceBeat: (event: BeatEvent) => void,
+    private emitBeat: (event: GeneratorBeatEvent) => void,
+  ) {}
 
   public addPriority(beatGenerator: BeatGenerator, priority: number): void {
     this.priorities.set(beatGenerator, priority);
@@ -24,7 +28,7 @@ export default class BeatPropagator implements IBeatPropagator {
       .reduce((minimum, v) => Math.max(minimum, v), Number.NEGATIVE_INFINITY);
   }
 
-  private isHighestPriority(generator: BeatGenerator): boolean {
+  public isHighestPriority(generator: BeatGenerator): boolean {
     const prio = this.priorities.get(generator);
     if (prio == undefined) {
       // Always reject beats from generators we don't know the priority of
@@ -34,6 +38,12 @@ export default class BeatPropagator implements IBeatPropagator {
   }
 
   public sendBeat(event: BeatEvent, generator: BeatGenerator): void {
+    this.emitBeat({
+      id: generator.getId(),
+      name: generator.getName(),
+      ...event,
+    });
+
     if (!this.isHighestPriority(generator)) return;
 
     if (process.env.LOG_AUDIO_BEATS === 'true') {
@@ -47,6 +57,6 @@ export default class BeatPropagator implements IBeatPropagator {
       logger.info(beat);
     }
 
-    this.emitBeat(event);
+    this.emitPrecedenceBeat(event);
   }
 }

@@ -9,7 +9,7 @@ import { SecurityNames } from '../../helpers/security';
 import logger from '../../logger';
 import { securityGroups } from '../../helpers/security-groups';
 import { Security } from '../auth';
-import BeatManager from './beat-manager';
+import BeatManager, { BeatGeneratorResponse } from './beat-manager';
 import BeatPriorities from './beat-priorities';
 
 const ARTIFICIAL_BEAT_GENERATOR_ID = 'artificial';
@@ -20,6 +20,14 @@ const REAL_TIME_BEAT_GENERATOR_NAME = 'Real Time Beat Detector';
 @Tags('Beat Generator')
 @Route('beat-generator')
 export class BeatGeneratorController extends Controller {
+  @Get('')
+  @Security(SecurityNames.LOCAL, securityGroups.beats.privileged)
+  public getAllBeatGenerators(): BeatGeneratorResponse[] {
+    const manager = BeatManager.getInstance();
+    const generators = manager.getAll();
+    return generators.map((g) => manager.asResponse(g));
+  }
+
   /**
    * Set the BPM found by the real time beat detector
    * @param params
