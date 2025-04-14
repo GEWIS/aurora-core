@@ -27,6 +27,7 @@ export enum RgbColor {
   BROWN = 'brown',
   LIGHTPINK = 'lightpink',
   LIME = 'lime',
+  MINT = 'mint',
   UV = 'uv',
   BLINDINGWHITE = 'blindingwhite',
 }
@@ -104,6 +105,7 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.CYAN,
       RgbColor.GOLD,
       RgbColor.LIME,
+      RgbColor.MINT,
     ],
     hex: '#ff1919',
     definitionLimited: {
@@ -223,6 +225,7 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.GOLD,
       RgbColor.BROWN,
       RgbColor.LIME,
+      RgbColor.MINT,
     ],
     hex: '#6a6aff',
     definitionLimited: {
@@ -251,6 +254,7 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.PINK,
       RgbColor.LIGHTPINK,
       RgbColor.LIME,
+      RgbColor.MINT,
     ],
     hex: '#ff8000',
     definitionLimited: {
@@ -278,6 +282,7 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.CYAN,
       RgbColor.BROWN,
       RgbColor.LIME,
+      RgbColor.MINT,
     ],
     hex: '#ff3a7c',
     definitionLimited: {
@@ -309,6 +314,7 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.BROWN,
       RgbColor.LIGHTPINK,
       RgbColor.LIME,
+      RgbColor.MINT,
     ],
     hex: '#ff00f9',
     definitionLimited: {
@@ -367,6 +373,7 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.GOLD,
       RgbColor.BROWN,
       RgbColor.LIME,
+      RgbColor.MINT,
     ],
     hex: '#f948c4',
     definitionLimited: {
@@ -396,6 +403,7 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.PINK,
       RgbColor.LIGHTPINK,
       RgbColor.LIME,
+      RgbColor.MINT,
     ],
     hex: '#ffbf00',
     definitionLimited: {
@@ -424,6 +432,7 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.PINK,
       RgbColor.LIGHTPINK,
       RgbColor.LIME,
+      RgbColor.MINT,
     ],
     hex: '#ff4d00',
     definitionLimited: {
@@ -472,7 +481,6 @@ export const rgbColorDefinitions: RgbColorSet = {
     alternative: WheelColor.GREEN,
     complementary: [
       RgbColor.RED,
-      RgbColor.GREEN,
       RgbColor.BLUE,
       RgbColor.YELLOW,
       RgbColor.LIGHTBLUE,
@@ -486,6 +494,35 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIGHTPINK,
     ],
     hex: '#80ff00',
+    definitionLimited: {
+      redChannel: 255,
+      greenChannel: 255,
+      blueChannel: 0,
+    },
+  },
+  [RgbColor.MINT]: {
+    definition: {
+      redChannel: 0,
+      greenChannel: 255,
+      blueChannel: 64,
+      warmWhiteChannel: 0,
+      coldWhiteChannel: 0,
+      amberChannel: 0,
+      uvChannel: 0,
+    },
+    alternative: WheelColor.GREEN,
+    complementary: [
+      RgbColor.RED,
+      RgbColor.YELLOW,
+      RgbColor.LIGHTBLUE,
+      RgbColor.ORANGE,
+      RgbColor.ROSERED,
+      RgbColor.PURPLE,
+      RgbColor.PINK,
+      RgbColor.GOLD,
+      RgbColor.BROWN,
+    ],
+    hex: '#3EB489',
     definitionLimited: {
       redChannel: 255,
       greenChannel: 255,
