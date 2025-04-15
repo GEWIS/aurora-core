@@ -57,8 +57,8 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
   };
 
   /**
-   * Returns whether this fixture can use the full color definition (true) or it must
-   * use the limited definition.
+   * Returns whether this fixture can use the full color definition (true) or it must use the
+   * limited definition. Depends on which type of LEDs the color's definition requires.
    */
   public canShowFullColor(color: RgbColorSpecification): boolean {
     if (color.definition.coldWhiteChannel && this.coldWhiteChannel == null) return false;
@@ -82,7 +82,8 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
       return;
     }
 
-    if (this.canShowFullColor(spec)) {
+    // Blinding white enables all (present) LED types, so no filter is necessary
+    if (this.canShowFullColor(spec) || spec === rgbColorDefinitions[RgbColor.BLINDINGWHITE]) {
       this.currentValues = spec.definition;
     } else {
       this.currentValues = {
