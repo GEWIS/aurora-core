@@ -1,5 +1,5 @@
 import { Column } from 'typeorm';
-import { hexToRgb, RgbColor, rgbColorDefinitions } from '../color-definitions';
+import { RgbColor, rgbColorDefinitions, RgbColorSpecification } from '../color-definitions';
 import LightsFixtureShutterOptions, { ShutterOption } from './lights-fixture-shutter-options';
 import Colors from './colors';
 import logger from '../../../logger';
@@ -57,13 +57,15 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
   };
 
   /**
-   * Returns whether multiple LED colors can be used to mix colors, or whether only
-   * RGB can be used.
+   * Returns whether this fixture can use the full color definition (true) or it must
+   * use the limited definition.
    */
-  public hasExtendedColorPalette(): boolean {
-    return (
-      this.coldWhiteChannel != null || this.warmWhiteChannel != null || this.amberChannel != null
-    );
+  public canShowFullColor(color: RgbColorSpecification): boolean {
+    if (color.definition.coldWhiteChannel && this.coldWhiteChannel == null) return false;
+    if (color.definition.warmWhiteChannel && this.warmWhiteChannel == null) return false;
+    if (color.definition.amberChannel && this.amberChannel == null) return false;
+    if (color.definition.uvChannel && this.uvChannel == null) return false;
+    return true;
   }
 
   public setColor(color?: RgbColor): void {
@@ -80,14 +82,13 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
       return;
     }
 
-    if (this.hasExtendedColorPalette()) {
+    if (this.canShowFullColor(spec)) {
       this.currentValues = spec.definition;
     } else {
-      const { r, g, b } = hexToRgb(spec.hex);
       this.currentValues = {
-        redChannel: r,
-        greenChannel: g,
-        blueChannel: b,
+        redChannel: spec.definitionLimited.redChannel,
+        greenChannel: spec.definitionLimited.greenChannel,
+        blueChannel: spec.definitionLimited.blueChannel,
         coldWhiteChannel: 0,
         warmWhiteChannel: 0,
         amberChannel: 0,
