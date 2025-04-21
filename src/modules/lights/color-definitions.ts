@@ -42,6 +42,7 @@ export type RgbColorSpecification = {
   alternative: WheelColor;
   complementary: RgbColor[];
   hex: HexColor;
+  definitionLimited: Pick<IColorsRgb, 'redChannel' | 'greenChannel' | 'blueChannel'>;
 };
 
 export type RgbColorSet = {
@@ -77,6 +78,11 @@ export const rgbColorDefinitions: RgbColorSet = {
     alternative: WheelColor.WHITE,
     complementary: [],
     hex: '#ffffff',
+    definitionLimited: {
+      redChannel: 255,
+      greenChannel: 255,
+      blueChannel: 255,
+    },
   },
   [RgbColor.RED]: {
     definition: {
@@ -100,6 +106,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIME,
     ],
     hex: '#ff1919',
+    definitionLimited: {
+      redChannel: 255,
+      greenChannel: 0,
+      blueChannel: 0,
+    },
   },
   [RgbColor.GREEN]: {
     definition: {
@@ -127,6 +138,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIGHTPINK,
     ],
     hex: '#00e60c',
+    definitionLimited: {
+      redChannel: 0,
+      greenChannel: 255,
+      blueChannel: 0,
+    },
   },
   [RgbColor.BLUE]: {
     definition: {
@@ -152,6 +168,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIME,
     ],
     hex: '#0000ff',
+    definitionLimited: {
+      redChannel: 0,
+      greenChannel: 0,
+      blueChannel: 255,
+    },
   },
   [RgbColor.YELLOW]: {
     definition: {
@@ -174,6 +195,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIME,
     ],
     hex: '#fba900',
+    definitionLimited: {
+      redChannel: 255,
+      greenChannel: 124,
+      blueChannel: 0,
+    },
   },
   [RgbColor.LIGHTBLUE]: {
     definition: {
@@ -199,6 +225,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIME,
     ],
     hex: '#6a6aff',
+    definitionLimited: {
+      redChannel: 98,
+      greenChannel: 98,
+      blueChannel: 255,
+    },
   },
   [RgbColor.ORANGE]: {
     definition: {
@@ -222,6 +253,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIME,
     ],
     hex: '#ff8000',
+    definitionLimited: {
+      redChannel: 255,
+      greenChannel: 90,
+      blueChannel: 0,
+    },
   },
   [RgbColor.ROSERED]: {
     definition: {
@@ -244,6 +280,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIME,
     ],
     hex: '#ff3a7c',
+    definitionLimited: {
+      redChannel: 217,
+      greenChannel: 32,
+      blueChannel: 32,
+    },
   },
   [RgbColor.PURPLE]: {
     definition: {
@@ -270,6 +311,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIME,
     ],
     hex: '#ff00f9',
+    definitionLimited: {
+      redChannel: 255,
+      greenChannel: 0,
+      blueChannel: 255,
+    },
   },
   [RgbColor.CYAN]: {
     definition: {
@@ -295,6 +341,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIME,
     ],
     hex: '#00d7fc',
+    definitionLimited: {
+      redChannel: 0,
+      blueChannel: 255,
+      greenChannel: 255,
+    },
   },
   [RgbColor.PINK]: {
     definition: {
@@ -318,6 +369,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIME,
     ],
     hex: '#f948c4',
+    definitionLimited: {
+      redChannel: 255,
+      greenChannel: 0,
+      blueChannel: 128,
+    },
   },
   [RgbColor.GOLD]: {
     definition: {
@@ -342,6 +398,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIME,
     ],
     hex: '#ffbf00',
+    definitionLimited: {
+      redChannel: 255,
+      greenChannel: 92,
+      blueChannel: 0,
+    },
   },
   [RgbColor.BROWN]: {
     definition: {
@@ -365,6 +426,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIME,
     ],
     hex: '#ff4d00',
+    definitionLimited: {
+      redChannel: 255,
+      greenChannel: 58,
+      blueChannel: 0,
+    },
   },
   [RgbColor.LIGHTPINK]: {
     definition: {
@@ -387,6 +453,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIME,
     ],
     hex: '#fc8ddb',
+    definitionLimited: {
+      redChannel: 255,
+      greenChannel: 50,
+      blueChannel: 189,
+    },
   },
   [RgbColor.LIME]: {
     definition: {
@@ -415,6 +486,11 @@ export const rgbColorDefinitions: RgbColorSet = {
       RgbColor.LIGHTPINK,
     ],
     hex: '#80ff00',
+    definitionLimited: {
+      redChannel: 255,
+      greenChannel: 255,
+      blueChannel: 0,
+    },
   },
   [RgbColor.BLINDINGWHITE]: {
     definition: {
@@ -429,6 +505,11 @@ export const rgbColorDefinitions: RgbColorSet = {
     alternative: WheelColor.WHITE,
     complementary: [],
     hex: '#ffffff',
+    definitionLimited: {
+      redChannel: 255,
+      greenChannel: 255,
+      blueChannel: 255,
+    },
   },
   [RgbColor.UV]: {
     definition: {
@@ -443,6 +524,11 @@ export const rgbColorDefinitions: RgbColorSet = {
     alternative: WheelColor.WHITE,
     complementary: [],
     hex: '#330066',
+    definitionLimited: {
+      redChannel: 0,
+      greenChannel: 0,
+      blueChannel: 0,
+    },
   },
 };
 

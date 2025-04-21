@@ -3,13 +3,8 @@ import LightsEffect, {
   BaseLightsEffectProps,
   LightsEffectBuilder,
 } from '../lights-effect';
-import { LightsGroup } from '../../entities';
-import {
-  hexToRgb,
-  RgbColor,
-  rgbColorDefinitions,
-  RgbColorSpecification,
-} from '../../color-definitions';
+import { LightsGroup, LightsMovingHeadRgb, LightsPar } from '../../entities';
+import { RgbColor, rgbColorDefinitions, RgbColorSpecification } from '../../color-definitions';
 import { EffectProgressionTickStrategy } from '../progression-strategies';
 import { IColorsRgb } from '../../entities/colors-rgb';
 import { ColorEffects } from './color-effects';
@@ -139,68 +134,51 @@ export default class BackgroundPulse extends LightsEffect<BackgroundPulseProps> 
     return (1 - fixtureAbsoluteProgression) * 2;
   }
 
-  private rgbToIColorsRgb({ r, g, b }: { r: number; b: number; g: number }): Required<IColorsRgb> {
-    return {
-      redChannel: r,
-      greenChannel: g,
-      blueChannel: b,
-      coldWhiteChannel: 0,
-      warmWhiteChannel: 0,
-      amberChannel: 0,
-      uvChannel: 0,
-    };
-  }
-
   /**
    * Mix two colors together
    * @param colorA
    * @param colorB
    * @param p factor B present in the new color
-   * @param rgbOnly Whether the output should be an RGB-only color
+   * @param fixture Fixture the color is going to be applied to
    * @private
    */
   private mixColors(
     colorA: RgbColorSpecification,
     colorB: RgbColorSpecification,
     p: number,
-    rgbOnly: boolean,
+    fixture: LightsPar | LightsMovingHeadRgb,
   ): Required<IColorsRgb> {
-    if (!rgbOnly) {
-      return {
-        redChannel: colorA.definition.redChannel * (1 - p) + colorB.definition.redChannel * p,
-        greenChannel: colorA.definition.greenChannel * (1 - p) + colorB.definition.greenChannel * p,
-        blueChannel: colorA.definition.blueChannel * (1 - p) + colorB.definition.blueChannel * p,
-        warmWhiteChannel:
-          colorA.definition.warmWhiteChannel! * (1 - p) + colorB.definition.warmWhiteChannel! * p,
-        coldWhiteChannel:
-          colorA.definition.coldWhiteChannel! * (1 - p) + colorB.definition.coldWhiteChannel! * p,
-        amberChannel:
-          colorA.definition.amberChannel! * (1 - p) + colorB.definition.amberChannel! * p,
-        uvChannel: colorA.definition.uvChannel! * (1 - p) + colorB.definition.uvChannel! * p,
-      };
-    }
+    const definitionA: IColorsRgb = fixture.color.canShowFullColor(colorA)
+      ? colorA.definition
+      : colorA.definitionLimited;
+    const definitionB: IColorsRgb = fixture.color.canShowFullColor(colorB)
+      ? colorB.definition
+      : colorB.definitionLimited;
 
-    const rgbA = hexToRgb(colorA.hex);
-    const rgbB = hexToRgb(colorB.hex);
-
-    return this.rgbToIColorsRgb({
-      r: rgbA.r * (1 - p) + rgbB.r * p,
-      g: rgbA.g * (1 - p) + rgbB.g * p,
-      b: rgbA.b * (1 - p) + rgbB.b * p,
-    });
+    return {
+      redChannel: definitionA.redChannel * (1 - p) + definitionB.redChannel * p,
+      greenChannel: definitionA.greenChannel * (1 - p) + definitionB.greenChannel * p,
+      blueChannel: definitionA.blueChannel * (1 - p) + definitionB.blueChannel * p,
+      warmWhiteChannel:
+        (definitionA.warmWhiteChannel ?? 0) * (1 - p) + (definitionB.warmWhiteChannel ?? 0) * p,
+      coldWhiteChannel:
+        (definitionA.coldWhiteChannel ?? 0) * (1 - p) + (definitionB.coldWhiteChannel ?? 0) * p,
+      amberChannel: (definitionA.amberChannel ?? 0) * (1 - p) + (definitionB.amberChannel ?? 0) * p,
+      uvChannel: (definitionA.uvChannel ?? 0) * (1 - p) + (definitionB.uvChannel ?? 0) * p,
+    };
   }
 
   /**
    * Get the mixed color for the given progression and the given color index
    * @param p progression, in range [0, 1]
    * @param colorIndex
-   * @param rgbOnly Whether only an RGB color should be returned, instead of an extensive palette
+   * @param fixture Fixture the color will be applied to
    * @private
    */
   private getColor(
     p: number,
     colorIndex: number,
-    rgbOnly: boolean,
+    fixture: LightsPar | LightsMovingHeadRgb,
   ): Required<IColorsRgb> | undefined {
     const baseColor = rgbColorDefinitions[this.props.colors[0]];
     if (!baseColor) return undefined;
@@ -208,13 +186,12 @@ export default class BackgroundPulse extends LightsEffect<BackgroundPulseProps> 
     let compositeColor: RgbColorSpecification | undefined;
     if (this.props.colors.length >= 2) {
       compositeColor = rgbColorDefinitions[this.props.colors[colorIndex]];
+    } else {
+      // If we have only one color, always show the base color.
+      return baseColor.definition;
     }
 
-    if (p <= 0 || !compositeColor) {
-      return rgbOnly ? this.rgbToIColorsRgb(hexToRgb(baseColor.hex)) : baseColor.definition;
-    }
-
-    return this.mixColors(baseColor, compositeColor, p, rgbOnly);
+    return this.mixColors(baseColor, compositeColor, p, fixture);
   }
 
   tick(): LightsGroup {
@@ -232,11 +209,7 @@ export default class BackgroundPulse extends LightsEffect<BackgroundPulseProps> 
         p = this.getRelativeProgression(progressionStrategy.getProgression(tick));
       }
 
-      const color = this.getColor(
-        p,
-        this.colorIndices[i] + 1,
-        !f.fixture.color.hasExtendedColorPalette(),
-      );
+      const color = this.getColor(p, this.colorIndices[i] + 1, f.fixture);
       if (color) {
         f.fixture.setCustomColor(color);
       } else {
