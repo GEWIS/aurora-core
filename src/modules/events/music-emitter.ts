@@ -1,10 +1,8 @@
-import { EventEmitter } from 'node:events';
-// TODO: Fix cyclical dependency
-// eslint-disable-next-line import/no-cycle
+import { BaseEventEmitter } from './base-event-emitter';
 import BaseAudioHandler from '../handlers/base-audio-handler';
 import { TrackChangeEvent } from './music-emitter-events';
 
-export class MusicEmitter extends EventEmitter {
+export class MusicEmitter extends BaseEventEmitter {
   private audioHandlers: BaseAudioHandler[] = [];
 
   private currentlyPlaying: TrackChangeEvent[] | null;
