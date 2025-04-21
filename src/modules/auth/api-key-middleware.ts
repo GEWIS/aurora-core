@@ -10,7 +10,7 @@ export default async function apiKeyMiddleware(req: Request, res: Response, next
     return;
   }
 
-  const rawKey = req.headers['X-API-Key'];
+  const rawKey = req.headers['x-api-key'];
   if (!rawKey) {
     next();
     return;
