@@ -60,16 +60,20 @@ export default class BeatManager {
     this.propagator.addPriority(generator, priority);
     this.generators.push(generator);
     generator.start();
+
+    this.beatEmitter.emit('generator_add', this.asResponse(generator));
   }
 
   /**
-   * Deregister a beat generator.
+   * Deregister and destroy a beat generator.
    * @param id
    */
   public remove(id: string): void {
     const index = this.generators.findIndex((g) => g.getId() === id);
     if (index >= 0) {
       this.propagator.removePriority(this.generators[index]);
+      this.generators[index].destroy();
+      this.beatEmitter.emit('generator_remove', this.asResponse(this.generators[index]));
       this.generators.splice(index, 1);
     }
   }

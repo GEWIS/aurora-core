@@ -1,7 +1,6 @@
 import { PlaybackState, Track } from '@fostertheweb/spotify-web-sdk';
 import SpotifyApiHandler from './spotify-api-handler';
-import { MusicEmitter } from '../events';
-import { TrackChangeEvent } from '../events/music-emitter-events';
+import { MusicEmitter, TrackChangeEvent } from '../events';
 import logger from '../../logger';
 
 export default class SpotifyTrackHandler {
@@ -37,6 +36,10 @@ export default class SpotifyTrackHandler {
     if (this.initialized) throw new Error('SpotifyTrackHandler is already initialized!');
     this.musicEmitter = emitter;
     this.initialized = true;
+  }
+
+  public isInitialized(): boolean {
+    return this.initialized;
   }
 
   private asTrackChangeEvent(item: Track, state: PlaybackState): TrackChangeEvent {

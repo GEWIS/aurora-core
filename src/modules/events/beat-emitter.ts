@@ -2,6 +2,7 @@ import { EventEmitter } from 'node:events';
 import { MusicEmitter } from './music-emitter';
 import { BeatEvent } from './music-emitter-events';
 import { GeneratorBeatEvent } from './beat-emitter-events';
+import logger from '../../logger';
 
 export class BeatEmitter extends EventEmitter {
   constructor(private musicEmitter: MusicEmitter) {

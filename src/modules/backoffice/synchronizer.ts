@@ -22,4 +22,10 @@ export function initBackofficeBeatSynchronizer(socket: Namespace, emitterStore: 
   emitterStore.beatEmitter.on('beat', (event) => {
     socket.emit('beat', event);
   });
+  emitterStore.beatEmitter.on('generator_add', (event) => {
+    socket.emit('generator_add', event);
+  });
+  emitterStore.beatEmitter.on('generator_remove', (event) => {
+    socket.emit('generator_remove', event);
+  });
 }
