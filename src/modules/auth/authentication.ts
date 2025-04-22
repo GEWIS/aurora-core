@@ -35,7 +35,7 @@ export async function expressAuthentication(
     }
 
     // User should be an integration user and should have endpoints assigned
-    if (request.user.integrationUserId !== undefined && !request.user.endpoints) {
+    if (request.user.integrationUserId === undefined || !request.user.endpoints) {
       throw new HttpApiException(HttpStatusCode.Forbidden);
     }
 
