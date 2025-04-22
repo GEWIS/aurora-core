@@ -13,7 +13,7 @@ import { CenturionScreenHandler } from '../../handlers/screen';
 import { LightsEffectBuilder } from '../../lights/effects/lights-effect';
 import Wave from '../../lights/effects/color/wave';
 import Sparkle from '../../lights/effects/color/sparkle';
-import { ArtificialBeatGenerator } from '../../beats/artificial-beat-generator';
+import { ArtificialBeatGenerator, BeatManager, BeatPriorities } from '../../beats';
 import logger from '../../../logger';
 import LightsSwitchManager from '../../root/lights-switch-manager';
 import { FeatureEnabled, ServerSettingsStore } from '../../server-settings';
@@ -52,7 +52,11 @@ export default class CenturionMode extends BaseMode<
 
   public currentColors?: RgbColor[];
 
-  private beatGenerator: ArtificialBeatGenerator;
+  private beatManager: BeatManager;
+
+  private beatGeneratorBackground: ArtificialBeatGenerator;
+
+  private beatGeneratorSong: ArtificialBeatGenerator | undefined;
 
   private lightsSwitchManager: LightsSwitchManager;
 
@@ -67,7 +71,7 @@ export default class CenturionMode extends BaseMode<
     super(lights, screens, audios, LIGHTS_HANDLER, SCREEN_HANDLER, AUDIO_HANDLER);
 
     this.audioHandler.addSyncAudioTimingHandler(this.syncFeedEvents.bind(this));
-    this.beatGenerator = ArtificialBeatGenerator.getInstance();
+    this.beatManager = BeatManager.getInstance();
   }
 
   public async initialize(musicEmitter: MusicEmitter) {
@@ -110,7 +114,12 @@ export default class CenturionMode extends BaseMode<
     this.fireLastFeedEvent(this.timestamp);
 
     this.screenHandler.start();
-    this.beatGenerator.start(130);
+    this.beatGeneratorBackground = new ArtificialBeatGenerator(
+      'background',
+      'Centurion (Background)',
+      130,
+    );
+    this.beatManager.add(this.beatGeneratorBackground, BeatPriorities.BACKGROUND_BEAT_GENERATOR);
     logger.info('Started centurion playback.');
     return true;
   }
@@ -146,7 +155,8 @@ export default class CenturionMode extends BaseMode<
     this.audioHandler.stop();
     this.screenHandler.stop();
     this.stopFeedEvents();
-    this.beatGenerator.stop();
+    this.setSongBeatGenerator();
+    this.beatManager.remove(this.beatGeneratorBackground.getId());
     logger.info('Paused centurion playback.');
 
     this.timestamp = (new Date().getTime() - this.startTime.getTime()) / 1000;
@@ -186,13 +196,12 @@ export default class CenturionMode extends BaseMode<
   private getRandomMovementEffect(): LightsEffectBuilder {
     // If we do not have a bpm, choose SearchLight as the default
     const defaultEffect = SearchLight.build({ radiusFactor: 1.5, cycleTime: 3000 });
-    if (!this.beatGenerator.bpm) {
+    if (!this.beatGeneratorSong) {
       return defaultEffect;
     }
 
-    const baseCycleTime = Math.round(360000 / this.beatGenerator.bpm);
-    const classicRotateProb = Math.max(0, Math.min(1, (this.beatGenerator.bpm - 120) / 60));
-    console.log(this.beatGenerator.bpm, classicRotateProb);
+    const baseCycleTime = Math.round(360000 / this.beatGeneratorSong.bpm);
+    const classicRotateProb = Math.max(0, Math.min(1, (this.beatGeneratorSong.bpm - 120) / 60));
 
     const effects = [
       {
@@ -236,10 +245,10 @@ export default class CenturionMode extends BaseMode<
     ];
     let factor = Math.random();
 
-    if (!this.beatGenerator.bpm || this.beatGenerator.bpm < 120) {
+    if (!this.beatGeneratorSong || this.beatGeneratorSong.bpm < 120) {
       // If the music is relatively slow or really fast, do not use wave or sparkle
       factor = factor - 0.2;
-    } else if (this.beatGenerator.bpm > 160) {
+    } else if (this.beatGeneratorSong && this.beatGeneratorSong.bpm > 160) {
       // If the music is really fast, do not use wave, as the other effects will be
       // much more energetic
       factor = factor - 0.1;
@@ -254,18 +263,36 @@ export default class CenturionMode extends BaseMode<
   }
 
   /**
-   * Change the beatgenerator BPM to the speed defined in the song, if it exists
+   * Reset the song beat generator: restart it with the given BPM if BPM is defined, else stop.
+   * @param bpm
+   * @private
+   */
+  private setSongBeatGenerator(bpm?: number) {
+    if (this.beatGeneratorSong) {
+      this.beatManager.remove(this.beatGeneratorSong.getId());
+      this.beatGeneratorSong = undefined;
+    }
+
+    if (bpm) {
+      this.beatGeneratorSong = new ArtificialBeatGenerator('centurion', 'Centurion', bpm);
+      this.beatManager.add(this.beatGeneratorSong, BeatPriorities.CENTURION_BEAT_GENERATOR);
+    }
+  }
+
+  /**
+   * Change the beat generator BPM to the speed defined in the song, if it exists. If it does not
+   * exist, stop the song beat generator.
    * @param songData
    * @private
    */
-  private setBpm(songData: SongData | SongData[]) {
+  private setBpmFromSong(songData: SongData | SongData[]) {
     let bpm: number | undefined;
     if (Array.isArray(songData)) {
       bpm = songData.find((s) => s.bpm !== undefined)?.bpm;
     } else {
       bpm = songData.bpm;
     }
-    if (bpm) this.beatGenerator.start(bpm);
+    this.setSongBeatGenerator(bpm);
   }
 
   /**
@@ -318,7 +345,7 @@ export default class CenturionMode extends BaseMode<
       this.screenHandler.horn(event.data.strobeTime ?? STROBE_TIME, event.data.counter);
     } else if (event.type === 'song') {
       this.lastSongEvent = event;
-      this.setBpm(event.data);
+      this.setBpmFromSong(event.data);
       // Set effects after setting bpm, because the effects might need the bpm
       this.setRandomLightEffects();
       this.emitSong(event.data);
@@ -360,10 +387,9 @@ export default class CenturionMode extends BaseMode<
         }
         if (event.data.random) {
           this.setRandomLightEffects();
-          if (this.beatGenerator.bpm) {
-            // Restart the beat generator to ensure no quick successive beats when the lights change
-            this.beatGenerator.start(this.beatGenerator.bpm);
-          }
+          // Restart the beat generator to ensure no quick successive beats when the lights change
+          this.beatGeneratorBackground.restart();
+          if (this.beatGeneratorSong) this.beatGeneratorSong.restart();
           return;
         }
         if (l.pars.length > 0 && event.data.effects.pars) {
@@ -388,7 +414,7 @@ export default class CenturionMode extends BaseMode<
         }
       });
     } else if (event.type === 'bpm') {
-      this.beatGenerator.start(event.data.bpm);
+      this.setSongBeatGenerator(event.data.bpm);
     } else if (event.type === 'other' && event.data === 'stop') {
       this.stop();
     }

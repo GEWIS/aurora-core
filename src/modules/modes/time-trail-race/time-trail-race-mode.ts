@@ -17,7 +17,7 @@ import {
 } from './time-trail-race-events';
 import { InvalidStateError } from './time-trail-race-invalid-state-error';
 import TimeTrailRaceLightsHandler from '../../handlers/lights/time-trail-race-lights-handler';
-import { ArtificialBeatGenerator } from '../../beats/artificial-beat-generator';
+import { ArtificialBeatGenerator, BeatManager, BeatPriorities } from '../../beats';
 import logger from '../../../logger';
 import { SpotifyTrackHandler } from '../../spotify';
 
@@ -32,7 +32,9 @@ export default class TimeTrailRaceMode extends BaseMode<
   TimeTrailRaceScreenHandler,
   SimpleAudioHandler
 > {
-  private artificialBeatGenerator: ArtificialBeatGenerator;
+  private beatManager: BeatManager;
+
+  private timeTrailBeatGenerator: ArtificialBeatGenerator | undefined;
 
   private backofficeSyncEmitter: BackofficeSyncEmitter;
 
@@ -51,14 +53,14 @@ export default class TimeTrailRaceMode extends BaseMode<
   public scoreboard: ScoreboardItem[] = [];
 
   destroy(): void {
-    this.artificialBeatGenerator.stop();
+    this.stopBeats();
     super.destroy();
   }
 
   constructor(lights: LightsGroup[], screens: Screen[], audios: Audio[]) {
     super(lights, screens, audios, LIGHTS_HANDLER, SCREEN_HANDLER, AUDIO_HANDLER);
 
-    this.artificialBeatGenerator = ArtificialBeatGenerator.getInstance();
+    this.beatManager = BeatManager.getInstance();
     this.spotify = SpotifyTrackHandler.getInstance();
   }
 
@@ -68,6 +70,16 @@ export default class TimeTrailRaceMode extends BaseMode<
 
   public get sessionName() {
     return this._sessionName;
+  }
+
+  /**
+   * Stop the beat generator if it is enabled.
+   */
+  private stopBeats(): void {
+    if (this.timeTrailBeatGenerator) {
+      this.beatManager.remove(this.timeTrailBeatGenerator.getId());
+      this.timeTrailBeatGenerator = undefined;
+    }
   }
 
   public initialize(backofficeSyncEmitter: BackofficeSyncEmitter, sessionName: string) {
@@ -169,7 +181,8 @@ export default class TimeTrailRaceMode extends BaseMode<
     this.audioHandler.play(MUSIC_FILE);
 
     this.lightsHandler.setLightsToParty();
-    this.artificialBeatGenerator.start(125);
+    this.timeTrailBeatGenerator = new ArtificialBeatGenerator('time-trail', 'Time Trail Race', 125);
+    this.beatManager.add(this.timeTrailBeatGenerator, BeatPriorities.TIME_TRAIL_BEAT_GENERATOR);
 
     logger.trace(`Time trail race player started at ${this.startTime.toLocaleTimeString()}`);
 
@@ -206,7 +219,7 @@ export default class TimeTrailRaceMode extends BaseMode<
     this.audioHandler.stop();
 
     this.lightsHandler.setLightsToWhite();
-    this.artificialBeatGenerator.stop();
+    this.stopBeats();
 
     logger.trace(`Time Trail Race player finished with ${finishTime.toLocaleString()}ms`);
 
@@ -226,7 +239,7 @@ export default class TimeTrailRaceMode extends BaseMode<
     };
     this.screenHandler.showScoreboard(event);
     this.backofficeSyncEmitter.emit('race-scoreboard', event);
-    this.artificialBeatGenerator.stop();
+    this.stopBeats();
 
     this.lightsHandler.setLightsToParty();
     this.spotify.resumePlayback();

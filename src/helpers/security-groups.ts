@@ -82,6 +82,7 @@ export const securityGroups = {
       SecurityGroup.AVICO,
       SecurityGroup.INTEGRATION_USER,
     ],
+    privileged: [SecurityGroup.ADMIN],
   },
   gdrp: {
     base: [SecurityGroup.ADMIN],

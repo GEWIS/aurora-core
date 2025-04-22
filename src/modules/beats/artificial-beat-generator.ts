@@ -1,6 +1,5 @@
-import { MusicEmitter } from '../events';
-import { BeatEvent } from '../events/music-emitter-events';
-import logger from '../../logger';
+import { BeatEvent } from '../events';
+import { BeatGenerator } from './beat-generator';
 
 export interface ArtificialBeatGeneratorParams {
   /**
@@ -10,33 +9,18 @@ export interface ArtificialBeatGeneratorParams {
   bpm: number;
 }
 
-export class ArtificialBeatGenerator {
+export class ArtificialBeatGenerator extends BeatGenerator {
   private beatStart: Date | undefined;
 
-  public bpm: number | undefined;
+  public bpm: number;
 
   private beatInterval: number;
 
   private interval: NodeJS.Timeout;
 
-  private musicEmitter: MusicEmitter;
-
-  private static instance: ArtificialBeatGenerator;
-
-  private ping = false;
-
-  public static getInstance() {
-    if (!this.instance) {
-      this.instance = new ArtificialBeatGenerator();
-    }
-    return this.instance;
-  }
-
-  public init(musicEmitter: MusicEmitter) {
-    if (this.musicEmitter) {
-      throw new Error('ArtificalBeatGenerator already initialized');
-    }
-    this.musicEmitter = musicEmitter;
+  constructor(id: string, name: string, bpm: number) {
+    super(id, name);
+    this.bpm = bpm;
   }
 
   /**
@@ -47,36 +31,31 @@ export class ArtificialBeatGenerator {
   }
 
   /**
-   * Start the beat generator with the given BPM (beats per minute)
-   * @param bpm
+   * Restart the beat generator, so the next beat will be right now.
    */
-  start(bpm: number) {
-    if (this.beatStart) this.stop();
+  public restart(): void {
+    this.start();
+  }
 
-    this.bpm = bpm;
-    this.beatInterval = Math.round(60000 / bpm);
+  /**
+   * Start the beat generator
+   */
+  public start() {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+    this.beatInterval = Math.round(60000 / this.bpm);
 
     this.beatStart = new Date();
-    this.musicEmitter.artificialBeatGeneratorEnabled = true;
     this.interval = setInterval(this.emitBeat.bind(this), this.beatInterval);
     this.emitBeat();
   }
 
   /**
-   * Stop the beat generator
-   */
-  stop() {
-    clearInterval(this.interval);
-    this.bpm = undefined;
-    this.beatStart = undefined;
-    this.musicEmitter.artificialBeatGeneratorEnabled = false;
-  }
-
-  /**
-   * Emit a beat to the music emitter. Confidence is always 0.5 because it's an artifical beat
+   * Emit a beat to the music emitter. Confidence is always 0.5 because it's an artificial beat
    * @private
    */
-  private emitBeat() {
+  protected emitBeat() {
     if (!this.beatStart) return;
 
     const event: BeatEvent = {
@@ -87,17 +66,10 @@ export class ArtificialBeatGenerator {
       },
     };
 
-    if (process.env.LOG_AUDIO_BEATS === 'true') {
-      let beat = '';
+    this.sendBeat(event);
+  }
 
-      if (this.ping) beat += 'beat:   . ';
-      if (!this.ping) beat += 'beat:  .  ';
-      this.ping = !this.ping;
-
-      beat += `: ${event.beat.start} (artificial)`;
-      logger.info(beat);
-    }
-
-    this.musicEmitter.emitAudio('beat', event);
+  destroy() {
+    clearInterval(this.interval);
   }
 }

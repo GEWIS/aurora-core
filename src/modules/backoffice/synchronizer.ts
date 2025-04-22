@@ -3,7 +3,7 @@ import { MusicEmitter } from '../events';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 import EmitterStore from '../events/emitter-store';
 
-export default function initBackofficeSynchronizer(socket: Namespace, emitterStore: EmitterStore) {
+export function initBackofficeSynchronizer(socket: Namespace, emitterStore: EmitterStore) {
   emitterStore.musicEmitter.on('beat', (event) => {
     socket.emit('beat', event);
   });
@@ -15,5 +15,17 @@ export default function initBackofficeSynchronizer(socket: Namespace, emitterSto
   });
   emitterStore.orderEmitter.on('orders', (event) => {
     socket.emit('orders', event);
+  });
+}
+
+export function initBackofficeBeatSynchronizer(socket: Namespace, emitterStore: EmitterStore) {
+  emitterStore.beatEmitter.on('beat', (event) => {
+    socket.emit('beat', event);
+  });
+  emitterStore.beatEmitter.on('generator_add', (event) => {
+    socket.emit('generator_add', event);
+  });
+  emitterStore.beatEmitter.on('generator_remove', (event) => {
+    socket.emit('generator_remove', event);
   });
 }
