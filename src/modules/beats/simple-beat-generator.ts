@@ -9,7 +9,7 @@ export interface ArtificialBeatGeneratorParams {
   bpm: number;
 }
 
-export class ArtificialBeatGenerator extends BeatGenerator {
+export class SimpleBeatGenerator extends BeatGenerator {
   private beatStart: Date | undefined;
 
   public bpm: number;

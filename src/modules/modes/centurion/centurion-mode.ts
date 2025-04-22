@@ -13,7 +13,7 @@ import { CenturionScreenHandler } from '../../handlers/screen';
 import { LightsEffectBuilder } from '../../lights/effects/lights-effect';
 import Wave from '../../lights/effects/color/wave';
 import Sparkle from '../../lights/effects/color/sparkle';
-import { ArtificialBeatGenerator, BeatManager, BeatPriorities } from '../../beats';
+import { SimpleBeatGenerator, BeatManager, BeatPriorities } from '../../beats';
 import logger from '../../../logger';
 import LightsSwitchManager from '../../root/lights-switch-manager';
 import { FeatureEnabled, ServerSettingsStore } from '../../server-settings';
@@ -54,9 +54,9 @@ export default class CenturionMode extends BaseMode<
 
   private beatManager: BeatManager;
 
-  private beatGeneratorBackground: ArtificialBeatGenerator;
+  private beatGeneratorBackground: SimpleBeatGenerator;
 
-  private beatGeneratorSong: ArtificialBeatGenerator | undefined;
+  private beatGeneratorSong: SimpleBeatGenerator | undefined;
 
   private lightsSwitchManager: LightsSwitchManager;
 
@@ -114,7 +114,7 @@ export default class CenturionMode extends BaseMode<
     this.fireLastFeedEvent(this.timestamp);
 
     this.screenHandler.start();
-    this.beatGeneratorBackground = new ArtificialBeatGenerator(
+    this.beatGeneratorBackground = new SimpleBeatGenerator(
       'background',
       'Centurion (Background)',
       130,
@@ -274,7 +274,7 @@ export default class CenturionMode extends BaseMode<
     }
 
     if (bpm) {
-      this.beatGeneratorSong = new ArtificialBeatGenerator('centurion', 'Centurion', bpm);
+      this.beatGeneratorSong = new SimpleBeatGenerator('centurion', 'Centurion', bpm);
       this.beatManager.add(this.beatGeneratorSong, BeatPriorities.CENTURION_BEAT_GENERATOR);
     }
   }

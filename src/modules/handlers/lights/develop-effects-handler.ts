@@ -4,7 +4,7 @@ import { RgbColor } from '../../lights/color-definitions';
 import { Wave } from '../../lights/effects/color';
 import TableRotate from '../../lights/effects/movement/table-rotate';
 import logger from '../../../logger';
-import { ArtificialBeatGenerator, BeatManager, BeatPriorities } from '../../beats';
+import { SimpleBeatGenerator, BeatManager, BeatPriorities } from '../../beats';
 import {
   LightsEffectDirection,
   LightsEffectPattern,
@@ -13,7 +13,7 @@ import {
 export default class DevelopEffectsHandler extends EffectsHandler {
   private beatManager: BeatManager;
 
-  private backgroundBeatGenerator: ArtificialBeatGenerator | undefined;
+  private backgroundBeatGenerator: SimpleBeatGenerator | undefined;
 
   constructor() {
     super();
@@ -21,7 +21,7 @@ export default class DevelopEffectsHandler extends EffectsHandler {
   }
 
   private startBeats() {
-    this.backgroundBeatGenerator = new ArtificialBeatGenerator(
+    this.backgroundBeatGenerator = new SimpleBeatGenerator(
       'develop-effects',
       'DevelopEffectsHandler',
       120,

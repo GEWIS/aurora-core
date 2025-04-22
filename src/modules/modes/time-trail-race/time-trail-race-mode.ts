@@ -17,7 +17,7 @@ import {
 } from './time-trail-race-events';
 import { InvalidStateError } from './time-trail-race-invalid-state-error';
 import TimeTrailRaceLightsHandler from '../../handlers/lights/time-trail-race-lights-handler';
-import { ArtificialBeatGenerator, BeatManager, BeatPriorities } from '../../beats';
+import { SimpleBeatGenerator, BeatManager, BeatPriorities } from '../../beats';
 import logger from '../../../logger';
 import { SpotifyTrackHandler } from '../../spotify';
 
@@ -34,7 +34,7 @@ export default class TimeTrailRaceMode extends BaseMode<
 > {
   private beatManager: BeatManager;
 
-  private timeTrailBeatGenerator: ArtificialBeatGenerator | undefined;
+  private timeTrailBeatGenerator: SimpleBeatGenerator | undefined;
 
   private backofficeSyncEmitter: BackofficeSyncEmitter;
 
@@ -181,7 +181,7 @@ export default class TimeTrailRaceMode extends BaseMode<
     this.audioHandler.play(MUSIC_FILE);
 
     this.lightsHandler.setLightsToParty();
-    this.timeTrailBeatGenerator = new ArtificialBeatGenerator('time-trail', 'Time Trail Race', 125);
+    this.timeTrailBeatGenerator = new SimpleBeatGenerator('time-trail', 'Time Trail Race', 125);
     this.beatManager.add(this.timeTrailBeatGenerator, BeatPriorities.TIME_TRAIL_BEAT_GENERATOR);
 
     logger.trace(`Time trail race player started at ${this.startTime.toLocaleTimeString()}`);
