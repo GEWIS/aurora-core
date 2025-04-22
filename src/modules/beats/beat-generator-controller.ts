@@ -38,16 +38,17 @@ export class BeatGeneratorController extends Controller {
     const manager = BeatManager.getInstance();
     const generator = manager.get(REAL_TIME_BEAT_GENERATOR_ID);
     if (generator) {
-      manager.remove(generator.getId());
+      (generator as ArtificialBeatGenerator).setBpm(params.bpm);
+    } else {
+      manager.add(
+        new ArtificialBeatGenerator(
+          REAL_TIME_BEAT_GENERATOR_ID,
+          REAL_TIME_BEAT_GENERATOR_NAME,
+          params.bpm,
+        ),
+        BeatPriorities.REAL_TIME_BEAT_DETECTOR,
+      );
     }
-    manager.add(
-      new ArtificialBeatGenerator(
-        REAL_TIME_BEAT_GENERATOR_ID,
-        REAL_TIME_BEAT_GENERATOR_NAME,
-        params.bpm,
-      ),
-      BeatPriorities.REAL_TIME_BEAT_DETECTOR,
-    );
   }
 
   /**
