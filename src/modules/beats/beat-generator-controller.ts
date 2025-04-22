@@ -1,10 +1,7 @@
 import { Controller } from '@tsoa/runtime';
 import { Body, Delete, Get, Post, Request, Route, Tags } from 'tsoa';
 import { Request as ExpressRequest } from 'express';
-import {
-  ArtificialBeatGenerator,
-  ArtificialBeatGeneratorParams,
-} from './artificial-beat-generator';
+import { SimpleBeatGenerator, ArtificialBeatGeneratorParams } from './simple-beat-generator';
 import { SecurityNames } from '../../helpers/security';
 import logger from '../../logger';
 import { securityGroups } from '../../helpers/security-groups';
@@ -38,16 +35,17 @@ export class BeatGeneratorController extends Controller {
     const manager = BeatManager.getInstance();
     const generator = manager.get(REAL_TIME_BEAT_GENERATOR_ID);
     if (generator) {
-      manager.remove(generator.getId());
+      (generator as SimpleBeatGenerator).setBpm(params.bpm);
+    } else {
+      manager.add(
+        new SimpleBeatGenerator(
+          REAL_TIME_BEAT_GENERATOR_ID,
+          REAL_TIME_BEAT_GENERATOR_NAME,
+          params.bpm,
+        ),
+        BeatPriorities.REAL_TIME_BEAT_DETECTOR,
+      );
     }
-    manager.add(
-      new ArtificialBeatGenerator(
-        REAL_TIME_BEAT_GENERATOR_ID,
-        REAL_TIME_BEAT_GENERATOR_NAME,
-        params.bpm,
-      ),
-      BeatPriorities.REAL_TIME_BEAT_DETECTOR,
-    );
   }
 
   /**
@@ -71,7 +69,7 @@ export class BeatGeneratorController extends Controller {
     const generator = manager.get(ARTIFICIAL_BEAT_GENERATOR_ID);
     if (!generator) return null;
     return {
-      bpm: (generator as ArtificialBeatGenerator).bpm,
+      bpm: (generator as SimpleBeatGenerator).bpm,
     };
   }
 
@@ -90,7 +88,7 @@ export class BeatGeneratorController extends Controller {
       manager.remove(generator.getId());
     }
     manager.add(
-      new ArtificialBeatGenerator(
+      new SimpleBeatGenerator(
         ARTIFICIAL_BEAT_GENERATOR_ID,
         ARTIFICIAL_BEAT_GENERATOR_NAME,
         params.bpm,

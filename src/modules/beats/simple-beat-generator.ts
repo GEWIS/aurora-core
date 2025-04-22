@@ -9,7 +9,7 @@ export interface ArtificialBeatGeneratorParams {
   bpm: number;
 }
 
-export class ArtificialBeatGenerator extends BeatGenerator {
+export class SimpleBeatGenerator extends BeatGenerator {
   private beatStart: Date | undefined;
 
   public bpm: number;
@@ -38,15 +38,27 @@ export class ArtificialBeatGenerator extends BeatGenerator {
   }
 
   /**
+   * Update the bpm (transmits a new beat on call)
+   * @param bpm
+   */
+  public setBpm(bpm: number): void {
+    this.bpm = bpm;
+    this.start();
+  }
+
+  /**
    * Start the beat generator
    */
   public start() {
     if (this.interval) {
       clearInterval(this.interval);
     }
-    this.beatInterval = Math.round(60000 / this.bpm);
 
-    this.beatStart = new Date();
+    if (!this.beatStart) {
+      this.beatStart = new Date();
+    }
+
+    this.beatInterval = Math.round(60000 / this.bpm);
     this.interval = setInterval(this.emitBeat.bind(this), this.beatInterval);
     this.emitBeat();
   }
