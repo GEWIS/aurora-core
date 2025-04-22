@@ -23,10 +23,10 @@ export function setupErrorHandler(app: Express) {
       });
     } else if (err instanceof HttpApiException) {
       // Ignore unauthorized errors
-      if (err.statusCode !== HttpStatusCode.Unauthorized) {
-        logger.warn(`Caught '${err.statusCode} - ${err.name}' for ${req.path}.`);
+      if (err.status !== HttpStatusCode.Unauthorized) {
+        logger.warn(`Caught '${err.status} - ${err.name}' for ${req.path}.`);
       }
-      res.status(err.statusCode).json(err);
+      res.status(err.status).json(err);
     } else if (err instanceof TrelloAPIError || err instanceof AxiosError) {
       logger.error(`Caught '${err.message} - ${err.name}' for ${req.path}.`);
       res.status(500).json('Internal server error.');
