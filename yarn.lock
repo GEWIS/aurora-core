@@ -352,21 +352,21 @@
     "@hapi/bourne" "^3.0.0"
     "@hapi/hoek" "^11.0.2"
 
-"@hey-api/json-schema-ref-parser@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@hey-api/json-schema-ref-parser/-/json-schema-ref-parser-1.0.4.tgz#818010c11f5790c406704f8743cf3538af10dbbb"
-  integrity sha512-IaJ4yFgU5r63KZyeySHRKSM1bavFIda8KdwCFi5BxQCIklltzEByBksNOPms+yHXpWWfR+OopIusVZV8roycYg==
+"@hey-api/json-schema-ref-parser@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@hey-api/json-schema-ref-parser/-/json-schema-ref-parser-1.0.3.tgz#d20ed12edcbe679540af2647fb28ed61b7fbca7e"
+  integrity sha512-jgyNFPUReGpdB0ihWv6m+Q3dcawtXx4t6cvi0NS4xxblulcCfEjThP5xVwShFiTRScckIQ/GsuZv20arRTIDkg==
   dependencies:
     "@jsdevtools/ono" "^7.1.3"
     "@types/json-schema" "^7.0.15"
     js-yaml "^4.1.0"
 
-"@hey-api/openapi-ts@^0.66.5":
-  version "0.66.5"
-  resolved "https://registry.yarnpkg.com/@hey-api/openapi-ts/-/openapi-ts-0.66.5.tgz#9018584c02d7e409f87667e417d38bc142cdb941"
-  integrity sha512-3bk0UMrIYdF7IC+SoJ941jni0rmc0cTk10MzcKarW5ybR2z631UrIU1sHNzadftaYL/WK+dbaDRwJ5Juhmf9/A==
+"@hey-api/openapi-ts@^0.64.15":
+  version "0.64.15"
+  resolved "https://registry.yarnpkg.com/@hey-api/openapi-ts/-/openapi-ts-0.64.15.tgz#655e8ee4039f9f190244e72595bcfee0adf43ad6"
+  integrity sha512-bXpi9z3YEPVt9bVqlFA3hHmgDzfM8ID5kjnXR7t6PFxlmqo8CH8Y8aCNP7rMk1q7MXk42y2CXC2ehbU9cthCyw==
   dependencies:
-    "@hey-api/json-schema-ref-parser" "1.0.4"
+    "@hey-api/json-schema-ref-parser" "1.0.3"
     c12 "2.0.1"
     commander "13.0.0"
     handlebars "4.7.8"

@@ -58,7 +58,7 @@
     "@eslint/compat": "^1.2.7",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.23.0",
-    "@hey-api/openapi-ts": "^0.66.5",
+    "@hey-api/openapi-ts": "^0.64.15",
     "@tsoa/cli": "^6.6.0",
     "@tsoa/runtime": "^6.6.0",
     "@types/async-lock": "^1.4.2",
