@@ -8,6 +8,7 @@ export interface ISecuritySections {
 
 export interface ISecurityGroups {
   user: ISecuritySections;
+  color: ISecuritySections;
   audit: ISecuritySections;
   beats: ISecuritySections;
   gdrp: ISecuritySections;
@@ -69,6 +70,9 @@ const allSecuritySubscriberGroups = [
  */
 export const securityGroups = {
   user: {
+    base: allSecuritySubscriberGroups,
+  },
+  color: {
     base: allSecuritySubscriberGroups,
   },
   audit: {

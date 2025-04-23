@@ -1,4 +1,4 @@
-import { Body, Get, Post, Query, Request, Route, Security, Tags } from 'tsoa';
+import { Body, Get, Post, Query, Request, Route, Tags } from 'tsoa';
 import { Controller } from '@tsoa/runtime';
 import RootLightsService, {
   LightsControllerCreateParams,
@@ -24,7 +24,7 @@ import {
 import { SecurityGroup, SecurityNames } from '../../helpers/security';
 import { securityGroups } from '../../helpers/security-groups';
 import { Request as ExpressRequest } from 'express';
-import { LightsSwitch } from '../lights/entities';
+import { Security } from '../auth';
 
 interface LightsColorResponse {
   color: RgbColor;
@@ -205,7 +205,8 @@ export class RootLightsController extends Controller {
     return LIGHTS_EFFECTS.map((e) => e.name);
   }
 
-  @Security(SecurityNames.LOCAL, securityGroups.light.base)
+  @Security(SecurityNames.LOCAL, securityGroups.color.base)
+  @Security(SecurityNames.INTEGRATION, ['getAllLightsColors'])
   @Get('colors')
   public getAllLightsColors(): LightsColorResponse[] {
     return rgbColors.map(
