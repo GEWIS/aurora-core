@@ -1,16 +1,19 @@
 # Aurora Core
 
 Aurora is the software suite that integrates and synchronizes DMX lighting, narrowcasting screens and currently playing music.
-The system is designed around a publish-subscribe architecture.
-Executing clients connect to the core using SocketIO Websockets.
+The system is designed around a publish-subscribe architecture, where executing clients connect to the core using SocketIO Websockets.
 End users can send commands to Aurora by using HTTP (in the backoffice).
 
 This repository is the publisher or "core" of the system. All other applications connect to this central hub.
 The other repositories can be found here:
-- [Aurora Backoffice](https://github.com/gewis/aurora-backoffice).
-- [Aurora Narrowcasting Client](https://github.com/gewis/aurora-client).
-- [Aurora Audio Player](https://github.com/gewis/aurora-lights-proxy).
-- [Aurora DMX Lights Proxy](https://github.com/gewis/aurora-audio-player).
+- [Aurora Backoffice](https://github.com/gewis/aurora-backoffice), used by humans to control the behaviour of Aurora.
+- [Aurora Narrowcasting Client](https://github.com/gewis/aurora-client), the subscriber for screens.
+- [Aurora Audio Player](https://github.com/gewis/aurora-lights-proxy), the subscriber for audio players.
+- [Aurora DMX Lights Proxy](https://github.com/gewis/aurora-audio-player), the subscriber for DMX controllers.
+- [Aurora Lights Simulator](https://github.com/GEWIS/aurora-lights-simulator), to develop lights effects without
+having access to physical hardware.
+- [Aurora Real Time Beat Detector](https://github.com/GEWIS/aurora-beat-detector), if you want lights effects
+to play on the beat of the music without having to set the tempo yourself (manually).
 
 ## Prerequisites
 - NodeJS 22.
@@ -34,12 +37,16 @@ To fully utilize all functionality of Aurora, some extra environment variables a
 - To use GEWIS photos on the narrowcasting poster screen, you need an internal GEWIS website token.
 - To use SudoSOS borrel posters, you need at least a [SudoSOS API key](https://github.com/GEWIS/sudosos-backend). 
 
+### External services integrating with Aurora
+To read more about how you can integrate your own services with Aurora (to fetch data or send commands),
+visit the [README about Integrations](src/modules/auth/integration/README.md).
+
 ## Deployment
 Aurora can easily be deployed by using Docker Compose. Note that this only includes the core, backoffice and narrowcasting client.
 The audio player and DMX lights proxy need to be installed manually onto their destined systems, as those applications require an audio output and connected ARTnet controller respectively.
 
 ## Copyright
-Copyright © 2023-2024 Study Association GEWIS - Some rights reserved.
+Copyright © 2023-2025 Study Association GEWIS - Some rights reserved.
 You can use our software freely within the limits of our license.
 However, we worked very hard on this project and invested a lot of time in it
 so we ask you to leave our copyright marks in place when modifying our software.
