@@ -13,12 +13,10 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 COPY ./package.json ./yarn.lock ./
-RUN apk --no-cache --virtual build-dependencies add \
+RUN apk --no-cache add \
     git \
     # Python is required by node-gyp to build node dependencies (sqlite3)
-    python \
-    make \
-    g++
+    python3
 RUN yarn install --production
 COPY --from=build --chown=node /app/dist /app
 COPY ./public ./public
