@@ -1,5 +1,6 @@
 import BaseEntity from '../../../root/entities/base-entity';
 import { Column, Entity } from 'typeorm';
+import { jsonTransformer } from '../../../../helpers/transformers';
 
 @Entity()
 /**
@@ -16,16 +17,7 @@ export default class IntegrationUser extends BaseEntity {
   @Column({
     type: 'varchar',
     nullable: true,
-    transformer: {
-      from(value: string | null): Date | null {
-        if (value == null) return null;
-        return new Date(value);
-      },
-      to(value: Date | null): string | null {
-        if (value == null) return null;
-        return value.toISOString();
-      },
-    },
+    transformer: jsonTransformer<Date>(),
   })
   lastSeen: Date | null;
 
@@ -35,16 +27,7 @@ export default class IntegrationUser extends BaseEntity {
   @Column({
     nullable: true,
     type: 'varchar',
-    transformer: {
-      from(value: string | null): string[] {
-        if (value == null) return [];
-        return JSON.parse(value);
-      },
-      to(value: string[]): string | null {
-        if (value.length === 0) return null;
-        return JSON.stringify(value);
-      },
-    },
+    transformer: jsonTransformer<string[]>(),
   })
   endpoints: string[];
 }

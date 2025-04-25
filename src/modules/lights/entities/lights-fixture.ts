@@ -2,6 +2,7 @@ import { AfterLoad, Column } from 'typeorm';
 import BaseEntity from '../../root/entities/base-entity';
 import { RgbColor } from '../color-definitions';
 import { DEFAULT_MASTER_DIMMER } from './lights-group-fixture';
+import { jsonTransformer } from '../../../helpers/transformers';
 
 export default abstract class LightsFixture extends BaseEntity {
   @Column()
@@ -12,16 +13,7 @@ export default abstract class LightsFixture extends BaseEntity {
 
   @Column({
     type: 'varchar',
-    transformer: {
-      from(value: string | null): number[] | null {
-        if (value == null) return null;
-        return JSON.parse(value);
-      },
-      to(value: number[] | null): string | null {
-        if (value == null) return null;
-        return JSON.stringify(value);
-      },
-    },
+    transformer: jsonTransformer<number[]>(),
     nullable: true,
   })
   public resetChannelAndValue?: number[] | null;

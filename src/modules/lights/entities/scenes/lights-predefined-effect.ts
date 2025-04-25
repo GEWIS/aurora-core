@@ -3,6 +3,7 @@ import { Column, Entity } from 'typeorm';
 import { LightsEffectsColorCreateParams } from '../../effects/color';
 import { LightsEffectsMovementCreateParams } from '../../effects/movement';
 import { RgbColor } from '../../color-definitions';
+import { jsonTransformer } from '../../../../helpers/transformers';
 
 export type LightsButtonColors = {
   type: 'LightsButtonColors';
@@ -63,14 +64,7 @@ export default class LightsPredefinedEffect extends BaseEntity {
 
   @Column({
     type: 'varchar',
-    transformer: {
-      to(value: LightsPredefinedEffectProperties): string {
-        return JSON.stringify(value);
-      },
-      from(value: string): LightsPredefinedEffectProperties {
-        return JSON.parse(value);
-      },
-    },
+    transformer: jsonTransformer<LightsPredefinedEffectProperties>(),
   })
   properties: LightsPredefinedEffectProperties;
 

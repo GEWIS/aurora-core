@@ -1,6 +1,7 @@
 import { Column } from 'typeorm';
 import BaseEntity from './base-entity';
 import { SocketioNamespaces } from '../../../socketio-namespaces';
+import { jsonTransformer } from '../../../helpers/transformers';
 
 export default class SubscribeEntity extends BaseEntity {
   @Column({ nullable: true })
@@ -23,16 +24,7 @@ export default class SubscribeEntity extends BaseEntity {
   @Column({
     nullable: true,
     type: 'varchar',
-    transformer: {
-      from(value: string | null): Partial<Record<SocketioNamespaces, string>> | undefined {
-        if (!value) return undefined;
-        return JSON.parse(value);
-      },
-      to(value: Partial<Record<SocketioNamespaces, string>> | undefined | null): string | null {
-        if (!value) return null;
-        return JSON.stringify(value);
-      },
-    },
+    transformer: jsonTransformer<Partial<Record<SocketioNamespaces, string>>>(),
   })
   public socketIds?: Partial<Record<SocketioNamespaces, string>> | null;
 
