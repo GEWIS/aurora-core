@@ -11,7 +11,7 @@ Just like subscribers, `IntegrationUsers` can start a session with Aurora using 
 the core, which you can use in all following communication. You can also use the cookie to connect to SocketIO.
 
 However, to ease the integration process, `IntegrationUsers` are also able to authenticate themselves by using HTTP
-headers. Simply put the API key in the `X-API-Key` header of every request to authenticate that single HTTP
+headers. Simply put the API key in the `x-api-key` header of every request to authenticate that single HTTP
 request. For integrations, this is the preferred authentication method.
 
 ## Authorization

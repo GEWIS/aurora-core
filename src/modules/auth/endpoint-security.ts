@@ -17,7 +17,7 @@ function Security(
       },
   scopes?: string[],
 ): ClassDecorator & MethodDecorator {
-  return (...args: any[]) => {
+  return (...args: [any] | [Object, string | symbol, TypedPropertyDescriptor<any>]) => {
     // Class decorator
     if (args.length === 1) {
       const target = args[0] as Function;

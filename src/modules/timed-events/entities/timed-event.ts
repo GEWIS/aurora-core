@@ -1,6 +1,7 @@
 import BaseEntity from '../../root/entities/base-entity';
 import { Column, Entity } from 'typeorm';
 import EventSpec from '../event-spec';
+import { jsonTransformer } from '../../../helpers/transformers';
 
 @Entity()
 export default class TimedEvent extends BaseEntity {
@@ -9,14 +10,7 @@ export default class TimedEvent extends BaseEntity {
 
   @Column({
     type: 'varchar',
-    transformer: {
-      from(value: string): EventSpec {
-        return JSON.parse(value);
-      },
-      to(value: EventSpec): string {
-        return JSON.stringify(value);
-      },
-    },
+    transformer: jsonTransformer<EventSpec>(),
   })
   public eventSpec: EventSpec;
 

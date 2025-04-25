@@ -11,6 +11,7 @@ import {
   PosterScreenHandlerSettings,
   PosterScreenHandlerSettingsDefaults,
 } from '../handlers/screen/poster/poster-screen-handler-settings';
+import { jsonTransformer } from '../../helpers/transformers';
 
 export interface ISettings
   extends SudoSOSSettings,
@@ -40,16 +41,7 @@ export default class ServerSetting<T extends keyof ISettings = keyof ISettings> 
    */
   @Column({
     type: 'varchar',
-    transformer: {
-      from(value: string | null): number[] | null {
-        if (value == null) return null;
-        return JSON.parse(value);
-      },
-      to(value: number[] | null): string | null {
-        if (value == null) return null;
-        return JSON.stringify(value);
-      },
-    },
+    transformer: jsonTransformer(),
   })
   public value: ISettings[T];
 }
