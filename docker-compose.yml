@@ -2,7 +2,7 @@ version: '2'
 services:
   backoffice:
     build: ../aurora-backoffice
-    image: abc.docker-registry.gewis.nl/nc/aurora/backoffice:latest
+    image: ghcr.io/gewis/aurora/backoffice:latest
     restart: 'unless-stopped'
     ports:
       - '8080:80'
@@ -10,10 +10,11 @@ services:
       - aurora
     volumes:
       - posters:/usr/src/app/data/posters
+      - local-posters:/usr/src/app/data/posters
       - audio:/usr/src/app/data/audio
   client:
     build: ../aurora-client
-    image: abc.docker-registry.gewis.nl/nc/aurora/client:latest
+    image: ghcr.io/gewis/aurora/client:latest
     restart: 'unless-stopped'
     networks:
       - aurora
@@ -21,16 +22,19 @@ services:
       - '8081:80'
     volumes:
       - posters:/usr/src/app/data/posters
+      - local-posters:/usr/src/app/data/posters
       - audio:/usr/src/app/data/audio
   core:
     build: .
-    image: abc.docker-registry.gewis.nl/nc/aurora/core:latest
+    image: ghcr.io/gewis/aurora/core:latest
     restart: 'unless-stopped'
     networks:
       - aurora
     volumes:
       - posters:/app/public/posters
+      - local-posters:/app/public/local-posters
       - audio:/app/public_copy/audio
+      - private:/app/private
     environment:
       - PORT=3000
       - STATIC_FILES_LOCATION=/app/public_copy # fix for issue where a Docker volume overwrites the contents of a folder instead of merging them
@@ -39,7 +43,11 @@ services:
 volumes:
   posters:
     driver: local
+  local-posters:
+    driver: local
   audio:
+    driver: local
+  private:
     driver: local
 networks:
   aurora:
