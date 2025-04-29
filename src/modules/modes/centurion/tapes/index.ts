@@ -19,14 +19,14 @@ const tapes = [
  * Simple checks to see if we did not make any stupid mistakes in Centurion transciptions
  * @param tape
  */
-function validateTape(tape: MixTape) {
+export function validateTape(tape: MixTape) {
   // Events must be sorted
   tape.feed.forEach((event, i, all) => {
     if (i === 0) return;
     const prevEvent = all[i - 1];
     if (prevEvent.timestamp > event.timestamp) {
       throw new Error(
-        `[Tape ${tape.name}] Timestamp of event with index ${i - 1} (${prevEvent.timestamp}) is greater than the event with index ${i} (${event.timestamp})`,
+        `[Tape "${tape.name}"] Timestamp of event with index ${i - 1} (${prevEvent.timestamp}) is greater than the event with index ${i} (${event.timestamp})`,
       );
     }
   });
@@ -52,12 +52,12 @@ function validateTape(tape: MixTape) {
       const prevHornEvent = all[i - 1];
       if (prevHornEvent.data.counter + 1 !== hornEvent.data.counter && !isExcluded(hornEvent)) {
         throw new Error(
-          `[Tape ${tape.name}] Horn ${prevHornEvent.data.counter} is not succeeded by horn ${prevHornEvent.data.counter}, but ${hornEvent.data.counter}`,
+          `[Tape "${tape.name}"] Horn ${prevHornEvent.data.counter} is not succeeded by horn ${prevHornEvent.data.counter}, but ${hornEvent.data.counter}`,
         );
       }
     });
 }
 
-tapes.forEach(validateTape);
-
 export default tapes;
+
+export { default as MixTape } from './mix-tape';
