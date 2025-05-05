@@ -10,7 +10,7 @@ services:
       - aurora
     volumes:
       - posters:/usr/src/app/data/posters
-      - local-posters:/usr/src/app/data/posters
+      - local-posters:/usr/src/app/data/local-posters
       - audio:/usr/src/app/data/audio
   client:
     build: ../aurora-client
@@ -22,7 +22,7 @@ services:
       - '8081:80'
     volumes:
       - posters:/usr/src/app/data/posters
-      - local-posters:/usr/src/app/data/posters
+      - local-posters:/usr/src/app/data/local-posters
       - audio:/usr/src/app/data/audio
   core:
     build: .
