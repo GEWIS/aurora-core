@@ -48,14 +48,17 @@ export default async function seedDatabase() {
   await rootScreenService.createScreen({
     name: 'PCGEWISB-links',
     defaultHandler: CarouselPosterHandler.name,
+    scaleFactor: 1,
   });
   await rootScreenService.createScreen({
     name: 'PCGEWISB-rechts',
     defaultHandler: CarouselPosterHandler.name,
+    scaleFactor: 1,
   });
   await rootScreenService.createScreen({
     name: 'PCGEWISINFO',
     defaultHandler: CarouselPosterHandler.name,
+    scaleFactor: 1,
   });
   await new IntegrationUserService().createIntegrationUser({
     name: 'BPM-script',
