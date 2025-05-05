@@ -4,9 +4,10 @@ import dataSource from '../../database';
 import AuthService from '../auth/auth-service';
 
 export interface ScreenResponse
-  extends Pick<Screen, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
+  extends Pick<Screen, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds' | 'scaleFactor'> {}
 
-export interface ScreenCreateParams extends Pick<Screen, 'name' | 'defaultHandler'> {}
+export interface ScreenCreateParams
+  extends Pick<Screen, 'name' | 'defaultHandler' | 'scaleFactor'> {}
 
 export default class RootScreenService {
   private repository: Repository<Screen>;
@@ -22,6 +23,7 @@ export default class RootScreenService {
       updatedAt: screen.updatedAt,
       name: screen.name,
       socketIds: screen.socketIds,
+      scaleFactor: screen.scaleFactor,
     };
   }
 

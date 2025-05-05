@@ -105,7 +105,7 @@ export class HandlerController extends Controller {
     return this.handlersManager.getHandlers(Screen).map((h) => ({
       name: h.constructor.name,
       id: h.identifier,
-      entities: h.entities.map((screen) => RootScreenService.toScreenResponse(screen)),
+      entities: h.entities.map((screen) => RootScreenService.toScreenResponse(screen as Screen)),
     }));
   }
 

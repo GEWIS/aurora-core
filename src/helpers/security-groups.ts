@@ -135,6 +135,7 @@ export const securityGroups = {
   screen: {
     base: allSecurityGroups,
     privileged: [SecurityGroup.ADMIN],
+    subscriber: [SecurityGroup.SCREEN_SUBSCRIBER],
   },
   lightOperation: {
     base: baseSecurityGroups,
