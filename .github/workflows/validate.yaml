@@ -1,0 +1,43 @@
+name: Content validation
+description: Validate the contents of Aurora Core (see src/validation.ts for the list of checks present).
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+      - master
+  pull_request:
+    branches:
+      - develop
+      - main
+      - master
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: 'false'
+
+      - name: Set Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        uses: borales/actions-yarn@v5
+        with:
+          cmd: install
+          dir: ${{ inputs.working-directory }}
+
+      - name: Validate the project
+        uses: borales/actions-yarn@v5
+        with:
+          cmd: validate
+          dir: ${{ inputs.working-directory }}
