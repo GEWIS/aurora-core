@@ -7,7 +7,7 @@ import tapes, { validateTape, MixTape } from './modules/modes/centurion/tapes';
 let exitCode = 0;
 
 /**
- * Validate that
+ * Validate that all Centurion tapes do not contain simple copy-paste errors
  * @param tapes
  */
 function validateCenturionTapes(tapes: MixTape[]) {
