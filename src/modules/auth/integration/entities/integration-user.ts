@@ -17,7 +17,16 @@ export default class IntegrationUser extends BaseEntity {
   @Column({
     type: 'varchar',
     nullable: true,
-    transformer: jsonTransformer<Date>(),
+    transformer: {
+      from(value: string | null): Date | null {
+        if (value == null) return null;
+        return new Date(value);
+      },
+      to(value: Date | null): string | null {
+        if (value == null) return null;
+        return value.toISOString();
+      },
+    },
   })
   lastSeen: Date | null;
 
