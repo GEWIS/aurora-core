@@ -95,6 +95,7 @@ export class OrderController extends Controller {
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.orders.privileged)
+  @Security(SecurityNames.INTEGRATION, ['removeOrder'])
   @Delete('{orderNumber}')
   @Response<string>(409, 'Endpoint is disabled in the server settings')
   public async removeOrder(orderNumber: number) {
