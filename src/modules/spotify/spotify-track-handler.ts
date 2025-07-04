@@ -94,6 +94,22 @@ export default class SpotifyTrackHandler {
   }
 
   /**
+   * Skips to the next track.
+   */
+  public async skipToNext() {
+    if (!this.api.client || !this.playState || !this.playState.device || !this.playState.device.id){
+      logger.trace('Cannot skip to next track, no Spotify user or device');
+      return;
+    }
+
+    try {
+      await this.api.client?.player.skipToNext(this.playState.device.id);
+    } catch (e) {
+      logger.warn(e);
+    }
+  }
+
+  /**
    * Main event loop to get the currently playing song
    * @private
    */
