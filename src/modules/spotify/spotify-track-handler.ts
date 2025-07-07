@@ -107,11 +107,7 @@ export default class SpotifyTrackHandler {
       return;
     }
 
-    try {
-      await this.api.client?.player.skipToNext(this.playState.device.id);
-    } catch (e) {
-      logger.warn(e);
-    }
+    await this.api.client?.player.skipToNext(this.playState.device.id);
   }
 
   /**
