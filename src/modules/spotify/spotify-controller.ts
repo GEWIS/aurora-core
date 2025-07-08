@@ -183,4 +183,13 @@ export class SpotifyController extends Controller {
   public getSpotifyCurrentlyPlaying() {
     return SpotifyTrackHandler.getInstance().musicEmitter.getCurrentlyPlayingTrack;
   }
+
+  /**
+   * Skip the currently playing Spotify track.
+   */
+  @Security(SecurityNames.LOCAL, securityGroups.spotify.base)
+  @Post('skip')
+  public async skipSpotifyTrack(): Promise<void> {
+    return SpotifyTrackHandler.getInstance().skipToNext();
+  }
 }
