@@ -12,7 +12,7 @@ export default class Movement implements IMovement {
   @Column({ type: 'tinyint', unsigned: true })
   public panChannel: number;
 
-  @Column({ type: 'tinyint', unsigned: true, default: 0 })
+  @Column({ default: 0 })
   public basePanValue: number;
 
   @Column({ default: false })
