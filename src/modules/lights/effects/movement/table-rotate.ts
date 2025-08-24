@@ -46,7 +46,7 @@ export default class TableRotate extends BaseRotate<TableRotateProps> {
     offset: number = 0,
   ) {
     const panChannel = Math.cos(progression * 2 * Math.PI + offset) / 4 + 0.25;
-    const tiltChannel = Math.sin(progression * 6 * Math.PI + offset) * 0.2 + 0.4;
+    const tiltChannel = Math.sin(progression * 6 * Math.PI + offset) * 0.25 + 0.4;
 
     movingHead.setPositionRel(panChannel, tiltChannel);
   }
