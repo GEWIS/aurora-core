@@ -132,6 +132,8 @@ export interface LightsMovingHeadParams extends LightsFixtureParams {
   fineTiltChannel?: number;
   movingSpeedChannel?: number;
   basePanValue?: number;
+  panMirrored?: boolean;
+  tiltMirrored?: boolean;
 }
 
 export interface LightsMovingHeadRgbCreateParams extends LightsMovingHeadParams, ColorParams {}
