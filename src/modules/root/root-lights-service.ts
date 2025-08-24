@@ -516,6 +516,8 @@ export default class RootLightsService {
       fineTiltChannel: params.fineTiltChannel,
       movingSpeedChannel: params.movingSpeedChannel,
       basePanValue: params.basePanValue ?? 0,
+      mirrorPan: params.panMirrored,
+      mirrorTilt: params.tiltMirrored,
     } as Movement;
   }
 
