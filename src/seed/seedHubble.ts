@@ -73,11 +73,13 @@ export default async function seedDatabaseHubble(): Promise<LightsGroup[]> {
     colorGreenChannel: 9,
     colorBlueChannel: 10,
     colorColdWhiteChannel: 11,
+    basePanValue: 0.25,
+    panMirrored: true,
   });
 
   const hubbleRoom = await rootLightsService.createLightGroup(controller.id, {
     name: 'Room',
-    defaultHandler: 'DevelopEffectsHandler',
+    defaultHandler: '',
     gridSizeX: 12,
     gridSizeY: 0,
     pars: [
@@ -100,7 +102,7 @@ export default async function seedDatabaseHubble(): Promise<LightsGroup[]> {
 
   const movingHeadsWall = await rootLightsService.createLightGroup(controller.id, {
     name: 'Moving Heads Wall',
-    defaultHandler: 'DevelopEffectsHandler',
+    defaultHandler: '',
     gridSizeX: 4,
     gridSizeY: 0,
     pars: [],
@@ -115,7 +117,7 @@ export default async function seedDatabaseHubble(): Promise<LightsGroup[]> {
 
   const movingHeadsDanceFloor = await rootLightsService.createLightGroup(controller.id, {
     name: 'Moving Heads DanceFloor',
-    defaultHandler: 'DevelopEffectsHandler',
+    defaultHandler: '',
     gridSizeX: 2,
     gridSizeY: 2,
     pars: [],
