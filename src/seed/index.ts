@@ -1,17 +1,23 @@
 import '../env';
 import dataSource from '../database';
-import seedDatabase, { seedBorrelLights, seedDiscoFloor, seedOpeningSequence } from './seed';
+import seedDatabase, { seedBorrelLights, seedDiscoFloor, seedOpeningSequence } from './seedGewis';
 import logger from '../logger';
+import seedDatabaseHubble from './seedHubble';
 
 async function createSeeder() {
   await dataSource.initialize();
   await dataSource.dropDatabase();
 
   await dataSource.synchronize();
-  const [room, bar, lounge, movingHeadsGEWIS, movingHeadsRoy] = await seedDatabase();
-  await seedBorrelLights(room!, bar!, lounge!, movingHeadsGEWIS!);
-  await seedOpeningSequence(room!, bar!, movingHeadsGEWIS!, movingHeadsRoy!);
-  await seedDiscoFloor(9, 4);
+  if (process.argv.includes('--hubble')) {
+    console.info('Seeding database for Hubble');
+    await seedDatabaseHubble();
+  } else {
+    console.info('Seeding database for GEWIS');
+    const [room, bar, lounge, movingHeadsGEWIS, movingHeadsRoy] = await seedDatabase();
+    await seedBorrelLights(room!, bar!, lounge!, movingHeadsGEWIS!);
+    await seedOpeningSequence(room!, bar!, movingHeadsGEWIS!, movingHeadsRoy!);
+  }
 }
 
 if (require.main === module) {
