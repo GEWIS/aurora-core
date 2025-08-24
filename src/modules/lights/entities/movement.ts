@@ -15,11 +15,17 @@ export default class Movement implements IMovement {
   @Column({ type: 'tinyint', unsigned: true, default: 0 })
   public basePanValue: number;
 
+  @Column({ default: false })
+  public mirrorPan?: boolean;
+
   @Column({ type: 'tinyint', nullable: true, unsigned: true })
   public finePanChannel?: number | null;
 
   @Column({ type: 'tinyint', unsigned: true })
   public tiltChannel: number;
+
+  @Column({ default: false })
+  public mirrorTilt?: boolean;
 
   @Column({ type: 'tinyint', nullable: true, unsigned: true })
   public fineTiltChannel?: number | null;
@@ -51,9 +57,20 @@ export default class Movement implements IMovement {
   public setPositionRel(panFactor: number, tiltFactor: number) {
     this.valuesUpdatedAt = new Date();
 
-    const pan = panFactor * 170;
-    const tilt = tiltFactor * 255;
-    const panChannel = Math.floor(pan) + this.basePanValue;
+    // Calculate the pan given the base pan value and whether the pan should be mirrored
+    let relativePan = panFactor;
+    if (this.mirrorPan) relativePan = 1 - relativePan;
+    relativePan = relativePan + this.basePanValue;
+
+    // Calculate the tilt, whether the tilt should be mirrored
+    let relativeTilt = tiltFactor;
+    if (this.mirrorTilt) relativeTilt = 1 - relativeTilt;
+
+    // Pan should be 360 degrees: we assume here that a moving head
+    // can rotate 540 degrees (1.5 rounds)
+    const pan = relativePan * 170;
+    const tilt = relativeTilt * 255;
+    const panChannel = Math.floor(pan);
     const tiltChannel = Math.floor(tilt);
     const finePanChannel = Math.floor((pan - panChannel) * 255);
     const fineTiltChannel = Math.floor((tilt - tiltChannel) * 255);
@@ -73,20 +90,7 @@ export default class Movement implements IMovement {
    * @deprecated
    */
   public setPositionAbs(pan: number, tilt: number) {
-    this.valuesUpdatedAt = new Date();
-
-    const panChannel = Math.floor(pan);
-    const tiltChannel = Math.floor(tilt);
-    const finePanChannel = Math.floor((pan - panChannel) * 255);
-    const fineTiltChannel = Math.floor((tilt - tiltChannel) * 255);
-
-    this.currentValues = {
-      panChannel,
-      finePanChannel,
-      tiltChannel,
-      fineTiltChannel,
-      movingSpeedChannel: 0,
-    };
+    return this.setPositionRel(pan / 255, tilt / 255);
   }
 
   /**
