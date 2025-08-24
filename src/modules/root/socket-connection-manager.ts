@@ -48,13 +48,32 @@ export default class SocketConnectionManager {
   }
 
   /**
+   * Clear the saved socket ids for all entities in a table
+   * @param repo
+   */
+  public async clearSavedSocketIdsForEntity(repo: Repository<SubscribeEntity>) {
+    const entities = await repo.find();
+    await Promise.all(
+      entities.map(async (entity) => {
+        entity.socketIds = null;
+        await repo.save(entity);
+      }),
+    );
+  }
+
+  /**
    * Socket IDs might still exist in the database on startup, for example if the application has
    * crashed and is now restarted.
    */
   public async clearSavedSocketIds() {
-    await dataSource.getRepository(Audio).update({}, { socketIds: null });
-    await dataSource.getRepository(Screen).update({}, { socketIds: null });
-    await dataSource.getRepository(LightsController).update({}, { socketIds: null });
+    const audioRepo = dataSource.getRepository(Audio);
+    await this.clearSavedSocketIdsForEntity(audioRepo);
+
+    const screenRepo = dataSource.getRepository(Screen);
+    await this.clearSavedSocketIdsForEntity(screenRepo);
+
+    const lightsControllerRepo = dataSource.getRepository(LightsController);
+    await this.clearSavedSocketIdsForEntity(lightsControllerRepo);
   }
 
   private async updateSocketIdForEntity<T extends SubscribeEntity>(
