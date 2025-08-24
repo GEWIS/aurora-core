@@ -162,6 +162,7 @@ export default async function seedDatabase() {
   const gewisRoom = await rootLightsService.createLightGroup(controller.id, {
     name: 'Ruimte',
     defaultHandler: '',
+    groupInMiddle: false,
     gridSizeX: 12,
     gridSizeY: 0,
     pars: [
@@ -184,6 +185,7 @@ export default async function seedDatabase() {
   const gewisBar = await rootLightsService.createLightGroup(controller.id, {
     name: 'Bar',
     defaultHandler: '',
+    groupInMiddle: false,
     gridSizeX: 4,
     gridSizeY: 0,
     pars: [
@@ -198,6 +200,7 @@ export default async function seedDatabase() {
   const gewisLounge = await rootLightsService.createLightGroup(controller.id, {
     name: 'Lounge',
     defaultHandler: '',
+    groupInMiddle: false,
     gridSizeX: 1,
     gridSizeY: 0,
     pars: [{ fixtureId: eurolite_LED_7C_7.id, firstChannel: 129, positionX: 0 }],
@@ -207,6 +210,7 @@ export default async function seedDatabase() {
   const gewisMHRoom = await rootLightsService.createLightGroup(controller.id, {
     name: 'Ruimte MH',
     defaultHandler: '',
+    groupInMiddle: true,
     gridSizeX: 2,
     gridSizeY: 0,
     pars: [],
@@ -224,6 +228,7 @@ export default async function seedDatabase() {
   const royMHs = await rootLightsService.createLightGroup(controller.id, {
     name: 'Roy MH',
     defaultHandler: '',
+    groupInMiddle: false,
     gridSizeX: 2,
     gridSizeY: 0,
     pars: [],
@@ -815,6 +820,7 @@ export async function seedDiscoFloor(width: number, height: number) {
   return await service.createLightGroup(controller.id, {
     name: 'Disco floor',
     defaultHandler: '',
+    groupInMiddle: true,
     gridSizeX: width * 2,
     gridSizeY: height * 2,
     pars,

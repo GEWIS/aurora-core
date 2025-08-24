@@ -80,6 +80,7 @@ export default async function seedDatabaseHubble(): Promise<LightsGroup[]> {
   const hubbleRoom = await rootLightsService.createLightGroup(controller.id, {
     name: 'Room',
     defaultHandler: '',
+    groupInMiddle: false,
     gridSizeX: 12,
     gridSizeY: 0,
     pars: [
@@ -103,6 +104,7 @@ export default async function seedDatabaseHubble(): Promise<LightsGroup[]> {
   const movingHeadsWall = await rootLightsService.createLightGroup(controller.id, {
     name: 'Moving Heads Wall',
     defaultHandler: '',
+    groupInMiddle: false,
     gridSizeX: 4,
     gridSizeY: 0,
     pars: [],
@@ -118,6 +120,7 @@ export default async function seedDatabaseHubble(): Promise<LightsGroup[]> {
   const movingHeadsDanceFloor = await rootLightsService.createLightGroup(controller.id, {
     name: 'Moving Heads DanceFloor',
     defaultHandler: '',
+    groupInMiddle: false,
     gridSizeX: 2,
     gridSizeY: 2,
     pars: [],

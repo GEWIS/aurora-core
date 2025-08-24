@@ -181,7 +181,8 @@ export interface LightsInGroup {
   positionY?: number;
 }
 
-export interface LightsGroupCreateParams extends Pick<LightsGroup, 'name' | 'defaultHandler'> {
+export interface LightsGroupCreateParams
+  extends Pick<LightsGroup, 'name' | 'defaultHandler' | 'groupInMiddle'> {
   /**
    * Size (width) of the X axis where all the fixtures are positioned.
    * All fixtures should have their positionX be in range [0, gridSizeX).
@@ -413,6 +414,7 @@ export default class RootLightsService {
       const group = (await manager.save(LightsGroup, {
         name: params.name,
         defaultHandler: params.defaultHandler,
+        groupInMiddle: params.groupInMiddle,
         controller,
         gridSizeX: params.gridSizeX,
         gridSizeY: params.gridSizeY,

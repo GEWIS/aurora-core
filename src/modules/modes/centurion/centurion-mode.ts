@@ -5,7 +5,7 @@ import SetEffectsHandler from '../../handlers/lights/set-effects-handler';
 import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
 import MixTape, { FeedEvent, Horn, Song, SongData } from './tapes/mix-tape';
 import { BeatFadeOut, StaticColor } from '../../lights/effects/color';
-import { ClassicRotate, SearchLight } from '../../lights/effects/movement';
+import { ClassicRotate, SearchLight, TableRotate } from '../../lights/effects/movement';
 import { getTwoComplementaryRgbColors, RgbColor } from '../../lights/color-definitions';
 import { MusicEmitter } from '../../events';
 import { TrackChangeEvent } from '../../events/music-emitter-events';
@@ -193,7 +193,17 @@ export default class CenturionMode extends BaseMode<
     );
   }
 
-  private getRandomMovementEffect(): LightsEffectBuilder {
+  private getRandomMovementEffectSide(): LightsEffectBuilder {
+    if (!this.beatGeneratorSong) {
+      return TableRotate.build();
+    }
+
+    // Baseline: cycle time of 10000ms for 120bpm
+    const baseCycleTime = Math.round(1200000 / this.beatGeneratorSong.bpm);
+    return TableRotate.build({ cycleTime: baseCycleTime });
+  }
+
+  private getRandomMovementEffectCenter(): LightsEffectBuilder {
     // If we do not have a bpm, choose SearchLight as the default
     const defaultEffect = SearchLight.build({ radiusFactor: 1.5, cycleTime: 3000 });
     if (!this.beatGeneratorSong) {
@@ -303,14 +313,18 @@ export default class CenturionMode extends BaseMode<
     const { colorNames } = getTwoComplementaryRgbColors();
     this.currentColors = colorNames;
 
-    const newMovementEffectBuilder = this.getRandomMovementEffect();
+    const newMovementEffectSideBuilder = this.getRandomMovementEffectSide();
+    const newMovementEffectCenterBuilder = this.getRandomMovementEffectCenter();
     const movingHeadEffectColor = StaticColor.build({ color: RgbColor.WHITE });
     const newEffectBuilder = this.getRandomParEffect(colorNames);
 
     this.lights.forEach((l) => {
       // If we have a moving head, assign a movement effect
+      if ((l.movingHeadRgbs.length > 0 || l.movingHeadWheels.length > 0) && l.groupInMiddle) {
+        this.lightsHandler.setMovementEffect(l, [newMovementEffectCenterBuilder]);
+      }
       if (l.movingHeadRgbs.length > 0 || l.movingHeadWheels.length > 0) {
-        this.lightsHandler.setMovementEffect(l, [newMovementEffectBuilder]);
+        this.lightsHandler.setMovementEffect(l, [newMovementEffectSideBuilder]);
       }
       // If we have a wheel moving head, assign a static color
       if (l.movingHeadWheels.length > 0) {

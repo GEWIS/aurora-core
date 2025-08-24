@@ -3,7 +3,7 @@ import { BeatEvent } from '../../events/music-emitter-events';
 import { BeatFadeOut, Sparkle, StaticColor, Wave } from '../../lights/effects/color';
 import { getTwoComplementaryRgbColors, RgbColor } from '../../lights/color-definitions';
 import EffectsHandler from './effects-handler';
-import { SearchLight } from '../../lights/effects/movement';
+import { SearchLight, TableRotate } from '../../lights/effects/movement';
 
 export default class RandomEffectsHandler extends EffectsHandler {
   private lastSectionStart: number = 0;
@@ -45,7 +45,11 @@ export default class RandomEffectsHandler extends EffectsHandler {
     } else {
       this.groupColorEffects.set(entity, new StaticColor(entity, { color: RgbColor.WHITE }));
     }
-    this.groupMovementEffects.set(entity, new SearchLight(entity, {}));
+    if (entity.groupInMiddle) {
+      this.groupMovementEffects.set(entity, new SearchLight(entity, {}));
+    } else {
+      this.groupMovementEffects.set(entity, new TableRotate(entity, {}));
+    }
   }
 
   beat(event: BeatEvent): void {

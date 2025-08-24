@@ -25,6 +25,13 @@ export default class LightsGroup extends SubscribeEntity {
   public movingHeadRgbs: LightsGroupMovingHeadRgbs[];
 
   /**
+   * Whether the group of lights is situated in the middle of the room, or at the side.
+   * Handlers can use this to determine which effects to use.
+   */
+  @Column({ default: true })
+  public groupInMiddle: boolean;
+
+  /**
    * Size (width) of the X axis where all the fixtures are positioned.
    * All fixtures should have their positionX be in range [0, gridSizeX).
    */
