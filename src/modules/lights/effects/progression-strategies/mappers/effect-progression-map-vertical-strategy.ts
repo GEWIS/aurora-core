@@ -3,6 +3,7 @@ import LightsGroupFixture from '../../../entities/lights-group-fixture';
 
 export default class EffectProgressionMapVerticalStrategy extends EffectProgressionMapStrategy {
   getNrFixtures(): number {
+    if (this.lightsGroup.gridSizeY == 0) return 1;
     return this.lightsGroup.gridSizeY * this.multiplier;
   }
 

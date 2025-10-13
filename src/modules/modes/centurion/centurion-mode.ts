@@ -13,12 +13,16 @@ import { CenturionScreenHandler } from '../../handlers/screen';
 import { LightsEffectBuilder } from '../../lights/effects/lights-effect';
 import Wave from '../../lights/effects/color/wave';
 import Sparkle from '../../lights/effects/color/sparkle';
-import { SimpleBeatGenerator, BeatManager, BeatPriorities } from '../../beats';
+import { BeatManager, BeatPriorities, SimpleBeatGenerator } from '../../beats';
 import logger from '../../../logger';
 import LightsSwitchManager from '../../root/lights-switch-manager';
 import { FeatureEnabled, ServerSettingsStore } from '../../server-settings';
 import { ISettings } from '../../server-settings/server-setting';
 import RootLightsService from '../../root/root-lights-service';
+import {
+  LightsEffectDirection,
+  LightsEffectPattern,
+} from '../../lights/effects/lights-effect-pattern';
 
 const LIGHTS_HANDLER = 'SetEffectsHandler';
 const AUDIO_HANDLER = 'SimpleAudioHandler';
@@ -234,6 +238,24 @@ export default class CenturionMode extends BaseMode<
   }
 
   /**
+   * Get a random pattern to apply to the lights effects
+   * @private
+   */
+  private getRandomPattern(): LightsEffectPattern {
+    const enumValues = Object.values(LightsEffectPattern);
+    return enumValues[Math.floor(Math.random() * enumValues.length)];
+  }
+
+  /**
+   * Get a random direction to apply to the lights effects
+   * @private
+   */
+  private getRandomDirection(): LightsEffectDirection {
+    const enumValues = Object.values(LightsEffectDirection);
+    return enumValues[Math.floor(Math.random() * enumValues.length)];
+  }
+
+  /**
    * Get a random effect given a set of colors
    * @param colors
    * @private
@@ -241,7 +263,13 @@ export default class CenturionMode extends BaseMode<
   private getRandomParEffect(colors: RgbColor[]): LightsEffectBuilder {
     const effects = [
       {
-        effect: BeatFadeOut.build({ colors, enableFade: false, nrBlacks: 1 }),
+        effect: BeatFadeOut.build({
+          colors,
+          enableFade: false,
+          nrBlacks: 1,
+          pattern: this.getRandomPattern(),
+          direction: this.getRandomDirection(),
+        }),
         probability: 0.8,
       },
       {
@@ -249,7 +277,11 @@ export default class CenturionMode extends BaseMode<
         probability: 0.1,
       },
       {
-        effect: Wave.build({ colors: colors }),
+        effect: Wave.build({
+          colors: colors,
+          pattern: this.getRandomPattern(),
+          direction: this.getRandomDirection(),
+        }),
         probability: 0.1,
       },
     ];
@@ -264,11 +296,13 @@ export default class CenturionMode extends BaseMode<
       factor = factor - 0.1;
     }
 
+    console.log(factor);
+
     return (
       effects.find((effect, i) => {
         const previous = effects.slice(0, i).reduce((x, e) => x + e.probability, 0);
         return previous <= factor && previous + effect.probability > factor;
-      })?.effect || BeatFadeOut.build({ colors, enableFade: false })
+      })?.effect || effects[0].effect
     );
   }
 
