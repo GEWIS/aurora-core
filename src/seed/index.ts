@@ -1,23 +1,66 @@
 import '../env';
+import { Command, Option } from 'commander';
 import dataSource from '../database';
-import seedDatabase, { seedBorrelLights, seedDiscoFloor, seedOpeningSequence } from './seedGewis';
+import seedDatabase, { seedBorrelLights, seedOpeningSequence } from './seedGewis';
 import logger from '../logger';
 import seedDatabaseHubble from './seedHubble';
+import { seedDiscoFloor } from './seedDiscoFloor';
+
+function commaSeparatedListInt(value: any, _: any): number[] {
+  return value.split(',').map((s: any) => parseInt(s, 10));
+}
+
+const program = new Command();
+program
+  .name('aurora-seeder')
+  .description('Functions to seed the database.')
+  .addOption(new Option('--gewis', 'Seed for GEWIS').conflicts(['hubble', 'disco-floor']))
+  .addOption(new Option('--hubble', 'Seed for Hubble').conflicts(['gewis', 'disco-floor']))
+  .addOption(new Option('--disco-floor', 'Seed the disco floor').conflicts(['gewis', 'hubble']))
+  .option('-w, --width <number>', 'Width of the disco floor (int)', parseInt)
+  .option('-h, --height <number>', 'Height of the disco floor (int)', parseInt)
+  .option(
+    '--channel-order <items>',
+    'DMX channel order of all light panels on a single floor tile',
+    commaSeparatedListInt,
+  );
+
+/**
+ * Channel order tile indices, where the top left is 0,0 in the lights group grid.
+ * |---+---|
+ * | 0 | 1 |
+ * |---+---|
+ * | 2 | 3 |
+ * |---+---|
+ */
 
 async function createSeeder() {
   await dataSource.initialize();
-  await dataSource.dropDatabase();
-
   await dataSource.synchronize();
-  if (process.argv.includes('--hubble')) {
+
+  program.parse();
+
+  if (program.opts().hubble) {
     console.info('Seeding database for Hubble');
     await seedDatabaseHubble();
-  } else {
+  } else if (program.opts().gewis) {
     console.info('Seeding database for GEWIS');
     const [room, bar, lounge, movingHeadsGEWIS, movingHeadsRoy] = await seedDatabase();
     await seedBorrelLights(room!, bar!, lounge!, movingHeadsGEWIS!);
     await seedOpeningSequence(room!, bar!, movingHeadsGEWIS!, movingHeadsRoy!);
+  } else if (program.opts().discoFloor) {
+    console.info('Seeding database for disco floor');
+    const { width, height, channelOrder } = program.opts();
+    if (!width) {
+      console.error('ERROR: No width given.');
+    } else if (!height) {
+      console.error('ERROR: No height given.');
+    } else {
+      await seedDiscoFloor(width, height, channelOrder);
+    }
   }
+
+  await dataSource.destroy();
 }
 
 if (require.main === module) {
