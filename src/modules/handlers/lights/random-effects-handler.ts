@@ -45,6 +45,9 @@ export default class RandomEffectsHandler extends EffectsHandler {
    * @private
    */
   private scheduleNextEffectSwitch() {
+    // Clear any existing effect timeout if present
+    if (this.effectSwitchTimeout !== null) clearTimeout(this.effectSwitchTimeout);
+
     const timeoutTime = Math.round(Math.random() * 20000 + 20000);
     this.effectSwitchTimeout = setTimeout(this.performEffectSwitch.bind(this), timeoutTime);
   }
@@ -55,6 +58,9 @@ export default class RandomEffectsHandler extends EffectsHandler {
    * @private
    */
   private performEffectSwitch() {
+    // Remove the timeout, because it has fired.
+    this.effectSwitchTimeout = null;
+
     this.updateRandomColor();
     this.entities.forEach((entity) => {
       this.assignRandomEffect(entity);
@@ -114,6 +120,9 @@ export default class RandomEffectsHandler extends EffectsHandler {
       this.entities.forEach((group) => {
         this.assignRandomEffect(group);
       });
+
+      // Schedule a new effect timeout, because we have just switched.
+      this.scheduleNextEffectSwitch();
     }
 
     super.beat(event);
