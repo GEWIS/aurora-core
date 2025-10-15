@@ -122,10 +122,10 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
     };
   }
 
-  private getColor(color: keyof Required<IColorsRgb>): number {
+  private getColor(color: keyof Required<IColorsRgb>, masterRelativeBrightness: number): number {
     let value = this.currentValues[color]!;
     if (this.masterDimChannel) return value;
-    value = Math.round(value * this.currentBrightness);
+    value = Math.round(value * this.currentBrightness * masterRelativeBrightness);
     return value;
   }
 
@@ -175,32 +175,37 @@ export default class ColorsRgb extends Colors implements IColorsRgb {
     return values;
   }
 
+  /**
+   * @param mRelBrightness Master relative brightness (the brightness set in the global settings).
+   * @param values DMX bus to inject the channel values into.
+   * @param shutterOptions The channel needed to "open" the fixture in case it requires a specific
+   * channel.
+   */
   public setColorsInDmx(
-    masterRelativeBrightness: number,
+    mRelBrightness: number,
     values: number[],
     shutterOptions: LightsFixtureShutterOptions[],
   ): number[] {
     if (this.masterDimChannel)
-      values[this.masterDimChannel - 1] = Math.round(
-        this.currentBrightness * masterRelativeBrightness * 255,
-      );
+      values[this.masterDimChannel - 1] = Math.round(this.currentBrightness * mRelBrightness * 255);
+
     if (this.shutterChannel)
       values[this.shutterChannel - 1] =
         shutterOptions.find((o) => o.shutterOption === ShutterOption.OPEN)?.channelValue ?? 0;
-    values[this.redChannel - 1] = this.getColor('redChannel');
-    values[this.greenChannel - 1] = this.getColor('greenChannel');
-    values[this.blueChannel - 1] = this.getColor('blueChannel');
+    values[this.redChannel - 1] = this.getColor('redChannel', mRelBrightness);
+    values[this.greenChannel - 1] = this.getColor('greenChannel', mRelBrightness);
+    values[this.blueChannel - 1] = this.getColor('blueChannel', mRelBrightness);
     if (this.coldWhiteChannel != null) {
-      values[this.coldWhiteChannel - 1] = this.getColor('coldWhiteChannel');
+      values[this.coldWhiteChannel - 1] = this.getColor('coldWhiteChannel', mRelBrightness);
     }
     if (this.warmWhiteChannel != null) {
-      values[this.warmWhiteChannel - 1] = this.getColor('warmWhiteChannel');
+      values[this.warmWhiteChannel - 1] = this.getColor('warmWhiteChannel', mRelBrightness);
     }
     if (this.amberChannel != null) {
-      values[this.amberChannel - 1] = this.getColor('amberChannel');
+      values[this.amberChannel - 1] = this.getColor('amberChannel', mRelBrightness);
     }
     if (this.uvChannel != null) {
-      values[this.uvChannel - 1] = this.getColor('uvChannel');
+      values[this.uvChannel - 1] = this.getColor('uvChannel', mRelBrightness);
     }
 
     return values;
