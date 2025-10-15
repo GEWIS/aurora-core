@@ -20,6 +20,8 @@ import { FeatureEnabled, ServerSettingsStore } from '../../server-settings';
 import { ISettings } from '../../server-settings/server-setting';
 import RootLightsService from '../../root/root-lights-service';
 import {
+  getRandomLightsEffectDirection,
+  getRandomLightsEffectPattern,
   LightsEffectDirection,
   LightsEffectPattern,
 } from '../../lights/effects/lights-effect-pattern';
@@ -238,37 +240,22 @@ export default class CenturionMode extends BaseMode<
   }
 
   /**
-   * Get a random pattern to apply to the lights effects
-   * @private
-   */
-  private getRandomPattern(): LightsEffectPattern {
-    const enumValues = Object.values(LightsEffectPattern);
-    return enumValues[Math.floor(Math.random() * enumValues.length)];
-  }
-
-  /**
-   * Get a random direction to apply to the lights effects
-   * @private
-   */
-  private getRandomDirection(): LightsEffectDirection {
-    const enumValues = Object.values(LightsEffectDirection);
-    return enumValues[Math.floor(Math.random() * enumValues.length)];
-  }
-
-  /**
    * Get a random effect given a set of colors
    * @param colors
    * @private
    */
   private getRandomParEffect(colors: RgbColor[]): LightsEffectBuilder {
+    const pattern = getRandomLightsEffectPattern();
+    const direction = getRandomLightsEffectDirection();
+
     const effects = [
       {
         effect: BeatFadeOut.build({
           colors,
           enableFade: false,
           nrBlacks: 1,
-          pattern: this.getRandomPattern(),
-          direction: this.getRandomDirection(),
+          pattern,
+          direction,
         }),
         probability: 0.8,
       },
@@ -279,8 +266,8 @@ export default class CenturionMode extends BaseMode<
       {
         effect: Wave.build({
           colors: colors,
-          pattern: this.getRandomPattern(),
-          direction: this.getRandomDirection(),
+          pattern,
+          direction,
         }),
         probability: 0.1,
       },

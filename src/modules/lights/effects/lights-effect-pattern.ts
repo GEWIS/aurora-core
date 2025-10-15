@@ -12,3 +12,19 @@ export enum LightsEffectDirection {
   FORWARDS = 'forwards',
   BACKWARDS = 'backwards',
 }
+
+/**
+ * Get a random lights effect pattern from all possible options.
+ */
+export function getRandomLightsEffectPattern(): LightsEffectPattern {
+  const enumValues = Object.values(LightsEffectPattern);
+  return enumValues[Math.floor(Math.random() * enumValues.length)];
+}
+
+/**
+ * Get a random lights effect direction.
+ */
+export function getRandomLightsEffectDirection(): LightsEffectDirection {
+  const enumValues = Object.values(LightsEffectDirection);
+  return enumValues[Math.floor(Math.random() * enumValues.length)];
+}
