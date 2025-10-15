@@ -7,8 +7,7 @@ import seedDatabaseHubble from './seedHubble';
 import { seedDiscoFloor } from './seedDiscoFloor';
 
 function commaSeparatedListInt(value: any, _: any): number[] {
-  return value.split(',')
-    .map((s: any) => parseInt(s, 10));
+  return value.split(',').map((s: any) => parseInt(s, 10));
 }
 
 const program = new Command();
@@ -20,7 +19,11 @@ program
   .addOption(new Option('--disco-floor', 'Seed the disco floor').conflicts(['gewis', 'hubble']))
   .option('-w, --width <number>', 'Width of the disco floor (int)', parseInt)
   .option('-h, --height <number>', 'Height of the disco floor (int)', parseInt)
-  .option('--channel-order <items>', 'DMX channel order of all light panels on a single floor tile', commaSeparatedListInt)
+  .option(
+    '--channel-order <items>',
+    'DMX channel order of all light panels on a single floor tile',
+    commaSeparatedListInt,
+  );
 
 /**
  * Channel order tile indices, where the top left is 0,0 in the lights group grid.
