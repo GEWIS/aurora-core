@@ -3,7 +3,7 @@ import RootLightsService, { LightsInGroup } from '../modules/root/root-lights-se
 export async function seedDiscoFloor(
   width: number,
   height: number,
-  channelOrder: number[] = [3, 2, 1, 0],
+  channelOrder: number[] = [3, 2, 0, 1],
 ) {
   if (channelOrder.length !== 4) {
     throw new Error('Channel order must contain exactly four panels.');
