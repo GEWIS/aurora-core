@@ -531,7 +531,8 @@
 
 "@sudosos/sudosos-client@github:GEWIS/sudosos-client":
   version "1.1.2"
-  resolved "https://codeload.github.com/GEWIS/sudosos-client/tar.gz/e876cfa72b0e7d5ff7cd7cd6a1a3a1fcb3bbda9c"
+  uid "64799e929e90ed28d026aa193423753318e1419e"
+  resolved "https://codeload.github.com/GEWIS/sudosos-client/tar.gz/64799e929e90ed28d026aa193423753318e1419e"
   dependencies:
     axios "^1.6.3"
     swagger-axios-codegen "^0.16.4"
