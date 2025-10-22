@@ -8,9 +8,6 @@
     "build": "tsoa spec-and-routes && tsc",
     "start": "node dist/src/index.js",
     "tsoa": "tsoa spec-and-routes",
-    "gen-client": "yarn gen-client-backoffice && yarn gen-client-client",
-    "gen-client-backoffice": "openapi-ts -o ../aurora-backoffice/src/api/",
-    "gen-client-client": "openapi-ts -o ../aurora-client/src/api/",
     "lint": "eslint ./src --max-warnings=0",
     "lint-fix": "eslint ./src --fix",
     "format": "prettier --ignore-path .gitignore --check ./src/",
@@ -62,7 +59,6 @@
     "@eslint/compat": "^1.2.7",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.23.0",
-    "@hey-api/openapi-ts": "^0.86.1",
     "@tsoa/cli": "^6.6.0",
     "@tsoa/runtime": "^6.6.0",
     "@types/async-lock": "^1.4.2",
@@ -89,7 +85,7 @@
     "nodemon": "^3.1.9",
     "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "5.7.2"
   },
   "engines": {
     "node": ">=22.0.0"
