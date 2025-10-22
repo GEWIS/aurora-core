@@ -4,6 +4,7 @@ import { HttpStatusCode } from 'axios';
 import { HttpApiException } from '../../../helpers/custom-error';
 import database from '../../../database';
 import { ApiKey } from '../entities';
+import UpdateController from '../../update/update-controller';
 
 passport.use(
   'apikey',
@@ -22,5 +23,7 @@ passport.use(
     }
 
     callback(null, identity.asAuthUser());
+
+    await new UpdateController().updateSubscribeEntityGitRepo(req, identity);
   }),
 );

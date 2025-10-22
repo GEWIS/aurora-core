@@ -1,6 +1,7 @@
 import BaseEntity from '../../../root/entities/base-entity';
 import { Column, Entity } from 'typeorm';
 import { jsonTransformer } from '../../../../helpers/transformers';
+import UpdateGitDetails from '../../../update/entities/update-git-details';
 
 @Entity()
 /**
@@ -39,4 +40,7 @@ export default class IntegrationUser extends BaseEntity {
     transformer: jsonTransformer<string[]>(),
   })
   endpoints: string[];
+
+  @Column(() => UpdateGitDetails)
+  public versioning: UpdateGitDetails;
 }

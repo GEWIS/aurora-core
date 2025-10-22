@@ -50,6 +50,14 @@
             "properties": {
               "key": {
                 "type": "string"
+              },
+              "gitRepositoryUrl": {
+                "type": "string",
+                "example": "https://github.com/GEWIS/aurora-core"
+              },
+              "currentVersion": {
+                "type": "string",
+                "example": "v1.2.3"
               }
             },
             "additionalProperties": false

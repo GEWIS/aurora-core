@@ -2,6 +2,7 @@ import { Column } from 'typeorm';
 import BaseEntity from './base-entity';
 import { SocketioNamespaces } from '../../../socketio-namespaces';
 import { jsonTransformer } from '../../../helpers/transformers';
+import UpdateGitDetails from '../../update/entities/update-git-details';
 
 export default class SubscribeEntity extends BaseEntity {
   @Column({ nullable: true })
@@ -27,6 +28,9 @@ export default class SubscribeEntity extends BaseEntity {
     transformer: jsonTransformer<Partial<Record<SocketioNamespaces, string>>>(),
   })
   public socketIds?: Partial<Record<SocketioNamespaces, string>> | null;
+
+  @Column(() => UpdateGitDetails)
+  public versioning: UpdateGitDetails;
 
   /**
    * Get the socket ID for the given namespace. Undefined if no connection.
