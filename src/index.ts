@@ -36,7 +36,10 @@ async function createApp(): Promise<void> {
       fs.mkdirSync(audioToPath);
     }
     // Empty the directory before filling it with new files
-    fs.readdirSync(audioToPath).forEach((f) => fs.rmSync(path.join(audioToPath, f)));
+    fs.readdirSync(audioToPath).forEach((f) => {
+      if (f === 'lost+found') return; // skip lost+found folder that is created in ext4 filesystems
+      fs.rmSync(path.join(audioToPath, f), { recursive: true, force: true });
+    });
     fs.cpSync(audioFromPath, audioToPath, { recursive: true });
   }
 
