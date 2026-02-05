@@ -18,16 +18,16 @@ to play on the beat of the music without having to set the tempo yourself (manua
 ## Prerequisites
 - NodeJS 22.
 
-## Installation
+## Development setup
 1. Copy `.env.example` to `.env` and fill in the environment variables.
-2. Run `yarn install`.
-3. Run `yarn dev`.
-4. The application is now running at http://localhost:3000. The API documentation can be found at http://localhost:3000/api-docs.
+1. Run `yarn install`.
+1. Run `yarn dev`.
+1. The application is now running at http://localhost:3000. The API documentation can be found at http://localhost:3000/api-docs.
 
-Authentication is done using Keycloak (OIDC). However, while in development mode you can also use the `/auth/mock` endpoint to mock a Keycloak authentication.
-
-To get started more easily, you can seed the database with GEWIS's setup using `yarn seed`.
+To get started more easily, you can seed the database using `yarn seed:gewis` or `yarn seed:hubble`.
 You can then find the API keys for all the subscribers in the `api_key` SQL table.
+
+When running `yarn dev`, authentication is handled automatically by using mock endpoints. It is not needed to set up anything for this.
 
 ### Integration with external services
 To fully utilize all functionality of Aurora, some extra environment variables are required:
