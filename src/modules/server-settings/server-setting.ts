@@ -14,7 +14,8 @@ import {
 import { jsonTransformer } from '../../helpers/transformers';
 
 export interface ISettings
-  extends SudoSOSSettings,
+  extends
+    SudoSOSSettings,
     ModeSettings,
     ScreenHandlerSettings,
     PosterScreenHandlerSettings,

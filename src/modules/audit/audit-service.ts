@@ -35,14 +35,15 @@ export interface GetAuditLogEntryParams {
   skip?: number;
 }
 
-export interface CreateAuditLogEntryParams
-  extends Pick<AuditLogEntry, 'userId' | 'userName' | 'action'> {}
+export interface CreateAuditLogEntryParams extends Pick<
+  AuditLogEntry,
+  'userId' | 'userName' | 'action'
+> {}
 
-export interface AuditLogEntryResponse
-  extends Pick<
-    AuditLogEntry,
-    'id' | 'createdAt' | 'updatedAt' | 'userId' | 'userName' | 'action'
-  > {}
+export interface AuditLogEntryResponse extends Pick<
+  AuditLogEntry,
+  'id' | 'createdAt' | 'updatedAt' | 'userId' | 'userName' | 'action'
+> {}
 
 interface PaginatedAuditLogEntryResponse {
   records: AuditLogEntryResponse[];

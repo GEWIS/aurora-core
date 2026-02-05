@@ -26,16 +26,20 @@ import { WheelColor } from '../lights/color-definitions';
 import { IColorsWheel } from '../lights/entities/colors-wheel';
 import LightsSwitchManager from './lights-switch-manager';
 
-export interface LightsControllerResponse
-  extends Pick<LightsController, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'> {}
+export interface LightsControllerResponse extends Pick<
+  LightsController,
+  'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds'
+> {}
 
 export interface ShutterChannelValuesResponse {
   open?: number;
   strobe?: number;
 }
 
-export interface LightsFixtureResponse
-  extends Pick<LightsFixture, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'nrChannels'> {
+export interface LightsFixtureResponse extends Pick<
+  LightsFixture,
+  'id' | 'createdAt' | 'updatedAt' | 'name' | 'nrChannels'
+> {
   canReset: boolean;
   resetChannel?: number;
   resetChannelValue?: number;
@@ -84,8 +88,10 @@ export interface FixtureInGroupResponse<
   masterDimmer: number;
 }
 
-export interface BaseLightsGroupResponse
-  extends Pick<LightsGroup, 'id' | 'createdAt' | 'updatedAt' | 'name'> {}
+export interface BaseLightsGroupResponse extends Pick<
+  LightsGroup,
+  'id' | 'createdAt' | 'updatedAt' | 'name'
+> {}
 
 export interface LightsGroupResponse extends BaseLightsGroupResponse {
   controller: LightsControllerResponse;
@@ -96,11 +102,10 @@ export interface LightsGroupResponse extends BaseLightsGroupResponse {
   movingHeadWheels: FixtureInGroupResponse<MovingHeadWheelResponse>[];
 }
 
-export interface LightsSwitchResponse
-  extends Pick<
-    LightsSwitch,
-    'id' | 'createdAt' | 'updatedAt' | 'name' | 'dmxChannel' | 'onValue'
-  > {}
+export interface LightsSwitchResponse extends Pick<
+  LightsSwitch,
+  'id' | 'createdAt' | 'updatedAt' | 'name' | 'dmxChannel' | 'onValue'
+> {}
 
 export interface ColorParams {
   masterDimChannel?: number;
@@ -181,8 +186,10 @@ export interface LightsInGroup {
   positionY?: number;
 }
 
-export interface LightsGroupCreateParams
-  extends Pick<LightsGroup, 'name' | 'defaultHandler' | 'groupInMiddle'> {
+export interface LightsGroupCreateParams extends Pick<
+  LightsGroup,
+  'name' | 'defaultHandler' | 'groupInMiddle'
+> {
   /**
    * Size (width) of the X axis where all the fixtures are positioned.
    * All fixtures should have their positionX be in range [0, gridSizeX).
@@ -203,8 +210,10 @@ export interface LightsGroupCreateParams
   movingHeadWheels: LightsInGroup[];
 }
 
-export interface LightsSwitchCreateParams
-  extends Pick<LightsSwitch, 'name' | 'dmxChannel' | 'onValue'> {}
+export interface LightsSwitchCreateParams extends Pick<
+  LightsSwitch,
+  'name' | 'dmxChannel' | 'onValue'
+> {}
 
 export interface LightsControllerCreateParams extends Pick<LightsController, 'name'> {}
 

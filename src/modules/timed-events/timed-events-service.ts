@@ -8,8 +8,7 @@ import logger from '../../logger';
 export interface CreateTimedEventRequest extends Pick<TimedEvent, 'cronExpression' | 'eventSpec'> {}
 
 export interface UpdateTimedEventRequest
-  extends CreateTimedEventRequest,
-    Pick<TimedEvent, 'skipNext'> {}
+  extends CreateTimedEventRequest, Pick<TimedEvent, 'skipNext'> {}
 
 export default class TimedEventsService {
   private static instance: TimedEventsService;

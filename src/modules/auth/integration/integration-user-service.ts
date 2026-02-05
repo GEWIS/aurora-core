@@ -6,8 +6,10 @@ import { HttpStatusCode } from 'axios';
 import IntegrationEndpointManager from './integration-endpoint-manager';
 import AuthService from '../auth-service';
 
-export interface IntegrationUserResponse
-  extends Pick<IntegrationUser, 'id' | 'name' | 'endpoints'> {
+export interface IntegrationUserResponse extends Pick<
+  IntegrationUser,
+  'id' | 'name' | 'endpoints'
+> {
   lastSeen: string | null;
 }
 

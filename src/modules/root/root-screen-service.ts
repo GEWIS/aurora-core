@@ -3,11 +3,15 @@ import { Screen } from './entities';
 import dataSource from '../../database';
 import AuthService from '../auth/auth-service';
 
-export interface ScreenResponse
-  extends Pick<Screen, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds' | 'scaleFactor'> {}
+export interface ScreenResponse extends Pick<
+  Screen,
+  'id' | 'createdAt' | 'updatedAt' | 'name' | 'socketIds' | 'scaleFactor'
+> {}
 
-export interface ScreenCreateParams
-  extends Pick<Screen, 'name' | 'defaultHandler' | 'scaleFactor'> {}
+export interface ScreenCreateParams extends Pick<
+  Screen,
+  'name' | 'defaultHandler' | 'scaleFactor'
+> {}
 
 export default class RootScreenService {
   private repository: Repository<Screen>;

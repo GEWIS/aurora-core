@@ -16,11 +16,12 @@ export interface LightsPredefinedEffectResponse {
   properties: LightsPredefinedEffectProperties;
 }
 
-export interface LightsPredefinedEffectCreateParams
-  extends Pick<LightsPredefinedEffect, 'buttonId' | 'properties' | 'icon' | 'name'> {}
+export interface LightsPredefinedEffectCreateParams extends Pick<
+  LightsPredefinedEffect,
+  'buttonId' | 'properties' | 'icon' | 'name'
+> {}
 
-export interface LightsPredefinedEffectUpdateParams
-  extends Partial<LightsPredefinedEffectCreateParams> {}
+export interface LightsPredefinedEffectUpdateParams extends Partial<LightsPredefinedEffectCreateParams> {}
 
 export default class SetEffectsService {
   private repo: Repository<LightsPredefinedEffect>;
