@@ -2,7 +2,8 @@
 FROM node:22 AS build
 ENV NODE_ENV=development
 WORKDIR /app
-COPY ./package.json ./yarn.lock ./
+COPY ./package.json ./yarn.lock ./.yarnrc.yml ./
+RUN corepack enable
 RUN yarn
 COPY ./ ./
 RUN yarn build
@@ -12,7 +13,7 @@ FROM node:22-alpine AS target
 ENV NODE_ENV=production
 
 WORKDIR /app
-COPY ./package.json ./yarn.lock ./
+COPY ./package.json ./yarn.lock ./.yarnrc.yml ./
 RUN apk --no-cache --virtual add \
     git \
     # Python is required by node-gyp to build node dependencies (sqlite3)
@@ -20,7 +21,8 @@ RUN apk --no-cache --virtual add \
     py3-pip \
     g++ \
     make
-RUN yarn install --production
+RUN corepack enable
+RUN yarn workspaces focus --all --production
 COPY --from=build --chown=node /app/dist /app
 COPY ./public ./public
 
