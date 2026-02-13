@@ -13,6 +13,7 @@ import BaseHandler from '../handlers/base-handler';
 import logger from '../../logger';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 import LightsSwitchManager from './lights-switch-manager';
+import EntityStatusManager from './status-manager';
 
 export default class SocketConnectionManager {
   /**
@@ -32,16 +33,19 @@ export default class SocketConnectionManager {
     private backofficeEmitter: BackofficeSyncEmitter,
   ) {
     this.lock = new AsyncLock();
+    const statusManager = new EntityStatusManager(backofficeEmitter);
 
     Object.values(SocketioNamespaces).forEach((namespace) => {
       ioServer.of(namespace).on('connect', (socket) => {
         this.updateSocketId((socket.request as any).user, namespace, socket.id).catch((e) =>
           logger.error(e),
         );
+        statusManager.addSocketConnection(socket);
         socket.on('disconnect', () => {
           this.updateSocketId((socket.request as any).user, namespace).catch((e) =>
             logger.error(e),
           );
+          statusManager.removeSocketConnection(socket);
         });
       });
     });
