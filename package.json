@@ -25,7 +25,7 @@
     "@fostertheweb/spotify-web-sdk": "^1.3.0",
     "@sudosos/sudosos-client": "https://github.com/GEWIS/sudosos-client.git#commit=b1f2b656e1178626c0ab56b9aa4fc7a87b6fadcd",
     "async-lock": "^1.4.1",
-    "axios": "1.13.3",
+    "axios": "1.13.5",
     "body-parser": "^2.2.2",
     "commander": "^14.0.2",
     "connect-typeorm": "^2.0.0",
