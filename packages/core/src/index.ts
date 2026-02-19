@@ -2,7 +2,7 @@ import './env';
 import { createServer } from 'http';
 import * as fs from 'fs';
 import path from 'node:path';
-import logger from './logger';
+import logger from '@gewis/aurora-logger';
 import createHttp from './http';
 import dataSource from './database';
 import HandlerManager from './modules/root/handler-manager';

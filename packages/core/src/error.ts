@@ -2,7 +2,7 @@ import { Response as ExResponse, Request as ExRequest, NextFunction, Express } f
 import { ValidateError } from 'tsoa';
 import { AxiosError } from 'axios';
 import { HttpApiException, HttpStatusCode } from './helpers/custom-error';
-import logger from './logger';
+import logger from '@gewis/aurora-logger';
 import { ApiError as TrelloAPIError } from './modules/handlers/screen/poster/trello/client';
 import ModeDisabledError from './modules/modes/mode-disabled-error';
 import { InvalidStateError } from './modules/modes/time-trail-race/time-trail-race-invalid-state-error';
