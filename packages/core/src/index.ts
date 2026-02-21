@@ -1,10 +1,11 @@
+import 'reflect-metadata';
 import './env';
+import { initializeDataSource } from './database';
 import { createServer } from 'http';
 import * as fs from 'fs';
 import path from 'node:path';
-import logger from '@gewis/aurora-logger';
+import logger from './logger';
 import createHttp from './http';
-import dataSource from './database';
 import HandlerManager from './modules/root/handler-manager';
 import createWebsocket from './socketio';
 import './modules/audit/audit-logger';
@@ -43,7 +44,7 @@ async function createApp(): Promise<void> {
     fs.cpSync(audioFromPath, audioToPath, { recursive: true });
   }
 
-  await dataSource.initialize();
+  await initializeDataSource();
 
   await ServerSettingsStore.getInstance().initialize();
   const featureFlagManager = new FeatureFlagManager();

@@ -1,16 +1,18 @@
-import pino, { Logger } from 'pino';
+import pino from 'pino';
 
-const logger: Logger<'audit'> = pino({
-  transport: {
-    target: 'pino-pretty',
-    options: {
-      colorize: true,
+export const createPinoLogger = () => {
+  const base = pino({
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        colorize: true,
+      },
     },
-  },
-  level: process.env.LOG_LEVEL || 'info',
-  customLevels: {
-    audit: 39,
-  },
-});
+    level: process.env.LOG_LEVEL || 'info',
+    customLevels: {
+      audit: 39,
+    },
+  });
 
-export default logger;
+  return base;
+};

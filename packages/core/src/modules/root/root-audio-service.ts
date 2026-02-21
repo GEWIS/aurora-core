@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { Audio } from './entities';
-import dataSource from '../../database';
+import { resolveDataSource } from '../../ports/data-source.port';
 import AuthService from '../auth/auth-service';
 
 export interface AudioResponse extends Pick<
@@ -14,7 +14,7 @@ export default class RootAudioService {
   private repository: Repository<Audio>;
 
   constructor() {
-    this.repository = dataSource.getRepository(Audio);
+    this.repository = resolveDataSource().getRepository(Audio);
   }
 
   public static toAudioResponse(audio: Audio): AudioResponse {

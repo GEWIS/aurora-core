@@ -1,5 +1,5 @@
-import { DataSource } from 'typeorm';
-import fs from 'fs';
+import { createSqliteDataSource } from '@gewis/aurora-db-sqlite';
+import { registerDataSource } from './ports/data-source.port';
 import ServerSetting from './modules/server-settings/server-setting';
 import { Entities as BaseEntities } from './modules/root/entities';
 import { Entities as AuthEntities } from './modules/auth/entities';
@@ -11,27 +11,7 @@ import { Entities as LightsEntities } from './modules/lights/entities';
 import { Entities as TimedEventsEntities } from './modules/timed-events/entities';
 import LocalPoster from './modules/handlers/screen/poster/local/local-poster';
 
-const dataSource = new DataSource({
-  host: process.env.TYPEORM_HOST,
-  port: parseInt(process.env.TYPEORM_PORT || '3001', 10),
-  database: process.env.TYPEORM_DATABASE,
-  type: process.env.TYPEORM_CONNECTION as any,
-  username: process.env.TYPEORM_USERNAME,
-  password: process.env.TYPEORM_PASSWORD,
-  ...(process.env.TYPEORM_SSL_ENABLED === 'true' && process.env.TYPEORM_SSL_CACERTS
-    ? {
-        ssl: {
-          ca: fs.readFileSync(process.env.TYPEORM_SSL_CACERTS),
-        },
-      }
-    : {}),
-  synchronize: process.env.TYPEORM_SYNCHRONIZE === 'true',
-  logging: process.env.TYPEORM_LOGGING === 'true',
-  extra: {
-    authPlugins: {
-      mysql_clear_password: () => () => Buffer.from(`${process.env.TYPEORM_PASSWORD}\0`),
-    },
-  },
+const dataSource = createSqliteDataSource({
   entities: [
     ServerSetting,
     ...TimedEventsEntities,
@@ -45,5 +25,11 @@ const dataSource = new DataSource({
     LocalPoster,
   ],
 });
+
+registerDataSource(dataSource);
+
+export const initializeDataSource = async (): Promise<void> => {
+  await dataSource.initialize();
+};
 
 export default dataSource;

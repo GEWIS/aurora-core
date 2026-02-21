@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import crypto from 'crypto';
 import { ApiKey } from './entities';
 import { IntegrationUser } from './integration/entities';
-import dataSource from '../../database';
+import { resolveDataSource } from '../../ports/data-source.port';
 import { Audio, LightsController, Screen } from '../root/entities';
 
 export interface OidcConfig {
@@ -25,8 +25,8 @@ export default class AuthService {
   private integrationUserRepository: Repository<IntegrationUser>;
 
   constructor() {
-    this.apiKeyRepository = dataSource.getRepository(ApiKey);
-    this.integrationUserRepository = dataSource.getRepository(IntegrationUser);
+    this.apiKeyRepository = resolveDataSource().getRepository(ApiKey);
+    this.integrationUserRepository = resolveDataSource().getRepository(IntegrationUser);
   }
 
   private generateKey(): string {

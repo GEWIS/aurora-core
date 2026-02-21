@@ -20,7 +20,7 @@ export function logAudit(user: unknown, msg?: string, ...args: any[]): void {
     );
     return;
   }
-  logger.trace<AuthUser>(user, msg, args);
+  logger.trace(user, msg, args);
 
   new AuditService()
     .addLog({ userId: user.id, userName: user.name, action: msg })

@@ -7,7 +7,7 @@ import {
   LightsPar,
   LightsSwitch,
 } from '../lights/entities';
-import dataSource from '../../database';
+import { resolveDataSource } from '../../ports/data-source.port';
 import LightsFixture from '../lights/entities/lights-fixture';
 import ColorsRgb, { IColorsRgb } from '../lights/entities/colors-rgb';
 import LightsMovingHead from '../lights/entities/lights-moving-head';
@@ -223,8 +223,9 @@ export default class RootLightsService {
   private groupRepository: Repository<LightsGroup>;
 
   constructor() {
-    this.controllerRepository = dataSource.getRepository(LightsController);
-    this.groupRepository = dataSource.getRepository(LightsGroup);
+    const ds = resolveDataSource();
+    this.controllerRepository = ds.getRepository(LightsController);
+    this.groupRepository = ds.getRepository(LightsGroup);
   }
 
   private static toColorResponse(c: ColorsRgb, firstChannel: number): ColorResponse {
@@ -419,7 +420,7 @@ export default class RootLightsService {
     const controller = await this.controllerRepository.findOne({ where: { id: controllerId } });
     if (controller == null) return null;
 
-    return dataSource.transaction(async (manager) => {
+    return resolveDataSource().transaction(async (manager) => {
       const group = (await manager.save(LightsGroup, {
         name: params.name,
         defaultHandler: params.defaultHandler,
@@ -482,19 +483,19 @@ export default class RootLightsService {
   }
 
   public async getLightsGroupPar(id: number): Promise<LightsGroupPars | null> {
-    const repository = dataSource.getRepository(LightsGroupPars);
+    const repository = resolveDataSource().getRepository(LightsGroupPars);
     return repository.findOne({ where: { id } });
   }
 
   public async getLightsGroupMovingHeadRgb(id: number): Promise<LightsGroupMovingHeadRgbs | null> {
-    const repository = dataSource.getRepository(LightsGroupMovingHeadRgbs);
+    const repository = resolveDataSource().getRepository(LightsGroupMovingHeadRgbs);
     return repository.findOne({ where: { id } });
   }
 
   public async getLightsGroupMovingHeadWheel(
     id: number,
   ): Promise<LightsGroupMovingHeadWheels | null> {
-    const repository = dataSource.getRepository(LightsGroupMovingHeadWheels);
+    const repository = resolveDataSource().getRepository(LightsGroupMovingHeadWheels);
     return repository.findOne({ where: { id } });
   }
 
@@ -541,15 +542,15 @@ export default class RootLightsService {
   }
 
   public async getAllLightsPars(): Promise<LightsPar[]> {
-    return dataSource.getRepository(LightsPar).find();
+    return resolveDataSource().getRepository(LightsPar).find();
   }
 
   public async getAllMovingHeadRgbs(): Promise<LightsMovingHeadRgb[]> {
-    return dataSource.getRepository(LightsMovingHeadRgb).find();
+    return resolveDataSource().getRepository(LightsMovingHeadRgb).find();
   }
 
   public async getAllMovingHeadWheels(): Promise<LightsMovingHeadWheel[]> {
-    return dataSource.getRepository(LightsMovingHeadWheel).find();
+    return resolveDataSource().getRepository(LightsMovingHeadWheel).find();
   }
 
   public async createFixtureShutterOptions(
@@ -577,7 +578,8 @@ export default class RootLightsService {
   }
 
   public async createLightsPar(params: LightsParCreateParams): Promise<LightsPar> {
-    const repository = dataSource.getRepository(LightsPar);
+    const ds = resolveDataSource();
+    const repository = ds.getRepository(LightsPar);
     const par = await repository.save({
       ...this.toFixture(params),
       color: {
@@ -587,7 +589,7 @@ export default class RootLightsService {
       },
     });
     par.shutterOptions = (await this.createFixtureShutterOptions(
-      dataSource.getRepository(LightsParShutterOptions),
+      ds.getRepository(LightsParShutterOptions),
       par,
       params.shutterOptionValues,
     )) as LightsParShutterOptions[];
@@ -597,7 +599,8 @@ export default class RootLightsService {
   public async createMovingHeadRgb(
     params: LightsMovingHeadRgbCreateParams,
   ): Promise<LightsMovingHeadRgb> {
-    const repository = dataSource.getRepository(LightsMovingHeadRgb);
+    const ds = resolveDataSource();
+    const repository = ds.getRepository(LightsMovingHeadRgb);
     const movingHead = await repository.save({
       ...this.toFixture(params),
       movement: this.toMovement(params),
@@ -608,7 +611,7 @@ export default class RootLightsService {
       },
     });
     movingHead.shutterOptions = (await this.createFixtureShutterOptions(
-      dataSource.getRepository(LightsMovingHeadRgbShutterOptions),
+      ds.getRepository(LightsMovingHeadRgbShutterOptions),
       movingHead,
       params.shutterOptionValues,
     )) as LightsMovingHeadRgbShutterOptions[];
@@ -618,7 +621,8 @@ export default class RootLightsService {
   public async createMovingHeadWheel(
     params: LightsMovingHeadWheelCreateParams,
   ): Promise<LightsMovingHeadWheel> {
-    const repository = dataSource.getRepository(LightsMovingHeadWheel);
+    const ds = resolveDataSource();
+    const repository = ds.getRepository(LightsMovingHeadWheel);
     const movingHead = await repository.save({
       ...this.toFixture(params),
       movement: this.toMovement(params),
@@ -629,7 +633,7 @@ export default class RootLightsService {
       },
     });
     movingHead.shutterOptions = (await this.createFixtureShutterOptions(
-      dataSource.getRepository(LightsMovingHeadWheelShutterOptions),
+      ds.getRepository(LightsMovingHeadWheelShutterOptions),
       movingHead,
       params.shutterOptionValues,
     )) as LightsMovingHeadWheelShutterOptions[];
@@ -645,7 +649,9 @@ export default class RootLightsService {
       whereClause = { controller: { id: controllerId } };
     }
 
-    let switches = await dataSource.getRepository(LightsSwitch).find({ where: whereClause });
+    let switches = await resolveDataSource()
+      .getRepository(LightsSwitch)
+      .find({ where: whereClause });
     if (enabled != null) {
       const manager = LightsSwitchManager.getInstance();
       switches = switches.filter((s) => {
@@ -666,7 +672,7 @@ export default class RootLightsService {
     const controller = await this.controllerRepository.findOne({ where: { id: controllerId } });
     if (controller == null) return null;
 
-    const repository = dataSource.getRepository(LightsSwitch);
+    const repository = resolveDataSource().getRepository(LightsSwitch);
     return repository.save({
       controller,
       ...params,

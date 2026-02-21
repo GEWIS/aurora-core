@@ -6,7 +6,7 @@ import {
 } from '@fostertheweb/spotify-web-sdk';
 import { Repository } from 'typeorm';
 import { SpotifyUser } from './entities';
-import dataSource from '../../database';
+import { resolveDataSource } from '../../ports/data-source.port';
 import logger from '../../logger';
 
 export interface SpotifyUserProfile extends UserProfile {}
@@ -23,7 +23,7 @@ export default class SpotifyApiHandler {
   private repository: Repository<SpotifyUser>;
 
   constructor() {
-    this.repository = dataSource.getRepository(SpotifyUser);
+    this.repository = resolveDataSource().getRepository(SpotifyUser);
   }
 
   public async init() {

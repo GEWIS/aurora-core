@@ -2,7 +2,7 @@ import { FileStorage } from '../../../../files/storage/file-storage';
 import { DiskStorage } from '../../../../files/storage';
 import LocalPoster from './local-poster';
 import { Repository } from 'typeorm';
-import dataSource from '../../../../../database';
+import { resolveDataSource } from '../../../../../ports/data-source.port';
 import { HttpApiException } from '../../../../../helpers/custom-error';
 import { HttpStatusCode } from 'axios';
 import { File } from '../../../../files/entities';
@@ -33,8 +33,9 @@ export default class LocalPosterService {
 
   constructor() {
     this.storage = new DiskStorage('local-posters');
-    this.repo = dataSource.getRepository(LocalPoster);
-    this.fileRepo = dataSource.getRepository(File);
+    const ds = resolveDataSource();
+    this.repo = ds.getRepository(LocalPoster);
+    this.fileRepo = ds.getRepository(File);
   }
 
   public toResponse(poster: LocalPoster): LocalPosterResponse {
