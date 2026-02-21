@@ -4,7 +4,10 @@
   "description": "Shared configuration for Aurora packages",
   "private": true,
   "exports": {
-    "./vitest": "./src/vitest.ts",
+    "./vitest": {
+      "development": "./src/vitest.ts",
+      "default": "./src/vitest.ts"
+    },
     "./tsconfig.base.json": "./tsconfig.base.json"
   },
   "typesVersions": {

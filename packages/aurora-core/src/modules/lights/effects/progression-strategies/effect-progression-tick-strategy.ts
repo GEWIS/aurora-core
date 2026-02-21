@@ -1,4 +1,4 @@
-import { BeatEvent } from 'src/modules/events/music-emitter-events';
+import { BeatEvent } from '../../../events/music-emitter-events';
 import { LightsGroup } from '../../entities';
 import EffectProgressionStrategy from './effect-progression-strategy';
 

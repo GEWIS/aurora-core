@@ -1,5 +1,4 @@
 import { Namespace } from 'socket.io';
-import { EventParams } from 'socket.io/dist/typed-events';
 import BaseHandler from './base-handler';
 import Screen from '../root/entities/screen';
 import { TrackChangeEvent } from '../events/music-emitter-events';
@@ -26,7 +25,7 @@ export default abstract class BaseScreenHandler extends BaseHandler<Screen> {
    * @param args
    * @protected
    */
-  protected sendEventToScreen(screen: Screen, eventName: string, ...args: EventParams<any, any>) {
+  protected sendEventToScreen(screen: Screen, eventName: string, ...args: any[]) {
     const socketId = screen.getSocketId(this.socket.name as SocketioNamespaces);
     this.socket.sockets.get(socketId || '')?.emit(eventName, args);
   }
@@ -38,7 +37,7 @@ export default abstract class BaseScreenHandler extends BaseHandler<Screen> {
    * @param args
    * @protected
    */
-  protected sendEvent(eventName: string, ...args: EventParams<any, any>) {
+  protected sendEvent(eventName: string, ...args: any[]) {
     this.entities.forEach((screen) => {
       this.sendEventToScreen(screen, eventName, ...args);
     });

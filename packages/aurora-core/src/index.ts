@@ -30,7 +30,7 @@ import LightsSwitchManager from './modules/root/lights-switch-manager';
 async function createApp(): Promise<void> {
   // Fix for production issue where a Docker volume overwrites the contents of a folder instead of merging them
   if (process.env.STATIC_FILES_LOCATION) {
-    const audioFromPath = path.join(__dirname, '../public/audio');
+    const audioFromPath = path.join(import.meta.dirname, '../public/audio');
     const audioToPath = path.join(process.env.STATIC_FILES_LOCATION, '/audio');
 
     if (!fs.existsSync(audioToPath)) {

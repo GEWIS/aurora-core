@@ -3,9 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/index.ts",
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "type": "module",
   "private": true,
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --project tsconfig.lib.json",
     "test": "vitest run --coverage",
     "test:watch": "vitest"
   },
@@ -19,6 +26,6 @@
   },
   "devDependencies": {
     "@gewis/aurora-config": "1.0.0",
-    "typescript": "5.9.3"
+    "development": "5.9.3"
   }
 }

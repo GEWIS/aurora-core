@@ -2,7 +2,7 @@ import { Server as SocketIoServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
 import { NextFunction, Response } from 'express';
 import passport from 'passport';
-import { DefaultEventsMap, EventsMap } from 'socket.io/dist/typed-events';
+import { DefaultEventsMap } from 'socket.io';
 import { SessionMiddleware, AuthUser } from './modules/auth';
 import { customOrigin, enableCors } from './http';
 import { SECURE_NAMESPACES } from './socketio-namespaces';
@@ -22,7 +22,7 @@ interface SocketData {
  * @param httpServer Express.JS HttpServer instance
  */
 export default function createWebsocket(httpServer: HttpServer) {
-  const io = new SocketIoServer<DefaultEventsMap, EventsMap, DefaultEventsMap, SocketData>(
+  const io = new SocketIoServer<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>(
     httpServer,
     {
       cookie: true,

@@ -5,7 +5,7 @@ import { FileStorage } from './file-storage';
 import { IFile } from '../entities';
 
 export default class DiskStorage extends FileStorage {
-  private readonly rootDir = path.join(__dirname, '../../../../');
+  private readonly rootDir = path.join(import.meta.dirname, '../../../../');
 
   private readonly relativeWorkdir: string;
 

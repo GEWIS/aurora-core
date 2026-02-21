@@ -1,9 +1,4 @@
 {
-  "extends": "@gewis/aurora-config/tsconfig.base.json",
-  "compilerOptions": {
-    "incremental": true
-  },
-  "ts-node": {
-    "files": true
-  }
+  "files": [],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.spec.json" }]
 }
