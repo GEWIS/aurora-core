@@ -25,6 +25,6 @@
   "devDependencies": {
     "@gewis/aurora-config": "1.0.0",
     "better-sqlite3": "^11.10.0",
-    "development": "5.9.3"
+    "typescript": "5.9.3"
   }
 }
