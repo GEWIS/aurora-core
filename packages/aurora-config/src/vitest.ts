@@ -1,10 +1,6 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
 import type { InlineConfig } from 'vitest/node';
 
-const baseEsbuildTarget = {
-  target: 'esnext' as const,
-};
-
 const baseCoverageThresholds = {
   lines: 95,
   functions: 95,
@@ -21,7 +17,6 @@ export interface DefineConfigOptions {
   coverageInclude?: string[];
   coverageThresholds?: boolean;
   decorators?: boolean;
-  tsconfig?: string;
 }
 
 export function defineBaseConfig(
@@ -32,8 +27,21 @@ export function defineBaseConfig(
     coverageInclude = ['src/**/*.ts'],
     coverageThresholds = true,
     decorators = false,
-    tsconfig = './tsconfig.spec.json',
   } = options;
+
+  const esbuildConfig = {
+    target: 'esnext' as const,
+    ...(decorators
+      ? {
+          tsconfigRaw: {
+            compilerOptions: {
+              experimentalDecorators: true,
+              emitDecoratorMetadata: true,
+            },
+          },
+        }
+      : {}),
+  };
 
   const testConfig: { test: InlineConfig } = {
     test: {
@@ -49,16 +57,8 @@ export function defineBaseConfig(
     },
   };
 
-  const esbuildConfig = { ...baseEsbuildTarget, tsconfig };
-
-  const base = mergeConfig(
+  return mergeConfig(
     defineConfig({ resolve: baseResolve, esbuild: esbuildConfig }),
     defineConfig(testConfig),
   );
-
-  if (decorators) {
-    return mergeConfig(base, defineConfig({ esbuild: esbuildConfig }));
-  }
-
-  return base;
 }

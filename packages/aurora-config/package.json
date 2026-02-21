@@ -2,6 +2,7 @@
   "name": "@gewis/aurora-config",
   "version": "1.0.0",
   "description": "Shared configuration for Aurora packages",
+  "type": "module",
   "private": true,
   "exports": {
     "./vitest": {
