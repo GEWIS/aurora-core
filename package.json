@@ -18,12 +18,15 @@
     "seed": "yarn workspace @gewis/aurora-core seed",
     "seed:gewis": "yarn workspace @gewis/aurora-core seed:gewis",
     "seed:hubble": "yarn workspace @gewis/aurora-core seed:hubble",
-    "validate": "yarn workspace @gewis/aurora-core validate"
+    "validate": "yarn workspace @gewis/aurora-core validate",
+    "test": "yarn workspaces foreach -A run test",
+    "test:watch": "yarn workspaces foreach -A run test:watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.18",
     "concurrently": "^9.2.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
@@ -33,7 +36,8 @@
     "nodemon": "^3.1.11",
     "prettier": "^3.8.1",
     "ts-node": "^10.9.2",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "^4.0.18"
   },
   "engines": {
     "node": ">=22.0.0"

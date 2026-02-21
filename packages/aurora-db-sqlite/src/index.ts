@@ -30,6 +30,7 @@ export const createSqliteDataSource = ({
     logging: process.env.TYPEORM_LOGGING === 'true',
     extra: {
       authPlugins: {
+        /* v8 ignore next */
         mysql_clear_password: () => () => Buffer.from(`${process.env.TYPEORM_PASSWORD}\0`),
       },
     },
