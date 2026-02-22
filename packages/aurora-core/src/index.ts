@@ -102,14 +102,15 @@ async function createApp(): Promise<void> {
   httpServer.listen(port, () => logger.info(`Listening at http://localhost:${port}`));
 }
 
-if (require.main === module) {
-  process.on('SIGINT', () => {
-    // this is only called on ctrl+c, not restart
-    process.kill(process.pid, 'SIGINT');
-  });
+process.on('SIGINT', () => {
+  process.exit(0);
+});
 
-  // Only execute the application directly if this is the main execution file.
-  createApp().catch((e) => {
-    logger.fatal(e);
-  });
-}
+process.on('SIGTERM', () => {
+  process.exit(0);
+});
+
+createApp().catch((e) => {
+  logger.fatal(e);
+  process.exit(1);
+});
