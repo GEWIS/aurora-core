@@ -4,7 +4,6 @@ import { Audio, Screen } from './entities';
 import { LightsGroup } from '../lights/entities';
 import ModeManager from '../modes/mode-manager';
 import RootLightsOperationsService from './root-lights-operations-service';
-import { DEFAULT_MASTER_DIMMER } from '../lights/entities/lights-group-fixture';
 
 export default class HandlerService {
   private handlerManager: HandlerManager;
@@ -17,10 +16,10 @@ export default class HandlerService {
   }
 
   async resetToDefaults() {
-    const ds = resolveDataSource();
-    const audios = await ds.getRepository(Audio).find();
-    const screens = await ds.getRepository(Screen).find();
-    const lights = await ds.getRepository(LightsGroup).find();
+    const datasource = resolveDataSource();
+    const audios = await datasource.getRepository(Audio).find();
+    const screens = await datasource.getRepository(Screen).find();
+    const lights = await datasource.getRepository(LightsGroup).find();
 
     // Set all subscribers to their default handlers (can be none)
     audios.forEach((audio) => this.handlerManager.registerHandler(audio, audio.defaultHandler));

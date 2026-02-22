@@ -223,9 +223,9 @@ export default class RootLightsService {
   private groupRepository: Repository<LightsGroup>;
 
   constructor() {
-    const ds = resolveDataSource();
-    this.controllerRepository = ds.getRepository(LightsController);
-    this.groupRepository = ds.getRepository(LightsGroup);
+    const datasource = resolveDataSource();
+    this.controllerRepository = datasource.getRepository(LightsController);
+    this.groupRepository = datasource.getRepository(LightsGroup);
   }
 
   private static toColorResponse(c: ColorsRgb, firstChannel: number): ColorResponse {
@@ -578,8 +578,8 @@ export default class RootLightsService {
   }
 
   public async createLightsPar(params: LightsParCreateParams): Promise<LightsPar> {
-    const ds = resolveDataSource();
-    const repository = ds.getRepository(LightsPar);
+    const datasource = resolveDataSource();
+    const repository = datasource.getRepository(LightsPar);
     const par = await repository.save({
       ...this.toFixture(params),
       color: {
@@ -589,7 +589,7 @@ export default class RootLightsService {
       },
     });
     par.shutterOptions = (await this.createFixtureShutterOptions(
-      ds.getRepository(LightsParShutterOptions),
+      datasource.getRepository(LightsParShutterOptions),
       par,
       params.shutterOptionValues,
     )) as LightsParShutterOptions[];
@@ -599,8 +599,8 @@ export default class RootLightsService {
   public async createMovingHeadRgb(
     params: LightsMovingHeadRgbCreateParams,
   ): Promise<LightsMovingHeadRgb> {
-    const ds = resolveDataSource();
-    const repository = ds.getRepository(LightsMovingHeadRgb);
+    const datasource = resolveDataSource();
+    const repository = datasource.getRepository(LightsMovingHeadRgb);
     const movingHead = await repository.save({
       ...this.toFixture(params),
       movement: this.toMovement(params),
@@ -611,7 +611,7 @@ export default class RootLightsService {
       },
     });
     movingHead.shutterOptions = (await this.createFixtureShutterOptions(
-      ds.getRepository(LightsMovingHeadRgbShutterOptions),
+      datasource.getRepository(LightsMovingHeadRgbShutterOptions),
       movingHead,
       params.shutterOptionValues,
     )) as LightsMovingHeadRgbShutterOptions[];
@@ -621,8 +621,8 @@ export default class RootLightsService {
   public async createMovingHeadWheel(
     params: LightsMovingHeadWheelCreateParams,
   ): Promise<LightsMovingHeadWheel> {
-    const ds = resolveDataSource();
-    const repository = ds.getRepository(LightsMovingHeadWheel);
+    const datasource = resolveDataSource();
+    const repository = datasource.getRepository(LightsMovingHeadWheel);
     const movingHead = await repository.save({
       ...this.toFixture(params),
       movement: this.toMovement(params),
@@ -633,7 +633,7 @@ export default class RootLightsService {
       },
     });
     movingHead.shutterOptions = (await this.createFixtureShutterOptions(
-      ds.getRepository(LightsMovingHeadWheelShutterOptions),
+      datasource.getRepository(LightsMovingHeadWheelShutterOptions),
       movingHead,
       params.shutterOptionValues,
     )) as LightsMovingHeadWheelShutterOptions[];

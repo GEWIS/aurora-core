@@ -70,14 +70,14 @@ export default class SocketConnectionManager {
    * crashed and is now restarted.
    */
   public async clearSavedSocketIds() {
-    const ds = resolveDataSource();
-    const audioRepo = ds.getRepository(Audio);
+    const datasource = resolveDataSource();
+    const audioRepo = datasource.getRepository(Audio);
     await this.clearSavedSocketIdsForEntity(audioRepo);
 
-    const screenRepo = ds.getRepository(Screen);
+    const screenRepo = datasource.getRepository(Screen);
     await this.clearSavedSocketIdsForEntity(screenRepo);
 
-    const lightsControllerRepo = ds.getRepository(LightsController);
+    const lightsControllerRepo = datasource.getRepository(LightsController);
     await this.clearSavedSocketIdsForEntity(lightsControllerRepo);
   }
 

@@ -36,8 +36,8 @@ export default class RootLightsOperationsService {
       });
     }
 
-    const ds = resolveDataSource();
-    const dbLightsGroup = await ds.getRepository(LightsGroup).findOne({
+    const datasource = resolveDataSource();
+    const dbLightsGroup = await datasource.getRepository(LightsGroup).findOne({
       where: { id },
       relations: { pars: true, movingHeadRgbs: true, movingHeadWheels: true },
     });
@@ -45,17 +45,17 @@ export default class RootLightsOperationsService {
 
     // Store the master brightness in the database, in case a lights group switches handlers
     if (dbLightsGroup.pars.length > 0)
-      await ds.getRepository(LightsGroupPars).update(
+      await datasource.getRepository(LightsGroupPars).update(
         dbLightsGroup.pars.map((p) => p.id),
         { masterRelativeBrightness },
       );
     if (dbLightsGroup.movingHeadRgbs.length > 0)
-      await ds.getRepository(LightsGroupMovingHeadRgbs).update(
+      await datasource.getRepository(LightsGroupMovingHeadRgbs).update(
         dbLightsGroup.movingHeadRgbs.map((p) => p.id),
         { masterRelativeBrightness },
       );
     if (dbLightsGroup.movingHeadWheels.length > 0)
-      await ds.getRepository(LightsGroupMovingHeadWheels).update(
+      await datasource.getRepository(LightsGroupMovingHeadWheels).update(
         dbLightsGroup.movingHeadWheels.map((p) => p.id),
         { masterRelativeBrightness },
       );
