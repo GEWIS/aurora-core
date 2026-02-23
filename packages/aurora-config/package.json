@@ -1,0 +1,41 @@
+{
+  "name": "@gewis/aurora-config",
+  "version": "1.0.0",
+  "description": "Shared configuration for Aurora packages",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./vitest": {
+      "development": "./src/vitest.ts",
+      "default": "./src/vitest.ts"
+    },
+    "./eslint": {
+      "development": "./src/eslint.ts",
+      "default": "./src/eslint.ts"
+    },
+    "./tsconfig.base.json": "./tsconfig.base.json"
+  },
+  "typesVersions": {
+    "*": {
+      "vitest": [
+        "./src/vitest.ts"
+      ],
+      "eslint": [
+        "./src/eslint.ts"
+      ]
+    }
+  },
+  "dependencies": {
+    "@eslint/compat": "^2.0.1",
+    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/js": "^9.39.2",
+    "@typescript-eslint/eslint-plugin": "^8.53.1",
+    "@typescript-eslint/parser": "^8.53.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "globals": "^17.1.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

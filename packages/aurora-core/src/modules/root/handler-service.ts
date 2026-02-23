@@ -1,0 +1,41 @@
+import HandlerManager from './handler-manager';
+import { resolveDataSource } from '../../ports/data-source.port';
+import { Audio, Screen } from './entities';
+import { LightsGroup } from '../lights/entities';
+import ModeManager from '../modes/mode-manager';
+import RootLightsOperationsService from './root-lights-operations-service';
+
+export default class HandlerService {
+  private handlerManager: HandlerManager;
+
+  private modeManager: ModeManager;
+
+  constructor() {
+    this.handlerManager = HandlerManager.getInstance();
+    this.modeManager = ModeManager.getInstance();
+  }
+
+  async resetToDefaults() {
+    const datasource = resolveDataSource();
+    const audios = await datasource.getRepository(Audio).find();
+    const screens = await datasource.getRepository(Screen).find();
+    const lights = await datasource.getRepository(LightsGroup).find();
+
+    // Set all subscribers to their default handlers (can be none)
+    audios.forEach((audio) => this.handlerManager.registerHandler(audio, audio.defaultHandler));
+    screens.forEach((screen) => this.handlerManager.registerHandler(screen, screen.defaultHandler));
+    lights.forEach((group) => this.handlerManager.registerHandler(group, group.defaultHandler));
+
+    // Reset handlers
+    this.handlerManager.resetHandlers();
+
+    // Disable all modes
+    this.modeManager.reset();
+
+    // Set all master dimmers back to their defaults
+    const rootLightsOpsService = new RootLightsOperationsService();
+    await Promise.all(
+      lights.map((l) => rootLightsOpsService.resetLightsGroupRelativeBrightness(l.id)),
+    );
+  }
+}

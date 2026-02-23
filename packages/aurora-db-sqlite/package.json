@@ -1,0 +1,35 @@
+{
+  "name": "@gewis/aurora-db-sqlite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsc --project tsconfig.lib.json",
+    "typecheck": "tsc --noEmit --project tsconfig.lib.json",
+    "lint": "eslint ./src --max-warnings=0",
+    "lint-fix": "eslint ./src --fix",
+    "format": "prettier --check ./src/",
+    "format-fix": "prettier --write ./src/",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "typeorm": "^0.3.28"
+  },
+  "devDependencies": {
+    "@gewis/aurora-config": "1.0.0",
+    "better-sqlite3": "^11.10.0",
+    "typescript": "5.9.3"
+  }
+}

@@ -25,7 +25,9 @@ services:
       - local-posters:/usr/src/app/data/local-posters
       - audio:/usr/src/app/data/audio
   core:
-    build: .
+    build:
+      context: .
+      dockerfile: packages/aurora-core/Dockerfile
     image: ghcr.io/gewis/aurora/core:latest
     restart: 'unless-stopped'
     networks:

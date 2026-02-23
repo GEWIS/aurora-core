@@ -1,0 +1,152 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/**/*-controller.ts"],
+  "spec": {
+    "basePath": "/api",
+    "securityDefinitions": {
+      "local": {
+        "type": "apiKey",
+        "name": "connect.sid",
+        "in": "cookie"
+      },
+      "integration": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    },
+    "outputDirectory": "build",
+    "host": "",
+    "specVersion": 3,
+    "schemes": ["http", "https"],
+    "specMerging": "recursive",
+    "spec": {
+      "components": {
+        "schemas": {
+          "OidcParameters": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "type": "string"
+              },
+              "session_state": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "ApiKeyParameters": {
+            "type": "object",
+            "required": ["key"],
+            "properties": {
+              "key": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "paths": {
+        "/auth/mock": {
+          "post": {
+            "operationId": "AuthMock",
+            "responses": {
+              "200": {
+                "description": "Success",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/AuthUser"
+                    }
+                  }
+                }
+              }
+            },
+            "security": [],
+            "parameters": [],
+            "tags": ["Authentication"],
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AuthUser"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/auth/oidc": {
+          "post": {
+            "operationId": "AuthOIDC",
+            "responses": {
+              "200": {
+                "description": "Success",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/AuthUser"
+                    }
+                  }
+                }
+              }
+            },
+            "security": [],
+            "parameters": [],
+            "tags": ["Authentication"],
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/OidcParameters"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/auth/key": {
+          "post": {
+            "operationId": "AuthKey",
+            "responses": {
+              "200": {
+                "description": "Success",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/AuthUser"
+                    }
+                  }
+                }
+              }
+            },
+            "security": [],
+            "parameters": [],
+            "tags": ["Authentication"],
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ApiKeyParameters"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "routes": {
+    "authenticationModule": "../aurora-auth/src/authentication.ts",
+    "basePath": "/api",
+    "routesDir": "build",
+    "middleware": "express"
+  }
+}

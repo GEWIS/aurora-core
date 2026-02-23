@@ -1,0 +1,39 @@
+{
+  "name": "@gewis/aurora-strategy-integration",
+  "version": "1.0.0",
+  "description": "Integration (endpoint-scoped) auth strategy for aurora-core",
+  "main": "src/index.ts",
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsc --project tsconfig.lib.json",
+    "typecheck": "tsc --noEmit --project tsconfig.lib.json",
+    "lint": "eslint ./src --max-warnings=0",
+    "lint-fix": "eslint ./src --fix",
+    "format": "prettier --check ./src/",
+    "format-fix": "prettier --write ./src/",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@gewis/aurora-auth": "workspace:*",
+    "@gewis/aurora-core": "workspace:*",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@gewis/aurora-config": "1.0.0",
+    "@types/express": "^5.0.1",
+    "@types/passport": "^1.0.17",
+    "reflect-metadata": "^0.2.2",
+    "typescript": "5.9.3"
+  }
+}

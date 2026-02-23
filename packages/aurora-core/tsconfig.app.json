@@ -1,0 +1,9 @@
+{
+  "extends": "@gewis/aurora-config/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "incremental": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts"]
+}
