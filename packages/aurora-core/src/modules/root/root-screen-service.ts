@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { Screen } from './entities';
 import { resolveDataSource } from '../../ports/data-source.port';
-import AuthService from '../auth/auth-service';
+import { AuthService } from '@gewis/aurora-auth';
 
 export interface ScreenResponse extends Pick<
   Screen,

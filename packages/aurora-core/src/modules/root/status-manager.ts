@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { AuthUser } from '../auth';
+import { AuthUser } from '../auth/auth-user';
 import { BackofficeSyncEmitter } from '../events/backoffice-sync-emitter';
 
 import { Audio, LightsController, Screen } from './entities';

@@ -1,0 +1,11 @@
+{
+  "extends": "@gewis/aurora-config/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "types": ["node", "passport", "express"],
+    "declaration": true,
+    "declarationMap": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["src/**/*.spec.ts"]
+}

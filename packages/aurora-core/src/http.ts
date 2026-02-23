@@ -7,10 +7,13 @@ import passport from 'passport';
 import { pinoHttp } from 'pino-http';
 import { RegisterRoutes } from '../build/routes';
 import apiDocs from '../build/swagger.json';
-import { SessionMiddleware, apiKeyMiddleware } from './modules/auth';
+import {
+  SessionMiddleware,
+  apiKeyMiddleware,
+  authResponse,
+  IntegrationUserActivityMiddleware,
+} from '@gewis/aurora-auth';
 import { setupErrorHandler } from './error';
-import { authResponse } from './modules/auth/passport';
-import { IntegrationUserActivityMiddleware } from './modules/auth/integration';
 
 const origins = process.env.CORS_ORIGINS?.split(', ');
 export const enableCors = origins !== undefined && origins.length > 0;

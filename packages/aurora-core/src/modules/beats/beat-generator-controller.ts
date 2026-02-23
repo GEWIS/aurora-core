@@ -5,7 +5,7 @@ import { SimpleBeatGenerator, ArtificialBeatGeneratorParams } from './simple-bea
 import { SecurityNames } from '../../helpers/security';
 import logger from '../../logger';
 import { securityGroups } from '../../helpers/security-groups';
-import { Security } from '../auth';
+import { Security } from '@gewis/aurora-auth';
 import BeatManager, { BeatGeneratorResponse } from './beat-manager';
 import BeatPriorities from './beat-priorities';
 

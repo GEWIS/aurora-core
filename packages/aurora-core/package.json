@@ -7,6 +7,46 @@
     ".": {
       "development": "./src/index.ts",
       "default": "./dist/index.js"
+    },
+    "./ports/data-source": {
+      "development": "./src/ports/data-source.port.ts",
+      "default": "./dist/src/ports/data-source.port.js"
+    },
+    "./ports/logger": {
+      "development": "./src/ports/logger.port.ts",
+      "default": "./dist/src/ports/logger.port.js"
+    },
+    "./ports/auth-strategy": {
+      "development": "./src/ports/auth-strategy.port.ts",
+      "default": "./dist/src/ports/auth-strategy.port.js"
+    },
+    "./helpers/security": {
+      "development": "./src/helpers/security.ts",
+      "default": "./dist/src/helpers/security.js"
+    },
+    "./helpers/security-groups": {
+      "development": "./src/helpers/security-groups.ts",
+      "default": "./dist/src/helpers/security-groups.js"
+    },
+    "./helpers/custom-error": {
+      "development": "./src/helpers/custom-error.ts",
+      "default": "./dist/src/helpers/custom-error.js"
+    },
+    "./helpers/transformers": {
+      "development": "./src/helpers/transformers.ts",
+      "default": "./dist/src/helpers/transformers.js"
+    },
+    "./modules/root/entities": {
+      "development": "./src/modules/root/entities/index.ts",
+      "default": "./dist/src/modules/root/entities/index.js"
+    },
+    "./modules/root/entities/base-entity": {
+      "development": "./src/modules/root/entities/base-entity.ts",
+      "default": "./dist/src/modules/root/entities/base-entity.js"
+    },
+    "./modules/auth/auth-user": {
+      "development": "./src/modules/auth/auth-user.ts",
+      "default": "./dist/src/modules/auth/auth-user.js"
     }
   },
   "type": "module",
@@ -33,8 +73,11 @@
   "license": "ISC",
   "dependencies": {
     "@fostertheweb/spotify-web-sdk": "^1.3.0",
+    "@gewis/aurora-auth": "workspace:*",
     "@gewis/aurora-db-sqlite": "workspace:*",
     "@gewis/aurora-logger": "workspace:*",
+    "@gewis/aurora-strategy-integration": "workspace:*",
+    "@gewis/aurora-strategy-local": "workspace:*",
     "@sudosos/sudosos-client": "https://github.com/GEWIS/sudosos-client.git#commit=b1f2b656e1178626c0ab56b9aa4fc7a87b6fadcd",
     "async-lock": "^1.4.1",
     "axios": "1.13.3",

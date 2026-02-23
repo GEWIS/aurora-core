@@ -3,7 +3,8 @@ import { Server as HttpServer } from 'http';
 import { NextFunction, Response } from 'express';
 import passport from 'passport';
 import { DefaultEventsMap } from 'socket.io';
-import { SessionMiddleware, AuthUser } from './modules/auth';
+import { SessionMiddleware } from '@gewis/aurora-auth';
+import { AuthUser } from './modules/auth/auth-user';
 import { customOrigin, enableCors } from './http';
 import { SECURE_NAMESPACES } from './socketio-namespaces';
 

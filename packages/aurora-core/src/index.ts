@@ -1,6 +1,9 @@
 import 'reflect-metadata';
 import './env';
 import { initializeDataSource } from './database';
+import { registerAuthStrategy } from './ports/auth-strategy.port';
+import { LocalAuthStrategy } from '@gewis/aurora-strategy-local';
+import { IntegrationAuthStrategy } from '@gewis/aurora-strategy-integration';
 import { createServer } from 'http';
 import * as fs from 'fs';
 import path from 'node:path';
@@ -45,6 +48,9 @@ async function createApp(): Promise<void> {
   }
 
   await initializeDataSource();
+
+  registerAuthStrategy(new LocalAuthStrategy());
+  registerAuthStrategy(new IntegrationAuthStrategy());
 
   await ServerSettingsStore.getInstance().initialize();
   const featureFlagManager = new FeatureFlagManager();

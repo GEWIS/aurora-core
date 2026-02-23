@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 import { Repository } from 'typeorm';
 import AsyncLock from 'async-lock';
 import HandlerManager from './handler-manager';
-import { AuthUser } from '../auth';
+import { AuthUser } from '../auth/auth-user';
 import { resolveDataSource } from '../../ports/data-source.port';
 import { Audio, LightsController, Screen } from './entities';
 import BaseLightsHandler from '../handlers/base-lights-handler';

@@ -15,7 +15,7 @@ import LightsGroupPars from '../lights/entities/lights-group-pars';
 import LightsGroupMovingHeadRgbs from '../lights/entities/lights-group-moving-head-rgbs';
 import LightsGroupMovingHeadWheels from '../lights/entities/lights-group-moving-head-wheels';
 import Movement, { IMovement } from '../lights/entities/movement';
-import AuthService from '../auth/auth-service';
+import { AuthService } from '@gewis/aurora-auth';
 import LightsParShutterOptions from '../lights/entities/lights-par-shutter-options';
 import LightsMovingHeadRgbShutterOptions from '../lights/entities/lights-moving-head-rgb-shutter-options';
 import LightsMovingHeadWheelShutterOptions from '../lights/entities/lights-moving-head-wheel-shutter-options';

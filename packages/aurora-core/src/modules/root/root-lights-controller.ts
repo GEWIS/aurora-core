@@ -24,7 +24,7 @@ import {
 import { SecurityGroup, SecurityNames } from '../../helpers/security';
 import { securityGroups } from '../../helpers/security-groups';
 import { Request as ExpressRequest } from 'express';
-import { Security } from '../auth';
+import { Security } from '@gewis/aurora-auth';
 
 interface LightsColorResponse {
   color: RgbColor;

@@ -20,8 +20,7 @@ import { FixedPositionCreateParams } from '../modules/lights/effects/movement/fi
 import { ColorEffects } from '../modules/lights/effects/color/color-effects';
 import { MovementEffects } from '../modules/lights/effects/movement/movement-effetcs';
 import { TimedEvent } from '../modules/timed-events/entities';
-import AuthService from '../modules/auth/auth-service';
-import { IntegrationUserService } from '../modules/auth/integration';
+import { AuthService, IntegrationUserService } from '@gewis/aurora-auth';
 
 export default async function seedDatabase() {
   const timedEventsRepo = dataSource.getRepository(TimedEvent);

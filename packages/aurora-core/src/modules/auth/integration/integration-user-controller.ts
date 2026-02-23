@@ -1,21 +1,19 @@
 import { Controller, Patch } from '@tsoa/runtime';
 import { Body, Delete, Get, Post, Route, Tags } from 'tsoa';
-import { Security } from '../index';
+import { Security } from '@gewis/aurora-auth';
 import { SecurityNames } from '../../../helpers/security';
 import { securityGroups } from '../../../helpers/security-groups';
-import IntegrationUserService, {
-  IntegrationUserCreateRequest,
-  IntegrationUserResponse,
-  IntegrationUserUpdateRequest,
-} from './integration-user-service';
-import AuthService from '../auth-service';
+import {
+  AuthService,
+  IntegrationUserService,
+  type IntegrationUserCreateRequest,
+  type IntegrationUserResponse,
+  type IntegrationUserUpdateRequest,
+} from '@gewis/aurora-auth';
 
 @Tags('User')
 @Route('user/integration')
 export class IntegrationUserController extends Controller {
-  /**
-   * Get a list of all endpoints that an integration user could access.
-   */
   @Security(SecurityNames.LOCAL, securityGroups.integrationUsers.privileged)
   @Get('endpoints')
   public getIntegrationEndpoints(): string[] {
@@ -48,7 +46,6 @@ export class IntegrationUserController extends Controller {
     const authService = new AuthService();
     let key = await authService.getIntegrationUserApiKey(user);
     if (!key) {
-      // Somehow the key does not exist, so let's create one.
       key = await authService.createApiKey({ integrationUser: user });
     }
     return key.key;

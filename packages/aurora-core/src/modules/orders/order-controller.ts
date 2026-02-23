@@ -6,7 +6,7 @@ import { SecurityNames } from '../../helpers/security';
 import { securityGroups } from '../../helpers/security-groups';
 import OrderManager from './order-manager';
 import { OrderSettings } from './order-settings';
-import { Security } from '../auth';
+import { Security } from '@gewis/aurora-auth';
 
 interface OrderRequest {
   orderNumber: number;
