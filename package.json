@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "concurrently \"nodemon\" \"nodemon -x npx tsoa spec-and-routes\"",
+    "dev": "./dev.sh",
     "build": "tsoa spec-and-routes && tsc",
     "start": "node dist/src/index.js",
     "tsoa": "tsoa spec-and-routes",
@@ -75,7 +75,6 @@
     "@types/uuid": "^11.0.0",
     "@typescript-eslint/eslint-plugin": "^8.53.1",
     "@typescript-eslint/parser": "^8.53.1",
-    "concurrently": "^9.2.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
