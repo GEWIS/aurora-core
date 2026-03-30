@@ -2139,9 +2139,9 @@ __metadata:
   linkType: hard
 
 "commander@npm:^14.0.2":
-  version: 14.0.2
-  resolution: "commander@npm:14.0.2"
-  checksum: 10c0/245abd1349dbad5414cb6517b7b5c584895c02c4f7836ff5395f301192b8566f9796c82d7bd6c92d07eba8775fe4df86602fca5d86d8d10bcc2aded1e21c2aeb
+  version: 14.0.3
+  resolution: "commander@npm:14.0.3"
+  checksum: 10c0/755652564bbf56ff2ff083313912b326450d3f8d8c85f4b71416539c9a05c3c67dbd206821ca72635bf6b160e2afdefcb458e86b317827d5cb333b69ce7f1a24
   languageName: node
   linkType: hard
 
@@ -5812,8 +5812,8 @@ __metadata:
   linkType: hard
 
 "pino@npm:^10.0.0, pino@npm:^10.3.0":
-  version: 10.3.0
-  resolution: "pino@npm:10.3.0"
+  version: 10.3.1
+  resolution: "pino@npm:10.3.1"
   dependencies:
     "@pinojs/redact": "npm:^0.4.0"
     atomic-sleep: "npm:^1.0.0"
@@ -5828,7 +5828,7 @@ __metadata:
     thread-stream: "npm:^4.0.0"
   bin:
     pino: bin.js
-  checksum: 10c0/cfbbc7dfaa2df2aa2dce728d751aa4b5b7ab973b2cd4bfff57868567563ef0c1c021f22932769141d535c72662390e09a0190e44f4413496dbe5e3c672816308
+  checksum: 10c0/ae1c57f2baac85dd5d63a3500746d5ea1cfc4bfcbf356eaec94d42a782eeb80caa4d4614de43a036cf48e2aed46d855a7ff21b126f55a63811def52a894ef937
   languageName: node
   linkType: hard
 
