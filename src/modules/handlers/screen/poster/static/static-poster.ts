@@ -3,7 +3,7 @@ import { File } from '../../../../files/entities';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
 @Entity()
-export default class LocalPoster extends BaseEntity {
+export default class StaticPoster extends BaseEntity {
   /**
    * File details of the poster, if locally stored on disk
    */

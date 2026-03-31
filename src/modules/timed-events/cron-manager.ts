@@ -7,7 +7,7 @@ import HandlerManager from '../root/handler-manager';
 import RootAudioService from '../root/root-audio-service';
 import RootLightsService from '../root/root-lights-service';
 import RootScreenService from '../root/root-screen-service';
-import LocalPosterService from '../handlers/screen/poster/local/local-poster-service';
+import StaticPosterService from '../handlers/screen/poster/static/static-poster-service';
 import { Screen } from '../root/entities';
 import { StaticPosterHandler } from '../handlers/screen';
 
@@ -157,8 +157,8 @@ export default class CronManager {
           return;
 
         case 'timed-event-set-static-poster': {
-          const service = new LocalPosterService();
-          const poster = await service.getSingleLocalPoster(spec.params.posterId);
+          const service = new StaticPosterService();
+          const poster = await service.getSingleStaticPoster(spec.params.posterId);
           const handler = HandlerManager.getInstance()
             .getHandlers(Screen)
             .filter(

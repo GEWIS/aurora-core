@@ -1,6 +1,6 @@
 import { FileStorage } from '../../../../files/storage/file-storage';
 import { DiskStorage } from '../../../../files/storage';
-import LocalPoster from './local-poster';
+import StaticPoster from './static-poster';
 import { Repository } from 'typeorm';
 import dataSource from '../../../../../database';
 import { HttpApiException } from '../../../../../helpers/custom-error';
@@ -8,7 +8,7 @@ import { HttpStatusCode } from 'axios';
 import { File } from '../../../../files/entities';
 import FileResponse from '../../../../files/entities/file-response';
 
-export interface LocalPosterResponse {
+export interface StaticPosterResponse {
   id: number;
   createdAt: string;
   updatedAt: string;
@@ -16,7 +16,7 @@ export interface LocalPosterResponse {
   uri?: string;
 }
 
-export interface LocalPosterRequest {
+export interface StaticPosterRequest {
   file?: {
     name: string;
     data: Buffer;
@@ -24,21 +24,21 @@ export interface LocalPosterRequest {
   uri?: string;
 }
 
-export default class LocalPosterService {
+export default class StaticPosterService {
   private storage: FileStorage;
 
-  private repo: Repository<LocalPoster>;
+  private repo: Repository<StaticPoster>;
 
   private fileRepo: Repository<File>;
 
   constructor() {
     this.storage = new DiskStorage('local-posters');
-    this.repo = dataSource.getRepository(LocalPoster);
+    this.repo = dataSource.getRepository(StaticPoster);
     this.fileRepo = dataSource.getRepository(File);
   }
 
-  public toResponse(poster: LocalPoster): LocalPosterResponse {
-    let file: LocalPosterResponse['file'];
+  public toResponse(poster: StaticPoster): StaticPosterResponse {
+    let file: StaticPosterResponse['file'];
     if (poster.file) {
       const location = this.storage.getPublicFileUri(poster.file);
       if (location) {
@@ -58,11 +58,11 @@ export default class LocalPosterService {
     };
   }
 
-  public async getAllLocalPosters(): Promise<LocalPoster[]> {
+  public async getAllStaticPosters(): Promise<StaticPoster[]> {
     return this.repo.find();
   }
 
-  public async getSingleLocalPoster(id: number): Promise<LocalPoster> {
+  public async getSingleStaticPoster(id: number): Promise<StaticPoster> {
     const poster = await this.repo.findOne({ where: { id } });
     if (poster == null) {
       throw new HttpApiException(HttpStatusCode.NotFound, `Poster with ID "${id}" not found.`);
@@ -70,7 +70,7 @@ export default class LocalPosterService {
     return poster;
   }
 
-  public async createLocalPoster(poster: LocalPosterRequest): Promise<LocalPoster> {
+  public async createStaticPoster(poster: StaticPosterRequest): Promise<StaticPoster> {
     let file: File | undefined;
     if (poster.file) {
       const fileParams = await this.storage.saveFile(poster.file.name, poster.file.data);
@@ -80,8 +80,8 @@ export default class LocalPosterService {
     return this.repo.save({ file, uri: poster.uri });
   }
 
-  public async deleteLocalPoster(id: number): Promise<void> {
-    const poster = await this.getSingleLocalPoster(id);
+  public async deleteStaticPoster(id: number): Promise<void> {
+    const poster = await this.getSingleStaticPoster(id);
     if (poster.file) {
       await this.fileRepo.delete(poster.file.id);
       await this.storage.deleteFile(poster.file);

@@ -5,7 +5,7 @@ import HandlerManager from '../../../../root/handler-manager';
 import { Screen } from '../../../../root/entities';
 import { SecurityNames } from '../../../../../helpers/security';
 import { securityGroups } from '../../../../../helpers/security-groups';
-import LocalPosterService, { LocalPosterResponse } from './local-poster-service';
+import StaticPosterService, { StaticPosterResponse } from './static-poster-service';
 import { Request as ExpressRequest } from 'express';
 import logger from '../../../../../logger';
 import { HttpStatusCode } from 'axios';
@@ -18,7 +18,7 @@ interface SetClockRequest {
 
 @Route('handler/screen/poster/static')
 @Tags('Handlers')
-export class LocalPosterController extends Controller {
+export class StaticPosterController extends Controller {
   private screenHandler: StaticPosterHandler;
 
   constructor() {
@@ -73,9 +73,9 @@ export class LocalPosterController extends Controller {
    */
   @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Get('items')
-  public async getAllStaticPosters(): Promise<LocalPosterResponse[]> {
-    const service = new LocalPosterService();
-    const posters = await service.getAllLocalPosters();
+  public async getAllStaticPosters(): Promise<StaticPosterResponse[]> {
+    const service = new StaticPosterService();
+    const posters = await service.getAllStaticPosters();
     return posters.map((p) => service.toResponse(p));
   }
 
@@ -93,7 +93,7 @@ export class LocalPosterController extends Controller {
       HttpStatusCode.BadRequest,
       'Invalid file type, expected an image or a video.'
     >,
-  ): Promise<LocalPosterResponse> {
+  ): Promise<StaticPosterResponse> {
     const mimeType = lookup(file.originalname);
     if (!mimeType || !(mimeType.startsWith('image/') || mimeType.startsWith('video'))) {
       return invalidFileTypeResponse(
@@ -102,8 +102,8 @@ export class LocalPosterController extends Controller {
       );
     }
 
-    const service = new LocalPosterService();
-    const poster = await service.createLocalPoster({
+    const service = new StaticPosterService();
+    const poster = await service.createStaticPoster({
       file: { name: file.originalname, data: file.buffer },
     });
     return service.toResponse(poster);
@@ -115,9 +115,9 @@ export class LocalPosterController extends Controller {
    */
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Post('items/url')
-  public async createStaticPosterUrl(@Body() body: { url: string }): Promise<LocalPosterResponse> {
-    const service = new LocalPosterService();
-    const poster = await service.createLocalPoster({
+  public async createStaticPosterUrl(@Body() body: { url: string }): Promise<StaticPosterResponse> {
+    const service = new StaticPosterService();
+    const poster = await service.createStaticPoster({
       uri: body.url,
     });
     return service.toResponse(poster);
@@ -130,8 +130,8 @@ export class LocalPosterController extends Controller {
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Delete('items/{id}')
   public async deleteStaticPoster(id: number): Promise<void> {
-    const service = new LocalPosterService();
-    await service.deleteLocalPoster(id);
+    const service = new StaticPosterService();
+    await service.deleteStaticPoster(id);
   }
 
   /**
@@ -142,8 +142,8 @@ export class LocalPosterController extends Controller {
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Post('items/{id}/show')
   public async showStaticPoster(id: number, @Request() req: ExpressRequest): Promise<void> {
-    const service = new LocalPosterService();
-    const poster = await service.getSingleLocalPoster(id);
+    const service = new StaticPosterService();
+    const poster = await service.getSingleStaticPoster(id);
     const posterResponse = service.toResponse(poster);
 
     logger.audit(req.user, `Show static poster (id: ${id}).`);
