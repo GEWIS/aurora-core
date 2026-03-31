@@ -22,6 +22,7 @@ import { MovementEffects } from '../modules/lights/effects/movement/movement-eff
 import { TimedEvent } from '../modules/timed-events/entities';
 import AuthService from '../modules/auth/auth-service';
 import { IntegrationUserService } from '../modules/auth/integration';
+import LocalPoster from '../modules/handlers/screen/poster/local/local-poster';
 
 export default async function seedDatabase() {
   const timedEventsRepo = dataSource.getRepository(TimedEvent);
@@ -774,4 +775,22 @@ export async function seedOpeningSequence(
 
   await addStep(borrelRuimte, 285000, 15000, [room]);
   await addStep(borrelBar, 285000, 15000, [bar]);
+}
+
+export async function seedPosters() {
+  const repo = dataSource.getRepository(LocalPoster);
+
+  const addPoster = async (name: string) => {
+    await repo.save({
+      name,
+      type: name,
+      protected: true,
+    } as LocalPoster);
+  };
+
+  await Promise.all(
+    ['logo', 'borrel-logo', 'borrel-wall-of-shame', 'borrel-price-list', 'train', 'olympics'].map(
+      addPoster,
+    ),
+  );
 }

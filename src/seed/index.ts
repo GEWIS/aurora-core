@@ -1,7 +1,7 @@
 import '../env';
 import { Command, Option } from 'commander';
 import dataSource from '../database';
-import seedDatabase, { seedBorrelLights, seedOpeningSequence } from './seedGewis';
+import seedDatabase, { seedBorrelLights, seedOpeningSequence, seedPosters } from './seedGewis';
 import logger from '../logger';
 import seedDatabaseHubble from './seedHubble';
 import { seedDiscoFloor } from './seedDiscoFloor';
@@ -48,6 +48,7 @@ async function createSeeder() {
     const [room, bar, lounge, movingHeadsGEWIS, movingHeadsRoy] = await seedDatabase();
     await seedBorrelLights(room!, bar!, lounge!, movingHeadsGEWIS!);
     await seedOpeningSequence(room!, bar!, movingHeadsGEWIS!, movingHeadsRoy!);
+    await seedPosters();
   } else if (program.opts().discoFloor) {
     console.info('Seeding database for disco floor');
     const { width, height, channelOrder } = program.opts();
