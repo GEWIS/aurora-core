@@ -27,7 +27,7 @@ export default class LocalPoster extends BaseEntity {
   @Column({ default: false })
   protected: boolean;
 
-  @Column({default: false})
+  @Column({ default: false })
   borrelMode: boolean;
 
   @Column({
