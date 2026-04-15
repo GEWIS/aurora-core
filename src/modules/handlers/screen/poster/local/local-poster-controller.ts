@@ -74,7 +74,7 @@ export class LocalPosterController extends Controller {
    * @param invalidFileTypeResponse
    */
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
-  @Put('/items/{id}/media')
+  @Put('items/{id}/media')
   public async attachMedia(
     id: number,
     @UploadedFile() file: Express.Multer.File,
