@@ -4,12 +4,40 @@ import { File } from '../../../../files/entities';
 import LocalPoster from './local-poster';
 import { DiskStorage } from '../../../../files/storage';
 import dataSource from '../../../../../database';
-import {
-  MediaPosterParams,
-  PhotoPosterParams,
-  UpdatePosterParams,
-  UrlPosterParams,
-} from './local-poster-controller';
+
+interface BasePosterParams {
+  name: string;
+  expirationDate?: Date;
+  accentColor?: string;
+  footerSize?: string;
+  defaultTimeout?: number;
+  borrelMode?: boolean;
+}
+
+export interface MediaPosterParams extends BasePosterParams {
+  type: 'media';
+}
+
+export interface UrlPosterParams extends BasePosterParams {
+  type: 'url';
+  url: string;
+}
+
+export interface PhotoPosterParams extends BasePosterParams {
+  type: 'photo';
+  album: number;
+}
+
+export type CreatePosterParams = MediaPosterParams | UrlPosterParams | PhotoPosterParams;
+
+export interface UpdatePosterParams {
+  name?: string;
+  expirationDate?: Date;
+  accentColor?: string;
+  footerSize?: string;
+  defaultTimeout?: number;
+  borrelMode?: boolean;
+}
 
 export interface LocalPosterResponse {}
 
@@ -42,7 +70,7 @@ export default class LocalPosterService {
     return {} as LocalPoster;
   }
 
-  public async attachMedia(id: number, file: { name: string; data: Buffer }): Promise<LocalPoster> {
+  public async attachMedia(id: number, filename: string, filedata: Buffer): Promise<LocalPoster> {
     return {} as LocalPoster;
   }
 
