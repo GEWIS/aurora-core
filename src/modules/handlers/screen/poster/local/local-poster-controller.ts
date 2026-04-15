@@ -14,21 +14,30 @@ interface BasePosterParams {
   borrelMode?: boolean;
 }
 
-interface MediaPosterParams extends BasePosterParams {
+export interface MediaPosterParams extends BasePosterParams {
   type: 'media';
 }
 
-interface UrlPosterParams extends BasePosterParams {
+export interface UrlPosterParams extends BasePosterParams {
   type: 'url';
   url: string;
 }
 
-interface PhotoPosterParams extends BasePosterParams {
+export interface PhotoPosterParams extends BasePosterParams {
   type: 'photo';
   album: number;
 }
 
 export type CreatePosterParams = MediaPosterParams | UrlPosterParams | PhotoPosterParams;
+
+export interface UpdatePosterParams {
+  name?: string;
+  expirationDate?: Date;
+  accentColor?: string;
+  footerSize?: string;
+  defaultTimeout?: number;
+  borrelMode?: boolean;
+}
 
 @Route('/handler/screen/poster')
 @Tags('Handlers')
@@ -111,7 +120,7 @@ export class LocalPosterController extends Controller {
   @Patch('items/{id}')
   public async updatePoster(
     id: number,
-    @Body() body: BasePosterParams,
+    @Body() body: UpdatePosterParams,
   ): Promise<LocalPosterResponse> {
     this.setStatus(501);
     return {} as LocalPosterResponse;
