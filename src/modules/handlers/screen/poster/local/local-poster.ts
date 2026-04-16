@@ -1,19 +1,18 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
 import BaseEntity from '../../../../root/entities/base-entity';
-
-export enum FooterSize {
-  FULL = 'full',
-  MINIMAL = 'minimal',
-  HIDDEN = 'hidden',
-}
+import { File } from '../../../../files/entities';
+import { FooterSize, PosterType } from '../poster';
 
 @Entity()
 export default class LocalPoster extends BaseEntity {
   @Column()
   name: string;
 
-  @Column()
-  type: string;
+  @Column({
+    type:'text',
+    enum: PosterType
+  })
+  type: PosterType;
 
   @Column({ nullable: true })
   expirationDate?: Date;
@@ -40,6 +39,13 @@ export default class LocalPoster extends BaseEntity {
   @Column({ default: 15 })
   defaultTimeout: number;
 
+  @Column({ nullable: true })
+  uri?: string;
+
   @Column({ type: 'simple-array', nullable: true })
-  sources?: string[];
+  albums?: number[];
+
+  @OneToOne(() => File, { nullable: true, eager: true, onDelete: 'SET NULL' })
+  @JoinColumn()
+  file?: File;
 }
