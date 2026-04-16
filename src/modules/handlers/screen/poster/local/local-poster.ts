@@ -20,9 +20,6 @@ export default class LocalPoster extends BaseEntity {
   @Column({ nullable: true })
   accentColor?: string;
 
-  @Column({ default: true })
-  active: boolean;
-
   @Column({ default: false })
   protected: boolean;
 
