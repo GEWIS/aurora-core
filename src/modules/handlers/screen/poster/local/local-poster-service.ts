@@ -7,6 +7,7 @@ import dataSource from '../../../../../database';
 import { HttpApiException } from '../../../../../helpers/custom-error';
 import { HttpStatusCode } from 'axios';
 import { FooterSize, PosterType } from '../poster';
+import FileResponse from '../../../../files/entities/file-response';
 
 interface BasePosterParams {
   name: string;
@@ -42,7 +43,21 @@ export interface UpdatePosterRequest {
   borrelMode?: boolean;
 }
 
-export interface LocalPosterResponse {}
+export interface LocalPosterResponse {
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  expirationDate?: Date;
+  accentColor?: string;
+  footerSize: FooterSize;
+  defaultTimeout: number;
+  borrelMode: boolean;
+  protected: boolean;
+  uri?: string;
+  albums?: number[];
+  file?: FileResponse;
+}
 
 export default class LocalPosterService {
   private storage: FileStorage;
@@ -62,7 +77,32 @@ export default class LocalPosterService {
    * @param poster The poster to be converted.
    */
   public toResponse(poster: LocalPoster): LocalPosterResponse {
-    return {} as LocalPosterResponse;
+    let file: LocalPosterResponse['file'];
+    if (poster.file) {
+      const location = this.storage.getPublicFileUri(poster.file);
+      if (location) {
+        file = {
+          location,
+          name: poster.file.originalName,
+        };
+      }
+    }
+
+    return {
+      id: poster.id,
+      name: poster.name,
+      createdAt: poster.createdAt.toISOString(),
+      updatedAt: poster.updatedAt.toISOString(),
+      expirationDate: poster.expirationDate ?? undefined,
+      accentColor: poster.accentColor ?? undefined,
+      footerSize: poster.footerSize,
+      defaultTimeout: poster.defaultTimeout,
+      borrelMode: poster.borrelMode,
+      protected: poster.protected,
+      uri: poster.uri ?? undefined,
+      albums: poster.albums ?? undefined,
+      file: file,
+    };
   }
 
   /**
