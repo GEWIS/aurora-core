@@ -4,9 +4,9 @@ import { SecurityNames } from '../../../../../helpers/security';
 import { securityGroups } from '../../../../../helpers/security-groups';
 import { HttpStatusCode } from 'axios';
 import LocalPosterService, {
-  CreatePosterParams,
+  CreatePosterRequest,
   LocalPosterResponse,
-  UpdatePosterParams,
+  UpdatePosterRequest,
 } from './local-poster-service';
 import LocalPoster from './local-poster';
 import { lookup } from 'mime-types';
@@ -46,7 +46,7 @@ export class LocalPosterController extends Controller {
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Post('items')
   public async createPoster(
-    @Body() body: CreatePosterParams,
+    @Body() body: CreatePosterRequest,
     @Res()
     invalidPosterTypeResponse: TsoaResponse<HttpStatusCode.BadRequest, 'Unknown Poster Type'>,
   ): Promise<LocalPosterResponse> {
@@ -56,7 +56,7 @@ export class LocalPosterController extends Controller {
         poster = await this.service.createMediaPoster(body);
         break;
       case PosterType.EXTERNAL:
-        poster = await this.service.createUrlPoster(body);
+        poster = await this.service.createExternalPoster(body);
         break;
       case PosterType.PHOTO:
         poster = await this.service.createPhotoPoster(body);
@@ -116,7 +116,7 @@ export class LocalPosterController extends Controller {
   @Patch('items/{id}')
   public async updatePoster(
     id: number,
-    @Body() body: UpdatePosterParams,
+    @Body() body: UpdatePosterRequest,
   ): Promise<LocalPosterResponse> {
     const poster = await this.service.updateLocalPoster(id, body);
     return this.service.toResponse(poster);

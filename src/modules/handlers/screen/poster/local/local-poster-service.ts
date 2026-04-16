@@ -17,23 +17,23 @@ interface BasePosterParams {
   borrelMode?: boolean;
 }
 
-export interface MediaPosterParams extends BasePosterParams {
+export interface MediaPosterRequest extends BasePosterParams {
   type: PosterType.IMAGE | PosterType.VIDEO;
 }
 
-export interface UrlPosterParams extends BasePosterParams {
+export interface ExternalPosterRequest extends BasePosterParams {
   type: PosterType.EXTERNAL;
   uri: string;
 }
 
-export interface PhotoPosterParams extends BasePosterParams {
+export interface PhotoPosterRequest extends BasePosterParams {
   type: PosterType.PHOTO;
   albums: number[];
 }
 
-export type CreatePosterParams = MediaPosterParams | UrlPosterParams | PhotoPosterParams;
+export type CreatePosterRequest = MediaPosterRequest | ExternalPosterRequest | PhotoPosterRequest;
 
-export interface UpdatePosterParams {
+export interface UpdatePosterRequest {
   name?: string;
   expirationDate?: Date;
   accentColor?: string;
@@ -89,7 +89,7 @@ export default class LocalPosterService {
    * This does not yet contain the actual image or video of the poster.
    * @param params Metadata of the poster as specified in the MediaPosterParams interface.
    */
-  public async createMediaPoster(params: MediaPosterParams): Promise<LocalPoster> {
+  public async createMediaPoster(params: MediaPosterRequest): Promise<LocalPoster> {
     const { name, type, expirationDate, accentColor, footerSize, defaultTimeout, borrelMode } =
       params;
     return this.repo.save({
@@ -127,7 +127,7 @@ export default class LocalPosterService {
    * Creates a new Local Poster of the url type.
    * @param params The specifics of the poster as specified in the UrlPosterParams interface.
    */
-  public async createUrlPoster(params: UrlPosterParams): Promise<LocalPoster> {
+  public async createExternalPoster(params: ExternalPosterRequest): Promise<LocalPoster> {
     const { name, type, expirationDate, accentColor, footerSize, defaultTimeout, borrelMode, uri } =
       params;
     return this.repo.save({
@@ -146,7 +146,7 @@ export default class LocalPosterService {
    * Creates a new Local Poster of the photo type.
    * @param params The specifics of the poster as specified in the PhotoPosterParams interface.
    */
-  public async createPhotoPoster(params: PhotoPosterParams): Promise<LocalPoster> {
+  public async createPhotoPoster(params: PhotoPosterRequest): Promise<LocalPoster> {
     const {
       name,
       type,
@@ -187,7 +187,7 @@ export default class LocalPosterService {
    * @param id The id of the poster to be updated.
    * @param params The fields of the poster to be updated as specified in UpdatePosterParams.
    */
-  public async updateLocalPoster(id: number, params: UpdatePosterParams): Promise<LocalPoster> {
+  public async updateLocalPoster(id: number, params: UpdatePosterRequest): Promise<LocalPoster> {
     const poster = await this.getSingleLocalPoster(id);
     Object.assign(poster, params);
     return this.repo.save(poster);
