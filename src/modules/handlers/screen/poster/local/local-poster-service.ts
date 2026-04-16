@@ -4,27 +4,30 @@ import { File } from '../../../../files/entities';
 import LocalPoster from './local-poster';
 import { DiskStorage } from '../../../../files/storage';
 import dataSource from '../../../../../database';
+import { HttpApiException } from '../../../../../helpers/custom-error';
+import { HttpStatusCode } from 'axios';
+import { FooterSize, PosterType } from '../poster';
 
 interface BasePosterParams {
   name: string;
   expirationDate?: Date;
   accentColor?: string;
-  footerSize?: string;
+  footerSize?: FooterSize;
   defaultTimeout?: number;
   borrelMode?: boolean;
 }
 
 export interface MediaPosterParams extends BasePosterParams {
-  type: 'media';
+  type: PosterType.IMAGE | PosterType.VIDEO;
 }
 
 export interface UrlPosterParams extends BasePosterParams {
-  type: 'url';
+  type: PosterType.EXTERNAL;
   url: string;
 }
 
 export interface PhotoPosterParams extends BasePosterParams {
-  type: 'photo';
+  type: PosterType.PHOTO;
   album: number;
 }
 
@@ -34,7 +37,7 @@ export interface UpdatePosterParams {
   name?: string;
   expirationDate?: Date;
   accentColor?: string;
-  footerSize?: string;
+  footerSize?: FooterSize;
   defaultTimeout?: number;
   borrelMode?: boolean;
 }
@@ -66,7 +69,7 @@ export default class LocalPosterService {
    * Fetches all Local Posters from the database.
    */
   public async getAllLocalPosters(): Promise<LocalPoster[]> {
-    return [] as LocalPoster[];
+    return this.repo.find();
   }
 
   /**
@@ -74,7 +77,11 @@ export default class LocalPosterService {
    * @param id The id of the poster to fetch.
    */
   public async getSingleLocalPoster(id: number): Promise<LocalPoster> {
-    return {} as LocalPoster;
+    const poster = await this.repo.findOne({ where: { id } });
+    if (poster == null) {
+      throw new HttpApiException(HttpStatusCode.NotFound, `Poster with ID "${id}" not found.`);
+    }
+    return poster;
   }
 
   /**
@@ -83,7 +90,17 @@ export default class LocalPosterService {
    * @param params Metadata of the poster as specified in the MediaPosterParams interface.
    */
   public async createMediaPoster(params: MediaPosterParams): Promise<LocalPoster> {
-    return {} as LocalPoster;
+    const { name, type, expirationDate, accentColor, footerSize, defaultTimeout, borrelMode } =
+      params;
+    return this.repo.save({
+      name,
+      type,
+      expirationDate,
+      accentColor,
+      footerSize,
+      defaultTimeout,
+      borrelMode,
+    });
   }
 
   /**

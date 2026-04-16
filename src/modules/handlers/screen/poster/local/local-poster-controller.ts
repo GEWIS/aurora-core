@@ -10,6 +10,7 @@ import LocalPosterService, {
 } from './local-poster-service';
 import LocalPoster from './local-poster';
 import { lookup } from 'mime-types';
+import { PosterType } from '../poster';
 
 @Route('/handler/screen/poster')
 @Tags('Handlers')
@@ -51,13 +52,13 @@ export class LocalPosterController extends Controller {
   ): Promise<LocalPosterResponse> {
     let poster: LocalPoster;
     switch (body.type) {
-      case 'media':
+      case PosterType.VIDEO || PosterType.IMAGE:
         poster = await this.service.createMediaPoster(body);
         break;
-      case 'url':
+      case PosterType.EXTERNAL:
         poster = await this.service.createUrlPoster(body);
         break;
-      case 'photo':
+      case PosterType.PHOTO:
         poster = await this.service.createPhotoPoster(body);
         break;
       default: {
