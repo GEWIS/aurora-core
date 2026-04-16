@@ -9,8 +9,8 @@ export default class LocalPoster extends BaseEntity {
   name: string;
 
   @Column({
-    type:'text',
-    enum: PosterType
+    type: 'text',
+    enum: PosterType,
   })
   type: PosterType;
 

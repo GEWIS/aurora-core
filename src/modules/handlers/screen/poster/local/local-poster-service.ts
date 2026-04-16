@@ -23,12 +23,12 @@ export interface MediaPosterParams extends BasePosterParams {
 
 export interface UrlPosterParams extends BasePosterParams {
   type: PosterType.EXTERNAL;
-  url: string;
+  uri: string;
 }
 
 export interface PhotoPosterParams extends BasePosterParams {
   type: PosterType.PHOTO;
-  album: number;
+  albums: number[];
 }
 
 export type CreatePosterParams = MediaPosterParams | UrlPosterParams | PhotoPosterParams;
@@ -110,7 +110,17 @@ export default class LocalPosterService {
    * @param filedata Buffer containing the file.
    */
   public async attachMedia(id: number, filename: string, filedata: Buffer): Promise<LocalPoster> {
-    return {} as LocalPoster;
+    const poster = await this.getSingleLocalPoster(id);
+    if (poster.type != PosterType.IMAGE && poster.type != PosterType.VIDEO) {
+      throw new HttpApiException(
+        HttpStatusCode.BadRequest,
+        `Poster with ID "${id}" is not a media poster.`,
+      );
+    }
+
+    const fileParams = await this.storage.saveFile(filename, filedata);
+    poster.file = await this.fileRepo.save(fileParams);
+    return this.repo.save(poster);
   }
 
   /**
@@ -118,7 +128,18 @@ export default class LocalPosterService {
    * @param params The specifics of the poster as specified in the UrlPosterParams interface.
    */
   public async createUrlPoster(params: UrlPosterParams): Promise<LocalPoster> {
-    return {} as LocalPoster;
+    const { name, type, expirationDate, accentColor, footerSize, defaultTimeout, borrelMode, uri } =
+      params;
+    return this.repo.save({
+      name,
+      type,
+      expirationDate,
+      accentColor,
+      footerSize,
+      defaultTimeout,
+      borrelMode,
+      uri,
+    });
   }
 
   /**
@@ -126,14 +147,40 @@ export default class LocalPosterService {
    * @param params The specifics of the poster as specified in the PhotoPosterParams interface.
    */
   public async createPhotoPoster(params: PhotoPosterParams): Promise<LocalPoster> {
-    return {} as LocalPoster;
+    const {
+      name,
+      type,
+      expirationDate,
+      accentColor,
+      footerSize,
+      defaultTimeout,
+      borrelMode,
+      albums,
+    } = params;
+    return this.repo.save({
+      name,
+      type,
+      expirationDate,
+      accentColor,
+      footerSize,
+      defaultTimeout,
+      borrelMode,
+      albums,
+    });
   }
 
   /**
    * Deletes the given poster from the database and storage.
    * @param id The id of the poster to be deleted.
    */
-  public async deleteLocalPoster(id: number): Promise<void> {}
+  public async deleteLocalPoster(id: number): Promise<void> {
+    const poster = await this.getSingleLocalPoster(id);
+    if (poster.file) {
+      await this.fileRepo.delete(poster.file.id);
+      await this.storage.deleteFile(poster.file);
+    }
+    await this.repo.remove(poster);
+  }
 
   /**
    * Updates the given fields in the database entry of the given poster.
@@ -141,6 +188,8 @@ export default class LocalPosterService {
    * @param params The fields of the poster to be updated as specified in UpdatePosterParams.
    */
   public async updateLocalPoster(id: number, params: UpdatePosterParams): Promise<LocalPoster> {
-    return {} as LocalPoster;
+    const poster = await this.getSingleLocalPoster(id);
+    Object.assign(poster, params);
+    return this.repo.save(poster);
   }
 }
