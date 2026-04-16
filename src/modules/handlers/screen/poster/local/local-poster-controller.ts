@@ -52,7 +52,8 @@ export class LocalPosterController extends Controller {
   ): Promise<LocalPosterResponse> {
     let poster: LocalPoster;
     switch (body.type) {
-      case PosterType.VIDEO || PosterType.IMAGE:
+      case PosterType.IMAGE:
+      case PosterType.VIDEO:
         poster = await this.service.createMediaPoster(body);
         break;
       case PosterType.EXTERNAL:
@@ -86,7 +87,7 @@ export class LocalPosterController extends Controller {
     >,
   ): Promise<LocalPosterResponse> {
     const mimeType = lookup(file.originalname);
-    if (!mimeType || !(mimeType.startsWith('image/') || mimeType.startsWith('video'))) {
+    if (!mimeType || !(mimeType.startsWith('image/') || mimeType.startsWith('video/'))) {
       return invalidFileTypeResponse(
         HttpStatusCode.UnsupportedMediaType,
         'Invalid file type, expected an image or a video.',
