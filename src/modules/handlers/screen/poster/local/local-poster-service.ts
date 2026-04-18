@@ -46,6 +46,7 @@ export interface UpdatePosterRequest {
 export interface LocalPosterResponse {
   id: number;
   name: string;
+  type: PosterType;
   createdAt: string;
   updatedAt: string;
   expirationDate?: Date;
@@ -91,6 +92,7 @@ export default class LocalPosterService {
     return {
       id: poster.id,
       name: poster.name,
+      type: poster.type,
       createdAt: poster.createdAt.toISOString(),
       updatedAt: poster.updatedAt.toISOString(),
       expirationDate: poster.expirationDate ?? undefined,
