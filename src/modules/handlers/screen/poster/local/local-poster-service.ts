@@ -11,6 +11,7 @@ import FileResponse from '../../../../files/entities/file-response';
 
 interface BasePosterParams {
   name: string;
+  label?: string;
   expirationDate?: Date;
   accentColor?: string;
   footerSize?: FooterSize;
@@ -36,6 +37,7 @@ export type CreatePosterRequest = MediaPosterRequest | ExternalPosterRequest | P
 
 export interface UpdatePosterRequest {
   name?: string;
+  label?: string;
   expirationDate?: Date;
   accentColor?: string;
   footerSize?: FooterSize;
@@ -46,6 +48,7 @@ export interface UpdatePosterRequest {
 export interface LocalPosterResponse {
   id: number;
   name: string;
+  label?: string;
   type: PosterType;
   createdAt: string;
   updatedAt: string;
@@ -92,6 +95,7 @@ export default class LocalPosterService {
     return {
       id: poster.id,
       name: poster.name,
+      label: poster.label ?? undefined,
       type: poster.type,
       createdAt: poster.createdAt.toISOString(),
       updatedAt: poster.updatedAt.toISOString(),
@@ -132,10 +136,11 @@ export default class LocalPosterService {
    * @param params Metadata of the poster as specified in the MediaPosterParams interface.
    */
   public async createMediaPoster(params: MediaPosterRequest): Promise<LocalPoster> {
-    const { name, type, expirationDate, accentColor, footerSize, defaultTimeout, borrelMode } =
+    const { name, label, type, expirationDate, accentColor, footerSize, defaultTimeout, borrelMode } =
       params;
     return this.repo.save({
       name,
+      label,
       type,
       expirationDate,
       accentColor,
@@ -170,10 +175,11 @@ export default class LocalPosterService {
    * @param params The specifics of the poster as specified in the UrlPosterParams interface.
    */
   public async createExternalPoster(params: ExternalPosterRequest): Promise<LocalPoster> {
-    const { name, type, expirationDate, accentColor, footerSize, defaultTimeout, borrelMode, uri } =
+    const { name, label, type, expirationDate, accentColor, footerSize, defaultTimeout, borrelMode, uri } =
       params;
     return this.repo.save({
       name,
+      label,
       type,
       expirationDate,
       accentColor,
@@ -191,6 +197,7 @@ export default class LocalPosterService {
   public async createPhotoPoster(params: PhotoPosterRequest): Promise<LocalPoster> {
     const {
       name,
+      label,
       type,
       expirationDate,
       accentColor,
@@ -201,6 +208,7 @@ export default class LocalPosterService {
     } = params;
     return this.repo.save({
       name,
+      label,
       type,
       expirationDate,
       accentColor,
