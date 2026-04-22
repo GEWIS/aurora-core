@@ -5,12 +5,10 @@ import HandlerManager from '../../../../root/handler-manager';
 import { Screen } from '../../../../root/entities';
 import { SecurityNames } from '../../../../../helpers/security';
 import { securityGroups } from '../../../../../helpers/security-groups';
-import StaticPosterService, { StaticPosterResponse } from './static-poster-service';
 import { Request as ExpressRequest } from 'express';
 import logger from '../../../../../logger';
-import { HttpStatusCode } from 'axios';
 import { StaticPosterHandlerState } from '../static-poster-handler';
-import { lookup } from 'mime-types';
+import LocalPosterService from '../local/local-poster-service';
 
 interface SetClockRequest {
   visible: boolean;
@@ -50,7 +48,7 @@ export class StaticPosterController extends Controller {
   }
 
   /**
-   * Chang the visibility of the clock on-screen
+   * Change the visibility of the clock on-screen
    */
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Post('clock')
@@ -69,72 +67,6 @@ export class StaticPosterController extends Controller {
   }
 
   /**
-   * Get all static posters from the database.
-   */
-  @Security(SecurityNames.LOCAL, securityGroups.poster.base)
-  @Get('items')
-  public async getAllStaticPosters(): Promise<StaticPosterResponse[]> {
-    const service = new StaticPosterService();
-    const posters = await service.getAllStaticPosters();
-    return posters.map((p) => service.toResponse(p));
-  }
-
-  /**
-   * Create a new static poster based on a file (image or video).
-   * @param file
-   * @param invalidFileTypeResponse
-   */
-  @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
-  @Post('items/file')
-  public async createStaticPosterFile(
-    @UploadedFile() file: Express.Multer.File,
-    @Res()
-    invalidFileTypeResponse: TsoaResponse<
-      HttpStatusCode.BadRequest,
-      'Invalid file type, expected an image or a video.'
-    >,
-  ): Promise<StaticPosterResponse> {
-    const mimeType = lookup(file.originalname);
-    if (!mimeType || !(mimeType.startsWith('image/') || mimeType.startsWith('video'))) {
-      return invalidFileTypeResponse(
-        HttpStatusCode.BadRequest,
-        'Invalid file type, expected an image or a video.',
-      );
-    }
-
-    const service = new StaticPosterService();
-    const poster = await service.createStaticPoster({
-      file: { name: file.originalname, data: file.buffer },
-    });
-    return service.toResponse(poster);
-  }
-
-  /**
-   * Create a new static poster based on a URL
-   * @param body
-   */
-  @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
-  @Post('items/url')
-  public async createStaticPosterUrl(@Body() body: { url: string }): Promise<StaticPosterResponse> {
-    const service = new StaticPosterService();
-    const poster = await service.createStaticPoster({
-      uri: body.url,
-    });
-    return service.toResponse(poster);
-  }
-
-  /**
-   * Permanently delete a static poster.
-   * @param id
-   */
-  @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
-  @Delete('items/{id}')
-  public async deleteStaticPoster(id: number): Promise<void> {
-    const service = new StaticPosterService();
-    await service.deleteStaticPoster(id);
-  }
-
-  /**
    * Show the given static poster on all screens using the StaticPosterHandler.
    * @param id
    * @param req
@@ -142,8 +74,8 @@ export class StaticPosterController extends Controller {
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Post('items/{id}/show')
   public async showStaticPoster(id: number, @Request() req: ExpressRequest): Promise<void> {
-    const service = new StaticPosterService();
-    const poster = await service.getSingleStaticPoster(id);
+    const service = new LocalPosterService();
+    const poster = await service.getSingleLocalPoster(id);
     const posterResponse = service.toResponse(poster);
 
     logger.audit(req.user, `Show static poster (id: ${id}).`);

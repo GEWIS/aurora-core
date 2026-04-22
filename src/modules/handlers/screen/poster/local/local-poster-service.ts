@@ -136,8 +136,16 @@ export default class LocalPosterService {
    * @param params Metadata of the poster as specified in the MediaPosterParams interface.
    */
   public async createMediaPoster(params: MediaPosterRequest): Promise<LocalPoster> {
-    const { name, label, type, expirationDate, accentColor, footerSize, defaultTimeout, borrelMode } =
-      params;
+    const {
+      name,
+      label,
+      type,
+      expirationDate,
+      accentColor,
+      footerSize,
+      defaultTimeout,
+      borrelMode,
+    } = params;
     return this.repo.save({
       name,
       label,
@@ -175,8 +183,17 @@ export default class LocalPosterService {
    * @param params The specifics of the poster as specified in the UrlPosterParams interface.
    */
   public async createExternalPoster(params: ExternalPosterRequest): Promise<LocalPoster> {
-    const { name, label, type, expirationDate, accentColor, footerSize, defaultTimeout, borrelMode, uri } =
-      params;
+    const {
+      name,
+      label,
+      type,
+      expirationDate,
+      accentColor,
+      footerSize,
+      defaultTimeout,
+      borrelMode,
+      uri,
+    } = params;
     return this.repo.save({
       name,
       label,

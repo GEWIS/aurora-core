@@ -13,6 +13,8 @@ import { FeatureEnabled, ServerSettingsStore } from '../../../server-settings';
 import { Controller } from '@tsoa/runtime';
 import { Poster } from './poster';
 import { ISettings } from '../../../server-settings/server-setting';
+import { LocalPosterResponse } from './local/local-poster-service';
+import LocalPoster from './local/local-poster';
 
 export interface BorrelModeParams {
   enabled: boolean;
@@ -23,7 +25,7 @@ export interface BorrelModeResponse extends BorrelModeParams {
 }
 
 export interface PosterResponse {
-  posters: Poster[];
+  posters: LocalPosterResponse[];
   borrelMode: boolean;
 }
 
@@ -43,33 +45,22 @@ export class CarouselPosterController extends Controller {
   @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Get('')
   public async getPosters(@Query() alwaysReturnBorrelPosters?: boolean): Promise<PosterResponse> {
-    if (!this.screenHandler.posterManager.posters) {
-      try {
-        await this.screenHandler.posterManager.fetchPosters();
-      } catch (e) {
-        logger.error(e);
-      }
-    }
-    const posters = this.screenHandler.posterManager.posters ?? [];
-
-    if (alwaysReturnBorrelPosters || this.screenHandler.borrelMode) {
-      return {
-        posters: posters,
-        borrelMode: this.screenHandler.borrelMode,
-      };
-    }
+    const posters = await this.screenHandler.posterService.getAllLocalPosters();
+    const visible =
+      alwaysReturnBorrelPosters || this.screenHandler.borrelMode
+        ? posters
+        : posters.filter((p) => !p.borrelMode);
 
     return {
-      posters: posters.filter((p) => !p.borrelMode),
-      borrelMode: false,
+      posters: visible.map((p) => this.screenHandler.posterService.toResponse(p)),
+      borrelMode: this.screenHandler.borrelMode,
     };
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Post('force-update')
   public async forceUpdatePosters(@Request() req: ExpressRequest): Promise<void> {
-    logger.audit(req.user, 'Force fetch posters from source.');
-    await this.screenHandler.posterManager.fetchPosters();
+    logger.audit(req.user, 'Force refresh carousel on screens.');
     this.screenHandler.forceUpdate();
   }
 
