@@ -14,6 +14,9 @@ export default class LocalPoster extends BaseEntity {
   })
   type: PosterType;
 
+  @Column({ default: true })
+  enabled: boolean;
+
   @Column({ nullable: true })
   label?: string;
 

@@ -50,6 +50,7 @@ export interface LocalPosterResponse {
   name: string;
   label?: string;
   type: PosterType;
+  enabled: boolean;
   createdAt: string;
   updatedAt: string;
   expirationDate?: Date;
@@ -97,6 +98,7 @@ export default class LocalPosterService {
       name: poster.name,
       label: poster.label ?? undefined,
       type: poster.type,
+      enabled: poster.enabled,
       createdAt: poster.createdAt.toISOString(),
       updatedAt: poster.updatedAt.toISOString(),
       expirationDate: poster.expirationDate ?? undefined,
@@ -257,6 +259,17 @@ export default class LocalPosterService {
   public async updateLocalPoster(id: number, params: UpdatePosterRequest): Promise<LocalPoster> {
     const poster = await this.getSingleLocalPoster(id);
     Object.assign(poster, params);
+    return this.repo.save(poster);
+  }
+
+  /**
+   * Changes the enabled status of the given poster.
+   * @param id The id of the poster to enable/disable.
+   * @param enabled The state to put the poster in.
+   */
+  public async togglePosterEnable(id: number, enabled: boolean): Promise<LocalPoster> {
+    const poster = await this.getSingleLocalPoster(id);
+    poster.enabled = enabled;
     return this.repo.save(poster);
   }
 }

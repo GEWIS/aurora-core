@@ -24,6 +24,10 @@ export interface BorrelModeResponse extends BorrelModeParams {
   present: boolean;
 }
 
+export interface EnabledParams {
+  enabled: boolean;
+}
+
 export interface PosterResponse {
   posters: LocalPosterResponse[];
   borrelMode: boolean;
@@ -85,6 +89,13 @@ export class CarouselPosterController extends Controller {
       `Set poster screen borrel mode to "${body.enabled ? 'true' : 'false'}".`,
     );
     this.screenHandler.setBorrelModeEnabled(body.enabled);
+  }
+
+  @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
+  @Post('{id}/enabled')
+  public async togglePoster(id: number, @Body() body: EnabledParams): Promise<LocalPosterResponse> {
+    const poster = await this.screenHandler.posterService.togglePosterEnable(id, body.enabled);
+    return this.screenHandler.posterService.toResponse(poster);
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.base)
