@@ -93,7 +93,7 @@ export class CarouselPosterController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Post('{id}/enabled')
-  public async togglePoster(id: number, @Body() body: EnabledParams): Promise<LocalPosterResponse> {
+  public async togglePosterEnable(id: number, @Body() body: EnabledParams): Promise<LocalPosterResponse> {
     const poster = await this.screenHandler.posterService.togglePosterEnable(id, body.enabled);
     return this.screenHandler.posterService.toResponse(poster);
   }
