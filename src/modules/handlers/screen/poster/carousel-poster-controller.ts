@@ -48,12 +48,19 @@ export class CarouselPosterController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.base)
   @Get('')
-  public async getPosters(@Query() alwaysReturnBorrelPosters?: boolean): Promise<PosterResponse> {
+  public async getPosters(@Query() includeHidden?: boolean): Promise<PosterResponse> {
     const posters = await this.screenHandler.posterService.getAllLocalPosters();
-    const visible =
-      alwaysReturnBorrelPosters || this.screenHandler.borrelMode
-        ? posters
-        : posters.filter((p) => !p.borrelMode);
+
+    let visible: LocalPoster[];
+    if (includeHidden) {
+      visible = posters;
+    } else {
+      const now = new Date();
+      const active = posters.filter(
+        (p) => p.enabled && (p.expirationDate == null || p.expirationDate > now),
+      );
+      visible = this.screenHandler.borrelMode ? active : active.filter((p) => !p.borrelMode);
+    }
 
     return {
       posters: visible.map((p) => this.screenHandler.posterService.toResponse(p)),
@@ -93,7 +100,10 @@ export class CarouselPosterController extends Controller {
 
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
   @Post('{id}/enabled')
-  public async togglePosterEnable(id: number, @Body() body: EnabledParams): Promise<LocalPosterResponse> {
+  public async togglePosterEnable(
+    id: number,
+    @Body() body: EnabledParams,
+  ): Promise<LocalPosterResponse> {
     const poster = await this.screenHandler.posterService.togglePosterEnable(id, body.enabled);
     return this.screenHandler.posterService.toResponse(poster);
   }
