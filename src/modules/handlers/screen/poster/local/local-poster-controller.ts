@@ -11,9 +11,11 @@ import LocalPosterService, {
 import LocalPoster from './local-poster';
 import { lookup } from 'mime-types';
 import { PosterType } from '../poster';
+import { FeatureEnabled } from '../../../../server-settings';
 
 @Route('/handler/screen/poster')
 @Tags('Handlers')
+@FeatureEnabled('Poster')
 export class LocalPosterController extends Controller {
   private service = new LocalPosterService();
 
