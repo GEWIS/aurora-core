@@ -12,6 +12,7 @@ import FileResponse from '../../../../files/entities/file-response';
 interface BasePosterParams {
   name: string;
   label?: string;
+  startDate?: Date;
   expirationDate?: Date;
   accentColor?: string;
   footerSize?: FooterSize;
@@ -38,6 +39,7 @@ export type CreatePosterRequest = MediaPosterRequest | ExternalPosterRequest | P
 export interface UpdatePosterRequest {
   name?: string;
   label?: string;
+  startDate?: Date;
   expirationDate?: Date;
   accentColor?: string;
   footerSize?: FooterSize;
@@ -53,6 +55,7 @@ export interface LocalPosterResponse {
   enabled: boolean;
   createdAt: string;
   updatedAt: string;
+  startDate?: Date;
   expirationDate?: Date;
   accentColor?: string;
   footerSize: FooterSize;
@@ -101,6 +104,7 @@ export default class LocalPosterService {
       enabled: poster.enabled,
       createdAt: poster.createdAt.toISOString(),
       updatedAt: poster.updatedAt.toISOString(),
+      startDate: poster.startDate ?? undefined,
       expirationDate: poster.expirationDate ?? undefined,
       accentColor: poster.accentColor ?? undefined,
       footerSize: poster.footerSize,
@@ -142,6 +146,7 @@ export default class LocalPosterService {
       name,
       label,
       type,
+      startDate,
       expirationDate,
       accentColor,
       footerSize,
@@ -152,6 +157,7 @@ export default class LocalPosterService {
       name,
       label,
       type,
+      startDate,
       expirationDate,
       accentColor,
       footerSize,
@@ -189,6 +195,7 @@ export default class LocalPosterService {
       name,
       label,
       type,
+      startDate,
       expirationDate,
       accentColor,
       footerSize,
@@ -200,6 +207,7 @@ export default class LocalPosterService {
       name,
       label,
       type,
+      startDate,
       expirationDate,
       accentColor,
       footerSize,
@@ -218,6 +226,7 @@ export default class LocalPosterService {
       name,
       label,
       type,
+      startDate,
       expirationDate,
       accentColor,
       footerSize,
@@ -229,6 +238,7 @@ export default class LocalPosterService {
       name,
       label,
       type,
+      startDate,
       expirationDate,
       accentColor,
       footerSize,

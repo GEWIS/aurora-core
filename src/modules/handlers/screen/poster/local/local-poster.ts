@@ -21,6 +21,9 @@ export default class LocalPoster extends BaseEntity {
   label?: string;
 
   @Column({ nullable: true })
+  startDate?: Date;
+
+  @Column({ nullable: true })
   expirationDate?: Date;
 
   @Column({ nullable: true })

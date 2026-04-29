@@ -57,7 +57,10 @@ export class CarouselPosterController extends Controller {
     } else {
       const now = new Date();
       const active = posters.filter(
-        (p) => p.enabled && (p.expirationDate == null || p.expirationDate > now),
+        (p) =>
+          p.enabled &&
+          (p.startDate == null || p.startDate <= now) &&
+          (p.expirationDate == null || p.expirationDate > now),
       );
       visible = this.screenHandler.borrelMode ? active : active.filter((p) => !p.borrelMode);
     }
