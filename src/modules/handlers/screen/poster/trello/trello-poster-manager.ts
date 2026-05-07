@@ -1,28 +1,18 @@
-import { randomUUID } from 'crypto';
-import { PosterManager } from '../poster-manager';
-import {
-  BasePoster,
-  ErrorPoster,
-  FooterSize,
-  LocalPoster,
-  LocalPosterType,
-  MediaPoster,
-  Poster,
-  PosterType,
-} from '../poster';
+import { BasePoster, FooterSize, LocalPosterType, Poster, PosterType } from '../poster';
 import { Board, Card, Checklist, TrelloClient, TrelloList } from './client';
-import { TrelloPosterStorage } from './trello-poster-storage';
+import LocalPosterService from '../local/local-poster-service';
+import axios from 'axios';
+import LocalPoster from '../local/local-poster';
 
 const DEFAULT_POSTER_TIMEOUT = 15;
 const DEFAULT_POSTER_REFRESH = 1000 * 60 * 15;
 
-export class TrelloPosterManager extends PosterManager {
+export class TrelloPosterManager {
   private client: TrelloClient;
 
   private refreshTimeout: NodeJS.Timeout | undefined = undefined;
 
   constructor() {
-    super();
     this.client = new TrelloClient();
   }
 
@@ -37,7 +27,7 @@ export class TrelloPosterManager extends PosterManager {
     list: TrelloList,
     board: Board,
     listType?: PosterType,
-  ): Promise<Poster[]> {
+  ): Promise<LocalPoster[]> {
     const { cards: allCards, lists: allLists, checklists: allChecklists } = board;
     const cards = allCards?.filter((card) => card.idList === list.id) || [];
 
@@ -79,22 +69,11 @@ export class TrelloPosterManager extends PosterManager {
             break;
         }
 
-        let type: LocalPosterType = (listType as LocalPosterType) || PosterType.UNKNOWN;
-        const cardType = card.desc;
-        if (listType === undefined && Object.values(PosterType).includes(cardType as any)) {
-          type = cardType as LocalPosterType;
-        }
-
-        const poster: LocalPoster = {
-          ...this.parseBasePoster(card, checklists, borrelMode),
-          type,
-        };
-
-        return poster;
+        return undefined;
       }),
     );
 
-    return posters.filter((p) => p !== undefined).flat() as Poster[];
+    return posters.filter((p) => p !== undefined).flat() as LocalPoster[];
   }
 
   /**
@@ -126,7 +105,6 @@ export class TrelloPosterManager extends PosterManager {
     let color = labels.find((l) => l.startsWith('#'));
 
     return {
-      id: card.id ?? randomUUID(),
       name: card.name || 'Poster',
       timeout,
       // If there is a due date present, set the due date
@@ -153,29 +131,37 @@ export class TrelloPosterManager extends PosterManager {
     checklists: Checklist[],
     type: PosterType.IMAGE | PosterType.VIDEO,
     borrelMode = false,
-  ): Promise<MediaPoster | ErrorPoster> {
+  ): Promise<LocalPoster | undefined> {
     const poster = this.parseBasePoster(card, checklists, borrelMode);
 
     if (!card.id) {
-      return {
-        ...poster,
-        type: PosterType.ERROR,
-        message: 'Card has no ID',
-      };
+      return undefined;
     }
-    const attachments = await this.client.default.getCardAttachments(card.id);
-    const source = await Promise.all(
-      attachments.map(async (attachment) => {
-        const storage = new TrelloPosterStorage();
-        return storage.storeAttachment(attachment);
-      }),
-    );
 
-    return {
-      ...poster,
-      type,
-      source,
+    const service = new LocalPosterService();
+    let localPoster = await service.createMediaPoster({
+      name: poster.name,
+      type: type,
+      label: poster.label,
+      startDate: card.badges?.start ? new Date(card.badges.start) : undefined,
+      expirationDate: poster.due,
+      defaultTimeout: poster.timeout,
+      footerSize: poster.footer,
+      borrelMode: poster.borrelMode,
+      accentColor: poster.color,
+      trello: true,
+    });
+
+    const attachments = await this.client.default.getCardAttachments(card.id);
+    const headers = {
+      Authorization: `OAuth oauth_consumer_key="${process.env.TRELLO_KEY}", oauth_token="${process.env.TRELLO_TOKEN}"`,
     };
+    const resp = await axios.get<ArrayBuffer>(attachments[0].url, {
+      responseType: 'arraybuffer',
+      headers,
+    });
+
+    return service.attachMedia(localPoster.id, attachments[0].fileName, Buffer.from(resp.data));
   }
 
   /**
@@ -189,26 +175,31 @@ export class TrelloPosterManager extends PosterManager {
     card: Card,
     checklists: Checklist[],
     borrelMode = false,
-  ): Promise<Poster> {
-    // Find the checklist called "photos", that should contain the album ids
+  ): Promise<LocalPoster | undefined> {
     const index = checklists.findIndex((checklist) => checklist.name.toLowerCase() === 'photos');
     // If such list cannot be found, it does not exist. Throw an error because we cannot continue
     if (index === undefined || index < 0) {
-      return {
-        ...this.parseBasePoster(card, checklists, borrelMode),
-        type: PosterType.ERROR,
-        message: 'Photo card has no checklist named "photos"',
-      };
+      return undefined;
     }
-    // Get the checklist for the albums
+
     const checkList = checklists![index];
-    // @ts-ignore
     const albums = checkList.checkItems.map((item: any) => item.name.split(' ')[0]);
-    return {
-      ...this.parseBasePoster(card, checklists, borrelMode),
+
+    const poster = this.parseBasePoster(card, checklists, borrelMode);
+    const service = new LocalPosterService();
+    return service.createPhotoPoster({
+      name: poster.name,
       type: PosterType.PHOTO,
+      label: poster.label,
+      startDate: card.badges?.start ? new Date(card.badges.start) : undefined,
+      expirationDate: poster.due,
+      defaultTimeout: poster.timeout,
+      footerSize: poster.footer,
+      borrelMode: poster.borrelMode,
+      accentColor: poster.color,
       albums,
-    };
+      trello: true,
+    });
   }
 
   /**
@@ -223,7 +214,7 @@ export class TrelloPosterManager extends PosterManager {
     card: Card,
     checklists: Checklist[],
     borrelMode = false,
-  ): Promise<Poster> {
+  ): Promise<LocalPoster | undefined> {
     const isUrl = (url: string): boolean => {
       try {
         const parsedUrl = new URL(url);
@@ -239,22 +230,28 @@ export class TrelloPosterManager extends PosterManager {
     const url = isUrl(match) ? match : (card.desc ?? '');
 
     if (!card.desc || !isUrl(url)) {
-      return {
-        ...this.parseBasePoster(card, checklists, borrelMode),
-        type: PosterType.ERROR,
-        message: 'Card description does not exist or is not a valid HTTP/HTTPS URL',
-      };
+      return undefined;
     }
-    return {
-      ...this.parseBasePoster(card, checklists, borrelMode),
+
+    const poster = this.parseBasePoster(card, checklists, borrelMode);
+    const service = new LocalPosterService();
+
+    return service.createExternalPoster({
+      name: poster.name,
       type: PosterType.EXTERNAL,
-      source: [url || ''],
-    };
+      label: poster.label,
+      startDate: card.badges?.start ? new Date(card.badges.start) : undefined,
+      expirationDate: poster.due,
+      defaultTimeout: poster.timeout,
+      footerSize: poster.footer,
+      borrelMode: poster.borrelMode,
+      accentColor: poster.color,
+      uri: url,
+      trello: true,
+    });
   }
 
-  async fetchPosters(): Promise<Poster[]> {
-    // const lists = await this.client.default
-    // .getBoardsIdLists(process.env.TRELLO_BOARD_ID || '', ViewFilter.ALL, 'all');
+  async reloadPosters(): Promise<LocalPoster[]> {
     let board = await this.client.default.getBoard(process.env.TRELLO_BOARD_ID || '');
     if (!Object.prototype.hasOwnProperty.call(board, 'id')) throw new Error(JSON.stringify(board));
     board = board as Board;
@@ -266,27 +263,15 @@ export class TrelloPosterManager extends PosterManager {
     const list = lists.find((l) => l.name === basePosterListName);
     if (!list) throw new Error(`Could not find the list called "${basePosterListName}"`);
 
-    this._posters = await this.parseLists(list, board);
+    const service = new LocalPosterService();
+
+    await service.deleteTrelloPosters();
+
+    await this.parseLists(list, board);
 
     if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
-    this.refreshTimeout = setTimeout(this.fetchPosters.bind(this), DEFAULT_POSTER_REFRESH);
+    this.refreshTimeout = setTimeout(this.reloadPosters.bind(this), DEFAULT_POSTER_REFRESH);
 
-    return this._posters;
-  }
-
-  /**
-   * @inheritDoc
-   */
-  public get posters(): Poster[] | undefined {
-    if (!this._posters) return undefined;
-    return this._posters.map((p): Poster => {
-      if (p.type === PosterType.IMAGE || p.type === PosterType.VIDEO) {
-        return {
-          ...p,
-          source: p.source.map((s) => `/static${s.replaceAll('\\', '/')}`),
-        };
-      }
-      return p;
-    });
+    return await service.getAllLocalPosters();
   }
 }

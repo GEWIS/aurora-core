@@ -18,6 +18,7 @@ interface BasePosterParams {
   footerSize?: FooterSize;
   defaultTimeout?: number;
   borrelMode?: boolean;
+  trello?: boolean;
 }
 
 export interface MediaPosterRequest extends BasePosterParams {
@@ -152,6 +153,7 @@ export default class LocalPosterService {
       footerSize,
       defaultTimeout,
       borrelMode,
+      trello,
     } = params;
     return this.repo.save({
       name,
@@ -163,6 +165,7 @@ export default class LocalPosterService {
       footerSize,
       defaultTimeout,
       borrelMode,
+      trello,
     });
   }
 
@@ -202,6 +205,7 @@ export default class LocalPosterService {
       defaultTimeout,
       borrelMode,
       uri,
+      trello,
     } = params;
     return this.repo.save({
       name,
@@ -214,6 +218,7 @@ export default class LocalPosterService {
       defaultTimeout,
       borrelMode,
       uri,
+      trello,
     });
   }
 
@@ -233,6 +238,7 @@ export default class LocalPosterService {
       defaultTimeout,
       borrelMode,
       albums,
+      trello,
     } = params;
     return this.repo.save({
       name,
@@ -245,6 +251,7 @@ export default class LocalPosterService {
       defaultTimeout,
       borrelMode,
       albums,
+      trello,
     });
   }
 
@@ -281,5 +288,13 @@ export default class LocalPosterService {
     const poster = await this.getSingleLocalPoster(id);
     poster.enabled = enabled;
     return this.repo.save(poster);
+  }
+
+  /**
+   * Deletes every poster with the trello flag from the database.
+   */
+  public async deleteTrelloPosters(): Promise<void> {
+    const posters = await this.repo.find({ where: { trello: true } });
+    await Promise.all(posters.map((poster) => this.deleteLocalPoster(poster.id)));
   }
 }

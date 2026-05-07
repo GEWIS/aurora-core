@@ -54,4 +54,7 @@ export default class LocalPoster extends BaseEntity {
   @OneToOne(() => File, { nullable: true, eager: true, onDelete: 'SET NULL' })
   @JoinColumn()
   file?: File;
+
+  @Column({ default: false })
+  trello: boolean;
 }
