@@ -12,6 +12,8 @@ export class TrelloPosterManager {
 
   private refreshTimeout: NodeJS.Timeout | undefined = undefined;
 
+  private photoFlag = false;
+
   constructor() {
     this.client = new TrelloClient();
   }
@@ -176,6 +178,13 @@ export class TrelloPosterManager {
     checklists: Checklist[],
     borrelMode = false,
   ): Promise<LocalPoster | undefined> {
+    // Only parse the list once
+    if (this.photoFlag) {
+      return;
+    } else {
+      this.photoFlag = true;
+    }
+
     const index = checklists.findIndex((checklist) => checklist.name.toLowerCase() === 'photos');
     // If such list cannot be found, it does not exist. Throw an error because we cannot continue
     if (index === undefined || index < 0) {
@@ -267,6 +276,7 @@ export class TrelloPosterManager {
 
     await service.deleteTrelloPosters();
 
+    this.photoFlag = false;
     await this.parseLists(list, board);
 
     if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
