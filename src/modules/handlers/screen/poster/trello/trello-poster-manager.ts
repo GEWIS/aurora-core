@@ -55,8 +55,6 @@ export class TrelloPosterManager {
 
         // If the card has a due date and this due date is in the past, skip this card
         if (card.due && new Date(card.due) < now) return undefined;
-        // If the card has a start date and this start date is in the future, skip this card
-        if (card.badges?.start != null && new Date(card.badges.start) > now) return undefined;
 
         switch (listType) {
           case 'img':
