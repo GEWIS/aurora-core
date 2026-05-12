@@ -49,6 +49,7 @@ export interface UpdatePosterRequest {
   footerSize?: FooterSize;
   defaultTimeout?: number;
   borrelMode?: boolean;
+  albums?: number[];
 }
 
 export interface LocalPosterResponse {
@@ -324,13 +325,11 @@ export default class LocalPosterService {
     for (const staticPoster of staticPosters) {
       try {
         if (staticPoster.file) {
-          // Read the file from wherever the static poster handler stored it...
           const sourceStorage = new DiskStorage(
             staticPoster.file.relativeDirectory.replace(/^public[\\/]/, ''),
           );
           const data = await sourceStorage.getFile(staticPoster.file);
 
-          // ...and re-save it through the local-poster storage to get the regular format.
           const fileParams = await this.storage.saveFile(staticPoster.file.originalName, data);
           const file = await this.fileRepo.save(fileParams);
 
