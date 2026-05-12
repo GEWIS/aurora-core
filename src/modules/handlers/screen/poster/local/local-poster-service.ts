@@ -1,9 +1,12 @@
 import { FileStorage } from '../../../../files/storage/file-storage';
 import { Repository } from 'typeorm';
+import { lookup } from 'mime-types';
 import { File } from '../../../../files/entities';
 import LocalPoster from './local-poster';
+import StaticPoster from '../static/static-poster';
 import { DiskStorage } from '../../../../files/storage';
 import dataSource from '../../../../../database';
+import logger from '../../../../../logger';
 import { HttpApiException } from '../../../../../helpers/custom-error';
 import { HttpStatusCode } from 'axios';
 import { FooterSize, PosterType } from '../poster';
@@ -296,5 +299,73 @@ export default class LocalPosterService {
   public async deleteTrelloPosters(): Promise<void> {
     const posters = await this.repo.find({ where: { trello: true } });
     await Promise.all(posters.map((poster) => this.deleteLocalPoster(poster.id)));
+  }
+
+  /**
+   * Checks whether the legacy static poster table exists, and if it does, migrates
+   * every static poster.
+   */
+  public async migrateStaticPosters(): Promise<void> {
+    const staticRepo = dataSource.getRepository(StaticPoster);
+
+    const queryRunner = dataSource.createQueryRunner();
+    let tableExists: boolean;
+    try {
+      tableExists = await queryRunner.hasTable(staticRepo.metadata.tableName);
+    } finally {
+      await queryRunner.release();
+    }
+    if (!tableExists) return;
+
+    const staticPosters = await staticRepo.find();
+    if (staticPosters.length === 0) return;
+
+    const migrated: StaticPoster[] = [];
+    for (const staticPoster of staticPosters) {
+      try {
+        if (staticPoster.file) {
+          // Read the file from wherever the static poster handler stored it...
+          const sourceStorage = new DiskStorage(
+            staticPoster.file.relativeDirectory.replace(/^public[\\/]/, ''),
+          );
+          const data = await sourceStorage.getFile(staticPoster.file);
+
+          // ...and re-save it through the local-poster storage to get the regular format.
+          const fileParams = await this.storage.saveFile(staticPoster.file.originalName, data);
+          const file = await this.fileRepo.save(fileParams);
+
+          const mimeType = lookup(staticPoster.file.originalName);
+          await this.repo.save({
+            name: staticPoster.file.originalName,
+            type: mimeType && mimeType.startsWith('video/') ? PosterType.VIDEO : PosterType.IMAGE,
+            file,
+            enabled: false,
+          });
+
+          await sourceStorage.deleteFile(staticPoster.file);
+          await this.fileRepo.delete(staticPoster.file.id);
+        } else if (staticPoster.uri) {
+          await this.repo.save({
+            name: staticPoster.uri,
+            type: PosterType.EXTERNAL,
+            uri: staticPoster.uri,
+            enabled: false,
+          });
+        } else {
+          logger.warn(
+            `Skipping static poster ${staticPoster.id}: it has neither a file nor a uri.`,
+          );
+          continue;
+        }
+        migrated.push(staticPoster);
+      } catch (error) {
+        logger.error(`Failed to migrate static poster ${staticPoster.id}: ${error}`);
+      }
+    }
+
+    if (migrated.length > 0) {
+      await staticRepo.remove(migrated);
+    }
+    logger.info(`Migrated ${migrated.length} static poster(s) to local posters.`);
   }
 }
