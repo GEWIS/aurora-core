@@ -11,9 +11,7 @@ export class TrelloPosterManager {
   private client: TrelloClient;
 
   private refreshTimeout: NodeJS.Timeout | undefined = undefined;
-
-  private photoFlag = false;
-
+  
   constructor() {
     this.client = new TrelloClient();
   }
@@ -23,13 +21,18 @@ export class TrelloPosterManager {
    * @param list
    * @param board
    * @param listType
+   * @param visitedLists
    * @private
    */
   private async parseLists(
     list: TrelloList,
     board: Board,
     listType?: PosterType,
+    visitedLists: Set<string> = new Set(),
   ): Promise<LocalPoster[]> {
+    if (!list.id || visitedLists.has(list.id)) return [];
+    visitedLists.add(list.id);
+
     const { cards: allCards, lists: allLists, checklists: allChecklists } = board;
     const cards = allCards?.filter((card) => card.idList === list.id) || [];
 
@@ -46,7 +49,7 @@ export class TrelloPosterManager {
         if (labels.includes('Posterlist')) {
           const newList = allLists?.find((l) => l.name === card.name);
           if (newList) {
-            return this.parseLists(newList, board, card.desc as PosterType);
+            return this.parseLists(newList, board, card.desc as PosterType, visitedLists);
           }
           throw new Error(`Unknown list: ${card.name}`);
         }
@@ -176,13 +179,6 @@ export class TrelloPosterManager {
     checklists: Checklist[],
     borrelMode = false,
   ): Promise<LocalPoster | undefined> {
-    // Only parse the list once
-    if (this.photoFlag) {
-      return;
-    } else {
-      this.photoFlag = true;
-    }
-
     const index = checklists.findIndex((checklist) => checklist.name.toLowerCase() === 'photos');
     // If such list cannot be found, it does not exist. Throw an error because we cannot continue
     if (index === undefined || index < 0) {
@@ -274,7 +270,6 @@ export class TrelloPosterManager {
 
     await service.deleteTrelloPosters();
 
-    this.photoFlag = false;
     await this.parseLists(list, board);
 
     if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
