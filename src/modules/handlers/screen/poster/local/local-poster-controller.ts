@@ -140,6 +140,7 @@ export class LocalPosterController extends Controller {
    * @param req
    */
   @Security(SecurityNames.LOCAL, securityGroups.poster.privileged)
+  @Security(SecurityNames.INTEGRATION, ['setStaticPoster'])
   @Post('items/{id}/show')
   public async showStaticPoster(id: number, @Request() req: ExpressRequest): Promise<void> {
     const service = new LocalPosterService();
