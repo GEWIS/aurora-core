@@ -449,19 +449,19 @@ const boomCenturion: MixTape = {
             }
         },
         {
+            timestamp: 1678.83,
+            type: 'horn',
+            data: {
+                counter: 28
+            }
+        },
+                {
             timestamp: 1679.11,
             type: 'song',
             data: {
                 artist: 'SEVENTEEN',
                 title: 'B.O.O.M.B.O.O.M.',
                 bpm: 108
-            }
-        },
-        {
-            timestamp: 1678.83,
-            type: 'horn',
-            data: {
-                counter: 28
             }
         },
         {
