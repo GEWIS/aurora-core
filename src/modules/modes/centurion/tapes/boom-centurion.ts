@@ -3,7 +3,7 @@ import MixTape from './mix-tape'
 const boomCenturion: MixTape = {
     name: 'B.O.O.M.turion',
     artist: 'B.O.O.M.',
-    songFile: '',
+    songFile: 'https://avico.gewis.nl/centurion/boom-centurion.mp3',
     coverUrl: '',
     duration: 6274,
     feed: [
