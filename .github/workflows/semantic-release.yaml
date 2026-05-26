@@ -14,10 +14,10 @@ jobs:
     needs: versioning
     if: ${{ needs.versioning.outputs.next-version != '' }}
     with:
-      projects: "['.']"
+      projects: '["."]'
       version: ${{ needs.versioning.outputs.next-version }}
       docker-registry: "abc.docker-registry.gewis.nl"
-      docker-paths: "['nc/aurora/core']"
+      docker-paths: '["nc/aurora/core"]'
       github-registry: "true"
     secrets:
       REGISTRY_USERNAME: ${{ secrets.SVC_GH_ABCNC_USERNAME }}

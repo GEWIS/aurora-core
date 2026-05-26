@@ -4,6 +4,7 @@ import gebroedersScooterCenturion2Original from './gebroeders-scooter-centurion-
 import gebroedersScooterTotaleEscalatien from './gebroeders-scooter-totale-escalatien';
 import gebroedersScooterTotaleEscalatieNegendarisch from './gebroeders-scooter-totale-escalatie-negendarisch';
 import athenaCenturion from './athena-centurion';
+import boomCenturion from './boom-centurion';
 import MixTape, { Horn } from './mix-tape';
 
 const tapes = [
@@ -13,6 +14,7 @@ const tapes = [
   gebroedersScooterTotaleEscalatieNegendarisch,
   gebroedersScooterTotaleEscalatien,
   athenaCenturion,
+  boomCenturion,
 ];
 
 /**
