@@ -100,6 +100,7 @@ export class HandlerController extends Controller {
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.handler.base)
+  @Security(SecurityNames.INTEGRATION, ['getScreenHandlers'])
   @Get('screen')
   public getScreenHandlers(): HandlerResponse<ScreenResponse>[] {
     return this.handlersManager.getHandlers(Screen).map((h) => ({
@@ -110,6 +111,7 @@ export class HandlerController extends Controller {
   }
 
   @Security(SecurityNames.LOCAL, securityGroups.handler.privileged)
+  @Security(SecurityNames.INTEGRATION, ['setScreenHandler'])
   @Post('screen/{id}')
   public async setScreenHandler(
     @Request() req: ExpressRequest,
