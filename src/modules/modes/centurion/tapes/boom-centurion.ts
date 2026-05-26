@@ -72,7 +72,7 @@ const boomCenturion: MixTape = {
             }
         },
         {
-            timestamp: 237.78 ,
+            timestamp: 237.78,
             type: 'horn',
             data: {
                 counter: 5
@@ -455,7 +455,7 @@ const boomCenturion: MixTape = {
                 counter: 28
             }
         },
-                {
+        {
             timestamp: 1679.11,
             type: 'song',
             data: {
