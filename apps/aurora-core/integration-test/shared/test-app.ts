@@ -9,6 +9,7 @@ import ServerSettingsStore from '@aurora/modules/server-settings/server-settings
 import { EmitterStore } from '@aurora/modules/events';
 import { BeatManager } from '@aurora/modules/beats';
 import HandlerManager from '@aurora/modules/root/handler-manager';
+import { HandlerFactory } from '@aurora/modules/handlers';
 import httpModule from '@aurora/http';
 
 export interface TestApp {
@@ -66,7 +67,12 @@ export class TestEnvironment {
 
         const httpServer = createServer(this.app);
         const io = new SocketIoServer(httpServer);
-        HandlerManager.getInstance(io, emitterStore);
+        const factory = new HandlerFactory(io, emitterStore.musicEmitter);
+        HandlerManager.getInstance(io, emitterStore, {
+          audio: factory.createAudioHandlers(),
+          lights: factory.createLightHandlers(),
+          screen: factory.createScreenHandlers(),
+        });
         await HandlerManager.getInstance().init();
 
         return this.app;

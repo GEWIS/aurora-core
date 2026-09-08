@@ -1,6 +1,6 @@
 import { ISettings } from './server-setting';
 import ServerSettingsStore, { FeatureFlagResponse } from './server-settings-store';
-import BaseHandler from '../handlers/base-handler';
+import BaseHandler from '../root/base-handler';
 
 type HandlerClass = new (...args: any[]) => BaseHandler<any>;
 

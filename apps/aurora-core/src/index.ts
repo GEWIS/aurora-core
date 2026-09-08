@@ -8,6 +8,7 @@ import logger from './logger';
 import createHttp from './http';
 import dataSource from './database';
 import HandlerManager from './modules/root/handler-manager';
+import { HandlerFactory } from './modules/handlers';
 import createWebsocket from './socketio';
 import './modules/audit/audit-logger';
 import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
@@ -61,7 +62,12 @@ async function createApp(): Promise<void> {
   BeatManager.getInstance().init(emitterStore.beatEmitter);
 
   const lightsSwitchManager = LightsSwitchManager.getInstance();
-  const handlerManager = HandlerManager.getInstance(io, emitterStore);
+  const handlerFactory = new HandlerFactory(io, emitterStore.musicEmitter);
+  const handlerManager = HandlerManager.getInstance(io, emitterStore, {
+    audio: handlerFactory.createAudioHandlers(),
+    lights: handlerFactory.createLightHandlers(),
+    screen: handlerFactory.createScreenHandlers(),
+  });
   await handlerManager.init();
   const socketConnectionManager = new SocketConnectionManager(
     handlerManager,

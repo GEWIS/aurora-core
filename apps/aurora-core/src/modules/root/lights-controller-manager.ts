@@ -1,6 +1,6 @@
 import { Namespace } from 'socket.io';
 import { LightsController } from './entities';
-import BaseLightsHandler from '../handlers/base-lights-handler';
+import BaseLightsHandler from './base-lights-handler';
 import { MusicEmitter } from '../events';
 import {
   LightsGroupPars,

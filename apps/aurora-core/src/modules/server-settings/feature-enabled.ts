@@ -4,7 +4,7 @@ import { NextFunction, Request as ExRequest, Response as ExResponse } from 'expr
 import { ISettings } from './server-setting';
 import ServerSettingsStore from './server-settings-store';
 import logger from '../../logger';
-import BaseHandler from '../handlers/base-handler';
+import BaseHandler from '../root/base-handler';
 import FeatureFlagManager from './feature-flag-manager';
 
 type ClassDecoratorParams<T extends { new (...args: any[]): {} }> = [T];
