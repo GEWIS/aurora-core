@@ -12,7 +12,7 @@ import { HandlerFactory } from './modules/handlers';
 import createWebsocket from './socketio';
 import './modules/audit/audit-logger';
 import { SpotifyApiHandler, SpotifyTrackHandler } from './modules/spotify';
-import LightsControllerManager from './modules/root/lights-controller-manager';
+import LightsControllerManager from './modules/lights/lights-controller-manager';
 import ModeManager from './modules/modes/mode-manager';
 import { BeatManager } from './modules/beats';
 import {
@@ -27,7 +27,7 @@ import { EmitterStore } from './modules/events';
 import Types from './types';
 import { OrderManager } from './modules/orders';
 import TimedEventsService from './modules/timed-events/timed-events-service';
-import LightsSwitchManager from './modules/root/lights-switch-manager';
+import LightsSwitchManager from './modules/lights/lights-switch-manager';
 import { TrelloPosterManager } from './modules/handlers/screen/poster/trello/trello-poster-manager';
 import GewisKeyholderSyncService from './modules/handlers/screen/info/gewis-keyholder-sync-service';
 

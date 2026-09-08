@@ -15,10 +15,10 @@ import Wave from '../../lights/effects/color/wave';
 import Sparkle from '../../lights/effects/color/sparkle';
 import { BeatManager, BeatPriorities, SimpleBeatGenerator } from '../../beats';
 import logger from '../../../logger';
-import LightsSwitchManager from '../../root/lights-switch-manager';
+import LightsSwitchManager from '../../lights/lights-switch-manager';
 import { FeatureEnabled, ServerSettingsStore } from '../../server-settings';
 import { ISettings } from '../../server-settings/server-setting';
-import RootLightsService from '../../root/root-lights-service';
+import RootLightsService from '../../lights/root-lights-service';
 import {
   getRandomLightsEffectDirection,
   getRandomLightsEffectPattern,

@@ -1,4 +1,4 @@
-import BaseLightsHandler from '../root/base-lights-handler';
+import BaseLightsHandler from '../lights/base-lights-handler';
 import { Server } from 'socket.io';
 import { MusicEmitter } from '../events';
 import { RandomEffectsHandler } from './lights';

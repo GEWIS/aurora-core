@@ -1,5 +1,5 @@
 import { Namespace } from 'socket.io';
-import { LightsController } from './entities';
+import { LightsController } from '../root/entities';
 import BaseLightsHandler from './base-lights-handler';
 import { MusicEmitter } from '../events';
 import {
@@ -8,8 +8,8 @@ import {
   LightsGroupMovingHeadWheels,
   LightsGroup,
   LightsSwitch,
-} from '../lights/entities';
-import HandlerManager from './handler-manager';
+} from './entities';
+import HandlerManager from '../root/handler-manager';
 import { SocketioNamespaces } from '../../socketio-namespaces';
 import LightsSwitchManager from './lights-switch-manager';
 
