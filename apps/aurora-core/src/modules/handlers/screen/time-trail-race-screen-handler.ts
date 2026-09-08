@@ -1,12 +1,4 @@
 import BaseScreenHandler from '../../root/base-screen-handler';
-import {
-  RaceFinishedEvent,
-  RaceInitializedEvent,
-  RacePlayerReadyEvent,
-  RacePlayerRegisteredEvent,
-  RaceScoreboardEvent,
-  RaceStartedEvent,
-} from '../../modes/time-trail-race/time-trail-race-events';
 import { FeatureEnabled } from '../../server-settings';
 
 @FeatureEnabled('TimeTrailRace')
@@ -15,27 +7,27 @@ export default class TimeTrailRaceScreenHandler extends BaseScreenHandler {
 
   beat(): void {}
 
-  initialized(params: RaceInitializedEvent): void {
+  initialized<T>(params: T): void {
     this.sendEvent('race-initialized', params);
   }
 
-  playerRegistered(params: RacePlayerRegisteredEvent): void {
+  playerRegistered<T>(params: T): void {
     this.sendEvent('race-player-registered', params);
   }
 
-  playerReady(params: RacePlayerReadyEvent): void {
+  playerReady<T>(params: T): void {
     this.sendEvent('race-player-ready', params);
   }
 
-  started(params: RaceStartedEvent): void {
+  started<T>(params: T): void {
     this.sendEvent('race-started', params);
   }
 
-  finished(params: RaceFinishedEvent): void {
+  finished<T>(params: T): void {
     this.sendEvent('race-finished', params);
   }
 
-  showScoreboard(params: RaceScoreboardEvent): void {
+  showScoreboard<T>(params: T): void {
     this.sendEvent('race-scoreboard', params);
   }
 }

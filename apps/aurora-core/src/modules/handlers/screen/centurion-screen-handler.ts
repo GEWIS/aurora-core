@@ -1,6 +1,5 @@
 import BaseScreenHandler from '../../root/base-screen-handler';
 import { BeatEvent, TrackChangeEvent } from '../../events/music-emitter-events';
-import MixTape from '../../modes/centurion/tapes/mix-tape';
 import { RgbColor } from '../../lights/color-definitions';
 import { FeatureEnabled } from '../../server-settings';
 
@@ -22,7 +21,7 @@ export default class CenturionScreenHandler extends BaseScreenHandler {
     this.sendEvent('horn', { strobeTime, counter });
   }
 
-  loaded(tape: MixTape): void {
+  loaded<T>(tape: T): void {
     this.sendEvent('loaded', tape);
   }
 
