@@ -1,6 +1,7 @@
 import { Column, Entity } from 'typeorm';
 import BaseEntity from '../root/entities/base-entity';
 import { jsonTransformer } from '../../helpers/transformers';
+import type {} from '../../register-settings';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ISettings {}
