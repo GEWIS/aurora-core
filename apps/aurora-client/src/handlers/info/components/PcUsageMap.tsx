@@ -99,6 +99,7 @@ function SvgIcon({
 
 export default function PcUsageMap({ pcs, settings }: Props) {
   const pcStyle = sStr(settings, 'pcStyle', 'circle');
+  const showNames = sBool(settings, 'showUsernames', true);
   const showVdesktops = sBool(settings, 'showVdesktops', true);
 
   const byId = new Map(pcs.map((pc) => [pc.pcId, pc]));
