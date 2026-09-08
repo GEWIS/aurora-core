@@ -1,5 +1,7 @@
 import { Express } from 'express';
 import supertest, { type Agent as TestAgent } from 'supertest';
+// do not remove; registers each module's settings defaults before ServerSettingsStore initializes
+import '@aurora/register-settings';
 import dataSource from '@aurora/database';
 import { createServer } from 'http';
 import { Server as SocketIoServer } from 'socket.io';
