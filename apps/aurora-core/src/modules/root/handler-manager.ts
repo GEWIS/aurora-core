@@ -10,7 +10,6 @@ import { LightsGroup } from '../lights/entities';
 import { BeatEvent, TrackChangeEvent } from '../events/music-emitter-events';
 import { SocketioNamespaces } from '../../socketio-namespaces';
 import logger from '../../logger';
-import { ShowOrdersEvent } from '../events/order-emitter-events';
 import EmitterStore from '../events/emitter-store';
 
 export interface HandlerSet {
@@ -177,7 +176,7 @@ export default class HandlerManager {
    * Transmit an order change to all screen handlers
    * (like changeTrack())
    */
-  public showOrders(event: ShowOrdersEvent) {
+  public showOrders<T>(event: T) {
     const handlers = this.getHandlers();
     handlers.forEach((h) => {
       if (h instanceof BaseScreenHandler && h.showOrders) h.showOrders(event);

@@ -4,7 +4,6 @@ import BaseHandler from './base-handler';
 import Screen from './entities/screen';
 import { TrackChangeEvent } from '../events/music-emitter-events';
 import { SocketioNamespaces } from '../../socketio-namespaces';
-import { ShowOrdersEvent } from '../events/order-emitter-events';
 import { FeatureEnabled } from '../server-settings';
 
 export default abstract class BaseScreenHandler extends BaseHandler<Screen> {
@@ -15,7 +14,7 @@ export default abstract class BaseScreenHandler extends BaseHandler<Screen> {
   abstract changeTrack(event: TrackChangeEvent[]): void;
 
   @FeatureEnabled('Orders')
-  public showOrders(event: ShowOrdersEvent): void {
+  public showOrders<T>(event: T): void {
     this.sendEvent('orders', event);
   }
 
