@@ -4,6 +4,9 @@ import { BeatEvent } from '../events/music-emitter-events';
 import logger from '../../logger';
 
 export default abstract class BaseHandler<T extends SubscribeEntity> {
+  // Property needed by Feature Flags to check whether class is a handler
+  public static readonly isHandlerClass = true;
+
   /**
    * Used to distinguish multiple instances of the same handler type
    */
