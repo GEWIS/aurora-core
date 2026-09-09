@@ -89,7 +89,14 @@
           <label class="text-sm opacity-70">Closed message</label>
           <InputText v-model="room.closedMessage" placeholder="GEWIS is closed" />
         </div>
-        <Button class="self-end" label="Save room status" @click="saveRoom" />
+        <Button class="self-end" label="Save room status" :loading="savingRoom" @click="saveRoom">
+          <template #icon>
+            <Transition mode="out-in" name="check-pop">
+              <i v-if="justSavedRoom" key="check" class="pi pi-check" />
+              <i v-else key="save" class="pi pi-save" />
+            </Transition>
+          </template>
+        </Button>
       </div>
     </AppContainer>
 
@@ -198,14 +205,19 @@
       </div>
       <template #footer>
         <Button label="Cancel" severity="secondary" text @click="dialogVisible = false" />
-        <Button label="Save" @click="saveKeyholder" />
+        <Button :loading="savingKeyholder" @click="saveKeyholder">
+          <Transition mode="out-in" name="check-pop">
+            <i v-if="justSavedKeyholder" key="check" class="pi pi-check" />
+            <span v-else key="label">Save</span>
+          </Transition>
+        </Button>
       </template>
     </Dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import { type KeyholderResponse } from '@gewis/aurora-api-client';
 import AppContainer from '@/layout/AppContainer.vue';
 import KeyholderLabel from '@/components/info/KeyholderLabel.vue';
@@ -308,7 +320,10 @@ watch(keyholderSearch, (value) => {
   }, 150);
 });
 
-onUnmounted(() => clearTimeout(searchTimer));
+onUnmounted(() => {
+  clearTimeout(searchTimer);
+  clearTimeout(justSavedRoomTimer);
+});
 
 /**
  * Board first, then candidate board, then the remaining keyholders, and by name
@@ -362,7 +377,12 @@ watch(
   { immediate: true },
 );
 
+const savingRoom = ref(false);
+const justSavedRoom = ref(false);
+let justSavedRoomTimer: ReturnType<typeof setTimeout> | undefined;
+
 async function saveRoom() {
+  savingRoom.value = true;
   await infoStore.saveRoomStatus({
     open: room.open,
     responsible1MemberId: room.responsible1,
@@ -372,6 +392,11 @@ async function saveRoom() {
     closedMessage: room.closedMessage || null,
     coffeeStatus: room.coffeeStatus,
   });
+  savingRoom.value = false;
+  await nextTick();
+  justSavedRoom.value = true;
+  clearTimeout(justSavedRoomTimer);
+  justSavedRoomTimer = setTimeout(() => (justSavedRoom.value = false), 1200);
 }
 
 function openEdit(keyholder: KeyholderResponse) {
@@ -386,18 +411,39 @@ function openEdit(keyholder: KeyholderResponse) {
   dialogVisible.value = true;
 }
 
+const savingKeyholder = ref(false);
+const justSavedKeyholder = ref(false);
+
 async function saveKeyholder() {
   if (editId.value === null) return;
+  savingKeyholder.value = true;
   await infoStore.updateKeyholder(editId.value, {
     displayName: form.displayName || null,
     isCandidateBoard: form.isCandidateBoard,
     photoUrl: form.photoUrl || null,
   });
+  savingKeyholder.value = false;
+  await nextTick();
+  justSavedKeyholder.value = true;
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  justSavedKeyholder.value = false;
   dialogVisible.value = false;
 }
 </script>
 
 <style scoped>
+.check-pop-enter-active,
+.check-pop-leave-active {
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+.check-pop-enter-from,
+.check-pop-leave-to {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
 /* Denser rows so more keyholders fit in the same vertical space. */
 :deep(.keyholder-table td),
 :deep(.keyholder-table th) {
