@@ -8,9 +8,22 @@
         </RouterLink>
       </template>
       <div class="flex flex-col gap-4">
-        <div class="flex items-center gap-3">
-          <ToggleSwitch v-model="room.open" />
-          <span>{{ room.open ? 'Room is open' : 'Room is closed' }}</span>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm opacity-70">Room status</label>
+          <SelectButton
+            v-model="room.open"
+            :allow-empty="false"
+            option-label="label"
+            option-value="value"
+            :options="roomOpenOptions"
+          >
+            <template #option="{ option }">
+              <span class="flex items-center gap-2">
+                <i :class="option.icon" />
+                {{ option.label }}
+              </span>
+            </template>
+          </SelectButton>
         </div>
         <div class="flex flex-col gap-1">
           <label class="text-sm opacity-70">Responsible person 1</label>
@@ -273,6 +286,11 @@ const room = reactive<{
   closedMessage: '',
   coffeeStatus: 0,
 });
+
+const roomOpenOptions: { label: string; value: boolean; icon: string }[] = [
+  { label: 'Open', value: true, icon: 'pi pi-lock-open' },
+  { label: 'Closed', value: false, icon: 'pi pi-lock' },
+];
 
 // Coffee/tea status codes, matching the legacy screen.
 const coffeeOptions: { label: string; value: number }[] = [
