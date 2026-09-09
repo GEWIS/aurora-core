@@ -102,14 +102,22 @@
           <label class="text-sm opacity-70">Closed message</label>
           <InputText v-model="room.closedMessage" placeholder="GEWIS is closed" />
         </div>
-        <Button class="self-end" label="Save room status" :loading="savingRoom" @click="saveRoom">
-          <template #icon>
-            <Transition mode="out-in" name="check-pop">
-              <i v-if="justSavedRoom" key="check" class="pi pi-check" />
-              <i v-else key="save" class="pi pi-save" />
-            </Transition>
-          </template>
-        </Button>
+        <div class="flex items-center justify-end gap-3">
+          <Transition name="check-pop">
+            <span v-if="roomDirty" class="flex items-center gap-2 text-sm text-amber-400">
+              <i class="pi pi-exclamation-circle" />
+              Unsaved changes
+            </span>
+          </Transition>
+          <Button label="Save room status" :loading="savingRoom" @click="saveRoom">
+            <template #icon>
+              <Transition mode="out-in" name="check-pop">
+                <i v-if="justSavedRoom" key="check" class="pi pi-check" />
+                <i v-else key="save" class="pi pi-save" />
+              </Transition>
+            </template>
+          </Button>
+        </div>
       </div>
     </AppContainer>
 
@@ -231,7 +239,7 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
-import { type KeyholderResponse } from '@gewis/aurora-api-client';
+import { type KeyholderResponse, type RoomStatusResponse } from '@gewis/aurora-api-client';
 import AppContainer from '@/layout/AppContainer.vue';
 import KeyholderLabel from '@/components/info/KeyholderLabel.vue';
 import { useInfoStore } from '@/stores/info.store';
@@ -269,7 +277,7 @@ function keyholderById(memberId: number | null | undefined): KeyholderResponse |
   return infoStore.keyholders.find((k) => k.memberId === memberId);
 }
 
-const room = reactive<{
+interface RoomForm {
   open: boolean;
   responsible1: number | null;
   responsible2: number | null;
@@ -277,15 +285,25 @@ const room = reactive<{
   lastCall: string;
   closedMessage: string;
   coffeeStatus: number;
-}>({
-  open: false,
-  responsible1: null,
-  responsible2: null,
-  beerTime: null,
-  lastCall: '',
-  closedMessage: '',
-  coffeeStatus: 0,
-});
+}
+
+function formFromStatus(status: RoomStatusResponse | null): RoomForm {
+  return {
+    open: status?.open ?? false,
+    responsible1: status?.responsible[0]?.memberId ?? null,
+    responsible2: status?.responsible[1]?.memberId ?? null,
+    beerTime: status?.beerTime ?? null,
+    lastCall: status?.lastCall ?? '',
+    closedMessage: status?.closedMessage ?? '',
+    coffeeStatus: status?.coffeeStatus ?? 0,
+  };
+}
+
+const room = reactive<RoomForm>(formFromStatus(null));
+
+const roomDirty = computed(
+  () => JSON.stringify(room) !== JSON.stringify(formFromStatus(infoStore.roomStatus)),
+);
 
 const roomOpenOptions: { label: string; value: boolean; icon: string }[] = [
   { label: 'Open', value: true, icon: 'pi pi-lock-open' },
@@ -384,13 +402,7 @@ watch(
   () => infoStore.roomStatus,
   (status) => {
     if (!status) return;
-    room.open = status.open;
-    room.responsible1 = status.responsible[0]?.memberId ?? null;
-    room.responsible2 = status.responsible[1]?.memberId ?? null;
-    room.beerTime = status.beerTime ?? null;
-    room.lastCall = status.lastCall ?? '';
-    room.closedMessage = status.closedMessage ?? '';
-    room.coffeeStatus = status.coffeeStatus ?? 0;
+    Object.assign(room, formFromStatus(status));
   },
   { immediate: true },
 );
