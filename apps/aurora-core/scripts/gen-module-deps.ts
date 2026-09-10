@@ -19,7 +19,8 @@ function walk(dir: string, out: string[] = []): string[] {
     const full = path.join(dir, entry);
     const st = statSync(full);
     if (st.isDirectory()) walk(full, out);
-    else if (/\.ts$/.test(entry) && !entry.endsWith('.spec.ts') && !entry.endsWith('.test.ts')) out.push(full);
+    else if (/\.ts$/.test(entry) && !entry.endsWith('.spec.ts') && !entry.endsWith('.test.ts'))
+      out.push(full);
   }
   return out;
 }
@@ -32,7 +33,8 @@ function moduleOf(file: string): string {
   return path.basename(rel, '.ts');
 }
 
-const IMPORT_RE = /(?:import|export)\s+(?:[^'"]*from\s+)?['"]([^'"]+)['"]|require\(\s*['"]([^'"]+)['"]\s*\)/g;
+const IMPORT_RE =
+  /(?:import|export)\s+(?:[^'"]*from\s+)?['"]([^'"]+)['"]|require\(\s*['"]([^'"]+)['"]\s*\)/g;
 
 function resolveImport(fromFile: string, spec: string): string | undefined {
   if (!spec.startsWith('.')) return undefined;
@@ -97,7 +99,9 @@ function toMermaid(edges: Edge[]): string {
 
   const lines = ['flowchart TD'];
   for (const m of mods) lines.push(`  ${idOf(m)}["${labelOf(m)}"]`);
-  for (const e of [...edges].sort((a, b) => a.from.localeCompare(b.from) || a.to.localeCompare(b.to))) {
+  for (const e of [...edges].sort(
+    (a, b) => a.from.localeCompare(b.from) || a.to.localeCompare(b.to),
+  )) {
     const label = e.weight > 1 ? `|${e.weight}|` : '';
     lines.push(`  ${idOf(e.from)} -->${label} ${idOf(e.to)}`);
   }

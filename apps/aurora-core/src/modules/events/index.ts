@@ -7,11 +7,7 @@ export { BeatEmitter } from './beat-emitter';
 export { GeneratorBeatEvent } from './beat-emitter-events';
 export { default as EmitterStore } from './emitter-store';
 export { TimeTrailRaceState } from './time-trail-race-state';
-export {
-  RegisterPlayerParams,
-  PlayerParams,
-  ScoreboardItem,
-} from './time-trail-race-entities';
+export { RegisterPlayerParams, PlayerParams, ScoreboardItem } from './time-trail-race-entities';
 export {
   RaceInitializedEvent,
   RacePlayerRegisteredEvent,

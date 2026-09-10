@@ -90,7 +90,10 @@ export default class HandlerManager {
    * @param handlers the handler instances to manage, grouped by entity type
    */
   public static getInstance(io?: Server, emitterStore?: EmitterStore, handlers?: HandlerSet) {
-    if (this.instance == null && (io === undefined || emitterStore === undefined || handlers === undefined)) {
+    if (
+      this.instance == null &&
+      (io === undefined || emitterStore === undefined || handlers === undefined)
+    ) {
       throw new Error('Not all parameters provided to initialize');
     } else if (this.instance == null) {
       this.instance = new HandlerManager(io!, emitterStore!, handlers!);
