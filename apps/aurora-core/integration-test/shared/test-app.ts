@@ -1,7 +1,6 @@
 import { Express } from 'express';
 import supertest, { type Agent as TestAgent } from 'supertest';
-// do not remove; registers each module's settings defaults before ServerSettingsStore initializes
-import '@aurora/register-settings';
+import { registerAllSettings } from '@aurora/register-settings';
 import dataSource from '@aurora/database';
 import { createServer } from 'http';
 import { Server as SocketIoServer } from 'socket.io';
@@ -59,6 +58,7 @@ export class TestEnvironment {
           await dataSource.initialize();
         }
 
+        registerAllSettings();
         await ServerSettingsStore.getInstance().initialize();
         const emitterStore = EmitterStore.getInstance();
         BeatManager.getInstance().init(emitterStore.beatEmitter);

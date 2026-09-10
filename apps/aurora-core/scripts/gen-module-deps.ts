@@ -1,3 +1,8 @@
+// Dev-only visualization script: walks `src`, derives a per-module import graph, and
+// renders it as Mermaid (or dumps raw edges with --out=) to spot dependency cycles ahead
+// of splitting `modules/*` into a plugin-style DAG. Edge counts are a coupling signal for
+// that refactor, not a build-time correctness check, so `IMPORT_RE` matching type-only
+// imports as edges is an accepted overstatement here.
 import { readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
 import path from 'path';
 

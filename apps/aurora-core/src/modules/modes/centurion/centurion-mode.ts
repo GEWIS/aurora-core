@@ -3,7 +3,7 @@ import { LightsGroup, LightsSwitch } from '../../lights/entities';
 import { Audio, Screen } from '../../root/entities';
 import SetEffectsHandler from '../../handlers/lights/set-effects-handler';
 import SimpleAudioHandler from '../../handlers/audio/simple-audio-handler';
-import MixTape, { FeedEvent, Horn, Song, SongData } from './tapes/mix-tape';
+import MixTape, { FeedEvent, Horn, Song, SongData } from '../../lights/mix-tape';
 import { BeatFadeOut, StaticColor } from '../../lights/effects/color';
 import { ClassicRotate, SearchLight, TableRotate } from '../../lights/effects/movement';
 import { getTwoComplementaryRgbColors, RgbColor } from '../../lights/color-definitions';

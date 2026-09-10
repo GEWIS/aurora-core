@@ -6,6 +6,11 @@ import ServerSettingsStore from './server-settings-store';
 import logger from '../../logger';
 import FeatureFlagManager from './feature-flag-manager';
 
+// Branded marker `BaseHandler` (modules/root) exposes as a static so this module can
+// recognize handler classes without importing `BaseHandler` itself (that would
+// reintroduce the server-settings -> root dependency cycle this decorator was built to avoid).
+export const HANDLER_CLASS_BRAND = Symbol('isHandlerClass');
+
 type ClassDecoratorParams<T extends { new (...args: any[]): {} }> = [T];
 type FunctionDecoratorParams<T> = [
   target: Object,
@@ -49,8 +54,8 @@ export default function FeatureEnabled(setting: keyof ISettings): ClassDecorator
       return Middlewares(endpointMiddleware);
     }
 
-    // The decorator is assigned to a handler (duck typing)
-    if (args.length === 1 && args[0].isHandlerClass === true) {
+    // The decorator is assigned to a handler (duck typing on the branded symbol)
+    if (args.length === 1 && args[0][HANDLER_CLASS_BRAND] === true) {
       // It is not possible to assign such a value to the class itself, because decorators can only
       // access class instances (objects). Static attributes for example cannot be changed by
       // decorators. Therefore, if we want to prevent object creation and not delete a handler after

@@ -8,6 +8,7 @@ import dataSource from '../../database';
 import { Audio, Screen } from './entities';
 import { LightsGroup } from '../lights/entities';
 import { BeatEvent, TrackChangeEvent } from '../events/music-emitter-events';
+import { ShowOrdersEvent } from '../events/order-emitter';
 import { SocketioNamespaces } from '../../socketio-namespaces';
 import logger from '../../logger';
 import EmitterStore from '../events/emitter-store';
@@ -176,7 +177,7 @@ export default class HandlerManager {
    * Transmit an order change to all screen handlers
    * (like changeTrack())
    */
-  public showOrders<T>(event: T) {
+  public showOrders(event: ShowOrdersEvent) {
     const handlers = this.getHandlers();
     handlers.forEach((h) => {
       if (h instanceof BaseScreenHandler && h.showOrders) h.showOrders(event);

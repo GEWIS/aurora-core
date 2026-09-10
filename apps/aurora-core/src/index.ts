@@ -1,6 +1,5 @@
 import './env';
-// do not remove; registers each module's settings defaults before ServerSettingsStore initializes
-import './register-settings';
+import { registerAllSettings } from './register-settings';
 import { createServer } from 'http';
 import * as fs from 'fs';
 import path from 'node:path';
@@ -50,6 +49,7 @@ async function createApp(): Promise<void> {
 
   await dataSource.initialize();
 
+  registerAllSettings();
   await ServerSettingsStore.getInstance().initialize();
   const featureFlagManager = new FeatureFlagManager();
   await TimedEventsService.getInstance().registerAllDatabaseEvents();
